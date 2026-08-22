@@ -7,259 +7,442 @@
   <title>Расписание — МеждОт25-2</title>
 
   <style>
+    :root {
+      --bg: #f1f3f6;
+      --card: #ffffff;
+      --text: #1d1d1f;
+      --muted: #737780;
+      --line: #e4e6eb;
+      --blue: #007aff;
+      --blue-soft: #eaf3ff;
+      --green: #20a464;
+      --green-soft: #eaf8f0;
+      --shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+      --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.09);
+    }
+
     * {
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f5f5f7;
-      color: #1d1d1f;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        "Segoe UI",
+        sans-serif;
+    }
+
+    button {
+      font: inherit;
     }
 
     .container {
-      max-width: 900px;
+      width: min(920px, calc(100% - 28px));
       margin: 0 auto;
-      padding: 24px 16px 50px;
+      padding: 28px 0 60px;
     }
+
+    /* HEADER */
 
     header {
-      margin-bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 22px;
     }
 
-    h1 {
-      margin: 0 0 5px;
-      font-size: 31px;
+    .title-block h1 {
+      margin: 0;
+      font-size: 34px;
+      line-height: 1.1;
+      letter-spacing: -0.8px;
     }
 
-    .subtitle {
-      color: #6e6e73;
-      font-size: 16px;
+    .group-name {
+      margin-top: 7px;
+      font-size: 17px;
+      color: var(--muted);
+      font-weight: 500;
     }
 
     .updated {
-      color: #8e8e93;
+      margin-top: 8px;
+      color: var(--muted);
       font-size: 13px;
-      margin-top: 7px;
     }
 
-    .refresh {
-      float: right;
-      border: none;
-      background: #007aff;
+    .refresh-button {
+      border: 0;
+      background: var(--blue);
       color: white;
+      border-radius: 13px;
+      padding: 11px 15px;
       font-size: 14px;
-      font-weight: 600;
-      padding: 10px 14px;
-      border-radius: 11px;
+      font-weight: 700;
       cursor: pointer;
+      white-space: nowrap;
+      transition: transform .15s ease, opacity .15s ease;
     }
 
-    /* Следующая пара */
+    .refresh-button:hover {
+      transform: translateY(-1px);
+    }
+
+    .refresh-button:active {
+      transform: scale(.97);
+    }
+
+    .refresh-button.loading {
+      opacity: .65;
+      pointer-events: none;
+    }
+
+    /* NEXT LESSON */
 
     .next-card {
-      background: white;
-      border-radius: 18px;
-      padding: 18px;
-      margin: 18px 0;
-      box-shadow: 0 3px 12px rgba(0,0,0,.07);
+      background: linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
+      border: 1px solid #dceaff;
+      border-radius: 22px;
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 6px 24px rgba(0, 122, 255, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .next-card::after {
+      content: "";
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      right: -70px;
+      top: -70px;
+      border-radius: 50%;
+      background: rgba(0, 122, 255, 0.05);
+      pointer-events: none;
     }
 
     .next-label {
-      color: #007aff;
+      color: var(--blue);
       font-size: 12px;
       font-weight: 800;
+      letter-spacing: .7px;
       text-transform: uppercase;
-      margin-bottom: 7px;
-    }
-
-    .next-time {
-      font-size: 25px;
-      font-weight: 800;
-      margin-bottom: 5px;
-    }
-
-    .next-subject {
-      font-size: 20px;
-      font-weight: 750;
-      line-height: 1.3;
       margin-bottom: 8px;
     }
 
+    .next-time {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.7px;
+      margin-bottom: 4px;
+    }
+
+    .next-discipline {
+      font-size: 20px;
+      font-weight: 750;
+      margin-bottom: 13px;
+    }
+
     .next-info {
-      color: #6e6e73;
+      display: grid;
+      gap: 7px;
+      color: var(--muted);
       font-size: 14px;
-      line-height: 1.6;
+      line-height: 1.4;
     }
 
-    .live {
-      border: 2px solid #34c759;
+    .next-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: fit-content;
+      margin-bottom: 11px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 800;
     }
 
-    .live .next-label {
-      color: #34c759;
+    .next-status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
     }
 
-    /* Навигация */
+    /* TABS */
 
-    .tabs-wrapper {
-      overflow-x: auto;
-      scrollbar-width: none;
-      margin-bottom: 24px;
-    }
-
-    .tabs-wrapper::-webkit-scrollbar {
-      display: none;
+    .tabs-wrap {
+      position: sticky;
+      top: 10px;
+      z-index: 20;
+      margin-bottom: 25px;
     }
 
     .tabs {
       display: flex;
       gap: 4px;
-      min-width: max-content;
-      background: #e5e5ea;
-      padding: 4px;
-      border-radius: 14px;
+      padding: 5px;
+      background: #e4e6eb;
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, .03);
+      box-shadow: 0 3px 14px rgba(0, 0, 0, .06);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .tabs::-webkit-scrollbar {
+      display: none;
     }
 
     .tab {
-      border: none;
+      flex: 1;
+      min-width: 105px;
+      border: 0;
       background: transparent;
-      color: #6e6e73;
+      color: #666a72;
+      padding: 10px 12px;
+      border-radius: 12px;
       font-size: 14px;
-      font-weight: 600;
-      padding: 10px 16px;
-      border-radius: 11px;
+      font-weight: 700;
       cursor: pointer;
+      transition: all .18s ease;
       white-space: nowrap;
     }
 
     .tab.active {
       background: white;
-      color: #1d1d1f;
-      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+      color: var(--text);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
     }
 
-    /* Дни */
+    /* DAY */
 
     .day {
-      margin-bottom: 28px;
+      margin-bottom: 30px;
     }
 
-    .date {
-      font-size: 21px;
-      font-weight: 700;
-      margin-bottom: 12px;
+    .day-header {
+      margin-bottom: 11px;
+      padding: 0 3px;
+    }
+
+    .weekday {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -.3px;
       text-transform: capitalize;
     }
 
-    .today-label {
-      display: inline-block;
-      background: #007aff;
-      color: white;
-      padding: 4px 8px;
-      border-radius: 7px;
-      font-size: 11px;
-      font-weight: 700;
-      margin-left: 6px;
-      vertical-align: middle;
+    .full-date {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 14px;
     }
 
-    /* Пара */
+    /* LESSON */
 
     .lesson {
-      background: white;
-      border-radius: 16px;
-      padding: 17px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 17px 18px;
       margin-bottom: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.055);
-      border: 2px solid transparent;
+      box-shadow: var(--shadow);
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .lesson:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-hover);
     }
 
     .lesson.current {
-      border-color: #34c759;
+      border: 2px solid var(--green);
+      background: #fbfffd;
+      box-shadow: 0 5px 20px rgba(32, 164, 100, .12);
     }
 
-    .lesson.current .time {
-      color: #34c759;
+    .lesson-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
     }
 
     .time {
-      font-size: 15px;
-      font-weight: 700;
-      color: #007aff;
+      color: var(--blue);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -.2px;
       margin-bottom: 7px;
     }
 
     .discipline {
       font-size: 18px;
-      font-weight: 700;
-      line-height: 1.3;
-      margin-bottom: 8px;
+      font-weight: 750;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+
+    .current-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 9px;
+      background: var(--green-soft);
+      color: var(--green);
+      border-radius: 9px;
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .current-badge::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      background: var(--green);
+      border-radius: 50%;
     }
 
     .info {
-      color: #6e6e73;
+      display: grid;
+      gap: 5px;
+      color: var(--muted);
       font-size: 14px;
-      line-height: 1.65;
+      line-height: 1.45;
     }
 
-    .lesson-status {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 5px 9px;
-      border-radius: 8px;
-      background: #34c759;
-      color: white;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
+    /* EMPTY */
 
     .empty {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 38px 20px;
       text-align: center;
-      color: #6e6e73;
-      padding: 55px 20px;
-      font-size: 16px;
+      color: var(--muted);
+      box-shadow: var(--shadow);
     }
 
-    .loading {
-      text-align: center;
-      color: #6e6e73;
-      padding: 50px 0;
+    .empty-icon {
+      font-size: 30px;
+      margin-bottom: 9px;
+    }
+
+    .empty-title {
+      color: var(--text);
+      font-weight: 750;
+      font-size: 17px;
+      margin-bottom: 5px;
     }
 
     .error {
-      background: #fff0f0;
-      color: #c00;
+      background: #fff1f1;
+      color: #c62828;
+      border: 1px solid #ffd2d2;
       padding: 16px;
-      border-radius: 12px;
+      border-radius: 15px;
+      line-height: 1.5;
     }
 
+    /* FOOTER */
+
+    .source {
+      margin-top: 30px;
+      text-align: center;
+      color: #999da5;
+      font-size: 12px;
+    }
+
+    /* MOBILE */
+
     @media (max-width: 600px) {
+
       .container {
-        padding: 20px 14px 40px;
+        width: min(100% - 20px, 920px);
+        padding-top: 18px;
       }
 
-      h1 {
-        font-size: 28px;
+      header {
+        align-items: center;
+        margin-bottom: 17px;
+      }
+
+      .title-block h1 {
+        font-size: 29px;
+      }
+
+      .group-name {
+        font-size: 15px;
+      }
+
+      .updated {
+        font-size: 12px;
+      }
+
+      .refresh-button {
+        padding: 10px 12px;
+        font-size: 13px;
+      }
+
+      .next-card {
+        padding: 18px;
+        border-radius: 19px;
       }
 
       .next-time {
-        font-size: 23px;
+        font-size: 27px;
       }
 
-      .next-subject {
+      .next-discipline {
         font-size: 18px;
       }
 
+      .tabs-wrap {
+        top: 5px;
+      }
+
+      .tabs {
+        border-radius: 14px;
+      }
+
       .tab {
+        min-width: 92px;
         font-size: 13px;
-        padding: 10px 14px;
+        padding: 10px 8px;
+      }
+
+      .weekday {
+        font-size: 19px;
       }
 
       .lesson {
         padding: 15px;
+        border-radius: 16px;
+      }
+
+      .discipline {
+        font-size: 17px;
+      }
+
+      .info {
+        font-size: 13px;
       }
     }
   </style>
@@ -267,1059 +450,760 @@
 
 <body>
 
-<div class="container">
+  <div class="container">
 
-  <header>
+    <header>
+      <div class="title-block">
+        <h1>Расписание</h1>
+        <div class="group-name">МеждОт25-2</div>
+        <div class="updated" id="updated">Загрузка расписания...</div>
+      </div>
 
-    <button class="refresh" onclick="loadSchedule()">
-      ↻ Обновить
-    </button>
+      <button class="refresh-button" id="refreshButton">
+        ↻ Обновить
+      </button>
+    </header>
 
-    <h1>Расписание</h1>
+    <div id="nextLesson"></div>
 
-    <div class="subtitle">
-      МеждОт25-2
+    <div class="tabs-wrap">
+      <nav class="tabs">
+        <button class="tab active" data-view="nearest">
+          Ближайшее
+        </button>
+
+        <button class="tab" data-view="today">
+          Сегодня
+        </button>
+
+        <button class="tab" data-view="tomorrow">
+          Завтра
+        </button>
+
+        <button class="tab" data-view="week">
+          Неделя
+        </button>
+
+        <button class="tab" data-view="month">
+          Месяц
+        </button>
+      </nav>
     </div>
 
-    <div class="updated" id="updated">
-      Загружаем расписание...
-    </div>
+    <main id="schedule">
+      <div class="empty">
+        Загружаем расписание...
+      </div>
+    </main>
 
-  </header>
-
-
-  <!-- Следующая пара -->
-
-  <div id="next-card"></div>
-
-
-  <!-- Навигация -->
-
-  <div class="tabs-wrapper">
-
-    <div class="tabs">
-
-      <button
-        class="tab active"
-        data-mode="nearest"
-        onclick="setMode('nearest')">
-        Ближайшее
-      </button>
-
-      <button
-        class="tab"
-        data-mode="today"
-        onclick="setMode('today')">
-        Сегодня
-      </button>
-
-      <button
-        class="tab"
-        data-mode="tomorrow"
-        onclick="setMode('tomorrow')">
-        Завтра
-      </button>
-
-      <button
-        class="tab"
-        data-mode="week"
-        onclick="setMode('week')">
-        Неделя
-      </button>
-
-      <button
-        class="tab"
-        data-mode="month"
-        onclick="setMode('month')">
-        Месяц
-      </button>
-
+    <div class="source">
+      Источник: официальный РУЗ Финансового университета
     </div>
 
   </div>
 
+  <script>
 
-  <main id="schedule">
+    let schedule = [];
+    let currentView = "nearest";
 
-    <div class="loading">
-      Загружаем расписание...
-    </div>
+    /*
+      -----------------------------
+      ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+      -----------------------------
+    */
 
-  </main>
-
-</div>
-
-
-<script>
-
-let allLessons = [];
-let currentMode = "nearest";
-
-
-/* -------------------------------
-   ДАТА
--------------------------------- */
-
-function getLocalDate() {
-
-  const now = new Date();
-
-  const year = now.getFullYear();
-
-  const month =
-    String(now.getMonth() + 1).padStart(2, "0");
-
-  const day =
-    String(now.getDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-}
-
-
-function addDays(dateString, days) {
-
-  const date =
-    new Date(dateString + "T12:00:00");
-
-  date.setDate(
-    date.getDate() + days
-  );
-
-  const year =
-    date.getFullYear();
-
-  const month =
-    String(date.getMonth() + 1).padStart(2, "0");
-
-  const day =
-    String(date.getDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-}
-
-
-function formatDate(dateString) {
-
-  const date =
-    new Date(dateString + "T12:00:00");
-
-  return date.toLocaleDateString(
-    "ru-RU",
-    {
-      weekday: "long",
-      day: "numeric",
-      month: "long"
+    function pad(number) {
+      return String(number).padStart(2, "0");
     }
-  );
-}
 
+    function localDateString(date = new Date()) {
+      return [
+        date.getFullYear(),
+        pad(date.getMonth() + 1),
+        pad(date.getDate())
+      ].join("-");
+    }
 
-/* -------------------------------
-   ВРЕМЯ ПАРЫ
--------------------------------- */
+    function addDays(date, amount) {
+      const result = new Date(date);
+      result.setDate(result.getDate() + amount);
+      return result;
+    }
 
-function lessonTimeToMinutes(time) {
+    function dateFromString(value) {
+      return new Date(value + "T00:00:00");
+    }
 
-  if (!time) return null;
+    function formatDate(dateString) {
+      const date = dateFromString(dateString);
 
-  const parts =
-    time.split(":");
+      return date.toLocaleDateString("ru-RU", {
+        day: "numeric",
+        month: "long"
+      });
+    }
 
-  if (parts.length < 2) return null;
+    function formatWeekday(dateString) {
+      const date = dateFromString(dateString);
 
-  return (
-    Number(parts[0]) * 60 +
-    Number(parts[1])
-  );
-}
+      return date.toLocaleDateString("ru-RU", {
+        weekday: "long"
+      });
+    }
 
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
 
-function getCurrentMinutes() {
-
-  const now = new Date();
-
-  return (
-    now.getHours() * 60 +
-    now.getMinutes()
-  );
-}
-
-
-/* -------------------------------
-   СЛЕДУЮЩАЯ / ТЕКУЩАЯ ПАРА
--------------------------------- */
-
-function findNextLesson() {
-
-  const today =
-    getLocalDate();
-
-  const now =
-    getCurrentMinutes();
-
-
-  /*
-   * Сначала проверяем сегодняшние пары.
-   */
-
-  const todayLessons =
-    allLessons
-      .filter(
-        lesson =>
-          lesson.date === today
-      )
-      .sort(
-        (a, b) =>
-          lessonTimeToMinutes(
-            a.beginLesson
-          ) -
-          lessonTimeToMinutes(
-            b.beginLesson
-          )
+    function lessonDateTime(lesson, field) {
+      return new Date(
+        `${lesson.date}T${lesson[field]}:00`
       );
+    }
 
+    function isLessonCurrent(lesson) {
+      const now = new Date();
 
-  /*
-   * Если сейчас идёт пара —
-   * возвращаем её.
-   */
+      const start = lessonDateTime(lesson, "beginLesson");
+      const end = lessonDateTime(lesson, "endLesson");
 
-  for (
-    const lesson of todayLessons
-  ) {
+      return now >= start && now < end;
+    }
 
-    const begin =
-      lessonTimeToMinutes(
-        lesson.beginLesson
-      );
-
-    const end =
-      lessonTimeToMinutes(
-        lesson.endLesson
-      );
-
-    if (
-      begin !== null &&
-      end !== null &&
-      now >= begin &&
-      now < end
-    ) {
-
-      return {
+    function lessonHasEnded(lesson) {
+      return new Date() >= lessonDateTime(
         lesson,
-        current: true
-      };
-
+        "endLesson"
+      );
     }
 
-  }
+    function sortSchedule(list) {
+      return [...list].sort((a, b) => {
 
+        const dateCompare =
+          (a.date || "").localeCompare(b.date || "");
 
-  /*
-   * Ищем следующую сегодняшнюю.
-   */
+        if (dateCompare !== 0) {
+          return dateCompare;
+        }
 
-  for (
-    const lesson of todayLessons
-  ) {
+        return (a.beginLesson || "")
+          .localeCompare(b.beginLesson || "");
+      });
+    }
 
-    const begin =
-      lessonTimeToMinutes(
-        lesson.beginLesson
+    /*
+      -----------------------------
+      СЛЕДУЮЩАЯ ПАРА
+      -----------------------------
+    */
+
+    function findNextLesson() {
+
+      const sorted = sortSchedule(schedule);
+
+      // Сначала ищем текущую пару.
+      const current = sorted.find(
+        lesson => isLessonCurrent(lesson)
       );
 
-    if (
-      begin !== null &&
-      begin > now
-    ) {
+      if (current) {
+        return {
+          lesson: current,
+          current: true
+        };
+      }
 
-      return {
-        lesson,
-        current: false
-      };
+      // Затем ближайшую ещё не начавшуюся.
+      const next = sorted.find(
+        lesson => !lessonHasEnded(lesson)
+      );
 
+      if (next) {
+        return {
+          lesson: next,
+          current: false
+        };
+      }
+
+      return null;
     }
 
-  }
+    function renderNextLesson() {
 
+      const container =
+        document.getElementById("nextLesson");
 
-  /*
-   * Сегодня больше пар нет.
-   * Ищем ближайшую будущую.
-   */
+      const result = findNextLesson();
 
-  const future =
-    allLessons
-      .filter(
-        lesson =>
-          lesson.date > today
-      )
-      .sort(
-        (a, b) => {
+      if (!result) {
+        container.innerHTML = "";
+        return;
+      }
 
-          if (
-            a.date !== b.date
-          ) {
+      const lesson = result.lesson;
 
-            return a.date.localeCompare(
-              b.date
+      const status = result.current
+        ? `
+          <div class="next-status">
+            <span class="next-status-dot"></span>
+            СЕЙЧАС ИДЁТ
+          </div>
+        `
+        : `
+          <div class="next-label">
+            Следующая пара
+          </div>
+        `;
+
+      container.innerHTML = `
+        <section class="next-card">
+
+          ${status}
+
+          <div class="next-time">
+            ${escapeHtml(lesson.beginLesson)}
+            –
+            ${escapeHtml(lesson.endLesson)}
+          </div>
+
+          <div class="next-discipline">
+            ${escapeHtml(
+              lesson.discipline || "Предмет не указан"
+            )}
+          </div>
+
+          <div class="next-info">
+
+            <div>
+              📅
+              ${formatWeekday(lesson.date)},
+              ${formatDate(lesson.date)}
+            </div>
+
+            <div>
+              👨‍🏫
+              ${escapeHtml(
+                lesson.lecturer ||
+                "Преподаватель не указан"
+              )}
+            </div>
+
+            ${
+              lesson.auditorium
+              ? `
+                <div>
+                  🏫
+                  ${escapeHtml(lesson.auditorium)}
+                </div>
+              `
+              : ""
+            }
+
+            ${
+              lesson.building
+              ? `
+                <div>
+                  📍
+                  ${escapeHtml(lesson.building)}
+                </div>
+              `
+              : ""
+            }
+
+          </div>
+
+        </section>
+      `;
+    }
+
+    /*
+      -----------------------------
+      ГРУППИРОВКА
+      -----------------------------
+    */
+
+    function groupByDate(list) {
+
+      const grouped = {};
+
+      for (const lesson of list) {
+
+        if (!lesson.date) {
+          continue;
+        }
+
+        if (!grouped[lesson.date]) {
+          grouped[lesson.date] = [];
+        }
+
+        grouped[lesson.date].push(lesson);
+      }
+
+      return grouped;
+    }
+
+    /*
+      -----------------------------
+      КАРТОЧКА ПАРЫ
+      -----------------------------
+    */
+
+    function lessonHtml(lesson) {
+
+      const current = isLessonCurrent(lesson);
+
+      return `
+        <article class="lesson ${current ? "current" : ""}">
+
+          <div class="lesson-header">
+
+            <div>
+              <div class="time">
+                ${escapeHtml(lesson.beginLesson || "")}
+                –
+                ${escapeHtml(lesson.endLesson || "")}
+              </div>
+
+              <div class="discipline">
+                ${escapeHtml(
+                  lesson.discipline ||
+                  "Предмет не указан"
+                )}
+              </div>
+            </div>
+
+            ${
+              current
+              ? `
+                <div class="current-badge">
+                  СЕЙЧАС ИДЁТ
+                </div>
+              `
+              : ""
+            }
+
+          </div>
+
+          <div class="info">
+
+            ${
+              lesson.lecturer
+              ? `
+                <div>
+                  👨‍🏫
+                  ${escapeHtml(lesson.lecturer)}
+                </div>
+              `
+              : ""
+            }
+
+            ${
+              lesson.auditorium
+              ? `
+                <div>
+                  🏫
+                  ${escapeHtml(lesson.auditorium)}
+                </div>
+              `
+              : ""
+            }
+
+            ${
+              lesson.building
+              ? `
+                <div>
+                  📍
+                  ${escapeHtml(lesson.building)}
+                </div>
+              `
+              : ""
+            }
+
+          </div>
+
+        </article>
+      `;
+    }
+
+    /*
+      -----------------------------
+      ОТОБРАЖЕНИЕ ДНЯ
+      -----------------------------
+    */
+
+    function renderDay(date, lessons) {
+
+      const sorted = sortSchedule(lessons);
+
+      return `
+        <section class="day">
+
+          <div class="day-header">
+
+            <div class="weekday">
+              ${escapeHtml(formatWeekday(date))}
+            </div>
+
+            <div class="full-date">
+              ${escapeHtml(formatDate(date))}
+            </div>
+
+          </div>
+
+          ${sorted.map(lessonHtml).join("")}
+
+        </section>
+      `;
+    }
+
+    /*
+      -----------------------------
+      ПУСТОЕ СОСТОЯНИЕ
+      -----------------------------
+    */
+
+    function renderEmpty(title, text) {
+
+      return `
+        <div class="empty">
+
+          <div class="empty-icon">
+            📚
+          </div>
+
+          <div class="empty-title">
+            ${escapeHtml(title)}
+          </div>
+
+          <div>
+            ${escapeHtml(text)}
+          </div>
+
+        </div>
+      `;
+    }
+
+    /*
+      -----------------------------
+      ФИЛЬТРЫ
+      -----------------------------
+    */
+
+    function getLessonsForView() {
+
+      const today = new Date();
+      const todayString = localDateString(today);
+
+      if (currentView === "today") {
+
+        return schedule.filter(
+          lesson => lesson.date === todayString
+        );
+      }
+
+      if (currentView === "tomorrow") {
+
+        const tomorrow =
+          localDateString(addDays(today, 1));
+
+        return schedule.filter(
+          lesson => lesson.date === tomorrow
+        );
+      }
+
+      if (currentView === "week") {
+
+        const start = today;
+        const end = addDays(today, 7);
+
+        return schedule.filter(lesson => {
+
+          const date = dateFromString(lesson.date);
+
+          return date >=
+            new Date(
+              start.getFullYear(),
+              start.getMonth(),
+              start.getDate()
+            )
+            &&
+            date <
+            new Date(
+              end.getFullYear(),
+              end.getMonth(),
+              end.getDate()
+            );
+        });
+      }
+
+      if (currentView === "month") {
+
+        const end = addDays(today, 30);
+
+        return schedule.filter(lesson => {
+
+          const date = dateFromString(lesson.date);
+
+          return date >=
+            new Date(
+              today.getFullYear(),
+              today.getMonth(),
+              today.getDate()
+            )
+            &&
+            date <= end;
+        });
+      }
+
+      /*
+        Ближайшее:
+        берём ближайший учебный день,
+        в котором есть занятия.
+      */
+
+      const sorted = sortSchedule(schedule);
+
+      const todayString2 =
+        localDateString(today);
+
+      const futureDates = [
+        ...new Set(
+          sorted
+            .filter(
+              lesson => lesson.date >= todayString2
+            )
+            .map(
+              lesson => lesson.date
+            )
+        )
+      ];
+
+      if (!futureDates.length) {
+        return [];
+      }
+
+      const nearestDate = futureDates[0];
+
+      return sorted.filter(
+        lesson => lesson.date === nearestDate
+      );
+    }
+
+    /*
+      -----------------------------
+      ОСНОВНОЙ RENDER
+      -----------------------------
+    */
+
+    function renderSchedule() {
+
+      const container =
+        document.getElementById("schedule");
+
+      const lessons =
+        getLessonsForView();
+
+      if (!lessons.length) {
+
+        if (currentView === "today") {
+
+          container.innerHTML =
+            renderEmpty(
+              "Сегодня занятий нет",
+              "Отличный день для отдыха 😎"
             );
 
-          }
+        } else if (currentView === "tomorrow") {
 
-          return (
-            lessonTimeToMinutes(
-              a.beginLesson
-            ) -
-            lessonTimeToMinutes(
-              b.beginLesson
-            )
+          container.innerHTML =
+            renderEmpty(
+              "Завтра занятий нет",
+              "В расписании пока ничего нет."
+            );
+
+        } else if (currentView === "week") {
+
+          container.innerHTML =
+            renderEmpty(
+              "На этой неделе занятий нет",
+              "В расписании нет занятий на ближайшие 7 дней."
+            );
+
+        } else {
+
+          container.innerHTML =
+            renderEmpty(
+              "Расписание не найдено",
+              "Попробуйте обновить расписание."
+            );
+        }
+
+        return;
+      }
+
+      const grouped =
+        groupByDate(lessons);
+
+      const dates =
+        Object.keys(grouped).sort();
+
+      container.innerHTML =
+        dates
+          .map(
+            date =>
+              renderDay(date, grouped[date])
+          )
+          .join("");
+    }
+
+    /*
+      -----------------------------
+      ЗАГРУЗКА
+      -----------------------------
+    */
+
+    async function loadSchedule() {
+
+      const button =
+        document.getElementById("refreshButton");
+
+      const updated =
+        document.getElementById("updated");
+
+      button.classList.add("loading");
+      button.textContent = "↻ Обновление...";
+
+      try {
+
+        const response =
+          await fetch(
+            "schedule.json?t=" +
+            Date.now()
           );
 
-        }
-      );
-
-
-  if (future.length) {
-
-    return {
-      lesson: future[0],
-      current: false
-    };
-
-  }
-
-
-  return null;
-}
-
-
-/* -------------------------------
-   КАРТОЧКА СЛЕДУЮЩЕЙ ПАРЫ
--------------------------------- */
-
-function renderNextLesson() {
-
-  const container =
-    document.getElementById(
-      "next-card"
-    );
-
-
-  const result =
-    findNextLesson();
-
-
-  if (!result) {
-
-    container.innerHTML = "";
-
-    return;
-  }
-
-
-  const lesson =
-    result.lesson;
-
-
-  const current =
-    result.current;
-
-
-  const label =
-    current
-      ? "Сейчас идёт"
-      : "Следующая пара";
-
-
-  const dateText =
-    formatDate(
-      lesson.date
-    );
-
-
-  const timeText =
-    `${lesson.beginLesson || ""}–${lesson.endLesson || ""}`;
-
-
-  const discipline =
-    lesson.discipline ||
-    "Предмет не указан";
-
-
-  const lecturer =
-    lesson.lecturer ||
-    "Преподаватель не указан";
-
-
-  const auditorium =
-    lesson.auditorium || "";
-
-
-  const building =
-    lesson.building || "";
-
-
-  container.innerHTML = `
-
-    <div class="next-card ${current ? "live" : ""}">
-
-      <div class="next-label">
-        ${label}
-      </div>
-
-      <div class="next-time">
-        ${timeText}
-      </div>
-
-      <div class="next-subject">
-        ${discipline}
-      </div>
-
-      <div class="next-info">
-
-        📅 ${dateText}
-
-        <br>
-
-        👨‍🏫 ${lecturer}
-
-        ${
-          auditorium
-            ? `<br>🏫 ${auditorium}`
-            : ""
+        if (!response.ok) {
+          throw new Error(
+            "Не удалось загрузить schedule.json"
+          );
         }
 
-        ${
-          building
-            ? `<br>📍 ${building}`
-            : ""
+        const data =
+          await response.json();
+
+        if (!Array.isArray(data)) {
+          throw new Error(
+            "schedule.json имеет неверный формат"
+          );
         }
 
-      </div>
+        schedule =
+          sortSchedule(data);
 
-    </div>
+        updated.textContent =
+          "Актуальное расписание • обновлено в " +
+          new Date().toLocaleTimeString(
+            "ru-RU",
+            {
+              hour: "2-digit",
+              minute: "2-digit"
+            }
+          );
 
-  `;
-}
+        renderNextLesson();
+        renderSchedule();
 
+      } catch (error) {
 
-/* -------------------------------
-   КАРТОЧКА ОБЫЧНОЙ ПАРЫ
--------------------------------- */
+        document.getElementById(
+          "schedule"
+        ).innerHTML = `
+          <div class="error">
+            <strong>
+              Ошибка загрузки расписания
+            </strong>
+            <br>
+            ${escapeHtml(error.message)}
+          </div>
+        `;
 
-function createLessonElement(
-  lesson
-) {
+        console.error(error);
 
-  const element =
-    document.createElement(
-      "div"
-    );
+      } finally {
 
-
-  element.className =
-    "lesson";
-
-
-  const today =
-    getLocalDate();
-
-
-  const now =
-    getCurrentMinutes();
-
-
-  let isCurrent = false;
-
-
-  if (
-    lesson.date === today
-  ) {
-
-    const begin =
-      lessonTimeToMinutes(
-        lesson.beginLesson
-      );
-
-    const end =
-      lessonTimeToMinutes(
-        lesson.endLesson
-      );
-
-
-    if (
-      begin !== null &&
-      end !== null &&
-      now >= begin &&
-      now < end
-    ) {
-
-      isCurrent = true;
-
+        button.classList.remove("loading");
+        button.textContent = "↻ Обновить";
+      }
     }
 
-  }
+    /*
+      -----------------------------
+      TABS
+      -----------------------------
+    */
 
+    document
+      .querySelectorAll(".tab")
+      .forEach(button => {
 
-  if (isCurrent) {
+        button.addEventListener(
+          "click",
+          () => {
 
-    element.classList.add(
-      "current"
-    );
+            document
+              .querySelectorAll(".tab")
+              .forEach(
+                item =>
+                  item.classList.remove("active")
+              );
 
-  }
+            button.classList.add("active");
 
+            currentView =
+              button.dataset.view;
 
-  const discipline =
-    lesson.discipline ||
-    "Предмет не указан";
-
-
-  const lecturer =
-    lesson.lecturer ||
-    "Преподаватель не указан";
-
-
-  const auditorium =
-    lesson.auditorium || "";
-
-
-  const building =
-    lesson.building || "";
-
-
-  element.innerHTML = `
-
-    <div class="time">
-      ${lesson.beginLesson || ""}
-      –
-      ${lesson.endLesson || ""}
-    </div>
-
-    <div class="discipline">
-      ${discipline}
-    </div>
-
-    <div class="info">
-
-      👨‍🏫 ${lecturer}
-
-      ${
-        auditorium
-          ? `<br>🏫 ${auditorium}`
-          : ""
-      }
-
-      ${
-        building
-          ? `<br>📍 ${building}`
-          : ""
-      }
-
-    </div>
-
-    ${
-      isCurrent
-        ? `<div class="lesson-status">
-             Сейчас идёт
-           </div>`
-        : ""
-    }
-
-  `;
-
-
-  return element;
-}
-
-
-/* -------------------------------
-   РЕНДЕР
--------------------------------- */
-
-function render() {
-
-  const container =
-    document.getElementById(
-      "schedule"
-    );
-
-
-  let lessons = [];
-
-
-  const today =
-    getLocalDate();
-
-
-  if (
-    currentMode === "nearest"
-  ) {
-
-    const futureDates =
-      [
-        ...new Set(
-          allLessons
-            .map(
-              lesson =>
-                lesson.date
-            )
-            .filter(
-              date =>
-                date >= today
-            )
-        )
-      ].sort();
-
-
-    if (
-      futureDates.length
-    ) {
-
-      lessons =
-        allLessons.filter(
-          lesson =>
-            lesson.date ===
-            futureDates[0]
+            renderSchedule();
+          }
         );
+      });
 
-    }
+    /*
+      -----------------------------
+      REFRESH
+      -----------------------------
+    */
 
-  }
-
-
-  if (
-    currentMode === "today"
-  ) {
-
-    lessons =
-      allLessons.filter(
-        lesson =>
-          lesson.date === today
+    document
+      .getElementById("refreshButton")
+      .addEventListener(
+        "click",
+        loadSchedule
       );
 
-  }
+    /*
+      -----------------------------
+      АВТОМАТИЧЕСКОЕ ОБНОВЛЕНИЕ
+      -----------------------------
+    */
 
+    loadSchedule();
 
-  if (
-    currentMode === "tomorrow"
-  ) {
+    // Перерисовываем статус текущей пары
+    // каждую минуту.
+    setInterval(() => {
 
-    const tomorrow =
-      addDays(
-        today,
-        1
-      );
+      renderNextLesson();
+      renderSchedule();
 
+    }, 60 * 1000);
 
-    lessons =
-      allLessons.filter(
-        lesson =>
-          lesson.date === tomorrow
-      );
-
-  }
-
-
-  if (
-    currentMode === "week"
-  ) {
-
-    const end =
-      addDays(
-        today,
-        6
-      );
-
-
-    lessons =
-      allLessons.filter(
-        lesson =>
-          lesson.date >= today &&
-          lesson.date <= end
-      );
-
-  }
-
-
-  if (
-    currentMode === "month"
-  ) {
-
-    const end =
-      addDays(
-        today,
-        29
-      );
-
-
-    lessons =
-      allLessons.filter(
-        lesson =>
-          lesson.date >= today &&
-          lesson.date <= end
-      );
-
-  }
-
-
-  if (!lessons.length) {
-
-    let text =
-      "Занятий нет.";
-
-
-    if (
-      currentMode === "today"
-    ) {
-
-      text =
-        "Сегодня занятий нет.";
-
-    }
-
-
-    if (
-      currentMode === "tomorrow"
-    ) {
-
-      text =
-        "Завтра занятий нет.";
-
-    }
-
-
-    if (
-      currentMode === "week"
-    ) {
-
-      text =
-        "На ближайшие 7 дней занятий нет.";
-
-    }
-
-
-    if (
-      currentMode === "month"
-    ) {
-
-      text =
-        "На ближайшие 30 дней занятий нет.";
-
-    }
-
-
-    if (
-      currentMode === "nearest"
-    ) {
-
-      text =
-        "Ближайших занятий нет.";
-
-    }
-
-
-    container.innerHTML = `
-      <div class="empty">
-        ${text}
-      </div>
-    `;
-
-
-    return;
-
-  }
-
-
-  /*
-   * Группировка по датам.
-   */
-
-  const grouped = {};
-
-
-  for (
-    const lesson
-    of lessons
-  ) {
-
-    if (
-      !grouped[lesson.date]
-    ) {
-
-      grouped[lesson.date] =
-        [];
-
-    }
-
-
-    grouped[lesson.date].push(
-      lesson
-    );
-
-  }
-
-
-  const dates =
-    Object.keys(grouped)
-      .sort();
-
-
-  container.innerHTML = "";
-
-
-  for (
-    const date
-    of dates
-  ) {
-
-    const day =
-      document.createElement(
-        "section"
-      );
-
-
-    day.className =
-      "day";
-
-
-    const dateElement =
-      document.createElement(
-        "div"
-      );
-
-
-    dateElement.className =
-      "date";
-
-
-    dateElement.innerHTML = `
-
-      ${formatDate(date)}
-
-      ${
-        date === today
-          ? '<span class="today-label">СЕГОДНЯ</span>'
-          : ""
-      }
-
-    `;
-
-
-    day.appendChild(
-      dateElement
-    );
-
-
-    grouped[date].sort(
-      (a, b) =>
-        (
-          lessonTimeToMinutes(
-            a.beginLesson
-          ) || 0
-        ) -
-        (
-          lessonTimeToMinutes(
-            b.beginLesson
-          ) || 0
-        )
-    );
-
-
-    for (
-      const lesson
-      of grouped[date]
-    ) {
-
-      day.appendChild(
-        createLessonElement(
-          lesson
-        )
-      );
-
-    }
-
-
-    container.appendChild(
-      day
-    );
-
-  }
-
-}
-
-
-/* -------------------------------
-   ВКЛАДКИ
--------------------------------- */
-
-function setMode(mode) {
-
-  currentMode =
-    mode;
-
-
-  document
-    .querySelectorAll(
-      ".tab"
-    )
-    .forEach(
-      tab => {
-
-        tab.classList.toggle(
-          "active",
-          tab.dataset.mode ===
-          mode
-        );
-
-      }
-    );
-
-
-  render();
-
-}
-
-
-/* -------------------------------
-   ЗАГРУЗКА
--------------------------------- */
-
-async function loadSchedule() {
-
-  const container =
-    document.getElementById(
-      "schedule"
-    );
-
-
-  container.innerHTML = `
-    <div class="loading">
-      Загружаем расписание...
-    </div>
-  `;
-
-
-  try {
-
-    const response =
-      await fetch(
-        "schedule.json?t=" +
-        Date.now()
-      );
-
-
-    if (!response.ok) {
-
-      throw new Error(
-        "Не удалось загрузить schedule.json"
-      );
-
-    }
-
-
-    const schedule =
-      await response.json();
-
-
-    if (
-      !Array.isArray(schedule)
-    ) {
-
-      throw new Error(
-        "schedule.json имеет неправильный формат"
-      );
-
-    }
-
-
-    allLessons =
-      schedule
-        .filter(
-          lesson =>
-            lesson.date
-        );
-
-
-    const now =
-      new Date();
-
-
-    document.getElementById(
-      "updated"
-    ).textContent =
-      "Актуальное расписание • " +
-      "обновлено в " +
-      now.toLocaleTimeString(
-        "ru-RU",
-        {
-          hour: "2-digit",
-          minute: "2-digit"
-        }
-      );
-
-
-    renderNextLesson();
-
-    render();
-
-
-  } catch (error) {
-
-    container.innerHTML = `
-      <div class="error">
-
-        Ошибка загрузки расписания:
-        <br><br>
-
-        ${error.message}
-
-      </div>
-    `;
-
-    console.error(error);
-
-  }
-
-}
-
-
-/* -------------------------------
-   ЗАПУСК
--------------------------------- */
-
-loadSchedule();
-
-
-/*
- * Обновляем статус текущей пары
- * каждую минуту.
- */
-
-setInterval(
-  () => {
-
-    renderNextLesson();
-
-    render();
-
-  },
-  60 * 1000
-);
-
-
-/*
- * Проверяем новый schedule.json
- * каждые 5 минут.
- */
-
-setInterval(
-  loadSchedule,
-  5 * 60 * 1000
-);
-
-</script>
+  </script>
 
 </body>
 </html>
