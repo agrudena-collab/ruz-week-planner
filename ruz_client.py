@@ -29,7 +29,7 @@ def get_group():
 def get_schedule(group_id):
 
     start = date.today()
-    finish = start + timedelta(days=21)
+    finish = start + timedelta(days=70)
 
     url = f"{BASE_URL}/api/schedule/group/{group_id}"
 
