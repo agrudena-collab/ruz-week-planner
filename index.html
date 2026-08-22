@@ -1,1210 +1,2479 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-
-<title>РУЗ · МеждОт25-2</title>
-
-<style>
-
-:root{
-  --bg:#07090f;
-  --surface:#10131c;
-  --surface2:#151925;
-  --text:#f7f8fb;
-  --muted:#8e96a8;
-  --line:rgba(255,255,255,.09);
 
-  --blue:#4f8cff;
-  --purple:#9b6cff;
-  --green:#27df91;
-  --yellow:#ffd166;
-  --pink:#ff5ca8;
-  --cyan:#42d9ff;
+  <meta charset="UTF-8">
 
-  --shadow:0 25px 70px rgba(0,0,0,.35);
-}
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
 
-*{
-  box-sizing:border-box;
-}
+  <meta
+    name="theme-color"
+    content="#070910"
+  >
 
-html{
-  scroll-behavior:smooth;
-}
+  <title>РУЗ · МеждОт25-2</title>
 
-body{
-  margin:0;
-  color:var(--text);
 
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Display",
-    "Segoe UI",
-    sans-serif;
+  <style>
 
-  background:
-    radial-gradient(
-      circle at 15% 0%,
-      rgba(79,140,255,.22),
-      transparent 28%
-    ),
-    radial-gradient(
-      circle at 90% 15%,
-      rgba(155,108,255,.18),
-      transparent 25%
-    ),
-    var(--bg);
+    /* =========================================================
+       VARIABLES
+    ========================================================= */
 
-  min-height:100vh;
-}
+    :root {
 
+      --bg: #070910;
 
-/* Фоновая сетка */
+      --surface: #10131d;
 
-body::before{
-  content:"";
+      --surface-2: #141925;
 
-  position:fixed;
-  inset:0;
+      --surface-3: #191e2b;
 
-  pointer-events:none;
+      --text: #f6f7fb;
 
-  opacity:.28;
+      --muted: #8d96a8;
 
-  background-image:
-    linear-gradient(
-      rgba(255,255,255,.025) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255,255,255,.025) 1px,
-      transparent 1px
-    );
+      --muted-2: #687184;
 
-  background-size:38px 38px;
-}
+      --line: rgba(255,255,255,.085);
 
+      --line-strong: rgba(255,255,255,.14);
 
-button{
-  font:inherit;
-}
+      --blue: #5b8cff;
 
+      --purple: #9b70ff;
 
-.container{
-  width:min(
-    1050px,
-    calc(100% - 28px)
-  );
+      --cyan: #43d9ff;
 
-  margin:auto;
+      --green: #2de39a;
 
-  padding:
-    25px
-    0
-    80px;
-}
+      --red: #e65b63;
 
+      --gold: #e6bc58;
 
-/* =========================
-   HEADER
-========================= */
+      --pink: #ff68ad;
 
-.header{
+      --shadow:
+        0 24px 70px rgba(0,0,0,.35);
 
-  display:flex;
+      --radius-xl: 30px;
 
-  justify-content:space-between;
+      --radius-lg: 23px;
 
-  align-items:center;
+      --radius-md: 17px;
 
-  margin-bottom:20px;
-}
+    }
 
 
-.brand{
+    /* =========================================================
+       RESET
+    ========================================================= */
 
-  display:flex;
+    * {
+      box-sizing: border-box;
+    }
 
-  gap:13px;
 
-  align-items:center;
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
 
-.logo{
+    body {
 
-  width:50px;
-  height:50px;
+      margin: 0;
 
-  border-radius:17px;
+      min-height: 100vh;
 
-  display:grid;
+      color: var(--text);
 
-  place-items:center;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        "Segoe UI",
+        sans-serif;
 
-  font-size:23px;
+      background:
 
-  font-weight:900;
+        radial-gradient(
+          circle at 8% 0%,
+          rgba(91,140,255,.19),
+          transparent 28%
+        ),
 
-  background:
-    linear-gradient(
-      135deg,
-      var(--blue),
-      var(--purple)
-    );
+        radial-gradient(
+          circle at 92% 12%,
+          rgba(155,112,255,.14),
+          transparent 25%
+        ),
 
-  box-shadow:
-    0 10px 35px
-    rgba(79,140,255,.35);
-}
+        radial-gradient(
+          circle at 50% 100%,
+          rgba(67,217,255,.07),
+          transparent 30%
+        ),
 
+        var(--bg);
 
-.title{
+      overflow-x: hidden;
+    }
 
-  font-size:30px;
 
-  font-weight:900;
+    body::before {
 
-  letter-spacing:-1px;
-}
+      content: "";
 
+      position: fixed;
 
-.group{
+      inset: 0;
 
-  color:var(--muted);
+      z-index: -2;
 
-  font-weight:650;
+      pointer-events: none;
 
-  margin-top:3px;
-}
+      opacity: .23;
 
+      background-image:
 
-.header-right{
+        linear-gradient(
+          rgba(255,255,255,.025) 1px,
+          transparent 1px
+        ),
 
-  display:flex;
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,.025) 1px,
+          transparent 1px
+        );
 
-  align-items:center;
+      background-size: 42px 42px;
+    }
 
-  gap:10px;
-}
 
+    body::after {
 
-.updated{
+      content: "";
 
-  color:var(--muted);
+      position: fixed;
 
-  font-size:12px;
-}
+      width: 520px;
 
+      height: 520px;
 
-.refresh{
+      right: -280px;
 
-  border:0;
+      top: 30%;
 
-  border-radius:14px;
+      border-radius: 50%;
 
-  padding:11px 14px;
+      pointer-events: none;
 
-  background:#fff;
+      background:
+        radial-gradient(
+          circle,
+          rgba(91,140,255,.09),
+          transparent 70%
+        );
 
-  color:#080a0f;
+      filter: blur(20px);
 
-  font-weight:800;
+      z-index: -1;
+    }
 
-  cursor:pointer;
 
-  transition:
-    transform .2s,
-    opacity .2s;
-}
+    button {
+      font: inherit;
+    }
 
 
-.refresh:active{
+    /* =========================================================
+       CONTAINER
+    ========================================================= */
 
-  transform:scale(.95);
+    .container {
 
-}
+      width:
+        min(
+          1080px,
+          calc(100% - 28px)
+        );
 
+      margin: 0 auto;
 
-.refresh.loading{
+      padding:
+        25px
+        0
+        80px;
+    }
 
-  opacity:.55;
 
-}
+    /* =========================================================
+       HEADER
+    ========================================================= */
 
+    .header {
 
-/* =========================
-   HERO
-========================= */
+      display: flex;
 
-.hero{
+      justify-content: space-between;
 
-  position:relative;
+      align-items: center;
 
-  overflow:hidden;
+      gap: 20px;
 
-  border:
-    1px solid var(--line);
+      margin-bottom: 20px;
+    }
 
-  border-radius:30px;
 
-  padding:30px;
+    .brand {
 
-  margin-bottom:13px;
+      display: flex;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(24,30,47,.96),
-      rgba(12,15,25,.92)
-    );
+      align-items: center;
 
-  box-shadow:var(--shadow);
+      gap: 13px;
+    }
 
-  backdrop-filter:blur(20px);
-}
 
+    .logo {
 
-.hero::after{
+      position: relative;
 
-  content:"";
+      width: 51px;
 
-  position:absolute;
+      height: 51px;
 
-  width:360px;
-  height:360px;
+      flex: 0 0 auto;
 
-  border-radius:50%;
+      display: grid;
 
-  right:-130px;
-  top:-170px;
+      place-items: center;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(79,140,255,.35),
-      transparent 65%
-    );
+      border-radius: 17px;
 
-  filter:blur(5px);
-}
+      font-size: 22px;
 
+      font-weight: 950;
 
-.hero-content{
+      color: white;
 
-  position:relative;
+      background:
+        linear-gradient(
+          135deg,
+          #4e88ff,
+          #9a68ff
+        );
 
-  z-index:1;
-}
+      box-shadow:
+        0 12px 35px
+        rgba(79,135,255,.28);
 
+      overflow: hidden;
+    }
 
-.eyebrow{
 
-  font-size:12px;
+    .logo::after {
 
-  text-transform:uppercase;
+      content: "";
 
-  letter-spacing:1.5px;
+      position: absolute;
 
-  color:var(--cyan);
+      width: 35px;
 
-  font-weight:900;
+      height: 35px;
 
-  margin-bottom:12px;
-}
+      border-radius: 50%;
 
+      right: -17px;
 
-.live{
+      top: -17px;
 
-  display:inline-flex;
+      background:
+        rgba(255,255,255,.2);
+    }
 
-  align-items:center;
 
-  gap:8px;
+    .title {
 
-  color:#07120d;
+      font-size: 30px;
 
-  background:var(--green);
+      line-height: 1;
 
-  padding:7px 10px;
+      font-weight: 950;
 
-  border-radius:10px;
+      letter-spacing: -1.2px;
+    }
 
-  font-size:11px;
 
-  font-weight:900;
+    .group {
 
-  margin-bottom:12px;
-}
+      margin-top: 5px;
 
+      color: var(--muted);
 
-.dot{
+      font-size: 14px;
 
-  width:7px;
-  height:7px;
+      font-weight: 650;
+    }
 
-  border-radius:50%;
 
-  background:#07120d;
+    .header-right {
 
-  box-shadow:
-    0 0 0 5px
-    rgba(7,18,13,.12);
-}
+      display: flex;
 
+      align-items: center;
 
-.hero-time{
+      gap: 10px;
+    }
 
-  font-size:58px;
 
-  line-height:1;
+    .updated {
 
-  font-weight:950;
+      color: var(--muted);
 
-  letter-spacing:-3px;
+      font-size: 12px;
 
-  margin-bottom:12px;
-}
+      white-space: nowrap;
+    }
 
 
-.hero-subject{
+    .refresh {
 
-  font-size:28px;
+      border: 0;
 
-  font-weight:900;
+      border-radius: 14px;
 
-  max-width:750px;
+      padding:
+        11px
+        15px;
 
-  margin-bottom:18px;
-}
+      color: #0a0c11;
 
+      background: #ffffff;
 
-.chips{
+      font-size: 13px;
 
-  display:flex;
+      font-weight: 850;
 
-  flex-wrap:wrap;
+      cursor: pointer;
 
-  gap:8px;
-}
+      transition:
+        transform .18s ease,
+        opacity .18s ease,
+        box-shadow .18s ease;
+    }
 
 
-.chip{
+    .refresh:hover {
 
-  padding:9px 11px;
+      box-shadow:
+        0 8px 25px
+        rgba(255,255,255,.13);
+    }
 
-  border:
-    1px solid var(--line);
 
-  background:
-    rgba(255,255,255,.055);
+    .refresh:active {
 
-  border-radius:12px;
+      transform: scale(.95);
+    }
 
-  color:#cbd1dd;
 
-  font-size:13px;
+    .refresh.loading {
 
-  font-weight:650;
-}
+      opacity: .55;
 
+      pointer-events: none;
+    }
 
-/* =========================
-   STATS
-========================= */
 
-.stats{
+    /* =========================================================
+       HERO
+    ========================================================= */
 
-  display:grid;
+    .hero {
 
-  grid-template-columns:
-    repeat(3,1fr);
+      position: relative;
 
-  gap:10px;
+      overflow: hidden;
 
-  margin-bottom:20px;
-}
+      margin-bottom: 12px;
 
+      padding: 31px;
 
-.stat{
+      border:
+        1px solid var(--line);
 
-  border:
-    1px solid var(--line);
+      border-radius: var(--radius-xl);
 
-  background:
-    rgba(16,19,28,.78);
+      background:
 
-  border-radius:20px;
+        linear-gradient(
+          135deg,
+          rgba(24,30,47,.96),
+          rgba(10,13,21,.94)
+        );
 
-  padding:17px;
+      box-shadow: var(--shadow);
 
-  box-shadow:
-    0 12px 30px
-    rgba(0,0,0,.18);
-}
+      backdrop-filter: blur(20px);
+    }
 
 
-.stat-value{
+    .hero::before {
 
-  font-size:25px;
+      content: "";
 
-  font-weight:900;
-}
+      position: absolute;
 
+      width: 420px;
 
-.stat-label{
+      height: 420px;
 
-  color:var(--muted);
+      right: -180px;
 
-  font-size:12px;
+      top: -210px;
 
-  margin-top:4px;
-}
+      border-radius: 50%;
 
+      background:
+        radial-gradient(
+          circle,
+          rgba(79,140,255,.28),
+          transparent 67%
+        );
 
-/* =========================
-   TABS
-========================= */
+      filter: blur(5px);
 
-.tabs-wrap{
+      pointer-events: none;
+    }
 
-  position:sticky;
 
-  top:8px;
+    .hero::after {
 
-  z-index:20;
+      content: "";
 
-  margin-bottom:27px;
-}
+      position: absolute;
 
+      width: 200px;
 
-.tabs{
+      height: 200px;
 
-  display:flex;
+      left: -130px;
 
-  gap:5px;
+      bottom: -140px;
 
-  padding:5px;
+      border-radius: 50%;
 
-  border:
-    1px solid var(--line);
+      background:
+        radial-gradient(
+          circle,
+          rgba(155,112,255,.14),
+          transparent 70%
+        );
 
-  background:
-    rgba(14,17,25,.78);
+      pointer-events: none;
+    }
 
-  backdrop-filter:blur(20px);
 
-  border-radius:17px;
+    .hero-content {
 
-  overflow:auto;
-}
+      position: relative;
 
+      z-index: 2;
+    }
 
-.tab{
 
-  border:0;
+    .eyebrow {
 
-  background:transparent;
+      margin-bottom: 11px;
 
-  color:var(--muted);
+      color: var(--cyan);
 
-  padding:11px 15px;
+      font-size: 11px;
 
-  border-radius:12px;
+      font-weight: 900;
 
-  font-weight:800;
+      letter-spacing: 1.7px;
 
-  cursor:pointer;
+      text-transform: uppercase;
+    }
 
-  white-space:nowrap;
 
-  min-width:105px;
+    .live {
 
-  transition:.2s;
-}
+      display: inline-flex;
 
+      align-items: center;
 
-.tab:hover{
+      gap: 8px;
 
-  color:white;
+      margin-bottom: 12px;
 
-}
+      padding:
+        7px
+        10px;
 
+      border-radius: 10px;
 
-.tab.active{
+      color: #06140d;
 
-  color:#111;
+      background: var(--green);
 
-  background:#fff;
+      font-size: 10px;
 
-  box-shadow:
-    0 4px 18px
-    rgba(255,255,255,.12);
-}
+      font-weight: 950;
 
+      letter-spacing: .4px;
+    }
 
-/* =========================
-   DAYS
-========================= */
 
-.day{
+    .live-dot {
 
-  margin-bottom:34px;
-}
+      width: 7px;
 
+      height: 7px;
 
-.day-heading{
+      border-radius: 50%;
 
-  display:flex;
+      background: #06140d;
 
-  justify-content:space-between;
+      box-shadow:
+        0 0 0 5px
+        rgba(6,20,13,.12);
+    }
 
-  align-items:end;
 
-  padding:
-    0
-    4px
-    11px;
-}
+    .hero-time {
 
+      margin-bottom: 12px;
 
-.weekday{
+      font-size: 59px;
 
-  font-size:23px;
+      line-height: .95;
 
-  font-weight:900;
+      font-weight: 950;
 
-  text-transform:capitalize;
-}
+      letter-spacing: -3.5px;
+    }
 
 
-.date{
+    .hero-subject {
 
-  color:var(--muted);
+      max-width: 800px;
 
-  font-size:13px;
+      margin-bottom: 18px;
 
-  margin-top:3px;
-}
+      font-size: 28px;
 
+      line-height: 1.18;
 
-.count{
+      font-weight: 900;
 
-  color:#b8c0cf;
+      letter-spacing: -.5px;
+    }
 
-  background:
-    rgba(255,255,255,.055);
 
-  border:
-    1px solid var(--line);
+    .hero-info {
 
-  padding:7px 10px;
+      display: flex;
 
-  border-radius:12px;
+      flex-wrap: wrap;
 
-  font-size:11px;
+      gap: 8px;
+    }
 
-  font-weight:800;
-}
 
+    .hero-chip {
 
-/* =========================
-   CARDS
-========================= */
+      display: inline-flex;
 
-.grid{
+      align-items: center;
 
-  display:grid;
+      gap: 6px;
 
-  grid-template-columns:
-    repeat(2,1fr);
+      padding:
+        8px
+        11px;
 
-  gap:11px;
-}
+      border:
+        1px solid var(--line);
 
+      border-radius: 11px;
 
-.lesson{
+      color: #cbd1dd;
 
-  position:relative;
+      background:
+        rgba(255,255,255,.055);
 
-  overflow:hidden;
+      font-size: 12px;
 
-  border:
-    1px solid var(--line);
+      font-weight: 650;
+    }
 
-  border-radius:22px;
 
-  padding:18px;
+    /* =========================================================
+       STATS
+    ========================================================= */
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(20,24,35,.96),
-      rgba(12,15,23,.92)
-    );
+    .stats {
 
-  box-shadow:
-    0 14px 35px
-    rgba(0,0,0,.2);
+      display: grid;
 
-  transition:
-    transform .2s,
-    border-color .2s,
-    box-shadow .2s;
-}
+      grid-template-columns:
+        repeat(3, 1fr);
 
+      gap: 10px;
 
-.lesson:hover{
+      margin-bottom: 21px;
+    }
 
-  transform:
-    translateY(-3px);
 
-  border-color:
-    rgba(255,255,255,.18);
+    .stat {
 
-  box-shadow:
-    0 20px 45px
-    rgba(0,0,0,.3);
-}
+      position: relative;
 
+      overflow: hidden;
 
-/* Цвет предмета */
+      padding: 17px;
 
-.lesson::before{
+      border:
+        1px solid var(--line);
 
-  content:"";
+      border-radius: 20px;
 
-  position:absolute;
+      background:
+        rgba(16,19,29,.78);
 
-  left:0;
-  top:0;
-  bottom:0;
+      box-shadow:
+        0 12px 30px
+        rgba(0,0,0,.18);
 
-  width:4px;
+      backdrop-filter: blur(15px);
+    }
 
-  background:
-    var(--accent,var(--blue));
-}
 
+    .stat::after {
 
-/* Светящийся шар */
+      content: "";
 
-.lesson::after{
+      position: absolute;
 
-  content:"";
+      width: 80px;
 
-  position:absolute;
+      height: 80px;
 
-  width:150px;
-  height:150px;
+      right: -40px;
 
-  border-radius:50%;
+      bottom: -45px;
 
-  right:-90px;
-  bottom:-100px;
+      border-radius: 50%;
 
-  background:
-    var(--accent,var(--blue));
+      background:
+        rgba(91,140,255,.09);
+    }
 
-  opacity:.12;
 
-  filter:blur(15px);
-}
+    .stat-value {
 
+      font-size: 25px;
 
-.lesson.current{
+      font-weight: 950;
 
-  border-color:
-    rgba(39,223,145,.55);
+      letter-spacing: -.7px;
+    }
 
-  box-shadow:
-    0 0 0 1px
-    rgba(39,223,145,.12),
 
-    0 20px 55px
-    rgba(39,223,145,.1);
-}
+    .stat-label {
 
+      margin-top: 4px;
 
-.lesson-top{
+      color: var(--muted);
 
-  display:flex;
+      font-size: 11px;
 
-  justify-content:space-between;
+      font-weight: 650;
+    }
 
-  gap:12px;
-}
 
+    /* =========================================================
+       NAVIGATION
+    ========================================================= */
 
-.time{
+    .tabs-wrap {
 
-  color:
-    var(--accent,var(--blue));
+      position: sticky;
 
-  font-weight:900;
+      top: 7px;
 
-  font-size:15px;
-}
+      z-index: 50;
 
+      margin-bottom: 28px;
+    }
 
-.subject{
 
-  font-size:20px;
+    .tabs {
 
-  font-weight:900;
+      display: flex;
 
-  line-height:1.18;
+      gap: 5px;
 
-  margin:
-    9px
-    0
-    13px;
+      padding: 5px;
 
-  max-width:90%;
-}
+      overflow-x: auto;
 
+      border:
+        1px solid var(--line);
 
-.meta{
+      border-radius: 17px;
 
-  display:flex;
+      background:
+        rgba(12,15,23,.82);
 
-  flex-wrap:wrap;
+      box-shadow:
+        0 12px 30px
+        rgba(0,0,0,.16);
 
-  gap:7px;
-}
+      backdrop-filter: blur(22px);
 
+      scrollbar-width: none;
+    }
 
-.meta span{
 
-  font-size:11px;
+    .tabs::-webkit-scrollbar {
+      display: none;
+    }
 
-  color:#aeb6c5;
 
-  background:
-    rgba(255,255,255,.055);
+    .tab {
 
-  border:
-    1px solid
-    rgba(255,255,255,.06);
+      flex: 1;
 
-  padding:7px 9px;
+      min-width: 105px;
 
-  border-radius:10px;
-}
+      padding:
+        11px
+        14px;
 
+      border: 0;
 
-.badge{
+      border-radius: 12px;
 
-  font-size:9px;
+      color: var(--muted);
 
-  font-weight:950;
+      background: transparent;
 
-  color:#07120d;
+      font-size: 13px;
 
-  background:
-    var(--green);
+      font-weight: 850;
 
-  height:max-content;
+      white-space: nowrap;
 
-  padding:6px 8px;
+      cursor: pointer;
 
-  border-radius:9px;
-}
+      transition:
+        color .2s ease,
+        background .2s ease,
+        transform .2s ease;
+    }
 
 
-/* =========================
-   EMPTY / ERROR
-========================= */
+    .tab:hover {
 
-.empty,
-.error{
+      color: #fff;
+    }
 
-  padding:
-    45px
-    20px;
 
-  text-align:center;
+    .tab:active {
 
-  border:
-    1px solid var(--line);
+      transform: scale(.97);
+    }
 
-  border-radius:22px;
 
-  background:
-    rgba(16,19,28,.75);
+    .tab.active {
 
-  color:var(--muted);
-}
+      color: #111319;
 
+      background: #fff;
 
-.empty strong,
-.error strong{
+      box-shadow:
+        0 4px 18px
+        rgba(255,255,255,.1);
+    }
 
-  display:block;
 
-  color:var(--text);
+    /* =========================================================
+       DAY
+    ========================================================= */
 
-  font-size:19px;
+    .day {
 
-  margin-bottom:7px;
-}
+      margin-bottom: 35px;
 
+      animation:
+        dayAppear .35s ease both;
+    }
 
-.source{
 
-  text-align:center;
+    @keyframes dayAppear {
 
-  color:#606878;
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
 
-  font-size:11px;
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
 
-  margin-top:35px;
-}
+    }
 
 
-/* =========================
-   MOBILE
-========================= */
+    .day-heading {
 
-@media(max-width:700px){
+      display: flex;
 
-  .container{
+      justify-content: space-between;
 
-    width:
-      calc(100% - 18px);
+      align-items: flex-end;
 
-    padding-top:15px;
-  }
+      gap: 15px;
 
+      padding:
+        0
+        4px
+        11px;
+    }
 
-  .title{
 
-    font-size:26px;
-  }
+    .weekday {
 
+      font-size: 23px;
 
-  .logo{
+      line-height: 1.1;
 
-    width:44px;
-    height:44px;
-  }
+      font-weight: 950;
 
+      text-transform: capitalize;
 
-  .updated{
+      letter-spacing: -.5px;
+    }
 
-    display:none;
-  }
 
+    .date {
 
-  .hero{
+      margin-top: 4px;
 
-    padding:21px;
+      color: var(--muted);
 
-    border-radius:24px;
-  }
+      font-size: 12px;
 
+      font-weight: 600;
+    }
 
-  .hero-time{
 
-    font-size:42px;
+    .day-count {
 
-    letter-spacing:-2px;
-  }
+      padding:
+        7px
+        10px;
 
+      border:
+        1px solid var(--line);
 
-  .hero-subject{
+      border-radius: 11px;
 
-    font-size:22px;
-  }
+      color: #b7bfce;
 
+      background:
+        rgba(255,255,255,.045);
 
-  .stats{
+      font-size: 10px;
 
-    gap:7px;
-  }
+      font-weight: 850;
 
+      white-space: nowrap;
+    }
 
-  .stat{
 
-    padding:13px;
+    /* =========================================================
+       LESSON GRID
+    ========================================================= */
 
-    border-radius:16px;
-  }
+    .lesson-grid {
 
+      display: grid;
 
-  .stat-value{
+      grid-template-columns:
+        repeat(2, 1fr);
 
-    font-size:20px;
-  }
+      gap: 11px;
+    }
 
 
-  .stat-label{
+    /* =========================================================
+       BASE LESSON CARD
+    ========================================================= */
 
-    font-size:10px;
-  }
+    .lesson {
 
+      --accent: var(--blue);
 
-  .grid{
+      position: relative;
 
-    grid-template-columns:1fr;
-  }
+      overflow: hidden;
 
+      padding: 18px;
 
-  .lesson{
+      border:
+        1px solid var(--line);
 
-    border-radius:19px;
-  }
+      border-radius: var(--radius-lg);
 
+      background:
 
-  .tabs-wrap{
+        linear-gradient(
+          145deg,
+          rgba(20,24,35,.97),
+          rgba(11,14,22,.95)
+        );
 
-    top:5px;
-  }
+      box-shadow:
+        0 14px 35px
+        rgba(0,0,0,.22);
 
+      cursor: pointer;
 
-  .tab{
+      isolation: isolate;
 
-    min-width:88px;
+      transition:
+        transform .24s ease,
+        border-color .24s ease,
+        box-shadow .24s ease;
+    }
 
-    padding:
-      10px
-      9px;
 
-    font-size:12px;
-  }
+    .lesson:hover {
 
-}
+      transform:
+        translateY(-3px);
 
-</style>
+      border-color:
+        rgba(255,255,255,.16);
+
+      box-shadow:
+        0 20px 48px
+        rgba(0,0,0,.31);
+    }
+
+
+    .lesson:active {
+
+      transform:
+        scale(.988);
+    }
+
+
+    /* Цветовая линия */
+
+    .lesson::before {
+
+      content: "";
+
+      position: absolute;
+
+      left: 0;
+
+      top: 0;
+
+      bottom: 0;
+
+      width: 4px;
+
+      background:
+        var(--accent);
+
+      z-index: 4;
+    }
+
+
+    /* Общий glow */
+
+    .lesson::after {
+
+      content: "";
+
+      position: absolute;
+
+      width: 170px;
+
+      height: 170px;
+
+      right: -100px;
+
+      bottom: -110px;
+
+      border-radius: 50%;
+
+      background:
+        var(--accent);
+
+      opacity: .075;
+
+      filter: blur(16px);
+
+      pointer-events: none;
+
+      z-index: -1;
+    }
+
+
+    .lesson-visual {
+
+      position: absolute;
+
+      inset: 0;
+
+      overflow: hidden;
+
+      pointer-events: none;
+
+      z-index: -1;
+    }
+
+
+    .lesson-top {
+
+      position: relative;
+
+      z-index: 3;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: flex-start;
+
+      gap: 13px;
+    }
+
+
+    .lesson-main {
+
+      min-width: 0;
+    }
+
+
+    .lesson-time {
+
+      color:
+        var(--accent);
+
+      font-size: 14px;
+
+      font-weight: 900;
+
+      letter-spacing: -.1px;
+    }
+
+
+    .lesson-subject {
+
+      margin-top: 8px;
+
+      margin-bottom: 13px;
+
+      max-width: 92%;
+
+      font-size: 19px;
+
+      line-height: 1.22;
+
+      font-weight: 900;
+
+      letter-spacing: -.25px;
+    }
+
+
+    .lesson-meta {
+
+      position: relative;
+
+      z-index: 3;
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 7px;
+    }
+
+
+    .meta-pill {
+
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 5px;
+
+      padding:
+        7px
+        9px;
+
+      border:
+        1px solid
+        rgba(255,255,255,.06);
+
+      border-radius: 10px;
+
+      color: #aeb6c5;
+
+      background:
+        rgba(255,255,255,.045);
+
+      font-size: 10px;
+
+      font-weight: 650;
+    }
+
+
+    .current-badge {
+
+      position: relative;
+
+      z-index: 5;
+
+      flex: 0 0 auto;
+
+      padding:
+        6px
+        8px;
+
+      border-radius: 9px;
+
+      color: #06140d;
+
+      background:
+        var(--green);
+
+      font-size: 9px;
+
+      font-weight: 950;
+
+      letter-spacing: .3px;
+    }
+
+
+    /* =========================================================
+       MATHEMATICS
+    ========================================================= */
+
+    .lesson.math {
+
+      --accent: #6d8cff;
+    }
+
+
+    .lesson.math .lesson-visual::before {
+
+      content: "∑";
+
+      position: absolute;
+
+      top: -9px;
+
+      right: 17px;
+
+      color:
+        rgba(109,140,255,.105);
+
+      font-size: 70px;
+
+      line-height: 1;
+
+      font-weight: 950;
+    }
+
+
+    .lesson.math .lesson-visual::after {
+
+      content: "";
+
+      position: absolute;
+
+      inset: 0;
+
+      opacity: .28;
+
+      background-image:
+
+        linear-gradient(
+          rgba(109,140,255,.11) 1px,
+          transparent 1px
+        ),
+
+        linear-gradient(
+          90deg,
+          rgba(109,140,255,.11) 1px,
+          transparent 1px
+        );
+
+      background-size:
+        21px
+        21px;
+
+      mask-image:
+        linear-gradient(
+          135deg,
+          transparent 5%,
+          black 75%
+        );
+    }
+
+
+    .lesson.math::after {
+
+      width: 90px;
+
+      height: 90px;
+
+      right: 35px;
+
+      bottom: -55px;
+
+      border:
+        1px solid
+        rgba(109,140,255,.18);
+
+      background:
+        transparent;
+
+      opacity: 1;
+
+      filter: none;
+
+      box-shadow:
+        -55px -28px 0 -42px
+        rgba(109,140,255,.7);
+    }
+
+
+    /* =========================================================
+       CHINESE
+    ========================================================= */
+
+    .lesson.chinese {
+
+      --accent: #e25a61;
+    }
+
+
+    .lesson.chinese .lesson-visual::before {
+
+      content: "中文";
+
+      position: absolute;
+
+      top: -4px;
+
+      right: 13px;
+
+      color:
+        rgba(226,90,97,.10);
+
+      font-size: 48px;
+
+      line-height: 1;
+
+      font-weight: 900;
+
+      letter-spacing: 4px;
+    }
+
+
+    .lesson.chinese .lesson-visual::after {
+
+      content: "";
+
+      position: absolute;
+
+      inset: 0;
+
+      opacity: .19;
+
+      background-image:
+
+        radial-gradient(
+          circle,
+          rgba(230,188,88,.18) 1px,
+          transparent 1.5px
+        );
+
+      background-size:
+        19px
+        19px;
+
+      mask-image:
+        linear-gradient(
+          135deg,
+          transparent,
+          black
+        );
+    }
+
+
+    .lesson.chinese::after {
+
+      width: 180px;
+
+      height: 180px;
+
+      right: -110px;
+
+      bottom: -115px;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(230,188,88,.32),
+          transparent 68%
+        );
+
+      opacity: .75;
+    }
+
+
+    /* =========================================================
+       DATA / STATISTICS
+    ========================================================= */
+
+    .lesson.data {
+
+      --accent: #9b70ff;
+    }
+
+
+    .lesson.data .lesson-visual::before {
+
+      content: "01 10 11";
+
+      position: absolute;
+
+      right: 15px;
+
+      top: 15px;
+
+      color:
+        rgba(155,112,255,.18);
+
+      font-family:
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+      font-size: 11px;
+
+      letter-spacing: 3px;
+
+      font-weight: 700;
+    }
+
+
+    .lesson.data .lesson-visual::after {
+
+      content: "";
+
+      position: absolute;
+
+      right: -5px;
+
+      bottom: 5px;
+
+      width: 170px;
+
+      height: 80px;
+
+      opacity: .36;
+
+      border-left:
+        1px solid
+        rgba(155,112,255,.25);
+
+      border-bottom:
+        1px solid
+        rgba(155,112,255,.25);
+
+      background:
+
+        radial-gradient(
+          circle at 20% 70%,
+          rgba(155,112,255,.65) 2px,
+          transparent 3px
+        ),
+
+        radial-gradient(
+          circle at 42% 48%,
+          rgba(155,112,255,.65) 2px,
+          transparent 3px
+        ),
+
+        radial-gradient(
+          circle at 65% 58%,
+          rgba(155,112,255,.65) 2px,
+          transparent 3px
+        ),
+
+        radial-gradient(
+          circle at 88% 22%,
+          rgba(155,112,255,.65) 2px,
+          transparent 3px
+        );
+    }
+
+
+    /* =========================================================
+       ECONOMICS / FINANCE
+    ========================================================= */
+
+    .lesson.finance {
+
+      --accent: #e6bc58;
+    }
+
+
+    .lesson.finance .lesson-visual::before {
+
+      content: "↗";
+
+      position: absolute;
+
+      top: -10px;
+
+      right: 13px;
+
+      color:
+        rgba(230,188,88,.11);
+
+      font-size: 70px;
+
+      font-weight: 950;
+    }
+
+
+    .lesson.finance .lesson-visual::after {
+
+      content: "";
+
+      position: absolute;
+
+      right: 0;
+
+      bottom: 0;
+
+      width: 210px;
+
+      height: 100px;
+
+      opacity: .28;
+
+      background:
+
+        linear-gradient(
+          150deg,
+          transparent 42%,
+          rgba(230,188,88,.65) 43%,
+          rgba(230,188,88,.65) 44%,
+          transparent 45%
+        );
+    }
+
+
+    .lesson.finance {
+
+      background:
+
+        linear-gradient(
+          145deg,
+          rgba(25,24,20,.97),
+          rgba(13,14,19,.95)
+        );
+    }
+
+
+    /* =========================================================
+       MILITARY
+    ========================================================= */
+
+    .lesson.military {
+
+      --accent: #45cf8b;
+    }
+
+
+    .lesson.military .lesson-visual::before {
+
+      content: "✦";
+
+      position: absolute;
+
+      top: -4px;
+
+      right: 18px;
+
+      color:
+        rgba(69,207,139,.11);
+
+      font-size: 52px;
+
+      font-weight: 950;
+    }
+
+
+    .lesson.military .lesson-visual::after {
+
+      content: "";
+
+      position: absolute;
+
+      inset: 0;
+
+      opacity: .19;
+
+      background:
+
+        repeating-linear-gradient(
+          135deg,
+          transparent 0,
+          transparent 12px,
+          rgba(69,207,139,.14) 13px,
+          transparent 15px
+        );
+    }
+
+
+    /* =========================================================
+       SPORT
+    ========================================================= */
+
+    .lesson.sport {
+
+      --accent: #43d9ff;
+    }
+
+
+    .lesson.sport .lesson-visual::before {
+
+      content: "↯";
+
+      position: absolute;
+
+      top: -6px;
+
+      right: 17px;
+
+      color:
+        rgba(67,217,255,.11);
+
+      font-size: 63px;
+
+      font-weight: 950;
+    }
+
+
+    .lesson.sport .lesson-visual::after {
+
+      content: "";
+
+      position: absolute;
+
+      right: -25px;
+
+      bottom: -25px;
+
+      width: 150px;
+
+      height: 150px;
+
+      border:
+        2px solid
+        rgba(67,217,255,.12);
+
+      transform:
+        rotate(45deg);
+    }
+
+
+    /* =========================================================
+       DEFAULT
+    ========================================================= */
+
+    .lesson.default {
+
+      --accent: #5b8cff;
+    }
+
+
+    .lesson.default .lesson-visual::before {
+
+      content: "";
+
+      position: absolute;
+
+      width: 200px;
+
+      height: 200px;
+
+      right: -110px;
+
+      top: -120px;
+
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(91,140,255,.15),
+          transparent 70%
+        );
+    }
+
+
+    /* =========================================================
+       EXPANDABLE DETAILS
+    ========================================================= */
+
+    .lesson-details {
+
+      display: grid;
+
+      grid-template-rows: 0fr;
+
+      margin-top: 0;
+
+      opacity: 0;
+
+      transition:
+
+        grid-template-rows .3s ease,
+
+        opacity .22s ease,
+
+        margin-top .3s ease;
+    }
+
+
+    .lesson-details-inner {
+
+      min-height: 0;
+
+      overflow: hidden;
+    }
+
+
+    .lesson.expanded .lesson-details {
+
+      grid-template-rows: 1fr;
+
+      margin-top: 16px;
+
+      opacity: 1;
+    }
+
+
+    .details-divider {
+
+      height: 1px;
+
+      margin-bottom: 10px;
+
+      background:
+        rgba(255,255,255,.08);
+    }
+
+
+    .detail-row {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: flex-start;
+
+      gap: 15px;
+
+      padding: 5px 0;
+
+      font-size: 11px;
+
+      line-height: 1.4;
+    }
+
+
+    .detail-label {
+
+      flex: 0 0 auto;
+
+      color:
+        var(--muted-2);
+
+      font-weight: 650;
+    }
+
+
+    .detail-value {
+
+      max-width: 70%;
+
+      color:
+        #dce1e9;
+
+      text-align: right;
+
+      font-weight: 700;
+    }
+
+
+    .expand-hint {
+
+      margin-top: 11px;
+
+      color:
+        #626c7e;
+
+      font-size: 9px;
+
+      font-weight: 650;
+
+      text-align: right;
+    }
+
+
+    /* =========================================================
+       CURRENT LESSON
+    ========================================================= */
+
+    .lesson.current {
+
+      border-color:
+        rgba(45,227,154,.5);
+
+      box-shadow:
+
+        0 0 0 1px
+        rgba(45,227,154,.09),
+
+        0 22px 55px
+        rgba(45,227,154,.09);
+    }
+
+
+    .lesson.current::before {
+
+      background:
+        linear-gradient(
+          180deg,
+          var(--green),
+          #22bd7e
+        );
+    }
+
+
+    .lesson.current .lesson-time {
+
+      color:
+        var(--green);
+    }
+
+
+    /* =========================================================
+       EMPTY
+    ========================================================= */
+
+    .empty {
+
+      padding:
+        50px
+        20px;
+
+      text-align: center;
+
+      border:
+        1px solid var(--line);
+
+      border-radius: 23px;
+
+      color: var(--muted);
+
+      background:
+        rgba(16,19,29,.78);
+
+      box-shadow:
+        0 18px 45px
+        rgba(0,0,0,.18);
+    }
+
+
+    .empty-icon {
+
+      margin-bottom: 10px;
+
+      font-size: 34px;
+    }
+
+
+    .empty-title {
+
+      margin-bottom: 6px;
+
+      color: var(--text);
+
+      font-size: 19px;
+
+      font-weight: 900;
+    }
+
+
+    .empty-text {
+
+      font-size: 13px;
+    }
+
+
+    /* =========================================================
+       ERROR
+    ========================================================= */
+
+    .error {
+
+      padding: 20px;
+
+      border:
+        1px solid
+        rgba(255,80,80,.18);
+
+      border-radius: 18px;
+
+      color: #ff9c9c;
+
+      background:
+        rgba(90,20,25,.3);
+
+      line-height: 1.5;
+    }
+
+
+    .error strong {
+
+      display: block;
+
+      margin-bottom: 5px;
+
+      color: #ffb4b4;
+    }
+
+
+    /* =========================================================
+       SOURCE
+    ========================================================= */
+
+    .source {
+
+      margin-top: 38px;
+
+      color:
+        #596173;
+
+      font-size: 10px;
+
+      font-weight: 600;
+
+      text-align: center;
+    }
+
+
+    /* =========================================================
+       MOBILE
+    ========================================================= */
+
+    @media(
+      max-width: 700px
+    ){
+
+      .container {
+
+        width:
+          calc(100% - 18px);
+
+        padding-top: 15px;
+      }
+
+
+      .header {
+
+        align-items:
+          flex-start;
+      }
+
+
+      .logo {
+
+        width: 44px;
+
+        height: 44px;
+
+        border-radius: 14px;
+
+        font-size: 19px;
+      }
+
+
+      .title {
+
+        font-size: 26px;
+      }
+
+
+      .group {
+
+        font-size: 13px;
+      }
+
+
+      .updated {
+
+        display: none;
+      }
+
+
+      .refresh {
+
+        padding:
+          9px
+          11px;
+
+        font-size: 12px;
+      }
+
+
+      .hero {
+
+        padding: 21px;
+
+        border-radius: 24px;
+      }
+
+
+      .hero-time {
+
+        font-size: 43px;
+
+        letter-spacing: -2.3px;
+      }
+
+
+      .hero-subject {
+
+        font-size: 21px;
+      }
+
+
+      .hero-chip {
+
+        font-size: 11px;
+      }
+
+
+      .stats {
+
+        gap: 7px;
+      }
+
+
+      .stat {
+
+        padding: 13px;
+
+        border-radius: 16px;
+      }
+
+
+      .stat-value {
+
+        font-size: 20px;
+      }
+
+
+      .stat-label {
+
+        font-size: 10px;
+      }
+
+
+      .tabs-wrap {
+
+        top: 5px;
+      }
+
+
+      .tabs {
+
+        border-radius: 15px;
+      }
+
+
+      .tab {
+
+        min-width: 89px;
+
+        padding:
+          10px
+          8px;
+
+        font-size: 11px;
+      }
+
+
+      .weekday {
+
+        font-size: 20px;
+      }
+
+
+      .lesson-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 9px;
+      }
+
+
+      .lesson {
+
+        padding: 16px;
+
+        border-radius: 19px;
+      }
+
+
+      .lesson-subject {
+
+        font-size: 18px;
+      }
+
+
+      .meta-pill {
+
+        font-size: 10px;
+      }
+
+
+      .detail-row {
+
+        font-size: 10px;
+      }
+
+    }
+
+
+    /* =========================================================
+       VERY SMALL SCREENS
+    ========================================================= */
+
+    @media(
+      max-width: 380px
+    ){
+
+      .stats {
+
+        grid-template-columns:
+          1fr 1fr 1fr;
+      }
+
+
+      .stat {
+
+        padding: 10px;
+      }
+
+
+      .stat-value {
+
+        font-size: 18px;
+      }
+
+
+      .stat-label {
+
+        font-size: 9px;
+      }
+
+
+      .hero-time {
+
+        font-size: 37px;
+      }
+
+    }
+
+  </style>
+
 </head>
 
 
 <body>
 
+
 <div class="container">
 
 
-<header class="header">
+  <!-- =======================================================
+       HEADER
+  ======================================================== -->
 
-  <div class="brand">
+  <header class="header">
 
-    <div class="logo">
-      R
-    </div>
 
-    <div>
+    <div class="brand">
 
-      <div class="title">
-        Расписание
+
+      <div class="logo">
+        R
       </div>
 
-      <div class="group">
-        МеждОт25-2 · РУЗ
+
+      <div>
+
+
+        <div class="title">
+          Расписание
+        </div>
+
+
+        <div class="group">
+          МеждОт25-2 · РУЗ
+        </div>
+
+
       </div>
 
+
     </div>
 
-  </div>
+
+    <div class="header-right">
 
 
-  <div class="header-right">
+      <div
+        class="updated"
+        id="updated"
+      >
+        Загрузка...
+      </div>
 
-    <div
-      class="updated"
-      id="updated"
-    >
-      Загрузка...
+
+      <button
+        class="refresh"
+        id="refreshButton"
+      >
+        ↻ Обновить
+      </button>
+
+
     </div>
 
-    <button
-      class="refresh"
-      id="refreshButton"
-    >
-      ↻ Обновить
-    </button>
+
+  </header>
+
+
+
+  <!-- =======================================================
+       NEXT LESSON
+  ======================================================== -->
+
+  <div id="nextLesson"></div>
+
+
+
+  <!-- =======================================================
+       STATS
+  ======================================================== -->
+
+  <div
+    class="stats"
+    id="stats"
+  ></div>
+
+
+
+  <!-- =======================================================
+       NAVIGATION
+  ======================================================== -->
+
+  <div class="tabs-wrap">
+
+
+    <nav class="tabs">
+
+
+      <button
+        class="tab active"
+        data-view="nearest"
+      >
+        Ближайшее
+      </button>
+
+
+      <button
+        class="tab"
+        data-view="today"
+      >
+        Сегодня
+      </button>
+
+
+      <button
+        class="tab"
+        data-view="tomorrow"
+      >
+        Завтра
+      </button>
+
+
+      <button
+        class="tab"
+        data-view="week"
+      >
+        Неделя
+      </button>
+
+
+      <button
+        class="tab"
+        data-view="month"
+      >
+        Месяц
+      </button>
+
+
+    </nav>
+
 
   </div>
 
-</header>
 
 
-<div id="nextLesson"></div>
+  <!-- =======================================================
+       SCHEDULE
+  ======================================================== -->
+
+  <main id="schedule">
 
 
-<div
-  class="stats"
-  id="stats"
-></div>
+    <div class="empty">
 
 
-<div class="tabs-wrap">
-
-  <nav class="tabs">
-
-    <button
-      class="tab active"
-      data-view="nearest"
-    >
-      Ближайшее
-    </button>
-
-    <button
-      class="tab"
-      data-view="today"
-    >
-      Сегодня
-    </button>
-
-    <button
-      class="tab"
-      data-view="tomorrow"
-    >
-      Завтра
-    </button>
-
-    <button
-      class="tab"
-      data-view="week"
-    >
-      Неделя
-    </button>
-
-    <button
-      class="tab"
-      data-view="month"
-    >
-      Месяц
-    </button>
-
-  </nav>
-
-</div>
+      <div class="empty-icon">
+        ✦
+      </div>
 
 
-<main id="schedule">
+      <div class="empty-title">
+        Загружаем расписание
+      </div>
 
-  <div class="empty">
-    Загрузка расписания...
+
+      <div class="empty-text">
+        Получаем актуальные данные из РУЗ.
+      </div>
+
+
+    </div>
+
+
+  </main>
+
+
+
+  <div class="source">
+
+    Автоматически обновляется из РУЗ · МеждОт25-2
+
   </div>
 
-</main>
-
-
-<div class="source">
-
-  Автоматически обновляется из РУЗ · МеждОт25-2
 
 </div>
 
-
-</div>
 
 
 <script>
+
+
+/* =========================================================
+   STATE
+========================================================= */
 
 let schedule = [];
 
 let currentView = "nearest";
 
 
-const $ = id =>
-  document.getElementById(id);
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function $(id) {
+
+  return document.getElementById(id);
+
+}
 
 
-const pad = n =>
-  String(n).padStart(2,"0");
+function pad(value) {
+
+  return String(value)
+    .padStart(2, "0");
+
+}
 
 
 function localDateString(
-  d = new Date()
-){
+  date = new Date()
+) {
 
-  return (
-    d.getFullYear()
-    + "-"
-    + pad(d.getMonth()+1)
-    + "-"
-    + pad(d.getDate())
-  );
+  return [
+
+    date.getFullYear(),
+
+    pad(
+      date.getMonth() + 1
+    ),
+
+    pad(
+      date.getDate()
+    )
+
+  ].join("-");
 
 }
 
 
 function addDays(
-  d,
-  n
-){
+  date,
+  amount
+) {
 
-  const x =
-    new Date(d);
+  const result =
+    new Date(date);
 
-  x.setDate(
-    x.getDate() + n
+  result.setDate(
+    result.getDate() + amount
   );
 
-  return x;
+  return result;
 
 }
 
 
-function dateFromString(v){
+function dateFromString(
+  value
+) {
 
   return new Date(
-    v + "T00:00:00"
+    value + "T00:00:00"
   );
 
 }
 
 
-function formatDate(v){
+function formatDate(
+  value
+) {
 
-  return dateFromString(v)
-    .toLocaleDateString(
-      "ru-RU",
-      {
-        day:"numeric",
-        month:"long"
-      }
-    );
-
-}
-
-
-function formatWeekday(v){
-
-  return dateFromString(v)
-    .toLocaleDateString(
-      "ru-RU",
-      {
-        weekday:"long"
-      }
-    );
+  return dateFromString(
+    value
+  ).toLocaleDateString(
+    "ru-RU",
+    {
+      day: "numeric",
+      month: "long"
+    }
+  );
 
 }
 
 
-function esc(v){
+function formatWeekday(
+  value
+) {
+
+  return dateFromString(
+    value
+  ).toLocaleDateString(
+    "ru-RU",
+    {
+      weekday: "long"
+    }
+  );
+
+}
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHtml(
+  value
+) {
 
   return String(
-    v ?? ""
+    value ?? ""
   )
-  .replace(/&/g,"&amp;")
-  .replace(/</g,"&lt;")
-  .replace(/>/g,"&gt;")
-  .replace(/"/g,"&quot;")
-  .replace(/'/g,"&#039;");
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
 
-function dt(
+/* =========================================================
+   LESSON DATETIME
+========================================================= */
+
+function lessonDateTime(
   lesson,
   field
-){
+) {
 
   return new Date(
     `${lesson.date}T${lesson[field]}:00`
@@ -1213,33 +2482,41 @@ function dt(
 }
 
 
-function current(lesson){
+function isCurrentLesson(
+  lesson
+) {
 
   const now =
     new Date();
 
-  return (
-    now >= dt(
+  const start =
+    lessonDateTime(
       lesson,
       "beginLesson"
-    )
-    &&
-    now <
-    dt(
+    );
+
+  const end =
+    lessonDateTime(
       lesson,
       "endLesson"
-    )
+    );
+
+  return (
+    now >= start &&
+    now < end
   );
 
 }
 
 
-function ended(lesson){
+function hasEnded(
+  lesson
+) {
 
   return (
     new Date()
     >=
-    dt(
+    lessonDateTime(
       lesson,
       "endLesson"
     )
@@ -1248,147 +2525,268 @@ function ended(lesson){
 }
 
 
-function sort(lessons){
+/* =========================================================
+   SORT
+========================================================= */
 
-  return [...lessons].sort(
-    (a,b) =>
+function sortLessons(
+  lessons
+) {
 
-      (a.date || "")
-      .localeCompare(
-        b.date || ""
-      )
+  return [
+    ...lessons
+  ].sort(
+    (
+      a,
+      b
+    ) => {
 
-      ||
+      const dateCompare =
+        (a.date || "")
+        .localeCompare(
+          b.date || ""
+        );
 
-      (a.beginLesson || "")
-      .localeCompare(
-        b.beginLesson || ""
-      )
 
+      if(
+        dateCompare !== 0
+      ) {
+
+        return dateCompare;
+
+      }
+
+
+      return (
+        (a.beginLesson || "")
+        .localeCompare(
+          b.beginLesson || ""
+        )
+      );
+
+    }
   );
 
 }
 
 
-/*
-================================
-ЦВЕТ ПРЕДМЕТА
-================================
-*/
+/* =========================================================
+   SUBJECT TYPE
+========================================================= */
 
-function accent(
+function getSubjectType(
   subject = ""
-){
+) {
 
   const s =
     subject.toLowerCase();
 
 
-  if(
-    /статист|математ|анализ/.test(s)
-  ){
+  /*
+    МАТЕМАТИКА
+  */
 
-    return "#9b6cff";
+  if(
+    /математ|матан|алгебр|геометр|мат\.? анализ/.test(s)
+  ) {
+
+    return "math";
 
   }
 
 
-  if(
-    /китай|кит|язык/.test(s)
-  ){
+  /*
+    КИТАЙСКИЙ
+  */
 
-    return "#ff5ca8";
+  if(
+    /китай|кит\.?\s*язык|中文|китайск/.test(s)
+  ) {
+
+    return "chinese";
 
   }
 
 
-  if(
-    /англ|english/.test(s)
-  ){
+  /*
+    АНАЛИЗ ДАННЫХ / СТАТИСТИКА
+  */
 
-    return "#42d9ff";
+  if(
+    /анализ данных|статист|data/.test(s)
+  ) {
+
+    return "data";
 
   }
 
 
-  if(
-    /бух|учет|финанс/.test(s)
-  ){
+  /*
+    ЭКОНОМИКА / ФИНАНСЫ
+  */
 
-    return "#ffd166";
+  if(
+    /эконом|финанс|бухгалтер|учет|учёт|рынок/.test(s)
+  ) {
+
+    return "finance";
 
   }
 
 
-  if(
-    /военн|физ|спорт/.test(s)
-  ){
+  /*
+    ВОЕННАЯ ПОДГОТОВКА
+  */
 
-    return "#27df91";
+  if(
+    /военн|военная подготовка/.test(s)
+  ) {
+
+    return "military";
 
   }
 
 
-  return "#4f8cff";
+  /*
+    ФИЗКУЛЬТУРА
+  */
+
+  if(
+    /физкультур|физическая культура|спорт/.test(s)
+  ) {
+
+    return "sport";
+
+  }
+
+
+  return "default";
 
 }
 
 
-/*
-================================
-NEXT LESSON
-================================
-*/
+/* =========================================================
+   EXTRA FIELDS
+========================================================= */
 
-function next(){
+function getAddress(
+  lesson
+) {
+
+  return (
+    lesson.address ||
+    lesson.adress ||
+    lesson.location ||
+    lesson.addressName ||
+    lesson.fullAddress ||
+    ""
+  );
+
+}
+
+
+function getLessonType(
+  lesson
+) {
+
+  return (
+    lesson.lessonType ||
+    lesson.kindOfWork ||
+    lesson.kind ||
+    lesson.type ||
+    lesson.form ||
+    ""
+  );
+
+}
+
+
+/* =========================================================
+   NEXT LESSON
+========================================================= */
+
+function findNextLesson() {
 
   const sorted =
-    sort(schedule);
-
-
-  const c =
-    sorted.find(
-      current
+    sortLessons(
+      schedule
     );
 
 
-  if(c){
+  const current =
+    sorted.find(
+      lesson =>
+        isCurrentLesson(
+          lesson
+        )
+    );
+
+
+  if(
+    current
+  ) {
 
     return {
-      lesson:c,
-      current:true
+
+      lesson:
+        current,
+
+      current:
+        true
+
     };
 
   }
 
 
-  const n =
+  const next =
     sorted.find(
-      x =>
-        !ended(x)
+      lesson =>
+        !hasEnded(
+          lesson
+        )
     );
 
 
-  return n
-    ? {
-        lesson:n,
-        current:false
-      }
-    : null;
+  if(
+    next
+  ) {
+
+    return {
+
+      lesson:
+        next,
+
+      current:
+        false
+
+    };
+
+  }
+
+
+  return null;
 
 }
 
 
-function renderNext(){
+/* =========================================================
+   RENDER NEXT
+========================================================= */
 
-  const result =
-    next();
+function renderNextLesson() {
 
   const container =
     $("nextLesson");
 
 
-  if(!result){
+  const result =
+    findNextLesson();
+
+
+  if(
+    !result
+  ) {
 
     container.innerHTML = `
 
@@ -1401,7 +2799,7 @@ function renderNext(){
           </div>
 
           <div class="hero-subject">
-            Ближайших занятий нет ✨
+            Ближайших занятий нет ✦
           </div>
 
         </div>
@@ -1425,6 +2823,7 @@ function renderNext(){
 
       <div class="hero-content">
 
+
         ${
           result.current
 
@@ -1433,7 +2832,7 @@ function renderNext(){
           `
           <div class="live">
 
-            <span class="dot"></span>
+            <span class="live-dot"></span>
 
             СЕЙЧАС ИДЁТ
 
@@ -1447,18 +2846,19 @@ function renderNext(){
             Следующая пара
           </div>
           `
+
         }
 
 
         <div class="hero-time">
 
-          ${esc(
+          ${escapeHtml(
             lesson.beginLesson
           )}
 
           –
 
-          ${esc(
+          ${escapeHtml(
             lesson.endLesson
           )}
 
@@ -1467,7 +2867,7 @@ function renderNext(){
 
         <div class="hero-subject">
 
-          ${esc(
+          ${escapeHtml(
             lesson.discipline ||
             "Предмет не указан"
           )}
@@ -1475,13 +2875,14 @@ function renderNext(){
         </div>
 
 
-        <div class="chips">
+        <div class="hero-info">
 
-          <span class="chip">
+
+          <span class="hero-chip">
 
             📅
 
-            ${esc(
+            ${escapeHtml(
               formatWeekday(
                 lesson.date
               )
@@ -1489,7 +2890,7 @@ function renderNext(){
 
             ,
 
-            ${esc(
+            ${escapeHtml(
               formatDate(
                 lesson.date
               )
@@ -1504,11 +2905,11 @@ function renderNext(){
               ?
 
             `
-            <span class="chip">
+            <span class="hero-chip">
 
               👨‍🏫
 
-              ${esc(
+              ${escapeHtml(
                 lesson.lecturer
               )}
 
@@ -1527,11 +2928,11 @@ function renderNext(){
               ?
 
             `
-            <span class="chip">
+            <span class="hero-chip">
 
               🏫
 
-              ${esc(
+              ${escapeHtml(
                 lesson.auditorium
               )}
 
@@ -1550,11 +2951,11 @@ function renderNext(){
               ?
 
             `
-            <span class="chip">
+            <span class="hero-chip">
 
               📍
 
-              ${esc(
+              ${escapeHtml(
                 lesson.building
               )}
 
@@ -1566,7 +2967,9 @@ function renderNext(){
             ""
           }
 
+
         </div>
+
 
       </div>
 
@@ -1577,76 +2980,82 @@ function renderNext(){
 }
 
 
-/*
-================================
-STATS
-================================
-*/
+/* =========================================================
+   STATS
+========================================================= */
 
-function renderStats(){
+function renderStats() {
 
   const today =
     localDateString();
 
 
-  const lessons =
+  const todayLessons =
     schedule.filter(
-      x =>
-        x.date === today
+      lesson =>
+        lesson.date ===
+        today
     );
 
 
-  const minutes =
-    lessons.reduce(
+  const totalMinutes =
+    todayLessons.reduce(
       (
         total,
         lesson
-      ) =>
+      ) => {
 
-        total +
+        const start =
+          lessonDateTime(
+            lesson,
+            "beginLesson"
+          );
 
-        Math.max(
-          0,
+        const end =
+          lessonDateTime(
+            lesson,
+            "endLesson"
+          );
 
-          (
-            dt(
-              lesson,
-              "endLesson"
-            )
-            -
-            dt(
-              lesson,
-              "beginLesson"
-            )
+
+        return (
+
+          total +
+
+          Math.max(
+            0,
+            (
+              end - start
+            ) / 60000
           )
-          /
-          60000
-        ),
 
+        );
+
+      },
       0
     );
 
 
   const hours =
     Math.floor(
-      minutes / 60
+      totalMinutes / 60
     );
 
 
-  const mins =
+  const minutes =
     Math.round(
-      minutes % 60
+      totalMinutes % 60
     );
 
 
   const buildings =
     new Set(
 
-      lessons
+      todayLessons
 
         .map(
-          x =>
-            x.building
+          lesson =>
+            lesson.building
         )
 
         .filter(Boolean)
@@ -1659,7 +3068,7 @@ function renderStats(){
     <div class="stat">
 
       <div class="stat-value">
-        ${lessons.length}
+        ${todayLessons.length}
       </div>
 
       <div class="stat-label">
@@ -1674,15 +3083,15 @@ function renderStats(){
       <div class="stat-value">
 
         ${
-          hours
+          hours > 0
 
             ?
 
-          `${hours}ч ${mins}м`
+          `${hours}ч ${minutes}м`
 
             :
 
-          `${mins}м`
+          `${minutes}м`
         }
 
       </div>
@@ -1711,23 +3120,35 @@ function renderStats(){
 }
 
 
-/*
-================================
-LESSON CARD
-================================
-*/
+/* =========================================================
+   LESSON CARD
+========================================================= */
 
-function lessonCard(
+function renderLesson(
   lesson
-){
+) {
 
-  const isNow =
-    current(lesson);
+  const current =
+    isCurrentLesson(
+      lesson
+    );
 
 
-  const color =
-    accent(
+  const type =
+    getSubjectType(
       lesson.discipline
+    );
+
+
+  const address =
+    getAddress(
+      lesson
+    );
+
+
+  const lessonType =
+    getLessonType(
+      lesson
     );
 
 
@@ -1735,53 +3156,71 @@ function lessonCard(
 
     <article
 
-      class="lesson
-      ${isNow ? "current" : ""}"
-
-      style="
-        --accent:${color};
+      class="
+        lesson
+        ${type}
+        ${current ? "current" : ""}
       "
+
+      data-lesson-id="${escapeHtml(
+
+        lesson.date +
+        "_" +
+        lesson.beginLesson +
+        "_" +
+        lesson.discipline
+
+      )}"
 
     >
 
+
+      <div class="lesson-visual"></div>
+
+
       <div class="lesson-top">
 
-        <div>
 
-          <div class="time">
+        <div class="lesson-main">
 
-            ${esc(
-              lesson.beginLesson
+
+          <div class="lesson-time">
+
+            ${escapeHtml(
+              lesson.beginLesson ||
+              ""
             )}
 
             –
 
-            ${esc(
-              lesson.endLesson
+            ${escapeHtml(
+              lesson.endLesson ||
+              ""
             )}
 
           </div>
 
 
-          <div class="subject">
+          <div class="lesson-subject">
 
-            ${esc(
+            ${escapeHtml(
               lesson.discipline ||
               "Предмет не указан"
             )}
 
           </div>
 
+
         </div>
 
 
         ${
-          isNow
+          current
 
             ?
 
           `
-          <div class="badge">
+          <div class="current-badge">
             СЕЙЧАС
           </div>
           `
@@ -1791,10 +3230,12 @@ function lessonCard(
           ""
         }
 
+
       </div>
 
 
-      <div class="meta">
+      <div class="lesson-meta">
+
 
         ${
           lesson.lecturer
@@ -1802,11 +3243,14 @@ function lessonCard(
             ?
 
           `
-          <span>
+          <span class="meta-pill">
+
             👨‍🏫
-            ${esc(
+
+            ${escapeHtml(
               lesson.lecturer
             )}
+
           </span>
           `
 
@@ -1822,11 +3266,14 @@ function lessonCard(
             ?
 
           `
-          <span>
+          <span class="meta-pill">
+
             🏫
-            ${esc(
+
+            ${escapeHtml(
               lesson.auditorium
             )}
+
           </span>
           `
 
@@ -1842,11 +3289,14 @@ function lessonCard(
             ?
 
           `
-          <span>
+          <span class="meta-pill">
+
             📍
-            ${esc(
+
+            ${escapeHtml(
               lesson.building
             )}
+
           </span>
           `
 
@@ -1855,7 +3305,170 @@ function lessonCard(
           ""
         }
 
+
       </div>
+
+
+      <!--
+        РАСКРЫВАЕМАЯ ИНФОРМАЦИЯ
+      -->
+
+      <div class="lesson-details">
+
+
+        <div class="lesson-details-inner">
+
+
+          <div class="details-divider"></div>
+
+
+          ${
+            lesson.lecturer
+
+              ?
+
+            `
+            <div class="detail-row">
+
+              <span class="detail-label">
+                Преподаватель
+              </span>
+
+              <span class="detail-value">
+                ${escapeHtml(
+                  lesson.lecturer
+                )}
+              </span>
+
+            </div>
+            `
+
+              :
+
+            ""
+          }
+
+
+          ${
+            lesson.auditorium
+
+              ?
+
+            `
+            <div class="detail-row">
+
+              <span class="detail-label">
+                Аудитория
+              </span>
+
+              <span class="detail-value">
+                ${escapeHtml(
+                  lesson.auditorium
+                )}
+              </span>
+
+            </div>
+            `
+
+              :
+
+            ""
+          }
+
+
+          ${
+            lesson.building
+
+              ?
+
+            `
+            <div class="detail-row">
+
+              <span class="detail-label">
+                Корпус
+              </span>
+
+              <span class="detail-value">
+                ${escapeHtml(
+                  lesson.building
+                )}
+              </span>
+
+            </div>
+            `
+
+              :
+
+            ""
+          }
+
+
+          ${
+            address
+
+              ?
+
+            `
+            <div class="detail-row">
+
+              <span class="detail-label">
+                Адрес
+              </span>
+
+              <span class="detail-value">
+                ${escapeHtml(
+                  address
+                )}
+              </span>
+
+            </div>
+            `
+
+              :
+
+            ""
+          }
+
+
+          ${
+            lessonType
+
+              ?
+
+            `
+            <div class="detail-row">
+
+              <span class="detail-label">
+                Тип занятия
+              </span>
+
+              <span class="detail-value">
+                ${escapeHtml(
+                  lessonType
+                )}
+              </span>
+
+            </div>
+            `
+
+              :
+
+            ""
+          }
+
+
+          <div class="expand-hint">
+
+            Нажмите, чтобы свернуть
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
 
     </article>
 
@@ -1864,13 +3477,11 @@ function lessonCard(
 }
 
 
-/*
-================================
-FILTER
-================================
-*/
+/* =========================================================
+   FILTER
+========================================================= */
 
-function getLessons(){
+function getLessons() {
 
   const today =
     new Date();
@@ -1882,22 +3493,26 @@ function getLessons(){
     );
 
 
+  /* Сегодня */
+
   if(
     currentView === "today"
-  ){
+  ) {
 
     return schedule.filter(
-      x =>
-        x.date ===
+      lesson =>
+        lesson.date ===
         todayString
     );
 
   }
 
 
+  /* Завтра */
+
   if(
     currentView === "tomorrow"
-  ){
+  ) {
 
     const tomorrow =
       localDateString(
@@ -1909,17 +3524,19 @@ function getLessons(){
 
 
     return schedule.filter(
-      x =>
-        x.date ===
+      lesson =>
+        lesson.date ===
         tomorrow
     );
 
   }
 
 
+  /* Неделя */
+
   if(
     currentView === "week"
-  ){
+  ) {
 
     const end =
       localDateString(
@@ -1931,20 +3548,26 @@ function getLessons(){
 
 
     return schedule.filter(
-      x =>
-        x.date >=
+      lesson =>
+
+        lesson.date >=
         todayString
+
         &&
-        x.date <=
+
+        lesson.date <=
         end
+
     );
 
   }
 
 
+  /* Месяц */
+
   if(
     currentView === "month"
-  ){
+  ) {
 
     const end =
       localDateString(
@@ -1956,32 +3579,42 @@ function getLessons(){
 
 
     return schedule.filter(
-      x =>
-        x.date >=
+      lesson =>
+
+        lesson.date >=
         todayString
+
         &&
-        x.date <=
+
+        lesson.date <=
         end
+
     );
 
   }
 
 
+  /*
+    БЛИЖАЙШЕЕ
+  */
+
   const futureDates = [
 
     ...new Set(
 
-      sort(schedule)
+      sortLessons(
+        schedule
+      )
 
         .filter(
-          x =>
-            x.date >=
+          lesson =>
+            lesson.date >=
             todayString
         )
 
         .map(
-          x =>
-            x.date
+          lesson =>
+            lesson.date
         )
 
     )
@@ -1991,7 +3624,7 @@ function getLessons(){
 
   if(
     !futureDates.length
-  ){
+  ) {
 
     return [];
 
@@ -1999,48 +3632,127 @@ function getLessons(){
 
 
   return schedule.filter(
-    x =>
-      x.date ===
+    lesson =>
+      lesson.date ===
       futureDates[0]
   );
 
 }
 
 
-/*
-================================
-RENDER
-================================
-*/
+/* =========================================================
+   EMPTY STATE
+========================================================= */
 
-function renderSchedule(){
+function renderEmptyState() {
 
-  const lessons =
-    getLessons();
+  let title =
+    "Занятий нет";
 
+
+  let text =
+    "В выбранном периоде занятий не найдено.";
+
+
+  if(
+    currentView === "today"
+  ) {
+
+    title =
+      "Сегодня свободный день";
+
+
+    text =
+      "На сегодня занятий нет.";
+
+  }
+
+
+  if(
+    currentView === "tomorrow"
+  ) {
+
+    title =
+      "Завтра занятий нет";
+
+
+    text =
+      "Можно спокойно планировать день.";
+
+  }
+
+
+  if(
+    currentView === "week"
+  ) {
+
+    title =
+      "Неделя свободна";
+
+
+    text =
+      "На ближайшие 7 дней занятий нет.";
+
+  }
+
+
+  if(
+    currentView === "month"
+  ) {
+
+    title =
+      "Занятий нет";
+
+
+    text =
+      "На ближайшие 30 дней занятий нет.";
+
+  }
+
+
+  return `
+
+    <div class="empty">
+
+      <div class="empty-icon">
+        ✦
+      </div>
+
+      <div class="empty-title">
+        ${title}
+      </div>
+
+      <div class="empty-text">
+        ${text}
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   MAIN RENDER
+========================================================= */
+
+function renderSchedule() {
 
   const container =
     $("schedule");
 
 
+  const lessons =
+    getLessons();
+
+
   if(
     !lessons.length
-  ){
+  ) {
 
-    container.innerHTML = `
-
-      <div class="empty">
-
-        <strong>
-          Занятий нет
-        </strong>
-
-        В выбранном периоде
-        расписание свободно.
-
-      </div>
-
-    `;
+    container.innerHTML =
+      renderEmptyState();
 
     return;
 
@@ -2057,7 +3769,7 @@ function renderSchedule(){
         !grouped[
           lesson.date
         ]
-      ){
+      ) {
 
         grouped[
           lesson.date
@@ -2087,70 +3799,109 @@ function renderSchedule(){
     dates
 
       .map(
-        date => `
+        date => {
 
-          <section class="day">
+          const dayLessons =
+            sortLessons(
+              grouped[date]
+            );
 
-            <div class="day-heading">
 
-              <div>
+          const count =
+            dayLessons.length;
 
-                <div class="weekday">
 
-                  ${esc(
-                    formatWeekday(
-                      date
-                    )
-                  )}
+          const countText =
+
+            count === 1
+
+              ?
+
+            "пара"
+
+              :
+
+            count < 5
+
+              ?
+
+            "пары"
+
+              :
+
+            "пар";
+
+
+          return `
+
+            <section class="day">
+
+
+              <div class="day-heading">
+
+
+                <div>
+
+
+                  <div class="weekday">
+
+                    ${escapeHtml(
+                      formatWeekday(
+                        date
+                      )
+                    )}
+
+                  </div>
+
+
+                  <div class="date">
+
+                    ${escapeHtml(
+                      formatDate(
+                        date
+                      )
+                    )}
+
+                  </div>
+
 
                 </div>
 
 
-                <div class="date">
+                <div class="day-count">
 
-                  ${esc(
-                    formatDate(
-                      date
-                    )
-                  )}
+                  ${count}
+
+                  ${countText}
 
                 </div>
+
 
               </div>
 
 
-              <div class="count">
+              <div class="lesson-grid">
 
-                ${grouped[date].length}
 
-                ${
-                  grouped[date].length === 1
-                    ? "пара"
-                    : grouped[date].length < 5
-                      ? "пары"
-                      : "пар"
+                ${dayLessons
+
+                  .map(
+                    renderLesson
+                  )
+
+                  .join("")
+
                 }
 
+
               </div>
 
-            </div>
 
+            </section>
 
-            <div class="grid">
+          `;
 
-              ${sort(
-                grouped[date]
-              )
-              .map(
-                lessonCard
-              )
-              .join("")}
-
-            </div>
-
-          </section>
-
-        `
+        }
       )
 
       .join("");
@@ -2158,16 +3909,18 @@ function renderSchedule(){
 }
 
 
-/*
-================================
-LOAD
-================================
-*/
+/* =========================================================
+   LOAD SCHEDULE
+========================================================= */
 
-async function loadSchedule(){
+async function loadSchedule() {
 
   const button =
     $("refreshButton");
+
+
+  const updated =
+    $("updated");
 
 
   button.classList.add(
@@ -2179,7 +3932,8 @@ async function loadSchedule(){
     "↻ Обновление...";
 
 
-  try{
+  try {
+
 
     const response =
       await fetch(
@@ -2190,7 +3944,7 @@ async function loadSchedule(){
 
     if(
       !response.ok
-    ){
+    ) {
 
       throw new Error(
         "Не удалось загрузить schedule.json"
@@ -2205,49 +3959,55 @@ async function loadSchedule(){
 
     if(
       !Array.isArray(data)
-    ){
+    ) {
 
       throw new Error(
-        "Неверный формат schedule.json"
+        "schedule.json имеет неверный формат"
       );
 
     }
 
 
     schedule =
-      sort(
+      sortLessons(
 
         data.filter(
-          x =>
-            x.date
+          lesson =>
+            lesson.date
         )
 
       );
 
 
-    $("updated").textContent =
+    updated.textContent =
       "Обновлено в " +
 
       new Date()
         .toLocaleTimeString(
           "ru-RU",
           {
-            hour:"2-digit",
-            minute:"2-digit"
+            hour: "2-digit",
+            minute: "2-digit"
           }
         );
 
 
-    renderNext();
+    renderNextLesson();
 
     renderStats();
 
     renderSchedule();
 
+
   }
 
+  catch(error) {
 
-  catch(error){
+
+    console.error(
+      error
+    );
+
 
     $("schedule").innerHTML = `
 
@@ -2257,7 +4017,7 @@ async function loadSchedule(){
           Не удалось загрузить расписание
         </strong>
 
-        ${esc(
+        ${escapeHtml(
           error.message
         )}
 
@@ -2265,10 +4025,11 @@ async function loadSchedule(){
 
     `;
 
+
   }
 
+  finally {
 
-  finally{
 
     button.classList.remove(
       "loading"
@@ -2283,11 +4044,9 @@ async function loadSchedule(){
 }
 
 
-/*
-================================
-TABS
-================================
-*/
+/* =========================================================
+   TAB BUTTONS
+========================================================= */
 
 document
   .querySelectorAll(
@@ -2296,9 +4055,11 @@ document
   .forEach(
     button => {
 
+
       button.addEventListener(
         "click",
         () => {
+
 
           document
             .querySelectorAll(
@@ -2323,18 +4084,85 @@ document
 
           renderSchedule();
 
+
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+
+
         }
       );
 
+
     }
+  );
+
+
+/* =========================================================
+   CARD EXPANSION
+========================================================= */
+
+document.addEventListener(
+  "click",
+  event => {
+
+
+    const card =
+      event.target.closest(
+        ".lesson"
+      );
+
+
+    if(
+      !card
+    ) {
+
+      return;
+
+    }
+
+
+    /*
+      Закрываем остальные карточки,
+      чтобы одновременно не было
+      огромного количества раскрытых
+      блоков.
+    */
+
+    document
+      .querySelectorAll(
+        ".lesson.expanded"
+      )
+      .forEach(
+        item => {
+
+          if(
+            item !== card
+          ) {
+
+            item.classList.remove(
+              "expanded"
+            );
+
+          }
+
+        }
+      );
+
+
+    card.classList.toggle(
+      "expanded"
+    );
+
+
+  }
 );
 
 
-/*
-================================
-REFRESH
-================================
-*/
+/* =========================================================
+   REFRESH BUTTON
+========================================================= */
 
 $("refreshButton")
   .addEventListener(
@@ -2343,38 +4171,34 @@ $("refreshButton")
   );
 
 
-/*
-================================
-START
-================================
-*/
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
 
 loadSchedule();
 
 
-/*
-Проверяем текущую пару
-каждую минуту.
-*/
+/* =========================================================
+   LIVE CLOCK / CURRENT LESSON
+========================================================= */
 
 setInterval(
   () => {
 
-    renderNext();
+    renderNextLesson();
 
     renderStats();
 
     renderSchedule();
 
   },
-  60000
+  60 * 1000
 );
 
 
-/*
-Проверяем новые данные
-каждые 5 минут.
-*/
+/* =========================================================
+   DATA REFRESH
+========================================================= */
 
 setInterval(
   loadSchedule,
@@ -2383,5 +4207,7 @@ setInterval(
 
 </script>
 
+
 </body>
+
 </html>
