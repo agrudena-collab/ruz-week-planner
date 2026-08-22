@@ -27,7 +27,10 @@ jobs:
       - name: Run RUZ client
         run: python ruz_client.py
 
-      - name: Save schedule.json
+      - name: Run planner
+        run: python planner.py
+
+      - name: Save schedule
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
