@@ -21,11 +21,11 @@
     .container {
       max-width: 900px;
       margin: 0 auto;
-      padding: 30px 20px 50px;
+      padding: 25px 20px 50px;
     }
 
     header {
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     h1 {
@@ -41,37 +41,60 @@
     .updated {
       color: #8e8e93;
       font-size: 13px;
-      margin-top: 8px;
+      margin-top: 7px;
+    }
+
+    .refresh {
+      float: right;
+      border: 0;
+      background: #007aff;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .tabs-wrapper {
+      overflow-x: auto;
+      margin-bottom: 28px;
+      scrollbar-width: none;
+    }
+
+    .tabs-wrapper::-webkit-scrollbar {
+      display: none;
     }
 
     .tabs {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      display: flex;
+      gap: 4px;
+      min-width: max-content;
       background: #e5e5ea;
       border-radius: 14px;
       padding: 3px;
-      margin-bottom: 28px;
     }
 
     .tab {
       border: 0;
       background: transparent;
-      padding: 11px 8px;
+      padding: 11px 17px;
       border-radius: 11px;
       font-size: 15px;
       font-weight: 600;
       color: #6e6e73;
       cursor: pointer;
+      white-space: nowrap;
     }
 
     .tab.active {
       background: white;
       color: #1d1d1f;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
     }
 
     .day {
-      margin-bottom: 28px;
+      margin-bottom: 30px;
     }
 
     .date {
@@ -144,22 +167,6 @@
       border-radius: 12px;
     }
 
-    .refresh {
-      float: right;
-      border: 0;
-      background: #007aff;
-      color: white;
-      padding: 10px 15px;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .refresh:active {
-      opacity: 0.7;
-    }
-
     @media (max-width: 600px) {
       .container {
         padding: 20px 14px 40px;
@@ -177,6 +184,11 @@
         padding: 15px;
       }
 
+      .tab {
+        padding: 10px 14px;
+        font-size: 14px;
+      }
+
       .refresh {
         padding: 9px 12px;
       }
@@ -189,7 +201,10 @@
 <div class="container">
 
   <header>
-    <button class="refresh" onclick="loadSchedule()">↻ Обновить</button>
+
+    <button class="refresh" onclick="loadSchedule()">
+      ↻ Обновить
+    </button>
 
     <h1>Расписание</h1>
 
@@ -200,32 +215,53 @@
     <div class="updated" id="updated">
       Загружаем расписание...
     </div>
+
   </header>
 
-  <div class="tabs">
 
-    <button
-      class="tab active"
-      data-mode="today"
-      onclick="setMode('today')">
-      Сегодня
-    </button>
+  <div class="tabs-wrapper">
 
-    <button
-      class="tab"
-      data-mode="tomorrow"
-      onclick="setMode('tomorrow')">
-      Завтра
-    </button>
+    <div class="tabs">
 
-    <button
-      class="tab"
-      data-mode="next"
-      onclick="setMode('next')">
-      Ближайшее
-    </button>
+      <button
+        class="tab active"
+        data-mode="next"
+        onclick="setMode('next')">
+        Ближайшее
+      </button>
+
+      <button
+        class="tab"
+        data-mode="today"
+        onclick="setMode('today')">
+        Сегодня
+      </button>
+
+      <button
+        class="tab"
+        data-mode="tomorrow"
+        onclick="setMode('tomorrow')">
+        Завтра
+      </button>
+
+      <button
+        class="tab"
+        data-mode="week"
+        onclick="setMode('week')">
+        Неделя
+      </button>
+
+      <button
+        class="tab"
+        data-mode="month"
+        onclick="setMode('month')">
+        Месяц
+      </button>
+
+    </div>
 
   </div>
+
 
   <main id="schedule">
 
@@ -237,38 +273,47 @@
 
 </div>
 
+
 <script>
 
   let allLessons = [];
-  let currentMode = "today";
+
+  let currentMode = "next";
 
 
-  // Получаем дату без UTC-ошибок
+  // Получение локальной даты без проблем с UTC
   function getLocalDateString(date = new Date()) {
 
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
+
+    const month =
+      String(date.getMonth() + 1).padStart(2, "0");
+
+    const day =
+      String(date.getDate()).padStart(2, "0");
 
     return `${year}-${month}-${day}`;
   }
 
 
-  // Добавляем дни к дате
+  // Добавление дней
   function addDays(date, days) {
 
     const result = new Date(date);
 
-    result.setDate(result.getDate() + days);
+    result.setDate(
+      result.getDate() + days
+    );
 
     return result;
   }
 
 
-  // Форматируем дату красиво
+  // Красивое отображение даты
   function formatDate(dateString) {
 
-    const date = new Date(dateString + "T00:00:00");
+    const date =
+      new Date(dateString + "T00:00:00");
 
     return date.toLocaleDateString(
       "ru-RU",
@@ -281,7 +326,7 @@
   }
 
 
-  // Группировка занятий по датам
+  // Группируем расписание по датам
   function groupLessons() {
 
     const grouped = {};
@@ -299,39 +344,133 @@
       grouped[lesson.date].push(lesson);
     }
 
+
     for (const date in grouped) {
 
-      grouped[date].sort((a, b) => {
-
-        return (a.beginLesson || "")
-          .localeCompare(b.beginLesson || "");
-
-      });
+      grouped[date].sort(
+        (a, b) =>
+          (a.beginLesson || "")
+            .localeCompare(
+              b.beginLesson || ""
+            )
+      );
 
     }
+
 
     return grouped;
   }
 
 
-  // Отрисовка одного дня
-  function renderDay(date, lessons) {
+  // Создание карточки занятия
+  function createLessonElement(
+    lesson,
+    isToday
+  ) {
 
-    const container = document.getElementById("schedule");
+    const element =
+      document.createElement("div");
 
-    const today = getLocalDateString();
+    element.className = "lesson";
 
-    const day = document.createElement("section");
+
+    if (isToday) {
+      element.classList.add("today");
+    }
+
+
+    const begin =
+      lesson.beginLesson || "";
+
+    const end =
+      lesson.endLesson || "";
+
+    const discipline =
+      lesson.discipline ||
+      "Предмет не указан";
+
+    const lecturer =
+      lesson.lecturer ||
+      "Преподаватель не указан";
+
+    const auditorium =
+      lesson.auditorium || "";
+
+    const building =
+      lesson.building || "";
+
+
+    element.innerHTML = `
+
+      <div class="time">
+        ${begin}–${end}
+      </div>
+
+      <div class="discipline">
+        ${discipline}
+      </div>
+
+      <div class="info">
+
+        👨‍🏫 ${lecturer}
+
+        ${
+          auditorium
+            ? `<br>🏫 ${auditorium}`
+            : ""
+        }
+
+        ${
+          building
+            ? `<br>📍 ${building}`
+            : ""
+        }
+
+      </div>
+
+    `;
+
+
+    return element;
+  }
+
+
+  // Отображение одного дня
+  function renderDay(
+    date,
+    lessons
+  ) {
+
+    const container =
+      document.getElementById(
+        "schedule"
+      );
+
+
+    const today =
+      getLocalDateString();
+
+
+    const day =
+      document.createElement(
+        "section"
+      );
 
     day.className = "day";
 
 
-    const dateElement = document.createElement("div");
+    const dateElement =
+      document.createElement(
+        "div"
+      );
 
-    dateElement.className = "date";
+    dateElement.className =
+      "date";
+
 
     dateElement.innerHTML = `
       ${formatDate(date)}
+
       ${
         date === today
           ? '<span class="today-label">СЕГОДНЯ</span>'
@@ -339,73 +478,23 @@
       }
     `;
 
-    day.appendChild(dateElement);
+
+    day.appendChild(
+      dateElement
+    );
 
 
-    for (const lesson of lessons) {
+    for (
+      const lesson of lessons
+    ) {
 
-      const lessonElement =
-        document.createElement("div");
+      day.appendChild(
+        createLessonElement(
+          lesson,
+          date === today
+        )
+      );
 
-      lessonElement.className = "lesson";
-
-      if (date === today) {
-        lessonElement.classList.add("today");
-      }
-
-
-      const begin =
-        lesson.beginLesson || "";
-
-      const end =
-        lesson.endLesson || "";
-
-      const discipline =
-        lesson.discipline ||
-        "Предмет не указан";
-
-      const lecturer =
-        lesson.lecturer ||
-        "Преподаватель не указан";
-
-      const auditorium =
-        lesson.auditorium || "";
-
-      const building =
-        lesson.building || "";
-
-
-      lessonElement.innerHTML = `
-
-        <div class="time">
-          ${begin}–${end}
-        </div>
-
-        <div class="discipline">
-          ${discipline}
-        </div>
-
-        <div class="info">
-
-          👨‍🏫 ${lecturer}
-
-          ${
-            auditorium
-              ? `<br>🏫 ${auditorium}`
-              : ""
-          }
-
-          ${
-            building
-              ? `<br>📍 ${building}`
-              : ""
-          }
-
-        </div>
-      `;
-
-
-      day.appendChild(lessonElement);
     }
 
 
@@ -413,31 +502,42 @@
   }
 
 
-  // Показываем сообщение
+  // Пустой экран
   function showEmpty(text) {
 
-    document.getElementById("schedule").innerHTML = `
+    document.getElementById(
+      "schedule"
+    ).innerHTML = `
+
       <div class="empty">
         ${text}
       </div>
+
     `;
   }
 
 
-  // Основная функция отображения
+  // Отрисовка расписания
   function renderSchedule() {
 
-    const grouped = groupLessons();
+    const grouped =
+      groupLessons();
+
 
     const dates =
-      Object.keys(grouped).sort();
+      Object.keys(grouped)
+        .sort();
 
 
     const today =
       new Date();
 
+
     const todayString =
-      getLocalDateString(today);
+      getLocalDateString(
+        today
+      );
+
 
     const tomorrowString =
       getLocalDateString(
@@ -446,65 +546,32 @@
 
 
     const container =
-      document.getElementById("schedule");
+      document.getElementById(
+        "schedule"
+      );
+
 
     container.innerHTML = "";
 
 
-    // СЕГОДНЯ
-    if (currentMode === "today") {
-
-      if (grouped[todayString]) {
-
-        renderDay(
-          todayString,
-          grouped[todayString]
-        );
-
-      } else {
-
-        showEmpty(
-          "Сегодня занятий нет."
-        );
-
-      }
-
-      return;
-    }
-
-
-    // ЗАВТРА
-    if (currentMode === "tomorrow") {
-
-      if (grouped[tomorrowString]) {
-
-        renderDay(
-          tomorrowString,
-          grouped[tomorrowString]
-        );
-
-      } else {
-
-        showEmpty(
-          "Завтра занятий нет."
-        );
-
-      }
-
-      return;
-    }
-
-
+    // -------------------------
     // БЛИЖАЙШЕЕ
-    if (currentMode === "next") {
+    // -------------------------
+
+    if (
+      currentMode === "next"
+    ) {
 
       const futureDates =
         dates.filter(
-          date => date >= todayString
+          date =>
+            date >= todayString
         );
 
 
-      if (futureDates.length === 0) {
+      if (
+        futureDates.length === 0
+      ) {
 
         showEmpty(
           "Ближайших занятий нет."
@@ -523,6 +590,168 @@
         grouped[nextDate]
       );
 
+
+      return;
+    }
+
+
+    // -------------------------
+    // СЕГОДНЯ
+    // -------------------------
+
+    if (
+      currentMode === "today"
+    ) {
+
+      if (
+        grouped[todayString]
+      ) {
+
+        renderDay(
+          todayString,
+          grouped[todayString]
+        );
+
+      } else {
+
+        showEmpty(
+          "Сегодня занятий нет."
+        );
+
+      }
+
+
+      return;
+    }
+
+
+    // -------------------------
+    // ЗАВТРА
+    // -------------------------
+
+    if (
+      currentMode === "tomorrow"
+    ) {
+
+      if (
+        grouped[tomorrowString]
+      ) {
+
+        renderDay(
+          tomorrowString,
+          grouped[tomorrowString]
+        );
+
+      } else {
+
+        showEmpty(
+          "Завтра занятий нет."
+        );
+
+      }
+
+
+      return;
+    }
+
+
+    // -------------------------
+    // НЕДЕЛЯ
+    // -------------------------
+
+    if (
+      currentMode === "week"
+    ) {
+
+      const endDate =
+        getLocalDateString(
+          addDays(today, 7)
+        );
+
+
+      const weekDates =
+        dates.filter(
+          date =>
+            date >= todayString &&
+            date <= endDate
+        );
+
+
+      if (
+        weekDates.length === 0
+      ) {
+
+        showEmpty(
+          "На ближайшие 7 дней занятий нет."
+        );
+
+        return;
+      }
+
+
+      for (
+        const date of weekDates
+      ) {
+
+        renderDay(
+          date,
+          grouped[date]
+        );
+
+      }
+
+
+      return;
+    }
+
+
+    // -------------------------
+    // МЕСЯЦ
+    // -------------------------
+
+    if (
+      currentMode === "month"
+    ) {
+
+      const endDate =
+        getLocalDateString(
+          addDays(today, 30)
+        );
+
+
+      const monthDates =
+        dates.filter(
+          date =>
+            date >= todayString &&
+            date <= endDate
+        );
+
+
+      if (
+        monthDates.length === 0
+      ) {
+
+        showEmpty(
+          "На ближайшие 30 дней занятий нет."
+        );
+
+        return;
+      }
+
+
+      for (
+        const date of monthDates
+      ) {
+
+        renderDay(
+          date,
+          grouped[date]
+        );
+
+      }
+
+
+      return;
     }
 
   }
@@ -531,7 +760,8 @@
   // Переключение вкладок
   function setMode(mode) {
 
-    currentMode = mode;
+    currentMode =
+      mode;
 
 
     document
@@ -550,16 +780,21 @@
   }
 
 
-  // Загрузка JSON
+  // Загрузка schedule.json
   async function loadSchedule() {
 
     const container =
-      document.getElementById("schedule");
+      document.getElementById(
+        "schedule"
+      );
+
 
     container.innerHTML = `
+
       <div class="loading">
         Загружаем расписание...
       </div>
+
     `;
 
 
@@ -596,13 +831,25 @@
       }
 
 
-      allLessons = schedule;
+      allLessons =
+        schedule;
+
+
+      const now =
+        new Date();
 
 
       document.getElementById(
         "updated"
       ).textContent =
-        "Актуальное расписание • обновлено только что";
+        "Актуальное расписание • обновлено в " +
+        now.toLocaleTimeString(
+          "ru-RU",
+          {
+            hour: "2-digit",
+            minute: "2-digit"
+          }
+        );
 
 
       renderSchedule();
@@ -611,6 +858,7 @@
     } catch (error) {
 
       container.innerHTML = `
+
         <div class="error">
 
           Ошибка загрузки расписания:<br>
@@ -618,7 +866,9 @@
           ${error.message}
 
         </div>
+
       `;
+
 
       console.error(error);
 
@@ -627,7 +877,7 @@
   }
 
 
-  // Запускаем
+  // Запуск
   loadSchedule();
 
 </script>
