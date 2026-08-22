@@ -1,10 +1,13 @@
-name: Test RUZ
+name: RUZ Daily Schedule
 
 on:
   workflow_dispatch:
 
+  schedule:
+    - cron: "0 3 * * *"
+
 jobs:
-  test-ruz:
+  get-schedule:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,5 +22,5 @@ jobs:
       - name: Install requests
         run: pip install requests
 
-      - name: Run RUZ client
+      - name: Get RUZ schedule
         run: python ruz_client.py
