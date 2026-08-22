@@ -4,21 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Расписание — МеждОт25-2</title>
+  <title>РУЗ · МеждОт25-2</title>
 
   <style>
     :root {
-      --bg: #f1f3f6;
-      --card: #ffffff;
-      --text: #1d1d1f;
-      --muted: #737780;
-      --line: #e4e6eb;
-      --blue: #007aff;
-      --blue-soft: #eaf3ff;
+      --bg: #eef2f7;
+      --card: rgba(255,255,255,.78);
+      --card-solid: #ffffff;
+      --text: #17191d;
+      --muted: #747983;
+      --line: rgba(0,0,0,.07);
+      --blue: #087cff;
+      --blue-light: #e8f2ff;
       --green: #20a464;
-      --green-soft: #eaf8f0;
-      --shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
-      --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.09);
+      --green-light: #e9f8f0;
+      --purple: #7657ff;
+      --shadow: 0 12px 35px rgba(30,45,70,.08);
+      --radius: 22px;
     }
 
     * {
@@ -31,7 +33,6 @@
 
     body {
       margin: 0;
-      background: var(--bg);
       color: var(--text);
       font-family:
         -apple-system,
@@ -40,6 +41,24 @@
         "SF Pro Text",
         "Segoe UI",
         sans-serif;
+      background:
+        radial-gradient(
+          circle at 10% 5%,
+          rgba(0,122,255,.13),
+          transparent 28%
+        ),
+        radial-gradient(
+          circle at 90% 20%,
+          rgba(118,87,255,.10),
+          transparent 25%
+        ),
+        radial-gradient(
+          circle at 50% 100%,
+          rgba(0,180,255,.08),
+          transparent 30%
+        ),
+        var(--bg);
+      min-height: 100vh;
     }
 
     button {
@@ -47,149 +66,243 @@
     }
 
     .container {
-      width: min(920px, calc(100% - 28px));
+      width: min(960px, calc(100% - 28px));
       margin: 0 auto;
-      padding: 28px 0 60px;
+      padding: 28px 0 70px;
     }
 
     /* HEADER */
 
-    header {
+    .header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      gap: 20px;
+      align-items: center;
+      gap: 18px;
       margin-bottom: 22px;
     }
 
-    .title-block h1 {
-      margin: 0;
-      font-size: 34px;
-      line-height: 1.1;
-      letter-spacing: -0.8px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
     }
 
-    .group-name {
-      margin-top: 7px;
-      font-size: 17px;
-      color: var(--muted);
-      font-weight: 500;
-    }
-
-    .updated {
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .refresh-button {
-      border: 0;
-      background: var(--blue);
+    .brand-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
       color: white;
+      font-size: 22px;
+      font-weight: 800;
+      background:
+        linear-gradient(
+          135deg,
+          var(--blue),
+          var(--purple)
+        );
+      box-shadow:
+        0 8px 20px rgba(58,100,255,.25);
+    }
+
+    .title {
+      font-size: 31px;
+      font-weight: 850;
+      letter-spacing: -1px;
+      line-height: 1.05;
+    }
+
+    .group {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .update-status {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .refresh {
+      border: 0;
+      color: white;
+      background: var(--text);
       border-radius: 13px;
-      padding: 11px 15px;
-      font-size: 14px;
-      font-weight: 700;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 750;
       cursor: pointer;
-      white-space: nowrap;
       transition: transform .15s ease, opacity .15s ease;
     }
 
-    .refresh-button:hover {
-      transform: translateY(-1px);
+    .refresh:active {
+      transform: scale(.96);
     }
 
-    .refresh-button:active {
-      transform: scale(.97);
-    }
-
-    .refresh-button.loading {
-      opacity: .65;
+    .refresh.loading {
+      opacity: .6;
       pointer-events: none;
     }
 
-    /* NEXT LESSON */
+    /* HERO */
 
-    .next-card {
-      background: linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
-      border: 1px solid #dceaff;
-      border-radius: 22px;
-      padding: 22px;
-      margin-bottom: 18px;
-      box-shadow: 0 6px 24px rgba(0, 122, 255, 0.08);
+    .hero {
       position: relative;
       overflow: hidden;
+      border-radius: 28px;
+      padding: 25px;
+      margin-bottom: 14px;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255,255,255,.92),
+          rgba(239,246,255,.80)
+        );
+      border: 1px solid rgba(255,255,255,.8);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
     }
 
-    .next-card::after {
+    .hero::before {
       content: "";
       position: absolute;
-      width: 170px;
-      height: 170px;
-      right: -70px;
-      top: -70px;
+      width: 220px;
+      height: 220px;
       border-radius: 50%;
-      background: rgba(0, 122, 255, 0.05);
-      pointer-events: none;
+      right: -90px;
+      top: -110px;
+      background: rgba(0,122,255,.08);
     }
 
-    .next-label {
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      left: -80px;
+      bottom: -100px;
+      background: rgba(118,87,255,.07);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-label {
       color: var(--blue);
       font-size: 12px;
-      font-weight: 800;
-      letter-spacing: .7px;
+      font-weight: 850;
+      letter-spacing: .9px;
       text-transform: uppercase;
-      margin-bottom: 8px;
+      margin-bottom: 9px;
     }
 
-    .next-time {
-      font-size: 30px;
+    .hero-time {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: -1.7px;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .hero-subject {
+      max-width: 650px;
+      font-size: 23px;
       font-weight: 800;
-      letter-spacing: -0.7px;
-      margin-bottom: 4px;
+      line-height: 1.2;
+      margin-bottom: 17px;
     }
 
-    .next-discipline {
-      font-size: 20px;
-      font-weight: 750;
-      margin-bottom: 13px;
+    .hero-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
-    .next-info {
-      display: grid;
-      gap: 7px;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .next-status {
+    .info-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      width: fit-content;
-      margin-bottom: 11px;
-      padding: 6px 10px;
-      border-radius: 10px;
-      background: var(--green-soft);
-      color: var(--green);
-      font-size: 12px;
-      font-weight: 800;
+      padding: 8px 10px;
+      border-radius: 11px;
+      background: rgba(255,255,255,.75);
+      border: 1px solid rgba(0,0,0,.05);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
     }
 
-    .next-status-dot {
+    .live-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--green);
+      background: var(--green-light);
+      border-radius: 10px;
+      padding: 7px 10px;
+      width: fit-content;
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .3px;
+      margin-bottom: 10px;
+    }
+
+    .live-dot {
       width: 7px;
       height: 7px;
       border-radius: 50%;
       background: var(--green);
+      box-shadow: 0 0 0 4px rgba(32,164,100,.12);
     }
 
-    /* TABS */
+    /* STATS */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 18px;
+      padding: 15px;
+      box-shadow: 0 5px 18px rgba(30,45,70,.05);
+      backdrop-filter: blur(14px);
+    }
+
+    .stat-value {
+      font-size: 23px;
+      font-weight: 850;
+      letter-spacing: -.5px;
+    }
+
+    .stat-label {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* NAVIGATION */
 
     .tabs-wrap {
       position: sticky;
-      top: 10px;
-      z-index: 20;
+      top: 8px;
+      z-index: 30;
       margin-bottom: 25px;
     }
 
@@ -197,10 +310,11 @@
       display: flex;
       gap: 4px;
       padding: 5px;
-      background: #e4e6eb;
+      background: rgba(225,229,237,.82);
+      border: 1px solid rgba(255,255,255,.9);
       border-radius: 16px;
-      border: 1px solid rgba(0, 0, 0, .03);
-      box-shadow: 0 3px 14px rgba(0, 0, 0, .06);
+      box-shadow: 0 5px 18px rgba(30,45,70,.07);
+      backdrop-filter: blur(18px);
       overflow-x: auto;
       scrollbar-width: none;
     }
@@ -214,20 +328,20 @@
       min-width: 105px;
       border: 0;
       background: transparent;
-      color: #666a72;
-      padding: 10px 12px;
+      color: #686d77;
+      padding: 10px 13px;
       border-radius: 12px;
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 750;
       cursor: pointer;
-      transition: all .18s ease;
       white-space: nowrap;
+      transition: all .18s ease;
     }
 
     .tab.active {
-      background: white;
       color: var(--text);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+      background: white;
+      box-shadow: 0 3px 10px rgba(0,0,0,.08);
     }
 
     /* DAY */
@@ -236,182 +350,247 @@
       margin-bottom: 30px;
     }
 
-    .day-header {
+    .day-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 15px;
+      padding: 0 4px;
       margin-bottom: 11px;
-      padding: 0 3px;
     }
 
     .weekday {
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: -.3px;
+      font-size: 21px;
+      font-weight: 850;
       text-transform: capitalize;
+      letter-spacing: -.35px;
     }
 
-    .full-date {
-      margin-top: 2px;
+    .date {
       color: var(--muted);
-      font-size: 14px;
+      font-size: 13px;
+      margin-top: 2px;
     }
 
-    /* LESSON */
+    .day-count {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* TIMELINE */
+
+    .timeline {
+      position: relative;
+      padding-left: 16px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 12px;
+      bottom: 12px;
+      width: 2px;
+      background: #dce1e8;
+      border-radius: 10px;
+    }
 
     .lesson {
-      background: var(--card);
-      border: 1px solid var(--line);
+      position: relative;
+      background: rgba(255,255,255,.84);
+      border: 1px solid rgba(0,0,0,.055);
       border-radius: 18px;
-      padding: 17px 18px;
+      padding: 16px;
       margin-bottom: 10px;
-      box-shadow: var(--shadow);
-      transition: transform .15s ease, box-shadow .15s ease;
+      box-shadow: 0 5px 18px rgba(30,45,70,.055);
+      backdrop-filter: blur(12px);
     }
 
-    .lesson:hover {
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-hover);
+    .lesson::before {
+      content: "";
+      position: absolute;
+      left: -16px;
+      top: 21px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid var(--blue);
+      box-shadow: 0 0 0 3px var(--bg);
     }
 
     .lesson.current {
       border: 2px solid var(--green);
-      background: #fbfffd;
-      box-shadow: 0 5px 20px rgba(32, 164, 100, .12);
+      background: rgba(249,255,252,.95);
+      box-shadow: 0 7px 22px rgba(32,164,100,.12);
     }
 
-    .lesson-header {
+    .lesson.current::before {
+      background: var(--green);
+      border-color: var(--green);
+      box-shadow:
+        0 0 0 3px var(--bg),
+        0 0 0 7px rgba(32,164,100,.10);
+    }
+
+    .lesson-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       gap: 12px;
     }
 
-    .time {
+    .lesson-time {
       color: var(--blue);
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: -.2px;
-      margin-bottom: 7px;
+      font-size: 15px;
+      font-weight: 850;
+      margin-bottom: 6px;
     }
 
-    .discipline {
-      font-size: 18px;
-      font-weight: 750;
-      line-height: 1.25;
-      margin-bottom: 10px;
-    }
-
-    .current-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 9px;
-      background: var(--green-soft);
+    .lesson.current .lesson-time {
       color: var(--green);
-      border-radius: 9px;
-      font-size: 11px;
+    }
+
+    .lesson-subject {
+      font-size: 18px;
       font-weight: 800;
-      white-space: nowrap;
+      line-height: 1.28;
+      margin-bottom: 9px;
     }
 
-    .current-badge::before {
-      content: "";
-      width: 6px;
-      height: 6px;
-      background: var(--green);
-      border-radius: 50%;
-    }
-
-    .info {
+    .lesson-info {
       display: grid;
       gap: 5px;
       color: var(--muted);
-      font-size: 14px;
-      line-height: 1.45;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .current-badge {
+      color: var(--green);
+      background: var(--green-light);
+      border-radius: 9px;
+      padding: 5px 8px;
+      font-size: 10px;
+      font-weight: 850;
+      white-space: nowrap;
     }
 
     /* EMPTY */
 
     .empty {
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 38px 20px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(0,0,0,.05);
+      border-radius: 20px;
+      padding: 42px 20px;
       text-align: center;
-      color: var(--muted);
       box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
     }
 
     .empty-icon {
-      font-size: 30px;
-      margin-bottom: 9px;
+      font-size: 32px;
+      margin-bottom: 10px;
     }
 
     .empty-title {
-      color: var(--text);
-      font-weight: 750;
-      font-size: 17px;
+      font-size: 18px;
+      font-weight: 800;
       margin-bottom: 5px;
     }
 
+    .empty-text {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
     .error {
+      padding: 17px;
+      border-radius: 16px;
       background: #fff1f1;
-      color: #c62828;
-      border: 1px solid #ffd2d2;
-      padding: 16px;
-      border-radius: 15px;
+      color: #bd2525;
+      border: 1px solid #ffd3d3;
       line-height: 1.5;
     }
 
-    /* FOOTER */
-
     .source {
-      margin-top: 30px;
+      margin-top: 35px;
       text-align: center;
-      color: #999da5;
-      font-size: 12px;
+      color: #999ea8;
+      font-size: 11px;
     }
 
     /* MOBILE */
 
-    @media (max-width: 600px) {
+    @media (max-width: 650px) {
 
       .container {
-        width: min(100% - 20px, 920px);
-        padding-top: 18px;
+        width: calc(100% - 20px);
+        padding-top: 17px;
       }
 
-      header {
-        align-items: center;
-        margin-bottom: 17px;
+      .header {
+        align-items: flex-start;
       }
 
-      .title-block h1 {
-        font-size: 29px;
+      .brand-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 13px;
+        font-size: 19px;
       }
 
-      .group-name {
-        font-size: 15px;
-      }
-
-      .updated {
-        font-size: 12px;
-      }
-
-      .refresh-button {
-        padding: 10px 12px;
-        font-size: 13px;
-      }
-
-      .next-card {
-        padding: 18px;
-        border-radius: 19px;
-      }
-
-      .next-time {
+      .title {
         font-size: 27px;
       }
 
-      .next-discipline {
-        font-size: 18px;
+      .group {
+        font-size: 14px;
+      }
+
+      .header-right {
+        gap: 5px;
+      }
+
+      .update-status {
+        display: none;
+      }
+
+      .refresh {
+        padding: 9px 11px;
+        font-size: 12px;
+      }
+
+      .hero {
+        padding: 19px;
+        border-radius: 21px;
+      }
+
+      .hero-time {
+        font-size: 35px;
+      }
+
+      .hero-subject {
+        font-size: 19px;
+      }
+
+      .stats {
+        gap: 7px;
+      }
+
+      .stat {
+        padding: 12px;
+        border-radius: 15px;
+      }
+
+      .stat-value {
+        font-size: 20px;
+      }
+
+      .stat-label {
+        font-size: 11px;
       }
 
       .tabs-wrap {
@@ -424,7 +603,7 @@
 
       .tab {
         min-width: 92px;
-        font-size: 13px;
+        font-size: 12px;
         padding: 10px 8px;
       }
 
@@ -432,17 +611,35 @@
         font-size: 19px;
       }
 
+      .day-count {
+        font-size: 11px;
+      }
+
+      .timeline {
+        padding-left: 13px;
+      }
+
       .lesson {
-        padding: 15px;
+        padding: 14px;
         border-radius: 16px;
       }
 
-      .discipline {
-        font-size: 17px;
+      .lesson::before {
+        left: -13px;
+        width: 9px;
+        height: 9px;
       }
 
-      .info {
-        font-size: 13px;
+      .lesson-subject {
+        font-size: 16px;
+      }
+
+      .lesson-info {
+        font-size: 12px;
+      }
+
+      .current-badge {
+        font-size: 9px;
       }
     }
   </style>
@@ -452,72 +649,147 @@
 
   <div class="container">
 
-    <header>
-      <div class="title-block">
-        <h1>Расписание</h1>
-        <div class="group-name">МеждОт25-2</div>
-        <div class="updated" id="updated">Загрузка расписания...</div>
+    <!-- HEADER -->
+
+    <header class="header">
+
+      <div class="brand">
+
+        <div class="brand-icon">
+          R
+        </div>
+
+        <div>
+          <div class="title">
+            Расписание
+          </div>
+
+          <div class="group">
+            МеждОт25-2
+          </div>
+        </div>
+
       </div>
 
-      <button class="refresh-button" id="refreshButton">
-        ↻ Обновить
-      </button>
+
+      <div class="header-right">
+
+        <div
+          class="update-status"
+          id="updated"
+        >
+          Загрузка...
+        </div>
+
+        <button
+          class="refresh"
+          id="refreshButton"
+        >
+          ↻ Обновить
+        </button>
+
+      </div>
+
     </header>
+
+
+    <!-- HERO -->
 
     <div id="nextLesson"></div>
 
+
+    <!-- STATS -->
+
+    <div
+      class="stats"
+      id="stats"
+    ></div>
+
+
+    <!-- NAVIGATION -->
+
     <div class="tabs-wrap">
+
       <nav class="tabs">
-        <button class="tab active" data-view="nearest">
+
+        <button
+          class="tab active"
+          data-view="nearest"
+        >
           Ближайшее
         </button>
 
-        <button class="tab" data-view="today">
+        <button
+          class="tab"
+          data-view="today"
+        >
           Сегодня
         </button>
 
-        <button class="tab" data-view="tomorrow">
+        <button
+          class="tab"
+          data-view="tomorrow"
+        >
           Завтра
         </button>
 
-        <button class="tab" data-view="week">
+        <button
+          class="tab"
+          data-view="week"
+        >
           Неделя
         </button>
 
-        <button class="tab" data-view="month">
+        <button
+          class="tab"
+          data-view="month"
+        >
           Месяц
         </button>
+
       </nav>
+
     </div>
 
+
+    <!-- SCHEDULE -->
+
     <main id="schedule">
+
       <div class="empty">
-        Загружаем расписание...
+        Загрузка расписания...
       </div>
+
     </main>
 
+
     <div class="source">
-      Источник: официальный РУЗ Финансового университета
+      Автоматически обновляется из РУЗ
     </div>
 
   </div>
 
+
   <script>
 
     let schedule = [];
+
     let currentView = "nearest";
 
-    /*
-      -----------------------------
-      ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
-      -----------------------------
-    */
 
-    function pad(number) {
-      return String(number).padStart(2, "0");
+    /* ==========================
+       DATE
+    ========================== */
+
+    function pad(value) {
+      return String(value).padStart(2, "0");
     }
 
-    function localDateString(date = new Date()) {
+
+    function localDateString(
+      date = new Date()
+    ) {
+
       return [
         date.getFullYear(),
         pad(date.getMonth() + 1),
@@ -525,35 +797,73 @@
       ].join("-");
     }
 
-    function addDays(date, amount) {
-      const result = new Date(date);
-      result.setDate(result.getDate() + amount);
+
+    function addDays(
+      date,
+      amount
+    ) {
+
+      const result =
+        new Date(date);
+
+      result.setDate(
+        result.getDate() + amount
+      );
+
       return result;
     }
 
-    function dateFromString(value) {
-      return new Date(value + "T00:00:00");
+
+    function dateFromString(
+      value
+    ) {
+
+      return new Date(
+        value + "T00:00:00"
+      );
     }
 
-    function formatDate(dateString) {
-      const date = dateFromString(dateString);
 
-      return date.toLocaleDateString("ru-RU", {
-        day: "numeric",
-        month: "long"
-      });
+    function formatDate(
+      value
+    ) {
+
+      return dateFromString(
+        value
+      ).toLocaleDateString(
+        "ru-RU",
+        {
+          day: "numeric",
+          month: "long"
+        }
+      );
     }
 
-    function formatWeekday(dateString) {
-      const date = dateFromString(dateString);
 
-      return date.toLocaleDateString("ru-RU", {
-        weekday: "long"
-      });
+    function formatWeekday(
+      value
+    ) {
+
+      return dateFromString(
+        value
+      ).toLocaleDateString(
+        "ru-RU",
+        {
+          weekday: "long"
+        }
+      );
     }
+
+
+    /* ==========================
+       HTML SAFETY
+    ========================== */
 
     function escapeHtml(value) {
-      return String(value ?? "")
+
+      return String(
+        value ?? ""
+      )
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -561,524 +871,942 @@
         .replace(/'/g, "&#039;");
     }
 
-    function lessonDateTime(lesson, field) {
+
+    /* ==========================
+       LESSON TIME
+    ========================== */
+
+    function lessonDateTime(
+      lesson,
+      field
+    ) {
+
       return new Date(
         `${lesson.date}T${lesson[field]}:00`
       );
     }
 
-    function isLessonCurrent(lesson) {
-      const now = new Date();
 
-      const start = lessonDateTime(lesson, "beginLesson");
-      const end = lessonDateTime(lesson, "endLesson");
+    function isCurrentLesson(
+      lesson
+    ) {
 
-      return now >= start && now < end;
-    }
+      const now =
+        new Date();
 
-    function lessonHasEnded(lesson) {
-      return new Date() >= lessonDateTime(
-        lesson,
-        "endLesson"
+      const start =
+        lessonDateTime(
+          lesson,
+          "beginLesson"
+        );
+
+      const end =
+        lessonDateTime(
+          lesson,
+          "endLesson"
+        );
+
+      return (
+        now >= start &&
+        now < end
       );
     }
 
-    function sortSchedule(list) {
-      return [...list].sort((a, b) => {
 
-        const dateCompare =
-          (a.date || "").localeCompare(b.date || "");
+    function hasEnded(
+      lesson
+    ) {
 
-        if (dateCompare !== 0) {
-          return dateCompare;
-        }
-
-        return (a.beginLesson || "")
-          .localeCompare(b.beginLesson || "");
-      });
+      return (
+        new Date() >=
+        lessonDateTime(
+          lesson,
+          "endLesson"
+        )
+      );
     }
 
-    /*
-      -----------------------------
-      СЛЕДУЮЩАЯ ПАРА
-      -----------------------------
-    */
+
+    function sortLessons(
+      lessons
+    ) {
+
+      return [...lessons].sort(
+        (a, b) => {
+
+          const date =
+            (a.date || "")
+              .localeCompare(
+                b.date || ""
+              );
+
+          if (date !== 0) {
+            return date;
+          }
+
+          return (
+            (a.beginLesson || "")
+              .localeCompare(
+                b.beginLesson || ""
+              )
+          );
+        }
+      );
+    }
+
+
+    /* ==========================
+       NEXT LESSON
+    ========================== */
 
     function findNextLesson() {
 
-      const sorted = sortSchedule(schedule);
+      const sorted =
+        sortLessons(schedule);
 
-      // Сначала ищем текущую пару.
-      const current = sorted.find(
-        lesson => isLessonCurrent(lesson)
-      );
+
+      const current =
+        sorted.find(
+          lesson =>
+            isCurrentLesson(
+              lesson
+            )
+        );
+
 
       if (current) {
+
         return {
           lesson: current,
           current: true
         };
+
       }
 
-      // Затем ближайшую ещё не начавшуюся.
-      const next = sorted.find(
-        lesson => !lessonHasEnded(lesson)
-      );
+
+      const next =
+        sorted.find(
+          lesson =>
+            !hasEnded(
+              lesson
+            )
+        );
+
 
       if (next) {
+
         return {
           lesson: next,
           current: false
         };
+
       }
+
 
       return null;
     }
 
+
     function renderNextLesson() {
 
       const container =
-        document.getElementById("nextLesson");
+        document.getElementById(
+          "nextLesson"
+        );
 
-      const result = findNextLesson();
+
+      const result =
+        findNextLesson();
+
 
       if (!result) {
-        container.innerHTML = "";
+
+        container.innerHTML = `
+          <section class="hero">
+
+            <div class="hero-content">
+
+              <div class="hero-label">
+                Расписание
+              </div>
+
+              <div class="hero-subject">
+                Ближайших занятий нет
+              </div>
+
+              <div class="hero-info">
+
+                <div class="info-pill">
+                  ✨ Расписание свободно
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+        `;
+
         return;
       }
 
-      const lesson = result.lesson;
 
-      const status = result.current
-        ? `
-          <div class="next-status">
-            <span class="next-status-dot"></span>
-            СЕЙЧАС ИДЁТ
-          </div>
-        `
-        : `
-          <div class="next-label">
-            Следующая пара
-          </div>
-        `;
+      const lesson =
+        result.lesson;
+
+
+      const current =
+        result.current;
+
 
       container.innerHTML = `
-        <section class="next-card">
 
-          ${status}
+        <section class="hero">
 
-          <div class="next-time">
-            ${escapeHtml(lesson.beginLesson)}
-            –
-            ${escapeHtml(lesson.endLesson)}
-          </div>
+          <div class="hero-content">
 
-          <div class="next-discipline">
-            ${escapeHtml(
-              lesson.discipline || "Предмет не указан"
-            )}
-          </div>
+            ${
+              current
+                ? `
+                  <div class="live-label">
+                    <span class="live-dot"></span>
+                    СЕЙЧАС ИДЁТ
+                  </div>
+                `
+                : `
+                  <div class="hero-label">
+                    Следующая пара
+                  </div>
+                `
+            }
 
-          <div class="next-info">
+            <div class="hero-time">
 
-            <div>
-              📅
-              ${formatWeekday(lesson.date)},
-              ${formatDate(lesson.date)}
-            </div>
-
-            <div>
-              👨‍🏫
               ${escapeHtml(
-                lesson.lecturer ||
-                "Преподаватель не указан"
+                lesson.beginLesson
               )}
+
+              –
+
+              ${escapeHtml(
+                lesson.endLesson
+              )}
+
             </div>
 
-            ${
-              lesson.auditorium
-              ? `
-                <div>
-                  🏫
-                  ${escapeHtml(lesson.auditorium)}
-                </div>
-              `
-              : ""
-            }
 
-            ${
-              lesson.building
-              ? `
-                <div>
-                  📍
-                  ${escapeHtml(lesson.building)}
-                </div>
-              `
-              : ""
-            }
+            <div class="hero-subject">
+
+              ${escapeHtml(
+                lesson.discipline ||
+                "Предмет не указан"
+              )}
+
+            </div>
+
+
+            <div class="hero-info">
+
+              <div class="info-pill">
+                📅
+                ${escapeHtml(
+                  formatWeekday(
+                    lesson.date
+                  )
+                )},
+                ${escapeHtml(
+                  formatDate(
+                    lesson.date
+                  )
+                )}
+              </div>
+
+
+              ${
+                lesson.lecturer
+                  ? `
+                    <div class="info-pill">
+                      👨‍🏫
+                      ${escapeHtml(
+                        lesson.lecturer
+                      )}
+                    </div>
+                  `
+                  : ""
+              }
+
+
+              ${
+                lesson.auditorium
+                  ? `
+                    <div class="info-pill">
+                      🏫
+                      ${escapeHtml(
+                        lesson.auditorium
+                      )}
+                    </div>
+                  `
+                  : ""
+              }
+
+
+              ${
+                lesson.building
+                  ? `
+                    <div class="info-pill">
+                      📍
+                      ${escapeHtml(
+                        lesson.building
+                      )}
+                    </div>
+                  `
+                  : ""
+              }
+
+            </div>
 
           </div>
 
         </section>
+
       `;
     }
 
-    /*
-      -----------------------------
-      ГРУППИРОВКА
-      -----------------------------
-    */
 
-    function groupByDate(list) {
+    /* ==========================
+       STATS
+    ========================== */
 
-      const grouped = {};
+    function renderStats() {
 
-      for (const lesson of list) {
+      const container =
+        document.getElementById(
+          "stats"
+        );
 
-        if (!lesson.date) {
-          continue;
-        }
 
-        if (!grouped[lesson.date]) {
-          grouped[lesson.date] = [];
-        }
+      const today =
+        localDateString();
 
-        grouped[lesson.date].push(lesson);
-      }
 
-      return grouped;
-    }
+      const todayLessons =
+        schedule.filter(
+          lesson =>
+            lesson.date === today
+        );
 
-    /*
-      -----------------------------
-      КАРТОЧКА ПАРЫ
-      -----------------------------
-    */
 
-    function lessonHtml(lesson) {
+      const totalMinutes =
+        todayLessons.reduce(
+          (total, lesson) => {
 
-      const current = isLessonCurrent(lesson);
+            const start =
+              lessonDateTime(
+                lesson,
+                "beginLesson"
+              );
 
-      return `
-        <article class="lesson ${current ? "current" : ""}">
+            const end =
+              lessonDateTime(
+                lesson,
+                "endLesson"
+              );
 
-          <div class="lesson-header">
+            return (
+              total +
+              Math.max(
+                0,
+                (end - start) /
+                60000
+              )
+            );
 
-            <div>
-              <div class="time">
-                ${escapeHtml(lesson.beginLesson || "")}
-                –
-                ${escapeHtml(lesson.endLesson || "")}
-              </div>
+          },
+          0
+        );
 
-              <div class="discipline">
-                ${escapeHtml(
-                  lesson.discipline ||
-                  "Предмет не указан"
-                )}
-              </div>
-            </div>
+
+      const hours =
+        Math.floor(
+          totalMinutes / 60
+        );
+
+      const minutes =
+        Math.round(
+          totalMinutes % 60
+        );
+
+
+      const buildings =
+        new Set(
+          todayLessons
+            .map(
+              lesson =>
+                lesson.building
+            )
+            .filter(Boolean)
+        ).size;
+
+
+      container.innerHTML = `
+
+        <div class="stat">
+
+          <div class="stat-value">
+            ${todayLessons.length}
+          </div>
+
+          <div class="stat-label">
+            пар сегодня
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-value">
 
             ${
-              current
-              ? `
-                <div class="current-badge">
-                  СЕЙЧАС ИДЁТ
-                </div>
-              `
-              : ""
+              hours > 0
+                ? `${hours}ч ${minutes}м`
+                : `${minutes}м`
             }
 
           </div>
 
-          <div class="info">
+          <div class="stat-label">
+            учебного времени
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-value">
+            ${buildings}
+          </div>
+
+          <div class="stat-label">
+            корпуса сегодня
+          </div>
+
+        </div>
+
+      `;
+    }
+
+
+    /* ==========================
+       LESSON CARD
+    ========================== */
+
+    function renderLesson(
+      lesson
+    ) {
+
+      const current =
+        isCurrentLesson(
+          lesson
+        );
+
+
+      return `
+
+        <article
+          class="lesson
+          ${current ? "current" : ""}"
+        >
+
+          <div class="lesson-top">
+
+            <div>
+
+              <div class="lesson-time">
+
+                ${escapeHtml(
+                  lesson.beginLesson ||
+                  ""
+                )}
+
+                –
+
+                ${escapeHtml(
+                  lesson.endLesson ||
+                  ""
+                )}
+
+              </div>
+
+
+              <div class="lesson-subject">
+
+                ${escapeHtml(
+                  lesson.discipline ||
+                  "Предмет не указан"
+                )}
+
+              </div>
+
+            </div>
+
+
+            ${
+              current
+                ? `
+                  <div class="current-badge">
+                    СЕЙЧАС
+                  </div>
+                `
+                : ""
+            }
+
+          </div>
+
+
+          <div class="lesson-info">
 
             ${
               lesson.lecturer
-              ? `
-                <div>
-                  👨‍🏫
-                  ${escapeHtml(lesson.lecturer)}
-                </div>
-              `
-              : ""
+                ? `
+                  <div>
+                    👨‍🏫
+                    ${escapeHtml(
+                      lesson.lecturer
+                    )}
+                  </div>
+                `
+                : ""
             }
+
 
             ${
               lesson.auditorium
-              ? `
-                <div>
-                  🏫
-                  ${escapeHtml(lesson.auditorium)}
-                </div>
-              `
-              : ""
+                ? `
+                  <div>
+                    🏫
+                    ${escapeHtml(
+                      lesson.auditorium
+                    )}
+                  </div>
+                `
+                : ""
             }
+
 
             ${
               lesson.building
-              ? `
-                <div>
-                  📍
-                  ${escapeHtml(lesson.building)}
-                </div>
-              `
-              : ""
+                ? `
+                  <div>
+                    📍
+                    ${escapeHtml(
+                      lesson.building
+                    )}
+                  </div>
+                `
+                : ""
             }
 
           </div>
 
         </article>
+
       `;
     }
 
-    /*
-      -----------------------------
-      ОТОБРАЖЕНИЕ ДНЯ
-      -----------------------------
-    */
 
-    function renderDay(date, lessons) {
+    /* ==========================
+       DAY
+    ========================== */
 
-      const sorted = sortSchedule(lessons);
+    function renderDay(
+      date,
+      lessons
+    ) {
+
+      const sorted =
+        sortLessons(
+          lessons
+        );
+
 
       return `
+
         <section class="day">
 
-          <div class="day-header">
+          <div class="day-heading">
 
-            <div class="weekday">
-              ${escapeHtml(formatWeekday(date))}
+            <div>
+
+              <div class="weekday">
+                ${escapeHtml(
+                  formatWeekday(
+                    date
+                  )
+                )}
+              </div>
+
+              <div class="date">
+                ${escapeHtml(
+                  formatDate(
+                    date
+                  )
+                )}
+              </div>
+
             </div>
 
-            <div class="full-date">
-              ${escapeHtml(formatDate(date))}
+
+            <div class="day-count">
+
+              ${sorted.length}
+              ${
+                sorted.length === 1
+                  ? "пара"
+                  : sorted.length < 5
+                    ? "пары"
+                    : "пар"
+              }
+
             </div>
 
           </div>
 
-          ${sorted.map(lessonHtml).join("")}
+
+          <div class="timeline">
+
+            ${sorted
+              .map(
+                lesson =>
+                  renderLesson(
+                    lesson
+                  )
+              )
+              .join("")
+            }
+
+          </div>
 
         </section>
+
       `;
     }
 
-    /*
-      -----------------------------
-      ПУСТОЕ СОСТОЯНИЕ
-      -----------------------------
-    */
 
-    function renderEmpty(title, text) {
+    /* ==========================
+       FILTER
+    ========================== */
 
-      return `
-        <div class="empty">
+    function getLessons() {
 
-          <div class="empty-icon">
-            📚
-          </div>
+      const today =
+        new Date();
 
-          <div class="empty-title">
-            ${escapeHtml(title)}
-          </div>
+      const todayString =
+        localDateString(
+          today
+        );
 
-          <div>
-            ${escapeHtml(text)}
-          </div>
 
-        </div>
-      `;
-    }
-
-    /*
-      -----------------------------
-      ФИЛЬТРЫ
-      -----------------------------
-    */
-
-    function getLessonsForView() {
-
-      const today = new Date();
-      const todayString = localDateString(today);
-
-      if (currentView === "today") {
+      if (
+        currentView === "today"
+      ) {
 
         return schedule.filter(
-          lesson => lesson.date === todayString
+          lesson =>
+            lesson.date ===
+            todayString
         );
+
       }
 
-      if (currentView === "tomorrow") {
+
+      if (
+        currentView === "tomorrow"
+      ) {
 
         const tomorrow =
-          localDateString(addDays(today, 1));
+          localDateString(
+            addDays(
+              today,
+              1
+            )
+          );
+
 
         return schedule.filter(
-          lesson => lesson.date === tomorrow
+          lesson =>
+            lesson.date ===
+            tomorrow
         );
+
       }
 
-      if (currentView === "week") {
 
-        const start = today;
-        const end = addDays(today, 7);
+      if (
+        currentView === "week"
+      ) {
 
-        return schedule.filter(lesson => {
-
-          const date = dateFromString(lesson.date);
-
-          return date >=
-            new Date(
-              start.getFullYear(),
-              start.getMonth(),
-              start.getDate()
+        const end =
+          localDateString(
+            addDays(
+              today,
+              6
             )
-            &&
-            date <
-            new Date(
-              end.getFullYear(),
-              end.getMonth(),
-              end.getDate()
-            );
-        });
+          );
+
+
+        return schedule.filter(
+          lesson =>
+            lesson.date >=
+              todayString &&
+            lesson.date <=
+              end
+        );
+
       }
 
-      if (currentView === "month") {
 
-        const end = addDays(today, 30);
+      if (
+        currentView === "month"
+      ) {
 
-        return schedule.filter(lesson => {
-
-          const date = dateFromString(lesson.date);
-
-          return date >=
-            new Date(
-              today.getFullYear(),
-              today.getMonth(),
-              today.getDate()
+        const end =
+          localDateString(
+            addDays(
+              today,
+              29
             )
-            &&
-            date <= end;
-        });
+          );
+
+
+        return schedule.filter(
+          lesson =>
+            lesson.date >=
+              todayString &&
+            lesson.date <=
+              end
+        );
+
       }
+
 
       /*
-        Ближайшее:
-        берём ближайший учебный день,
-        в котором есть занятия.
+        БЛИЖАЙШЕЕ
       */
-
-      const sorted = sortSchedule(schedule);
-
-      const todayString2 =
-        localDateString(today);
 
       const futureDates = [
         ...new Set(
-          sorted
+          sortLessons(schedule)
             .filter(
-              lesson => lesson.date >= todayString2
+              lesson =>
+                lesson.date >=
+                todayString
             )
             .map(
-              lesson => lesson.date
+              lesson =>
+                lesson.date
             )
         )
       ];
 
-      if (!futureDates.length) {
+
+      if (
+        !futureDates.length
+      ) {
+
         return [];
+
       }
 
-      const nearestDate = futureDates[0];
 
-      return sorted.filter(
-        lesson => lesson.date === nearestDate
+      return schedule.filter(
+        lesson =>
+          lesson.date ===
+          futureDates[0]
       );
     }
 
-    /*
-      -----------------------------
-      ОСНОВНОЙ RENDER
-      -----------------------------
-    */
+
+    /* ==========================
+       MAIN RENDER
+    ========================== */
 
     function renderSchedule() {
 
       const container =
-        document.getElementById("schedule");
+        document.getElementById(
+          "schedule"
+        );
+
 
       const lessons =
-        getLessonsForView();
+        getLessons();
 
-      if (!lessons.length) {
 
-        if (currentView === "today") {
+      if (
+        !lessons.length
+      ) {
 
-          container.innerHTML =
-            renderEmpty(
-              "Сегодня занятий нет",
-              "Отличный день для отдыха 😎"
-            );
+        let title =
+          "Занятий нет";
 
-        } else if (currentView === "tomorrow") {
+        let text =
+          "В выбранном периоде занятий не найдено.";
 
-          container.innerHTML =
-            renderEmpty(
-              "Завтра занятий нет",
-              "В расписании пока ничего нет."
-            );
 
-        } else if (currentView === "week") {
+        if (
+          currentView === "today"
+        ) {
 
-          container.innerHTML =
-            renderEmpty(
-              "На этой неделе занятий нет",
-              "В расписании нет занятий на ближайшие 7 дней."
-            );
+          title =
+            "Сегодня свободный день";
 
-        } else {
+          text =
+            "На сегодня занятий нет.";
 
-          container.innerHTML =
-            renderEmpty(
-              "Расписание не найдено",
-              "Попробуйте обновить расписание."
-            );
         }
+
+
+        if (
+          currentView === "tomorrow"
+        ) {
+
+          title =
+            "Завтра занятий нет";
+
+          text =
+            "Можно спокойно планировать день.";
+
+        }
+
+
+        if (
+          currentView === "week"
+        ) {
+
+          title =
+            "Неделя свободна";
+
+          text =
+            "На ближайшие 7 дней занятий нет.";
+
+        }
+
+
+        if (
+          currentView === "month"
+        ) {
+
+          title =
+            "Занятий нет";
+
+          text =
+            "На ближайшие 30 дней занятий нет.";
+
+        }
+
+
+        container.innerHTML = `
+
+          <div class="empty">
+
+            <div class="empty-icon">
+              ✨
+            </div>
+
+            <div class="empty-title">
+              ${title}
+            </div>
+
+            <div class="empty-text">
+              ${text}
+            </div>
+
+          </div>
+
+        `;
 
         return;
       }
 
+
       const grouped =
-        groupByDate(lessons);
+        {};
+
+
+      for (
+        const lesson
+        of lessons
+      ) {
+
+        if (
+          !grouped[
+            lesson.date
+          ]
+        ) {
+
+          grouped[
+            lesson.date
+          ] = [];
+
+        }
+
+
+        grouped[
+          lesson.date
+        ].push(
+          lesson
+        );
+
+      }
+
 
       const dates =
-        Object.keys(grouped).sort();
+        Object.keys(
+          grouped
+        ).sort();
+
 
       container.innerHTML =
         dates
           .map(
             date =>
-              renderDay(date, grouped[date])
+              renderDay(
+                date,
+                grouped[date]
+              )
           )
           .join("");
     }
 
-    /*
-      -----------------------------
-      ЗАГРУЗКА
-      -----------------------------
-    */
+
+    /* ==========================
+       LOAD
+    ========================== */
 
     async function loadSchedule() {
 
       const button =
-        document.getElementById("refreshButton");
+        document.getElementById(
+          "refreshButton"
+        );
+
 
       const updated =
-        document.getElementById("updated");
+        document.getElementById(
+          "updated"
+        );
 
-      button.classList.add("loading");
-      button.textContent = "↻ Обновление...";
+
+      button.classList.add(
+        "loading"
+      );
+
+      button.textContent =
+        "↻ Обновление...";
+
 
       try {
 
@@ -1088,120 +1816,185 @@
             Date.now()
           );
 
+
         if (!response.ok) {
+
           throw new Error(
             "Не удалось загрузить schedule.json"
           );
+
         }
+
 
         const data =
           await response.json();
 
-        if (!Array.isArray(data)) {
+
+        if (
+          !Array.isArray(data)
+        ) {
+
           throw new Error(
             "schedule.json имеет неверный формат"
           );
+
         }
 
-        schedule =
-          sortSchedule(data);
 
-        updated.textContent =
-          "Актуальное расписание • обновлено в " +
-          new Date().toLocaleTimeString(
-            "ru-RU",
-            {
-              hour: "2-digit",
-              minute: "2-digit"
-            }
+        schedule =
+          sortLessons(
+            data.filter(
+              lesson =>
+                lesson.date
+            )
           );
 
+
+        updated.textContent =
+          "Обновлено в " +
+          new Date()
+            .toLocaleTimeString(
+              "ru-RU",
+              {
+                hour: "2-digit",
+                minute: "2-digit"
+              }
+            );
+
+
         renderNextLesson();
+        renderStats();
         renderSchedule();
+
 
       } catch (error) {
 
         document.getElementById(
           "schedule"
         ).innerHTML = `
+
           <div class="error">
+
             <strong>
-              Ошибка загрузки расписания
+              Не удалось загрузить расписание
             </strong>
-            <br>
-            ${escapeHtml(error.message)}
+
+            <br><br>
+
+            ${escapeHtml(
+              error.message
+            )}
+
           </div>
+
         `;
 
         console.error(error);
 
       } finally {
 
-        button.classList.remove("loading");
-        button.textContent = "↻ Обновить";
+        button.classList.remove(
+          "loading"
+        );
+
+        button.textContent =
+          "↻ Обновить";
       }
     }
 
-    /*
-      -----------------------------
-      TABS
-      -----------------------------
-    */
+
+    /* ==========================
+       TABS
+    ========================== */
 
     document
-      .querySelectorAll(".tab")
-      .forEach(button => {
+      .querySelectorAll(
+        ".tab"
+      )
+      .forEach(
+        button => {
 
-        button.addEventListener(
-          "click",
-          () => {
+          button.addEventListener(
+            "click",
+            () => {
 
-            document
-              .querySelectorAll(".tab")
-              .forEach(
-                item =>
-                  item.classList.remove("active")
+              document
+                .querySelectorAll(
+                  ".tab"
+                )
+                .forEach(
+                  item =>
+                    item.classList.remove(
+                      "active"
+                    )
+                );
+
+
+              button.classList.add(
+                "active"
               );
 
-            button.classList.add("active");
 
-            currentView =
-              button.dataset.view;
+              currentView =
+                button.dataset.view;
 
-            renderSchedule();
-          }
-        );
-      });
 
-    /*
-      -----------------------------
-      REFRESH
-      -----------------------------
-    */
+              renderSchedule();
+
+            }
+          );
+
+        }
+      );
+
+
+    /* ==========================
+       REFRESH
+    ========================== */
 
     document
-      .getElementById("refreshButton")
+      .getElementById(
+        "refreshButton"
+      )
       .addEventListener(
         "click",
         loadSchedule
       );
 
-    /*
-      -----------------------------
-      АВТОМАТИЧЕСКОЕ ОБНОВЛЕНИЕ
-      -----------------------------
-    */
+
+    /* ==========================
+       START
+    ========================== */
 
     loadSchedule();
 
-    // Перерисовываем статус текущей пары
-    // каждую минуту.
-    setInterval(() => {
 
-      renderNextLesson();
-      renderSchedule();
+    /*
+      Обновляем текущую пару
+      каждую минуту.
+    */
 
-    }, 60 * 1000);
+    setInterval(
+      () => {
+
+        renderNextLesson();
+        renderStats();
+        renderSchedule();
+
+      },
+      60 * 1000
+    );
+
+
+    /*
+      Проверяем новые данные
+      каждые 5 минут.
+    */
+
+    setInterval(
+      loadSchedule,
+      5 * 60 * 1000
+    );
 
   </script>
 
