@@ -2,25 +2,30 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <meta name="theme-color" content="#f4f7fb">
 
   <title>РУЗ · МеждОт25-2</title>
 
   <style>
     :root {
-      --bg: #eef2f7;
-      --card: rgba(255,255,255,.78);
-      --card-solid: #ffffff;
-      --text: #17191d;
-      --muted: #747983;
-      --line: rgba(0,0,0,.07);
-      --blue: #087cff;
-      --blue-light: #e8f2ff;
-      --green: #20a464;
-      --green-light: #e9f8f0;
-      --purple: #7657ff;
-      --shadow: 0 12px 35px rgba(30,45,70,.08);
-      --radius: 22px;
+      --bg: #f4f7fb;
+      --text: #11141a;
+      --muted: #747b88;
+      --line: rgba(15, 23, 42, .07);
+
+      --blue: #1677ff;
+      --purple: #7958ff;
+      --green: #18b66a;
+      --orange: #f27d35;
+      --pink: #e65088;
+      --cyan: #08a8c8;
+
+      --shadow: 0 20px 60px rgba(30, 45, 70, .10);
+      --shadow-soft: 0 8px 30px rgba(30, 45, 70, .07);
+
+      --radius: 24px;
     }
 
     * {
@@ -34,6 +39,7 @@
     body {
       margin: 0;
       color: var(--text);
+
       font-family:
         -apple-system,
         BlinkMacSystemFont,
@@ -41,24 +47,52 @@
         "SF Pro Text",
         "Segoe UI",
         sans-serif;
+
       background:
         radial-gradient(
-          circle at 10% 5%,
-          rgba(0,122,255,.13),
-          transparent 28%
+          circle at 8% 2%,
+          rgba(22,119,255,.14),
+          transparent 27%
         ),
         radial-gradient(
-          circle at 90% 20%,
-          rgba(118,87,255,.10),
+          circle at 95% 12%,
+          rgba(121,88,255,.13),
           transparent 25%
         ),
         radial-gradient(
-          circle at 50% 100%,
-          rgba(0,180,255,.08),
+          circle at 55% 105%,
+          rgba(24,182,106,.09),
           transparent 30%
         ),
         var(--bg);
+
       min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+
+      position: fixed;
+      inset: 0;
+
+      pointer-events: none;
+
+      opacity: .25;
+
+      background-image:
+        radial-gradient(
+          rgba(20,35,60,.14) .7px,
+          transparent .7px
+        );
+
+      background-size: 18px 18px;
+
+      mask-image:
+        linear-gradient(
+          to bottom,
+          black,
+          transparent 80%
+        );
     }
 
     button {
@@ -66,82 +100,133 @@
     }
 
     .container {
-      width: min(960px, calc(100% - 28px));
+      width: min(
+        1020px,
+        calc(100% - 28px)
+      );
+
       margin: 0 auto;
-      padding: 28px 0 70px;
+
+      padding:
+        28px
+        0
+        75px;
     }
 
-    /* HEADER */
+
+    /* =========================
+       HEADER
+    ========================= */
 
     .header {
       display: flex;
+
       justify-content: space-between;
       align-items: center;
+
       gap: 18px;
-      margin-bottom: 22px;
+
+      margin-bottom: 18px;
     }
 
     .brand {
       display: flex;
+
       align-items: center;
+
       gap: 13px;
     }
 
     .brand-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 15px;
+      width: 52px;
+      height: 52px;
+
+      border-radius: 17px;
+
       display: grid;
       place-items: center;
+
       color: white;
+
       font-size: 22px;
-      font-weight: 800;
+      font-weight: 900;
+
       background:
         linear-gradient(
-          135deg,
-          var(--blue),
-          var(--purple)
+          145deg,
+          #1677ff,
+          #7958ff 70%,
+          #9a76ff
         );
+
       box-shadow:
-        0 8px 20px rgba(58,100,255,.25);
+        0 12px 30px
+        rgba(71,91,255,.25);
+
+      transform: rotate(-3deg);
     }
 
     .title {
       font-size: 31px;
-      font-weight: 850;
-      letter-spacing: -1px;
-      line-height: 1.05;
+
+      font-weight: 900;
+
+      letter-spacing: -1.2px;
+
+      line-height: 1;
     }
 
     .group {
-      margin-top: 4px;
+      margin-top: 6px;
+
       color: var(--muted);
-      font-size: 15px;
-      font-weight: 600;
+
+      font-size: 14px;
+
+      font-weight: 700;
     }
 
     .header-right {
       display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 8px;
+
+      align-items: center;
+
+      gap: 10px;
     }
 
     .update-status {
       color: var(--muted);
-      font-size: 12px;
+
+      font-size: 11px;
     }
 
     .refresh {
-      border: 0;
+      border: 1px solid
+        rgba(255,255,255,.8);
+
       color: white;
-      background: var(--text);
-      border-radius: 13px;
-      padding: 10px 14px;
+
+      background: #11141a;
+
+      border-radius: 14px;
+
+      padding:
+        11px
+        14px;
+
       font-size: 13px;
-      font-weight: 750;
+
+      font-weight: 800;
+
       cursor: pointer;
-      transition: transform .15s ease, opacity .15s ease;
+
+      box-shadow:
+        0 7px 20px
+        rgba(0,0,0,.12);
+
+      transition:
+        transform .18s ease,
+        opacity .18s ease;
     }
 
     .refresh:active {
@@ -149,173 +234,341 @@
     }
 
     .refresh.loading {
-      opacity: .6;
+      opacity: .55;
+
       pointer-events: none;
     }
 
-    /* HERO */
+
+    /* =========================
+       HERO
+    ========================= */
 
     .hero {
       position: relative;
+
       overflow: hidden;
-      border-radius: 28px;
-      padding: 25px;
-      margin-bottom: 14px;
+
+      border-radius: 32px;
+
+      padding: 27px;
+
+      margin-bottom: 12px;
+
       background:
         linear-gradient(
           135deg,
-          rgba(255,255,255,.92),
-          rgba(239,246,255,.80)
+          rgba(255,255,255,.94),
+          rgba(235,244,255,.80)
         );
-      border: 1px solid rgba(255,255,255,.8);
+
+      border:
+        1px solid
+        rgba(255,255,255,.95);
+
       box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
+
+      backdrop-filter: blur(22px);
     }
 
     .hero::before {
       content: "";
+
       position: absolute;
-      width: 220px;
-      height: 220px;
+
+      width: 340px;
+      height: 340px;
+
+      right: -140px;
+      top: -180px;
+
       border-radius: 50%;
-      right: -90px;
-      top: -110px;
-      background: rgba(0,122,255,.08);
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(22,119,255,.20),
+          rgba(121,88,255,.05) 55%,
+          transparent 70%
+        );
     }
 
     .hero::after {
       content: "";
+
       position: absolute;
-      width: 150px;
-      height: 150px;
+
+      width: 190px;
+      height: 190px;
+
+      left: -120px;
+      bottom: -125px;
+
       border-radius: 50%;
-      left: -80px;
-      bottom: -100px;
-      background: rgba(118,87,255,.07);
+
+      background:
+        rgba(121,88,255,.10);
     }
 
     .hero-content {
       position: relative;
+
       z-index: 1;
     }
 
     .hero-label {
       color: var(--blue);
-      font-size: 12px;
-      font-weight: 850;
-      letter-spacing: .9px;
-      text-transform: uppercase;
-      margin-bottom: 9px;
-    }
 
-    .hero-time {
-      font-size: 42px;
+      font-size: 11px;
+
       font-weight: 900;
-      letter-spacing: -1.7px;
-      line-height: 1;
+
+      letter-spacing: 1.2px;
+
+      text-transform: uppercase;
+
       margin-bottom: 10px;
-    }
-
-    .hero-subject {
-      max-width: 650px;
-      font-size: 23px;
-      font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 17px;
-    }
-
-    .hero-info {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .info-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 10px;
-      border-radius: 11px;
-      background: rgba(255,255,255,.75);
-      border: 1px solid rgba(0,0,0,.05);
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 600;
     }
 
     .live-label {
       display: inline-flex;
+
       align-items: center;
+
       gap: 7px;
-      color: var(--green);
-      background: var(--green-light);
-      border-radius: 10px;
-      padding: 7px 10px;
-      width: fit-content;
-      font-size: 12px;
-      font-weight: 850;
-      letter-spacing: .3px;
+
+      color: #087b48;
+
+      background: #e8faf1;
+
+      border:
+        1px solid
+        rgba(24,182,106,.12);
+
+      border-radius: 999px;
+
+      padding:
+        7px
+        10px;
+
+      font-size: 11px;
+
+      font-weight: 900;
+
+      letter-spacing: .5px;
+
       margin-bottom: 10px;
     }
 
     .live-dot {
       width: 7px;
       height: 7px;
+
       border-radius: 50%;
+
       background: var(--green);
-      box-shadow: 0 0 0 4px rgba(32,164,100,.12);
+
+      box-shadow:
+        0 0 0 5px
+        rgba(24,182,106,.12);
     }
 
-    /* STATS */
+    .hero-time {
+      font-size: 48px;
+
+      font-weight: 950;
+
+      letter-spacing: -2px;
+
+      line-height: 1;
+
+      margin-bottom: 9px;
+    }
+
+    .hero-subject {
+      max-width: 720px;
+
+      font-size: 24px;
+
+      font-weight: 850;
+
+      line-height: 1.18;
+
+      margin-bottom: 17px;
+
+      letter-spacing: -.4px;
+    }
+
+    .hero-info {
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 7px;
+    }
+
+    .info-pill {
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 6px;
+
+      padding:
+        8px
+        10px;
+
+      border-radius: 12px;
+
+      background:
+        rgba(255,255,255,.72);
+
+      border:
+        1px solid
+        rgba(17,20,26,.055);
+
+      color: var(--muted);
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+      box-shadow:
+        0 3px 10px
+        rgba(30,45,70,.03);
+    }
+
+
+    /* =========================
+       STATS
+    ========================= */
 
     .stats {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 9px;
+
       margin-bottom: 18px;
     }
 
     .stat {
-      background: rgba(255,255,255,.72);
-      border: 1px solid rgba(255,255,255,.9);
-      border-radius: 18px;
+      position: relative;
+
+      overflow: hidden;
+
+      background:
+        rgba(255,255,255,.72);
+
+      border:
+        1px solid
+        rgba(255,255,255,.95);
+
+      border-radius: 20px;
+
       padding: 15px;
-      box-shadow: 0 5px 18px rgba(30,45,70,.05);
-      backdrop-filter: blur(14px);
+
+      box-shadow:
+        var(--shadow-soft);
+
+      backdrop-filter: blur(18px);
+    }
+
+    .stat::after {
+      content: "";
+
+      position: absolute;
+
+      width: 80px;
+      height: 80px;
+
+      right: -32px;
+      bottom: -42px;
+
+      border-radius: 50%;
+
+      background:
+        rgba(22,119,255,.08);
+    }
+
+    .stat:nth-child(2)::after {
+      background:
+        rgba(121,88,255,.08);
+    }
+
+    .stat:nth-child(3)::after {
+      background:
+        rgba(24,182,106,.08);
     }
 
     .stat-value {
+      position: relative;
+
+      z-index: 1;
+
       font-size: 23px;
-      font-weight: 850;
-      letter-spacing: -.5px;
+
+      font-weight: 900;
+
+      letter-spacing: -.6px;
     }
 
     .stat-label {
+      position: relative;
+
+      z-index: 1;
+
       margin-top: 3px;
+
       color: var(--muted);
-      font-size: 12px;
-      font-weight: 600;
+
+      font-size: 11px;
+
+      font-weight: 700;
     }
 
-    /* NAVIGATION */
+
+    /* =========================
+       NAVIGATION
+    ========================= */
 
     .tabs-wrap {
       position: sticky;
-      top: 8px;
+
+      top: 7px;
+
       z-index: 30;
+
       margin-bottom: 25px;
     }
 
     .tabs {
       display: flex;
+
       gap: 4px;
+
       padding: 5px;
-      background: rgba(225,229,237,.82);
-      border: 1px solid rgba(255,255,255,.9);
-      border-radius: 16px;
-      box-shadow: 0 5px 18px rgba(30,45,70,.07);
-      backdrop-filter: blur(18px);
+
+      background:
+        rgba(224,229,238,.78);
+
+      border:
+        1px solid
+        rgba(255,255,255,.9);
+
+      border-radius: 17px;
+
+      box-shadow:
+        0 7px 22px
+        rgba(30,45,70,.08);
+
+      backdrop-filter:
+        blur(20px);
+
       overflow-x: auto;
+
       scrollbar-width: none;
     }
 
@@ -325,229 +578,504 @@
 
     .tab {
       flex: 1;
+
       min-width: 105px;
+
       border: 0;
+
       background: transparent;
-      color: #686d77;
-      padding: 10px 13px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 750;
+
+      color: #717784;
+
+      padding:
+        10px
+        13px;
+
+      border-radius: 13px;
+
+      font-size: 13px;
+
+      font-weight: 800;
+
       cursor: pointer;
+
       white-space: nowrap;
-      transition: all .18s ease;
+
+      transition:
+        .18s ease;
+    }
+
+    .tab:hover {
+      color: var(--text);
     }
 
     .tab.active {
       color: var(--text);
+
       background: white;
-      box-shadow: 0 3px 10px rgba(0,0,0,.08);
+
+      box-shadow:
+        0 4px 13px
+        rgba(0,0,0,.08);
     }
 
-    /* DAY */
+
+    /* =========================
+       DAY
+    ========================= */
 
     .day {
-      margin-bottom: 30px;
+      margin-bottom: 31px;
     }
 
     .day-heading {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
+
+      justify-content:
+        space-between;
+
+      align-items:
+        flex-end;
+
       gap: 15px;
-      padding: 0 4px;
+
+      padding:
+        0 4px;
+
       margin-bottom: 11px;
     }
 
     .weekday {
       font-size: 21px;
-      font-weight: 850;
+
+      font-weight: 900;
+
+      letter-spacing: -.4px;
+
       text-transform: capitalize;
-      letter-spacing: -.35px;
     }
 
     .date {
       color: var(--muted);
-      font-size: 13px;
-      margin-top: 2px;
+
+      font-size: 12px;
+
+      margin-top: 3px;
+
+      font-weight: 600;
     }
 
     .day-count {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
+      color: #555d69;
+
+      background:
+        rgba(255,255,255,.62);
+
+      border:
+        1px solid
+        rgba(255,255,255,.9);
+
+      padding:
+        6px
+        9px;
+
+      border-radius: 999px;
+
+      font-size: 11px;
+
+      font-weight: 800;
+
       white-space: nowrap;
     }
 
-    /* TIMELINE */
+
+    /* =========================
+       TIMELINE
+    ========================= */
 
     .timeline {
       position: relative;
-      padding-left: 16px;
+
+      padding-left: 20px;
     }
 
     .timeline::before {
       content: "";
+
       position: absolute;
-      left: 5px;
-      top: 12px;
-      bottom: 12px;
+
+      left: 6px;
+
+      top: 14px;
+      bottom: 14px;
+
       width: 2px;
-      background: #dce1e8;
+
+      background:
+        linear-gradient(
+          to bottom,
+          #d9e1ec,
+          #cfd8e6
+        );
+
       border-radius: 10px;
     }
 
+
+    /* =========================
+       LESSON CARD
+    ========================= */
+
     .lesson {
+      --accent: var(--blue);
+
+      --accent-bg: #edf5ff;
+
       position: relative;
-      background: rgba(255,255,255,.84);
-      border: 1px solid rgba(0,0,0,.055);
-      border-radius: 18px;
-      padding: 16px;
+
+      overflow: hidden;
+
+      background:
+        rgba(255,255,255,.86);
+
+      border:
+        1px solid
+        rgba(17,20,26,.055);
+
+      border-radius: 21px;
+
+      padding:
+        17px
+        17px
+        16px;
+
       margin-bottom: 10px;
-      box-shadow: 0 5px 18px rgba(30,45,70,.055);
-      backdrop-filter: blur(12px);
+
+      box-shadow:
+        var(--shadow-soft);
+
+      backdrop-filter:
+        blur(15px);
+
+      transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+    }
+
+    .lesson:hover {
+      transform:
+        translateY(-2px);
+
+      box-shadow:
+        0 13px 34px
+        rgba(34,49,76,.10);
+    }
+
+    .lesson::after {
+      content: "";
+
+      position: absolute;
+
+      left: 0;
+      top: 0;
+      bottom: 0;
+
+      width: 4px;
+
+      background:
+        var(--accent);
     }
 
     .lesson::before {
       content: "";
+
       position: absolute;
-      left: -16px;
-      top: 21px;
+
+      left: -20px;
+
+      top: 22px;
+
       width: 10px;
       height: 10px;
+
       border-radius: 50%;
+
       background: white;
-      border: 3px solid var(--blue);
-      box-shadow: 0 0 0 3px var(--bg);
+
+      border:
+        3px solid
+        var(--accent);
+
+      box-shadow:
+        0 0 0 3px
+        var(--bg);
     }
 
     .lesson.current {
-      border: 2px solid var(--green);
-      background: rgba(249,255,252,.95);
-      box-shadow: 0 7px 22px rgba(32,164,100,.12);
+      --accent: var(--green);
+
+      --accent-bg: #e8faf1;
+
+      border:
+        2px solid
+        rgba(24,182,106,.55);
+
+      background:
+        rgba(249,255,252,.96);
+
+      box-shadow:
+        0 12px 35px
+        rgba(24,182,106,.14);
     }
 
     .lesson.current::before {
-      background: var(--green);
-      border-color: var(--green);
+      background:
+        var(--green);
+
+      border-color:
+        var(--green);
+
       box-shadow:
         0 0 0 3px var(--bg),
-        0 0 0 7px rgba(32,164,100,.10);
+        0 0 0 7px
+        rgba(24,182,106,.10);
     }
 
     .lesson-top {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+
+      justify-content:
+        space-between;
+
+      align-items:
+        flex-start;
+
       gap: 12px;
     }
 
     .lesson-time {
-      color: var(--blue);
-      font-size: 15px;
-      font-weight: 850;
-      margin-bottom: 6px;
-    }
+      color:
+        var(--accent);
 
-    .lesson.current .lesson-time {
-      color: var(--green);
+      font-size: 14px;
+
+      font-weight: 900;
+
+      margin-bottom: 7px;
     }
 
     .lesson-subject {
       font-size: 18px;
-      font-weight: 800;
-      line-height: 1.28;
-      margin-bottom: 9px;
+
+      font-weight: 880;
+
+      line-height: 1.22;
+
+      margin-bottom: 12px;
+
+      letter-spacing: -.2px;
     }
 
     .lesson-info {
-      display: grid;
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 6px;
+    }
+
+    .lesson-chip {
+      display: inline-flex;
+
+      align-items: center;
+
       gap: 5px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.4;
+
+      padding:
+        6px
+        8px;
+
+      border-radius: 10px;
+
+      background:
+        var(--accent-bg);
+
+      color: #656d7a;
+
+      font-size: 11px;
+
+      font-weight: 700;
     }
 
     .current-badge {
-      color: var(--green);
-      background: var(--green-light);
-      border-radius: 9px;
-      padding: 5px 8px;
-      font-size: 10px;
-      font-weight: 850;
+      color: #087b48;
+
+      background:
+        #e5f9ef;
+
+      border-radius: 999px;
+
+      padding:
+        6px
+        9px;
+
+      font-size: 9px;
+
+      font-weight: 900;
+
       white-space: nowrap;
     }
 
-    /* EMPTY */
+
+    /* =========================
+       SUBJECT THEMES
+    ========================= */
+
+    .theme-blue {
+      --accent: #1677ff;
+      --accent-bg: #edf5ff;
+    }
+
+    .theme-purple {
+      --accent: #7958ff;
+      --accent-bg: #f1edff;
+    }
+
+    .theme-orange {
+      --accent: #f27d35;
+      --accent-bg: #fff2e9;
+    }
+
+    .theme-pink {
+      --accent: #e65088;
+      --accent-bg: #ffedf4;
+    }
+
+    .theme-cyan {
+      --accent: #08a8c8;
+      --accent-bg: #e8f9fc;
+    }
+
+    .theme-indigo {
+      --accent: #5267d9;
+      --accent-bg: #eef0ff;
+    }
+
+    .theme-green {
+      --accent: #18a865;
+      --accent-bg: #e9f9f0;
+    }
+
+
+    /* =========================
+       EMPTY / ERROR
+    ========================= */
 
     .empty {
-      background: rgba(255,255,255,.78);
-      border: 1px solid rgba(0,0,0,.05);
-      border-radius: 20px;
-      padding: 42px 20px;
+      background:
+        rgba(255,255,255,.78);
+
+      border:
+        1px solid
+        rgba(255,255,255,.9);
+
+      border-radius: 24px;
+
+      padding:
+        46px
+        20px;
+
       text-align: center;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(12px);
+
+      box-shadow:
+        var(--shadow);
+
+      backdrop-filter:
+        blur(15px);
     }
 
     .empty-icon {
-      font-size: 32px;
+      font-size: 34px;
+
       margin-bottom: 10px;
     }
 
     .empty-title {
       font-size: 18px;
-      font-weight: 800;
+
+      font-weight: 850;
+
       margin-bottom: 5px;
     }
 
     .empty-text {
       color: var(--muted);
-      font-size: 14px;
+
+      font-size: 13px;
     }
 
     .error {
       padding: 17px;
-      border-radius: 16px;
+
+      border-radius: 17px;
+
       background: #fff1f1;
+
       color: #bd2525;
-      border: 1px solid #ffd3d3;
+
+      border:
+        1px solid
+        #ffd3d3;
+
       line-height: 1.5;
     }
 
     .source {
       margin-top: 35px;
+
       text-align: center;
-      color: #999ea8;
-      font-size: 11px;
+
+      color: #9ba1aa;
+
+      font-size: 10px;
+
+      font-weight: 600;
     }
 
-    /* MOBILE */
+
+    /* =========================
+       MOBILE
+    ========================= */
 
     @media (max-width: 650px) {
 
       .container {
-        width: calc(100% - 20px);
+        width:
+          calc(100% - 20px);
+
         padding-top: 17px;
       }
 
       .header {
-        align-items: flex-start;
+        align-items:
+          flex-start;
       }
 
       .brand-icon {
-        width: 42px;
-        height: 42px;
-        border-radius: 13px;
-        font-size: 19px;
+        width: 43px;
+        height: 43px;
+
+        border-radius: 14px;
+
+        font-size: 18px;
       }
 
       .title {
-        font-size: 27px;
+        font-size: 26px;
       }
 
       .group {
-        font-size: 14px;
+        font-size: 13px;
       }
 
       .header-right {
@@ -559,17 +1087,21 @@
       }
 
       .refresh {
-        padding: 9px 11px;
+        padding:
+          9px
+          11px;
+
         font-size: 12px;
       }
 
       .hero {
-        padding: 19px;
-        border-radius: 21px;
+        padding: 20px;
+
+        border-radius: 23px;
       }
 
       .hero-time {
-        font-size: 35px;
+        font-size: 36px;
       }
 
       .hero-subject {
@@ -582,15 +1114,16 @@
 
       .stat {
         padding: 12px;
-        border-radius: 15px;
+
+        border-radius: 16px;
       }
 
       .stat-value {
-        font-size: 20px;
+        font-size: 19px;
       }
 
       .stat-label {
-        font-size: 11px;
+        font-size: 10px;
       }
 
       .tabs-wrap {
@@ -598,13 +1131,17 @@
       }
 
       .tabs {
-        border-radius: 14px;
+        border-radius: 15px;
       }
 
       .tab {
         min-width: 92px;
+
         font-size: 12px;
-        padding: 10px 8px;
+
+        padding:
+          10px
+          8px;
       }
 
       .weekday {
@@ -612,20 +1149,22 @@
       }
 
       .day-count {
-        font-size: 11px;
+        font-size: 10px;
       }
 
       .timeline {
-        padding-left: 13px;
+        padding-left: 14px;
       }
 
       .lesson {
         padding: 14px;
-        border-radius: 16px;
+
+        border-radius: 18px;
       }
 
       .lesson::before {
-        left: -13px;
+        left: -14px;
+
         width: 9px;
         height: 9px;
       }
@@ -635,19 +1174,26 @@
       }
 
       .lesson-info {
-        font-size: 12px;
+        gap: 5px;
       }
 
-      .current-badge {
-        font-size: 9px;
+      .lesson-chip {
+        font-size: 10px;
+
+        padding:
+          5px
+          7px;
       }
     }
+
   </style>
 </head>
+
 
 <body>
 
   <div class="container">
+
 
     <!-- HEADER -->
 
@@ -660,6 +1206,7 @@
         </div>
 
         <div>
+
           <div class="title">
             Расписание
           </div>
@@ -667,6 +1214,7 @@
           <div class="group">
             МеждОт25-2
           </div>
+
         </div>
 
       </div>
@@ -782,7 +1330,10 @@
     ========================== */
 
     function pad(value) {
-      return String(value).padStart(2, "0");
+
+      return String(value)
+        .padStart(2, "0");
+
     }
 
 
@@ -791,10 +1342,19 @@
     ) {
 
       return [
+
         date.getFullYear(),
-        pad(date.getMonth() + 1),
-        pad(date.getDate())
+
+        pad(
+          date.getMonth() + 1
+        ),
+
+        pad(
+          date.getDate()
+        )
+
       ].join("-");
+
     }
 
 
@@ -811,6 +1371,7 @@
       );
 
       return result;
+
     }
 
 
@@ -821,6 +1382,7 @@
       return new Date(
         value + "T00:00:00"
       );
+
     }
 
 
@@ -837,6 +1399,7 @@
           month: "long"
         }
       );
+
     }
 
 
@@ -852,6 +1415,7 @@
           weekday: "long"
         }
       );
+
     }
 
 
@@ -859,21 +1423,44 @@
        HTML SAFETY
     ========================== */
 
-    function escapeHtml(value) {
+    function escapeHtml(
+      value
+    ) {
 
       return String(
         value ?? ""
       )
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+
+        .replace(
+          /</g,
+          "&lt;"
+        )
+
+        .replace(
+          />/g,
+          "&gt;"
+        )
+
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
     }
 
 
     /* ==========================
-       LESSON TIME
+       TIME
     ========================== */
 
     function lessonDateTime(
@@ -884,6 +1471,7 @@
       return new Date(
         `${lesson.date}T${lesson[field]}:00`
       );
+
     }
 
 
@@ -910,6 +1498,7 @@
         now >= start &&
         now < end
       );
+
     }
 
 
@@ -924,6 +1513,7 @@
           "endLesson"
         )
       );
+
     }
 
 
@@ -931,7 +1521,9 @@
       lessons
     ) {
 
-      return [...lessons].sort(
+      return [
+        ...lessons
+      ].sort(
         (a, b) => {
 
           const date =
@@ -940,8 +1532,12 @@
                 b.date || ""
               );
 
-          if (date !== 0) {
+          if (
+            date !== 0
+          ) {
+
             return date;
+
           }
 
           return (
@@ -950,8 +1546,138 @@
                 b.beginLesson || ""
               )
           );
+
         }
       );
+
+    }
+
+
+    /* ==========================
+       SUBJECT STYLE
+    ========================== */
+
+    function subjectTheme(
+      name
+    ) {
+
+      const text =
+        String(
+          name || ""
+        ).toLowerCase();
+
+
+      if (
+        /китай|кит|chinese|中文/.test(
+          text
+        )
+      ) {
+
+        return "theme-orange";
+
+      }
+
+
+      if (
+        /математ|math|статист/.test(
+          text
+        )
+      ) {
+
+        return "theme-purple";
+
+      }
+
+
+      if (
+        /англ|english|иностран/.test(
+          text
+        )
+      ) {
+
+        return "theme-pink";
+
+      }
+
+
+      if (
+        /эконом|финанс|эконометр|анализ/.test(
+          text
+        )
+      ) {
+
+        return "theme-blue";
+
+      }
+
+
+      if (
+        /истор|прав|государ|полит/.test(
+          text
+        )
+      ) {
+
+        return "theme-indigo";
+
+      }
+
+
+      if (
+        /физ|спорт|воен/.test(
+          text
+        )
+      ) {
+
+        return "theme-green";
+
+      }
+
+
+      if (
+        /информ|программ|данн|it/.test(
+          text
+        )
+      ) {
+
+        return "theme-cyan";
+
+      }
+
+
+      const palette = [
+
+        "theme-blue",
+        "theme-purple",
+        "theme-orange",
+        "theme-pink",
+        "theme-cyan",
+        "theme-indigo"
+
+      ];
+
+
+      let hash = 0;
+
+
+      for (
+        let i = 0;
+        i < text.length;
+        i++
+      ) {
+
+        hash =
+          (
+            hash * 31 +
+            text.charCodeAt(i)
+          ) >>> 0;
+
+      }
+
+
+      return palette[
+        hash % palette.length
+      ];
+
     }
 
 
@@ -962,7 +1688,9 @@
     function findNextLesson() {
 
       const sorted =
-        sortLessons(schedule);
+        sortLessons(
+          schedule
+        );
 
 
       const current =
@@ -974,11 +1702,16 @@
         );
 
 
-      if (current) {
+      if (
+        current
+      ) {
 
         return {
+
           lesson: current,
+
           current: true
+
         };
 
       }
@@ -993,17 +1726,23 @@
         );
 
 
-      if (next) {
+      if (
+        next
+      ) {
 
         return {
+
           lesson: next,
+
           current: false
+
         };
 
       }
 
 
       return null;
+
     }
 
 
@@ -1019,9 +1758,12 @@
         findNextLesson();
 
 
-      if (!result) {
+      if (
+        !result
+      ) {
 
         container.innerHTML = `
+
           <section class="hero">
 
             <div class="hero-content">
@@ -1045,18 +1787,16 @@
             </div>
 
           </section>
+
         `;
 
         return;
+
       }
 
 
       const lesson =
         result.lesson;
-
-
-      const current =
-        result.current;
 
 
       container.innerHTML = `
@@ -1066,19 +1806,31 @@
           <div class="hero-content">
 
             ${
-              current
+              result.current
+
                 ? `
+
                   <div class="live-label">
+
                     <span class="live-dot"></span>
+
                     СЕЙЧАС ИДЁТ
+
                   </div>
+
                 `
+
                 : `
+
                   <div class="hero-label">
+
                     Следующая пара
+
                   </div>
+
                 `
             }
+
 
             <div class="hero-time">
 
@@ -1108,58 +1860,85 @@
             <div class="hero-info">
 
               <div class="info-pill">
+
                 📅
+
                 ${escapeHtml(
                   formatWeekday(
                     lesson.date
                   )
-                )},
+                )}
+
+                ,
+
                 ${escapeHtml(
                   formatDate(
                     lesson.date
                   )
                 )}
+
               </div>
 
 
               ${
                 lesson.lecturer
+
                   ? `
+
                     <div class="info-pill">
+
                       👨‍🏫
+
                       ${escapeHtml(
                         lesson.lecturer
                       )}
+
                     </div>
+
                   `
+
                   : ""
               }
 
 
               ${
                 lesson.auditorium
+
                   ? `
+
                     <div class="info-pill">
+
                       🏫
+
                       ${escapeHtml(
                         lesson.auditorium
                       )}
+
                     </div>
+
                   `
+
                   : ""
               }
 
 
               ${
                 lesson.building
+
                   ? `
+
                     <div class="info-pill">
+
                       📍
+
                       ${escapeHtml(
                         lesson.building
                       )}
+
                     </div>
+
                   `
+
                   : ""
               }
 
@@ -1170,6 +1949,7 @@
         </section>
 
       `;
+
     }
 
 
@@ -1192,13 +1972,17 @@
       const todayLessons =
         schedule.filter(
           lesson =>
-            lesson.date === today
+            lesson.date ===
+            today
         );
 
 
       const totalMinutes =
         todayLessons.reduce(
-          (total, lesson) => {
+          (
+            total,
+            lesson
+          ) => {
 
             const start =
               lessonDateTime(
@@ -1213,12 +1997,16 @@
               );
 
             return (
+
               total +
+
               Math.max(
                 0,
-                (end - start) /
-                60000
+                (
+                  end - start
+                ) / 60000
               )
+
             );
 
           },
@@ -1231,6 +2019,7 @@
           totalMinutes / 60
         );
 
+
       const minutes =
         Math.round(
           totalMinutes % 60
@@ -1239,12 +2028,18 @@
 
       const buildings =
         new Set(
+
           todayLessons
+
             .map(
               lesson =>
                 lesson.building
             )
-            .filter(Boolean)
+
+            .filter(
+              Boolean
+            )
+
         ).size;
 
 
@@ -1253,11 +2048,15 @@
         <div class="stat">
 
           <div class="stat-value">
+
             ${todayLessons.length}
+
           </div>
 
           <div class="stat-label">
+
             пар сегодня
+
           </div>
 
         </div>
@@ -1269,14 +2068,18 @@
 
             ${
               hours > 0
+
                 ? `${hours}ч ${minutes}м`
+
                 : `${minutes}м`
             }
 
           </div>
 
           <div class="stat-label">
+
             учебного времени
+
           </div>
 
         </div>
@@ -1285,16 +2088,21 @@
         <div class="stat">
 
           <div class="stat-value">
+
             ${buildings}
+
           </div>
 
           <div class="stat-label">
+
             корпуса сегодня
+
           </div>
 
         </div>
 
       `;
+
     }
 
 
@@ -1312,11 +2120,20 @@
         );
 
 
+      const theme =
+        subjectTheme(
+          lesson.discipline
+        );
+
+
       return `
 
         <article
-          class="lesson
-          ${current ? "current" : ""}"
+          class="
+            lesson
+            ${theme}
+            ${current ? "current" : ""}
+          "
         >
 
           <div class="lesson-top">
@@ -1326,15 +2143,13 @@
               <div class="lesson-time">
 
                 ${escapeHtml(
-                  lesson.beginLesson ||
-                  ""
+                  lesson.beginLesson || ""
                 )}
 
                 –
 
                 ${escapeHtml(
-                  lesson.endLesson ||
-                  ""
+                  lesson.endLesson || ""
                 )}
 
               </div>
@@ -1354,11 +2169,17 @@
 
             ${
               current
+
                 ? `
+
                   <div class="current-badge">
+
                     СЕЙЧАС
+
                   </div>
+
                 `
+
                 : ""
             }
 
@@ -1369,42 +2190,63 @@
 
             ${
               lesson.lecturer
+
                 ? `
-                  <div>
+
+                  <div class="lesson-chip">
+
                     👨‍🏫
+
                     ${escapeHtml(
                       lesson.lecturer
                     )}
+
                   </div>
+
                 `
+
                 : ""
             }
 
 
             ${
               lesson.auditorium
+
                 ? `
-                  <div>
+
+                  <div class="lesson-chip">
+
                     🏫
+
                     ${escapeHtml(
                       lesson.auditorium
                     )}
+
                   </div>
+
                 `
+
                 : ""
             }
 
 
             ${
               lesson.building
+
                 ? `
-                  <div>
+
+                  <div class="lesson-chip">
+
                     📍
+
                     ${escapeHtml(
                       lesson.building
                     )}
+
                   </div>
+
                 `
+
                 : ""
             }
 
@@ -1413,6 +2255,7 @@
         </article>
 
       `;
+
     }
 
 
@@ -1431,6 +2274,18 @@
         );
 
 
+      const count =
+        sorted.length;
+
+
+      const word =
+        count === 1
+          ? "пара"
+          : count < 5
+            ? "пары"
+            : "пар";
+
+
       return `
 
         <section class="day">
@@ -1440,19 +2295,23 @@
             <div>
 
               <div class="weekday">
+
                 ${escapeHtml(
                   formatWeekday(
                     date
                   )
                 )}
+
               </div>
 
               <div class="date">
+
                 ${escapeHtml(
                   formatDate(
                     date
                   )
                 )}
+
               </div>
 
             </div>
@@ -1460,14 +2319,7 @@
 
             <div class="day-count">
 
-              ${sorted.length}
-              ${
-                sorted.length === 1
-                  ? "пара"
-                  : sorted.length < 5
-                    ? "пары"
-                    : "пар"
-              }
+              ${count} ${word}
 
             </div>
 
@@ -1491,6 +2343,7 @@
         </section>
 
       `;
+
     }
 
 
@@ -1503,6 +2356,7 @@
       const today =
         new Date();
 
+
       const todayString =
         localDateString(
           today
@@ -1510,7 +2364,8 @@
 
 
       if (
-        currentView === "today"
+        currentView ===
+        "today"
       ) {
 
         return schedule.filter(
@@ -1523,7 +2378,8 @@
 
 
       if (
-        currentView === "tomorrow"
+        currentView ===
+        "tomorrow"
       ) {
 
         const tomorrow =
@@ -1545,7 +2401,8 @@
 
 
       if (
-        currentView === "week"
+        currentView ===
+        "week"
       ) {
 
         const end =
@@ -1561,6 +2418,7 @@
           lesson =>
             lesson.date >=
               todayString &&
+
             lesson.date <=
               end
         );
@@ -1569,7 +2427,8 @@
 
 
       if (
-        currentView === "month"
+        currentView ===
+        "month"
       ) {
 
         const end =
@@ -1585,6 +2444,7 @@
           lesson =>
             lesson.date >=
               todayString &&
+
             lesson.date <=
               end
         );
@@ -1596,20 +2456,27 @@
         БЛИЖАЙШЕЕ
       */
 
-      const futureDates = [
-        ...new Set(
-          sortLessons(schedule)
-            .filter(
-              lesson =>
-                lesson.date >=
-                todayString
+      const futureDates =
+        [
+          ...new Set(
+
+            sortLessons(
+              schedule
             )
-            .map(
-              lesson =>
-                lesson.date
-            )
-        )
-      ];
+
+              .filter(
+                lesson =>
+                  lesson.date >=
+                  todayString
+              )
+
+              .map(
+                lesson =>
+                  lesson.date
+              )
+
+          )
+        ];
 
 
       if (
@@ -1626,6 +2493,7 @@
           lesson.date ===
           futureDates[0]
       );
+
     }
 
 
@@ -1652,16 +2520,19 @@
         let title =
           "Занятий нет";
 
+
         let text =
           "В выбранном периоде занятий не найдено.";
 
 
         if (
-          currentView === "today"
+          currentView ===
+          "today"
         ) {
 
           title =
             "Сегодня свободный день";
+
 
           text =
             "На сегодня занятий нет.";
@@ -1670,11 +2541,13 @@
 
 
         if (
-          currentView === "tomorrow"
+          currentView ===
+          "tomorrow"
         ) {
 
           title =
             "Завтра занятий нет";
+
 
           text =
             "Можно спокойно планировать день.";
@@ -1683,11 +2556,13 @@
 
 
         if (
-          currentView === "week"
+          currentView ===
+          "week"
         ) {
 
           title =
             "Неделя свободна";
+
 
           text =
             "На ближайшие 7 дней занятий нет.";
@@ -1696,11 +2571,13 @@
 
 
         if (
-          currentView === "month"
+          currentView ===
+          "month"
         ) {
 
           title =
             "Занятий нет";
+
 
           text =
             "На ближайшие 30 дней занятий нет.";
@@ -1713,15 +2590,23 @@
           <div class="empty">
 
             <div class="empty-icon">
+
               ✨
+
             </div>
+
 
             <div class="empty-title">
+
               ${title}
+
             </div>
 
+
             <div class="empty-text">
+
               ${text}
+
             </div>
 
           </div>
@@ -1729,11 +2614,11 @@
         `;
 
         return;
+
       }
 
 
-      const grouped =
-        {};
+      const grouped = {};
 
 
       for (
@@ -1770,7 +2655,9 @@
 
 
       container.innerHTML =
+
         dates
+
           .map(
             date =>
               renderDay(
@@ -1778,7 +2665,9 @@
                 grouped[date]
               )
           )
+
           .join("");
+
     }
 
 
@@ -1804,6 +2693,7 @@
         "loading"
       );
 
+
       button.textContent =
         "↻ Обновление...";
 
@@ -1817,7 +2707,9 @@
           );
 
 
-        if (!response.ok) {
+        if (
+          !response.ok
+        ) {
 
           throw new Error(
             "Не удалось загрузить schedule.json"
@@ -1831,7 +2723,9 @@
 
 
         if (
-          !Array.isArray(data)
+          !Array.isArray(
+            data
+          )
         ) {
 
           throw new Error(
@@ -1852,22 +2746,30 @@
 
         updated.textContent =
           "Обновлено в " +
+
           new Date()
             .toLocaleTimeString(
               "ru-RU",
               {
-                hour: "2-digit",
-                minute: "2-digit"
+                hour:
+                  "2-digit",
+
+                minute:
+                  "2-digit"
               }
             );
 
 
         renderNextLesson();
+
         renderStats();
+
         renderSchedule();
 
 
-      } catch (error) {
+      } catch (
+        error
+      ) {
 
         document.getElementById(
           "schedule"
@@ -1876,7 +2778,9 @@
           <div class="error">
 
             <strong>
+
               Не удалось загрузить расписание
+
             </strong>
 
             <br><br>
@@ -1889,7 +2793,10 @@
 
         `;
 
-        console.error(error);
+
+        console.error(
+          error
+        );
 
       } finally {
 
@@ -1897,9 +2804,12 @@
           "loading"
         );
 
+
         button.textContent =
           "↻ Обновить";
+
       }
+
     }
 
 
@@ -1911,6 +2821,7 @@
       .querySelectorAll(
         ".tab"
       )
+
       .forEach(
         button => {
 
@@ -1922,6 +2833,7 @@
                 .querySelectorAll(
                   ".tab"
                 )
+
                 .forEach(
                   item =>
                     item.classList.remove(
@@ -1956,6 +2868,7 @@
       .getElementById(
         "refreshButton"
       )
+
       .addEventListener(
         "click",
         loadSchedule
@@ -1969,27 +2882,19 @@
     loadSchedule();
 
 
-    /*
-      Обновляем текущую пару
-      каждую минуту.
-    */
-
     setInterval(
       () => {
 
         renderNextLesson();
+
         renderStats();
+
         renderSchedule();
 
       },
       60 * 1000
     );
 
-
-    /*
-      Проверяем новые данные
-      каждые 5 минут.
-    */
 
     setInterval(
       loadSchedule,
