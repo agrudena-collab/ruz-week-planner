@@ -2,12 +2,14 @@ name: RUZ Daily Schedule
 
 on:
   workflow_dispatch:
-
   schedule:
     - cron: "0 3 * * *"
 
+permissions:
+  contents: write
+
 jobs:
-  get-schedule:
+  update-schedule:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,5 +24,13 @@ jobs:
       - name: Install requests
         run: pip install requests
 
-      - name: Get RUZ schedule
+      - name: Run RUZ client
         run: python ruz_client.py
+
+      - name: Save schedule.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add schedule.json
+          git diff --cached --quiet || git commit -m "Update schedule"
+          git push
