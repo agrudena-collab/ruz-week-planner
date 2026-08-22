@@ -1,2166 +1,842 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080b14">
 
-  <meta charset="UTF-8">
+<title>Расписание — МеждОт25-2</title>
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  >
+<style>
 
-  <meta
-    name="theme-color"
-    content="#070910"
-  >
+:root {
+  --bg: #080b14;
+  --panel: #0d1220;
+  --panel-2: #111827;
+  --line: rgba(255,255,255,.09);
 
-  <title>РУЗ · МеждОт25-2</title>
+  --text: #f5f7fb;
+  --muted: #8993a7;
+  --soft: #b9c1d0;
 
+  --radius: 24px;
 
-  <style>
+  --shadow:
+    0 18px 55px rgba(0,0,0,.28);
+}
 
-    /* =========================================================
-       VARIABLES
-    ========================================================= */
 
-    :root {
+/* =========================
+   BASE
+========================= */
 
-      --bg: #070910;
+* {
+  box-sizing: border-box;
+}
 
-      --surface: #10131d;
+html {
+  scroll-behavior: smooth;
+}
 
-      --surface-2: #141925;
+body {
+  margin: 0;
 
-      --surface-3: #191e2b;
+  color: var(--text);
 
-      --text: #f6f7fb;
+  background:
+    radial-gradient(
+      circle at 20% -10%,
+      rgba(91,107,255,.12),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(44,211,153,.06),
+      transparent 28%
+    ),
+    var(--bg);
 
-      --muted: #8d96a8;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    Inter,
+    "Segoe UI",
+    Arial,
+    sans-serif;
 
-      --muted-2: #687184;
+  -webkit-font-smoothing: antialiased;
+}
 
-      --line: rgba(255,255,255,.085);
+button {
+  font: inherit;
+  color: inherit;
+}
 
-      --line-strong: rgba(255,255,255,.14);
 
-      --blue: #5b8cff;
+/* =========================
+   APP
+========================= */
 
-      --purple: #9b70ff;
+.app {
+  width: min(1100px, calc(100% - 24px));
 
-      --cyan: #43d9ff;
+  margin: 0 auto;
 
-      --green: #2de39a;
+  padding:
+    18px
+    0
+    60px;
+}
 
-      --red: #e65b63;
 
-      --gold: #e6bc58;
+/* =========================
+   TOP
+========================= */
 
-      --pink: #ff68ad;
+.top {
+  position: sticky;
 
-      --shadow:
-        0 24px 70px rgba(0,0,0,.35);
+  top: 0;
 
-      --radius-xl: 30px;
+  z-index: 20;
 
-      --radius-lg: 23px;
+  padding:
+    8px
+    0
+    14px;
 
-      --radius-md: 17px;
+  background:
+    linear-gradient(
+      var(--bg) 72%,
+      transparent
+    );
 
-    }
+  backdrop-filter:
+    blur(12px);
+}
 
 
-    /* =========================================================
-       RESET
-    ========================================================= */
+/* =========================
+   HEADER
+========================= */
 
-    * {
-      box-sizing: border-box;
-    }
+.header {
+  display: flex;
 
+  align-items: flex-end;
 
-    html {
-      scroll-behavior: smooth;
-    }
+  justify-content: space-between;
 
+  gap: 18px;
 
-    body {
+  margin-bottom: 16px;
+}
 
-      margin: 0;
 
-      min-height: 100vh;
+.brand {
+  display: flex;
 
-      color: var(--text);
+  align-items: center;
 
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "SF Pro Text",
-        "Segoe UI",
-        sans-serif;
+  gap: 13px;
+}
 
-      background:
 
-        radial-gradient(
-          circle at 8% 0%,
-          rgba(91,140,255,.19),
-          transparent 28%
-        ),
+.logo {
+  width: 50px;
+  height: 50px;
 
-        radial-gradient(
-          circle at 92% 12%,
-          rgba(155,112,255,.14),
-          transparent 25%
-        ),
+  border-radius: 16px;
 
-        radial-gradient(
-          circle at 50% 100%,
-          rgba(67,217,255,.07),
-          transparent 30%
-        ),
+  display: grid;
 
-        var(--bg);
+  place-items: center;
 
-      overflow-x: hidden;
-    }
+  font-weight: 900;
 
+  font-size: 22px;
 
-    body::before {
+  color: white;
 
-      content: "";
+  background:
+    linear-gradient(
+      135deg,
+      #6d72ff,
+      #8b5cf6
+    );
 
-      position: fixed;
+  box-shadow:
+    0 10px 30px
+    rgba(104,91,255,.25);
+}
 
-      inset: 0;
 
-      z-index: -2;
+h1 {
+  margin: 0 0 5px;
 
-      pointer-events: none;
+  font-size: 28px;
 
-      opacity: .23;
+  line-height: 1.05;
 
-      background-image:
+  letter-spacing: -.8px;
+}
 
-        linear-gradient(
-          rgba(255,255,255,.025) 1px,
-          transparent 1px
-        ),
 
-        linear-gradient(
-          90deg,
-          rgba(255,255,255,.025) 1px,
-          transparent 1px
-        );
+.subtitle {
+  color: var(--muted);
 
-      background-size: 42px 42px;
-    }
+  font-size: 14px;
+}
 
 
-    body::after {
+.updated {
+  color: var(--muted);
 
-      content: "";
+  font-size: 13px;
 
-      position: fixed;
+  text-align: right;
+}
 
-      width: 520px;
 
-      height: 520px;
+.refresh {
+  margin-top: 6px;
 
-      right: -280px;
+  border:
+    1px solid var(--line);
 
-      top: 30%;
+  background:
+    #121827;
 
-      border-radius: 50%;
+  padding:
+    9px 13px;
 
-      pointer-events: none;
+  border-radius: 13px;
 
-      background:
-        radial-gradient(
-          circle,
-          rgba(91,140,255,.09),
-          transparent 70%
-        );
+  cursor: pointer;
 
-      filter: blur(20px);
+  font-weight: 700;
+}
 
-      z-index: -1;
-    }
+.refresh:active {
+  transform: scale(.98);
+}
 
 
-    button {
-      font: inherit;
-    }
+/* =========================
+   TABS
+========================= */
 
+.tabs {
+  display: grid;
 
-    /* =========================================================
-       CONTAINER
-    ========================================================= */
+  grid-template-columns:
+    repeat(5, 1fr);
 
-    .container {
+  gap: 5px;
 
-      width:
-        min(
-          1080px,
-          calc(100% - 28px)
-        );
+  padding: 5px;
 
-      margin: 0 auto;
+  background:
+    rgba(255,255,255,.055);
 
-      padding:
-        25px
-        0
-        80px;
-    }
+  border:
+    1px solid var(--line);
 
+  border-radius: 17px;
+}
 
-    /* =========================================================
-       HEADER
-    ========================================================= */
 
-    .header {
+.tab {
+  border: 0;
 
-      display: flex;
+  background: transparent;
 
-      justify-content: space-between;
+  color: var(--muted);
 
-      align-items: center;
+  padding:
+    11px 8px;
 
-      gap: 20px;
+  border-radius: 12px;
 
-      margin-bottom: 20px;
-    }
+  cursor: pointer;
 
+  font-weight: 750;
 
-    .brand {
+  font-size: 14px;
+}
 
-      display: flex;
 
-      align-items: center;
+.tab.active {
+  background: #f7f8fb;
 
-      gap: 13px;
-    }
+  color: #111827;
 
+  box-shadow:
+    0 4px 18px
+    rgba(0,0,0,.2);
+}
 
-    .logo {
 
-      position: relative;
+/* =========================
+   CONTENT
+========================= */
 
-      width: 51px;
+.content {
+  padding-top: 8px;
+}
 
-      height: 51px;
 
-      flex: 0 0 auto;
+/* =========================
+   DAY
+========================= */
 
-      display: grid;
+.day {
+  margin: 24px 0 0;
+}
 
-      place-items: center;
 
-      border-radius: 17px;
+.day-head {
+  display: flex;
 
-      font-size: 22px;
+  align-items: center;
 
-      font-weight: 950;
+  justify-content: space-between;
 
-      color: white;
+  margin:
+    0 4px
+    11px;
+}
 
-      background:
-        linear-gradient(
-          135deg,
-          #4e88ff,
-          #9a68ff
-        );
 
-      box-shadow:
-        0 12px 35px
-        rgba(79,135,255,.28);
+.day-title {
+  font-size: 20px;
 
-      overflow: hidden;
-    }
+  font-weight: 850;
 
+  letter-spacing: -.35px;
+}
 
-    .logo::after {
 
-      content: "";
+.day-date {
+  color: var(--muted);
 
-      position: absolute;
+  font-size: 13px;
 
-      width: 35px;
+  margin-top: 3px;
+}
 
-      height: 35px;
 
-      border-radius: 50%;
+.count {
+  color: var(--muted);
 
-      right: -17px;
+  font-size: 12px;
 
-      top: -17px;
+  border:
+    1px solid var(--line);
 
-      background:
-        rgba(255,255,255,.2);
-    }
+  padding:
+    6px 9px;
 
+  border-radius: 999px;
+}
 
-    .title {
 
-      font-size: 30px;
+.cards {
+  display: grid;
 
-      line-height: 1;
+  gap: 11px;
+}
 
-      font-weight: 950;
 
-      letter-spacing: -1.2px;
-    }
+/* =========================
+   LESSON CARD
+========================= */
 
+.card {
 
-    .group {
+  --accent: #7c83ff;
+  --accent2: #9aa0ff;
 
-      margin-top: 5px;
+  position: relative;
 
-      color: var(--muted);
+  overflow: hidden;
 
-      font-size: 14px;
+  border:
+    1px solid var(--line);
 
-      font-weight: 650;
-    }
+  border-radius: 22px;
 
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.055),
+      rgba(255,255,255,.018)
+    );
 
-    .header-right {
+  box-shadow:
+    0 8px 26px
+    rgba(0,0,0,.16);
 
-      display: flex;
+  cursor: pointer;
 
-      align-items: center;
+  transition:
+    transform .22s ease,
+    border-color .22s ease,
+    background .22s ease;
+}
 
-      gap: 10px;
-    }
 
+.card:hover {
+  transform:
+    translateY(-2px);
 
-    .updated {
+  border-color:
+    color-mix(
+      in srgb,
+      var(--accent) 38%,
+      transparent
+    );
+}
 
-      color: var(--muted);
 
-      font-size: 12px;
+.card.open {
+  border-color:
+    color-mix(
+      in srgb,
+      var(--accent) 50%,
+      transparent
+    );
 
-      white-space: nowrap;
-    }
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.075),
+      rgba(255,255,255,.025)
+    );
+}
 
 
-    .refresh {
+/* цветная линия слева */
 
-      border: 0;
+.card::before {
 
-      border-radius: 14px;
+  content: "";
 
-      padding:
-        11px
-        15px;
+  position: absolute;
 
-      color: #0a0c11;
+  inset:
+    0 auto 0 0;
 
-      background: #ffffff;
+  width: 4px;
 
-      font-size: 13px;
+  background:
+    var(--accent);
+}
 
-      font-weight: 850;
 
-      cursor: pointer;
+/* =========================
+   CARD MAIN
+========================= */
 
-      transition:
-        transform .18s ease,
-        opacity .18s ease,
-        box-shadow .18s ease;
-    }
+.card-main {
 
+  padding:
+    18px
+    18px
+    16px
+    21px;
 
-    .refresh:hover {
+  position: relative;
 
-      box-shadow:
-        0 8px 25px
-        rgba(255,255,255,.13);
-    }
+  min-height: 132px;
+}
 
 
-    .refresh:active {
+.time {
 
-      transform: scale(.95);
-    }
+  font-size: 16px;
 
+  font-weight: 850;
 
-    .refresh.loading {
+  color: var(--accent2);
 
-      opacity: .55;
+  letter-spacing: .2px;
+}
 
-      pointer-events: none;
-    }
 
+.subject {
 
-    /* =========================================================
-       HERO
-    ========================================================= */
+  font-size: 21px;
 
-    .hero {
+  line-height: 1.13;
 
-      position: relative;
+  font-weight: 850;
 
-      overflow: hidden;
+  letter-spacing: -.45px;
 
-      margin-bottom: 12px;
+  margin:
+    8px 0
+    14px;
 
-      padding: 31px;
+  max-width: 75%;
+}
 
-      border:
-        1px solid var(--line);
 
-      border-radius: var(--radius-xl);
+/* =========================
+   META
+========================= */
 
-      background:
+.meta {
 
-        linear-gradient(
-          135deg,
-          rgba(24,30,47,.96),
-          rgba(10,13,21,.94)
-        );
+  display: flex;
 
-      box-shadow: var(--shadow);
+  flex-wrap: wrap;
 
-      backdrop-filter: blur(20px);
-    }
+  gap: 7px;
+}
 
 
-    .hero::before {
+.pill {
 
-      content: "";
+  border:
+    1px solid
+    rgba(255,255,255,.085);
 
-      position: absolute;
+  background:
+    rgba(0,0,0,.16);
 
-      width: 420px;
+  color:
+    #aeb7c7;
 
-      height: 420px;
+  border-radius: 10px;
 
-      right: -180px;
+  padding:
+    6px 9px;
 
-      top: -210px;
+  font-size: 12px;
 
-      border-radius: 50%;
+  white-space: nowrap;
+}
 
-      background:
-        radial-gradient(
-          circle,
-          rgba(79,140,255,.28),
-          transparent 67%
-        );
 
-      filter: blur(5px);
+.pill b {
 
-      pointer-events: none;
-    }
+  color:
+    #dce1eb;
 
+  font-weight: 700;
+}
 
-    .hero::after {
 
-      content: "";
+/* =========================
+   DECORATIVE SVG
+========================= */
 
-      position: absolute;
+.motif {
 
-      width: 200px;
+  position: absolute;
 
-      height: 200px;
+  right: 15px;
 
-      left: -130px;
+  top: 15px;
 
-      bottom: -140px;
+  width: 150px;
 
-      border-radius: 50%;
+  height: 95px;
 
-      background:
-        radial-gradient(
-          circle,
-          rgba(155,112,255,.14),
-          transparent 70%
-        );
+  opacity: .46;
 
-      pointer-events: none;
-    }
+  pointer-events: none;
+}
 
 
-    .hero-content {
+/* =========================
+   EXPANDED DETAILS
+========================= */
 
-      position: relative;
+.card-details {
 
-      z-index: 2;
-    }
+  display: grid;
 
+  grid-template-rows:
+    0fr;
 
-    .eyebrow {
+  transition:
+    grid-template-rows
+    .28s ease;
+}
 
-      margin-bottom: 11px;
 
-      color: var(--cyan);
+.card.open .card-details {
 
-      font-size: 11px;
+  grid-template-rows:
+    1fr;
+}
 
-      font-weight: 900;
 
-      letter-spacing: 1.7px;
+.details-inner {
 
-      text-transform: uppercase;
-    }
+  overflow: hidden;
+}
 
 
-    .live {
+.details {
 
-      display: inline-flex;
+  border-top:
+    1px solid
+    var(--line);
 
-      align-items: center;
+  padding:
+    15px
+    18px
+    17px
+    21px;
 
-      gap: 8px;
+  display: grid;
 
-      margin-bottom: 12px;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0,1fr)
+    );
 
-      padding:
-        7px
-        10px;
+  gap:
+    11px 20px;
+}
 
-      border-radius: 10px;
 
-      color: #06140d;
+.detail-label {
 
-      background: var(--green);
+  font-size: 11px;
 
-      font-size: 10px;
+  color: #737e92;
 
-      font-weight: 950;
+  text-transform: uppercase;
 
-      letter-spacing: .4px;
-    }
+  letter-spacing: .8px;
 
+  margin-bottom: 3px;
+}
 
-    .live-dot {
 
-      width: 7px;
+.detail-value {
 
-      height: 7px;
+  font-size: 13px;
 
-      border-radius: 50%;
+  color: #e2e6ed;
 
-      background: #06140d;
+  line-height: 1.35;
+}
 
-      box-shadow:
-        0 0 0 5px
-        rgba(6,20,13,.12);
-    }
 
+/* =========================
+   EMPTY
+========================= */
 
-    .hero-time {
+.empty {
 
-      margin-bottom: 12px;
+  border:
+    1px dashed
+    var(--line);
 
-      font-size: 59px;
+  border-radius: 20px;
 
-      line-height: .95;
+  padding:
+    34px 20px;
 
-      font-weight: 950;
+  color: var(--muted);
 
-      letter-spacing: -3.5px;
-    }
+  text-align: center;
+}
 
 
-    .hero-subject {
+.loading {
 
-      max-width: 800px;
+  text-align: center;
 
-      margin-bottom: 18px;
+  color: var(--muted);
 
-      font-size: 28px;
+  padding:
+    60px 0;
+}
 
-      line-height: 1.18;
 
-      font-weight: 900;
+.error {
 
-      letter-spacing: -.5px;
-    }
+  border:
+    1px solid
+    rgba(255,90,90,.28);
 
+  background:
+    rgba(255,80,80,.07);
 
-    .hero-info {
+  padding: 18px;
 
-      display: flex;
+  border-radius: 18px;
 
-      flex-wrap: wrap;
+  color: #ffb5b5;
+}
 
-      gap: 8px;
-    }
 
+/* =========================
+   MOBILE
+========================= */
 
-    .hero-chip {
+@media (max-width:650px) {
 
-      display: inline-flex;
+  .app {
 
-      align-items: center;
+    width:
+      calc(100% - 20px);
 
-      gap: 6px;
+    padding:
+      12px
+      0
+      45px;
+  }
 
-      padding:
-        8px
-        11px;
 
-      border:
-        1px solid var(--line);
+  .header {
 
-      border-radius: 11px;
+    align-items:
+      flex-start;
+  }
 
-      color: #cbd1dd;
 
-      background:
-        rgba(255,255,255,.055);
+  .updated {
 
-      font-size: 12px;
+    display: none;
+  }
 
-      font-weight: 650;
-    }
 
+  h1 {
 
-    /* =========================================================
-       STATS
-    ========================================================= */
+    font-size: 25px;
+  }
 
-    .stats {
 
-      display: grid;
+  .tabs {
 
-      grid-template-columns:
-        repeat(3, 1fr);
+    grid-template-columns:
+      repeat(
+        5,
+        minmax(0,1fr)
+      );
 
-      gap: 10px;
+    overflow: auto;
+  }
 
-      margin-bottom: 21px;
-    }
 
+  .tab {
 
-    .stat {
+    font-size: 12px;
 
-      position: relative;
+    padding:
+      10px 4px;
+  }
 
-      overflow: hidden;
 
-      padding: 17px;
+  .subject {
 
-      border:
-        1px solid var(--line);
+    font-size: 19px;
 
-      border-radius: 20px;
+    max-width: 82%;
+  }
 
-      background:
-        rgba(16,19,29,.78);
 
-      box-shadow:
-        0 12px 30px
-        rgba(0,0,0,.18);
+  .details {
 
-      backdrop-filter: blur(15px);
-    }
+    grid-template-columns:
+      1fr;
+  }
 
 
-    .stat::after {
+  .motif {
 
-      content: "";
+    right: 5px;
 
-      position: absolute;
+    opacity: .30;
 
-      width: 80px;
+    width: 125px;
+  }
 
-      height: 80px;
+}
 
-      right: -40px;
 
-      bottom: -45px;
+@media (prefers-reduced-motion: reduce) {
 
-      border-radius: 50%;
+  * {
 
-      background:
-        rgba(91,140,255,.09);
-    }
+    scroll-behavior:
+      auto !important;
 
+    transition:
+      none !important;
+  }
 
-    .stat-value {
+}
 
-      font-size: 25px;
-
-      font-weight: 950;
-
-      letter-spacing: -.7px;
-    }
-
-
-    .stat-label {
-
-      margin-top: 4px;
-
-      color: var(--muted);
-
-      font-size: 11px;
-
-      font-weight: 650;
-    }
-
-
-    /* =========================================================
-       NAVIGATION
-    ========================================================= */
-
-    .tabs-wrap {
-
-      position: sticky;
-
-      top: 7px;
-
-      z-index: 50;
-
-      margin-bottom: 28px;
-    }
-
-
-    .tabs {
-
-      display: flex;
-
-      gap: 5px;
-
-      padding: 5px;
-
-      overflow-x: auto;
-
-      border:
-        1px solid var(--line);
-
-      border-radius: 17px;
-
-      background:
-        rgba(12,15,23,.82);
-
-      box-shadow:
-        0 12px 30px
-        rgba(0,0,0,.16);
-
-      backdrop-filter: blur(22px);
-
-      scrollbar-width: none;
-    }
-
-
-    .tabs::-webkit-scrollbar {
-      display: none;
-    }
-
-
-    .tab {
-
-      flex: 1;
-
-      min-width: 105px;
-
-      padding:
-        11px
-        14px;
-
-      border: 0;
-
-      border-radius: 12px;
-
-      color: var(--muted);
-
-      background: transparent;
-
-      font-size: 13px;
-
-      font-weight: 850;
-
-      white-space: nowrap;
-
-      cursor: pointer;
-
-      transition:
-        color .2s ease,
-        background .2s ease,
-        transform .2s ease;
-    }
-
-
-    .tab:hover {
-
-      color: #fff;
-    }
-
-
-    .tab:active {
-
-      transform: scale(.97);
-    }
-
-
-    .tab.active {
-
-      color: #111319;
-
-      background: #fff;
-
-      box-shadow:
-        0 4px 18px
-        rgba(255,255,255,.1);
-    }
-
-
-    /* =========================================================
-       DAY
-    ========================================================= */
-
-    .day {
-
-      margin-bottom: 35px;
-
-      animation:
-        dayAppear .35s ease both;
-    }
-
-
-    @keyframes dayAppear {
-
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-    }
-
-
-    .day-heading {
-
-      display: flex;
-
-      justify-content: space-between;
-
-      align-items: flex-end;
-
-      gap: 15px;
-
-      padding:
-        0
-        4px
-        11px;
-    }
-
-
-    .weekday {
-
-      font-size: 23px;
-
-      line-height: 1.1;
-
-      font-weight: 950;
-
-      text-transform: capitalize;
-
-      letter-spacing: -.5px;
-    }
-
-
-    .date {
-
-      margin-top: 4px;
-
-      color: var(--muted);
-
-      font-size: 12px;
-
-      font-weight: 600;
-    }
-
-
-    .day-count {
-
-      padding:
-        7px
-        10px;
-
-      border:
-        1px solid var(--line);
-
-      border-radius: 11px;
-
-      color: #b7bfce;
-
-      background:
-        rgba(255,255,255,.045);
-
-      font-size: 10px;
-
-      font-weight: 850;
-
-      white-space: nowrap;
-    }
-
-
-    /* =========================================================
-       LESSON GRID
-    ========================================================= */
-
-    .lesson-grid {
-
-      display: grid;
-
-      grid-template-columns:
-        repeat(2, 1fr);
-
-      gap: 11px;
-    }
-
-
-    /* =========================================================
-       BASE LESSON CARD
-    ========================================================= */
-
-    .lesson {
-
-      --accent: var(--blue);
-
-      position: relative;
-
-      overflow: hidden;
-
-      padding: 18px;
-
-      border:
-        1px solid var(--line);
-
-      border-radius: var(--radius-lg);
-
-      background:
-
-        linear-gradient(
-          145deg,
-          rgba(20,24,35,.97),
-          rgba(11,14,22,.95)
-        );
-
-      box-shadow:
-        0 14px 35px
-        rgba(0,0,0,.22);
-
-      cursor: pointer;
-
-      isolation: isolate;
-
-      transition:
-        transform .24s ease,
-        border-color .24s ease,
-        box-shadow .24s ease;
-    }
-
-
-    .lesson:hover {
-
-      transform:
-        translateY(-3px);
-
-      border-color:
-        rgba(255,255,255,.16);
-
-      box-shadow:
-        0 20px 48px
-        rgba(0,0,0,.31);
-    }
-
-
-    .lesson:active {
-
-      transform:
-        scale(.988);
-    }
-
-
-    /* Цветовая линия */
-
-    .lesson::before {
-
-      content: "";
-
-      position: absolute;
-
-      left: 0;
-
-      top: 0;
-
-      bottom: 0;
-
-      width: 4px;
-
-      background:
-        var(--accent);
-
-      z-index: 4;
-    }
-
-
-    /* Общий glow */
-
-    .lesson::after {
-
-      content: "";
-
-      position: absolute;
-
-      width: 170px;
-
-      height: 170px;
-
-      right: -100px;
-
-      bottom: -110px;
-
-      border-radius: 50%;
-
-      background:
-        var(--accent);
-
-      opacity: .075;
-
-      filter: blur(16px);
-
-      pointer-events: none;
-
-      z-index: -1;
-    }
-
-
-    .lesson-visual {
-
-      position: absolute;
-
-      inset: 0;
-
-      overflow: hidden;
-
-      pointer-events: none;
-
-      z-index: -1;
-    }
-
-
-    .lesson-top {
-
-      position: relative;
-
-      z-index: 3;
-
-      display: flex;
-
-      justify-content: space-between;
-
-      align-items: flex-start;
-
-      gap: 13px;
-    }
-
-
-    .lesson-main {
-
-      min-width: 0;
-    }
-
-
-    .lesson-time {
-
-      color:
-        var(--accent);
-
-      font-size: 14px;
-
-      font-weight: 900;
-
-      letter-spacing: -.1px;
-    }
-
-
-    .lesson-subject {
-
-      margin-top: 8px;
-
-      margin-bottom: 13px;
-
-      max-width: 92%;
-
-      font-size: 19px;
-
-      line-height: 1.22;
-
-      font-weight: 900;
-
-      letter-spacing: -.25px;
-    }
-
-
-    .lesson-meta {
-
-      position: relative;
-
-      z-index: 3;
-
-      display: flex;
-
-      flex-wrap: wrap;
-
-      gap: 7px;
-    }
-
-
-    .meta-pill {
-
-      display: inline-flex;
-
-      align-items: center;
-
-      gap: 5px;
-
-      padding:
-        7px
-        9px;
-
-      border:
-        1px solid
-        rgba(255,255,255,.06);
-
-      border-radius: 10px;
-
-      color: #aeb6c5;
-
-      background:
-        rgba(255,255,255,.045);
-
-      font-size: 10px;
-
-      font-weight: 650;
-    }
-
-
-    .current-badge {
-
-      position: relative;
-
-      z-index: 5;
-
-      flex: 0 0 auto;
-
-      padding:
-        6px
-        8px;
-
-      border-radius: 9px;
-
-      color: #06140d;
-
-      background:
-        var(--green);
-
-      font-size: 9px;
-
-      font-weight: 950;
-
-      letter-spacing: .3px;
-    }
-
-
-    /* =========================================================
-       MATHEMATICS
-    ========================================================= */
-
-    .lesson.math {
-
-      --accent: #6d8cff;
-    }
-
-
-    .lesson.math .lesson-visual::before {
-
-      content: "∑";
-
-      position: absolute;
-
-      top: -9px;
-
-      right: 17px;
-
-      color:
-        rgba(109,140,255,.105);
-
-      font-size: 70px;
-
-      line-height: 1;
-
-      font-weight: 950;
-    }
-
-
-    .lesson.math .lesson-visual::after {
-
-      content: "";
-
-      position: absolute;
-
-      inset: 0;
-
-      opacity: .28;
-
-      background-image:
-
-        linear-gradient(
-          rgba(109,140,255,.11) 1px,
-          transparent 1px
-        ),
-
-        linear-gradient(
-          90deg,
-          rgba(109,140,255,.11) 1px,
-          transparent 1px
-        );
-
-      background-size:
-        21px
-        21px;
-
-      mask-image:
-        linear-gradient(
-          135deg,
-          transparent 5%,
-          black 75%
-        );
-    }
-
-
-    .lesson.math::after {
-
-      width: 90px;
-
-      height: 90px;
-
-      right: 35px;
-
-      bottom: -55px;
-
-      border:
-        1px solid
-        rgba(109,140,255,.18);
-
-      background:
-        transparent;
-
-      opacity: 1;
-
-      filter: none;
-
-      box-shadow:
-        -55px -28px 0 -42px
-        rgba(109,140,255,.7);
-    }
-
-
-    /* =========================================================
-       CHINESE
-    ========================================================= */
-
-    .lesson.chinese {
-
-      --accent: #e25a61;
-    }
-
-
-    .lesson.chinese .lesson-visual::before {
-
-      content: "中文";
-
-      position: absolute;
-
-      top: -4px;
-
-      right: 13px;
-
-      color:
-        rgba(226,90,97,.10);
-
-      font-size: 48px;
-
-      line-height: 1;
-
-      font-weight: 900;
-
-      letter-spacing: 4px;
-    }
-
-
-    .lesson.chinese .lesson-visual::after {
-
-      content: "";
-
-      position: absolute;
-
-      inset: 0;
-
-      opacity: .19;
-
-      background-image:
-
-        radial-gradient(
-          circle,
-          rgba(230,188,88,.18) 1px,
-          transparent 1.5px
-        );
-
-      background-size:
-        19px
-        19px;
-
-      mask-image:
-        linear-gradient(
-          135deg,
-          transparent,
-          black
-        );
-    }
-
-
-    .lesson.chinese::after {
-
-      width: 180px;
-
-      height: 180px;
-
-      right: -110px;
-
-      bottom: -115px;
-
-      background:
-        radial-gradient(
-          circle,
-          rgba(230,188,88,.32),
-          transparent 68%
-        );
-
-      opacity: .75;
-    }
-
-
-    /* =========================================================
-       DATA / STATISTICS
-    ========================================================= */
-
-    .lesson.data {
-
-      --accent: #9b70ff;
-    }
-
-
-    .lesson.data .lesson-visual::before {
-
-      content: "01 10 11";
-
-      position: absolute;
-
-      right: 15px;
-
-      top: 15px;
-
-      color:
-        rgba(155,112,255,.18);
-
-      font-family:
-        "SFMono-Regular",
-        Consolas,
-        monospace;
-
-      font-size: 11px;
-
-      letter-spacing: 3px;
-
-      font-weight: 700;
-    }
-
-
-    .lesson.data .lesson-visual::after {
-
-      content: "";
-
-      position: absolute;
-
-      right: -5px;
-
-      bottom: 5px;
-
-      width: 170px;
-
-      height: 80px;
-
-      opacity: .36;
-
-      border-left:
-        1px solid
-        rgba(155,112,255,.25);
-
-      border-bottom:
-        1px solid
-        rgba(155,112,255,.25);
-
-      background:
-
-        radial-gradient(
-          circle at 20% 70%,
-          rgba(155,112,255,.65) 2px,
-          transparent 3px
-        ),
-
-        radial-gradient(
-          circle at 42% 48%,
-          rgba(155,112,255,.65) 2px,
-          transparent 3px
-        ),
-
-        radial-gradient(
-          circle at 65% 58%,
-          rgba(155,112,255,.65) 2px,
-          transparent 3px
-        ),
-
-        radial-gradient(
-          circle at 88% 22%,
-          rgba(155,112,255,.65) 2px,
-          transparent 3px
-        );
-    }
-
-
-    /* =========================================================
-       ECONOMICS / FINANCE
-    ========================================================= */
-
-    .lesson.finance {
-
-      --accent: #e6bc58;
-    }
-
-
-    .lesson.finance .lesson-visual::before {
-
-      content: "↗";
-
-      position: absolute;
-
-      top: -10px;
-
-      right: 13px;
-
-      color:
-        rgba(230,188,88,.11);
-
-      font-size: 70px;
-
-      font-weight: 950;
-    }
-
-
-    .lesson.finance .lesson-visual::after {
-
-      content: "";
-
-      position: absolute;
-
-      right: 0;
-
-      bottom: 0;
-
-      width: 210px;
-
-      height: 100px;
-
-      opacity: .28;
-
-      background:
-
-        linear-gradient(
-          150deg,
-          transparent 42%,
-          rgba(230,188,88,.65) 43%,
-          rgba(230,188,88,.65) 44%,
-          transparent 45%
-        );
-    }
-
-
-    .lesson.finance {
-
-      background:
-
-        linear-gradient(
-          145deg,
-          rgba(25,24,20,.97),
-          rgba(13,14,19,.95)
-        );
-    }
-
-
-    /* =========================================================
-       MILITARY
-    ========================================================= */
-
-    .lesson.military {
-
-      --accent: #45cf8b;
-    }
-
-
-    .lesson.military .lesson-visual::before {
-
-      content: "✦";
-
-      position: absolute;
-
-      top: -4px;
-
-      right: 18px;
-
-      color:
-        rgba(69,207,139,.11);
-
-      font-size: 52px;
-
-      font-weight: 950;
-    }
-
-
-    .lesson.military .lesson-visual::after {
-
-      content: "";
-
-      position: absolute;
-
-      inset: 0;
-
-      opacity: .19;
-
-      background:
-
-        repeating-linear-gradient(
-          135deg,
-          transparent 0,
-          transparent 12px,
-          rgba(69,207,139,.14) 13px,
-          transparent 15px
-        );
-    }
-
-
-    /* =========================================================
-       SPORT
-    ========================================================= */
-
-    .lesson.sport {
-
-      --accent: #43d9ff;
-    }
-
-
-    .lesson.sport .lesson-visual::before {
-
-      content: "↯";
-
-      position: absolute;
-
-      top: -6px;
-
-      right: 17px;
-
-      color:
-        rgba(67,217,255,.11);
-
-      font-size: 63px;
-
-      font-weight: 950;
-    }
-
-
-    .lesson.sport .lesson-visual::after {
-
-      content: "";
-
-      position: absolute;
-
-      right: -25px;
-
-      bottom: -25px;
-
-      width: 150px;
-
-      height: 150px;
-
-      border:
-        2px solid
-        rgba(67,217,255,.12);
-
-      transform:
-        rotate(45deg);
-    }
-
-
-    /* =========================================================
-       DEFAULT
-    ========================================================= */
-
-    .lesson.default {
-
-      --accent: #5b8cff;
-    }
-
-
-    .lesson.default .lesson-visual::before {
-
-      content: "";
-
-      position: absolute;
-
-      width: 200px;
-
-      height: 200px;
-
-      right: -110px;
-
-      top: -120px;
-
-      border-radius: 50%;
-
-      background:
-        radial-gradient(
-          circle,
-          rgba(91,140,255,.15),
-          transparent 70%
-        );
-    }
-
-
-    /* =========================================================
-       EXPANDABLE DETAILS
-    ========================================================= */
-
-    .lesson-details {
-
-      display: grid;
-
-      grid-template-rows: 0fr;
-
-      margin-top: 0;
-
-      opacity: 0;
-
-      transition:
-
-        grid-template-rows .3s ease,
-
-        opacity .22s ease,
-
-        margin-top .3s ease;
-    }
-
-
-    .lesson-details-inner {
-
-      min-height: 0;
-
-      overflow: hidden;
-    }
-
-
-    .lesson.expanded .lesson-details {
-
-      grid-template-rows: 1fr;
-
-      margin-top: 16px;
-
-      opacity: 1;
-    }
-
-
-    .details-divider {
-
-      height: 1px;
-
-      margin-bottom: 10px;
-
-      background:
-        rgba(255,255,255,.08);
-    }
-
-
-    .detail-row {
-
-      display: flex;
-
-      justify-content: space-between;
-
-      align-items: flex-start;
-
-      gap: 15px;
-
-      padding: 5px 0;
-
-      font-size: 11px;
-
-      line-height: 1.4;
-    }
-
-
-    .detail-label {
-
-      flex: 0 0 auto;
-
-      color:
-        var(--muted-2);
-
-      font-weight: 650;
-    }
-
-
-    .detail-value {
-
-      max-width: 70%;
-
-      color:
-        #dce1e9;
-
-      text-align: right;
-
-      font-weight: 700;
-    }
-
-
-    .expand-hint {
-
-      margin-top: 11px;
-
-      color:
-        #626c7e;
-
-      font-size: 9px;
-
-      font-weight: 650;
-
-      text-align: right;
-    }
-
-
-    /* =========================================================
-       CURRENT LESSON
-    ========================================================= */
-
-    .lesson.current {
-
-      border-color:
-        rgba(45,227,154,.5);
-
-      box-shadow:
-
-        0 0 0 1px
-        rgba(45,227,154,.09),
-
-        0 22px 55px
-        rgba(45,227,154,.09);
-    }
-
-
-    .lesson.current::before {
-
-      background:
-        linear-gradient(
-          180deg,
-          var(--green),
-          #22bd7e
-        );
-    }
-
-
-    .lesson.current .lesson-time {
-
-      color:
-        var(--green);
-    }
-
-
-    /* =========================================================
-       EMPTY
-    ========================================================= */
-
-    .empty {
-
-      padding:
-        50px
-        20px;
-
-      text-align: center;
-
-      border:
-        1px solid var(--line);
-
-      border-radius: 23px;
-
-      color: var(--muted);
-
-      background:
-        rgba(16,19,29,.78);
-
-      box-shadow:
-        0 18px 45px
-        rgba(0,0,0,.18);
-    }
-
-
-    .empty-icon {
-
-      margin-bottom: 10px;
-
-      font-size: 34px;
-    }
-
-
-    .empty-title {
-
-      margin-bottom: 6px;
-
-      color: var(--text);
-
-      font-size: 19px;
-
-      font-weight: 900;
-    }
-
-
-    .empty-text {
-
-      font-size: 13px;
-    }
-
-
-    /* =========================================================
-       ERROR
-    ========================================================= */
-
-    .error {
-
-      padding: 20px;
-
-      border:
-        1px solid
-        rgba(255,80,80,.18);
-
-      border-radius: 18px;
-
-      color: #ff9c9c;
-
-      background:
-        rgba(90,20,25,.3);
-
-      line-height: 1.5;
-    }
-
-
-    .error strong {
-
-      display: block;
-
-      margin-bottom: 5px;
-
-      color: #ffb4b4;
-    }
-
-
-    /* =========================================================
-       SOURCE
-    ========================================================= */
-
-    .source {
-
-      margin-top: 38px;
-
-      color:
-        #596173;
-
-      font-size: 10px;
-
-      font-weight: 600;
-
-      text-align: center;
-    }
-
-
-    /* =========================================================
-       MOBILE
-    ========================================================= */
-
-    @media(
-      max-width: 700px
-    ){
-
-      .container {
-
-        width:
-          calc(100% - 18px);
-
-        padding-top: 15px;
-      }
-
-
-      .header {
-
-        align-items:
-          flex-start;
-      }
-
-
-      .logo {
-
-        width: 44px;
-
-        height: 44px;
-
-        border-radius: 14px;
-
-        font-size: 19px;
-      }
-
-
-      .title {
-
-        font-size: 26px;
-      }
-
-
-      .group {
-
-        font-size: 13px;
-      }
-
-
-      .updated {
-
-        display: none;
-      }
-
-
-      .refresh {
-
-        padding:
-          9px
-          11px;
-
-        font-size: 12px;
-      }
-
-
-      .hero {
-
-        padding: 21px;
-
-        border-radius: 24px;
-      }
-
-
-      .hero-time {
-
-        font-size: 43px;
-
-        letter-spacing: -2.3px;
-      }
-
-
-      .hero-subject {
-
-        font-size: 21px;
-      }
-
-
-      .hero-chip {
-
-        font-size: 11px;
-      }
-
-
-      .stats {
-
-        gap: 7px;
-      }
-
-
-      .stat {
-
-        padding: 13px;
-
-        border-radius: 16px;
-      }
-
-
-      .stat-value {
-
-        font-size: 20px;
-      }
-
-
-      .stat-label {
-
-        font-size: 10px;
-      }
-
-
-      .tabs-wrap {
-
-        top: 5px;
-      }
-
-
-      .tabs {
-
-        border-radius: 15px;
-      }
-
-
-      .tab {
-
-        min-width: 89px;
-
-        padding:
-          10px
-          8px;
-
-        font-size: 11px;
-      }
-
-
-      .weekday {
-
-        font-size: 20px;
-      }
-
-
-      .lesson-grid {
-
-        grid-template-columns: 1fr;
-
-        gap: 9px;
-      }
-
-
-      .lesson {
-
-        padding: 16px;
-
-        border-radius: 19px;
-      }
-
-
-      .lesson-subject {
-
-        font-size: 18px;
-      }
-
-
-      .meta-pill {
-
-        font-size: 10px;
-      }
-
-
-      .detail-row {
-
-        font-size: 10px;
-      }
-
-    }
-
-
-    /* =========================================================
-       VERY SMALL SCREENS
-    ========================================================= */
-
-    @media(
-      max-width: 380px
-    ){
-
-      .stats {
-
-        grid-template-columns:
-          1fr 1fr 1fr;
-      }
-
-
-      .stat {
-
-        padding: 10px;
-      }
-
-
-      .stat-value {
-
-        font-size: 18px;
-      }
-
-
-      .stat-label {
-
-        font-size: 9px;
-      }
-
-
-      .hero-time {
-
-        font-size: 37px;
-      }
-
-    }
-
-  </style>
-
+</style>
 </head>
 
 
 <body>
 
 
-<div class="container">
+<div class="app">
 
 
-  <!-- =======================================================
-       HEADER
-  ======================================================== -->
+  <!-- =====================
+       TOP
+  ====================== -->
 
-  <header class="header">
-
-
-    <div class="brand">
+  <div class="top">
 
 
-      <div class="logo">
-        R
+    <!-- HEADER -->
+
+    <div class="header">
+
+
+      <div class="brand">
+
+
+        <div class="logo">
+          R
+        </div>
+
+
+        <div>
+
+          <h1>
+            Расписание
+          </h1>
+
+          <div class="subtitle">
+            МеждОт25-2
+          </div>
+
+        </div>
+
+
       </div>
 
 
-      <div>
+      <div class="updated">
 
-
-        <div class="title">
-          Расписание
+        <div id="updatedText">
+          Загрузка…
         </div>
 
 
-        <div class="group">
-          МеждОт25-2 · РУЗ
-        </div>
-
+        <button
+          class="refresh"
+          id="refresh"
+        >
+          ↻ Обновить
+        </button>
 
       </div>
 
@@ -2168,60 +844,12 @@
     </div>
 
 
-    <div class="header-right">
+    <!-- TABS -->
 
-
-      <div
-        class="updated"
-        id="updated"
-      >
-        Загрузка...
-      </div>
-
-
-      <button
-        class="refresh"
-        id="refreshButton"
-      >
-        ↻ Обновить
-      </button>
-
-
-    </div>
-
-
-  </header>
-
-
-
-  <!-- =======================================================
-       NEXT LESSON
-  ======================================================== -->
-
-  <div id="nextLesson"></div>
-
-
-
-  <!-- =======================================================
-       STATS
-  ======================================================== -->
-
-  <div
-    class="stats"
-    id="stats"
-  ></div>
-
-
-
-  <!-- =======================================================
-       NAVIGATION
-  ======================================================== -->
-
-  <div class="tabs-wrap">
-
-
-    <nav class="tabs">
-
+    <div
+      class="tabs"
+      id="tabs"
+    >
 
       <button
         class="tab active"
@@ -2262,1210 +890,934 @@
         Месяц
       </button>
 
-
-    </nav>
-
-
-  </div>
-
-
-
-  <!-- =======================================================
-       SCHEDULE
-  ======================================================== -->
-
-  <main id="schedule">
-
-
-    <div class="empty">
-
-
-      <div class="empty-icon">
-        ✦
-      </div>
-
-
-      <div class="empty-title">
-        Загружаем расписание
-      </div>
-
-
-      <div class="empty-text">
-        Получаем актуальные данные из РУЗ.
-      </div>
-
-
     </div>
 
 
-  </main>
-
-
-
-  <div class="source">
-
-    Автоматически обновляется из РУЗ · МеждОт25-2
-
   </div>
+
+
+  <!-- CONTENT -->
+
+  <main
+    class="content"
+    id="content"
+  >
+
+    <div class="loading">
+      Загружаю расписание…
+    </div>
+
+  </main>
 
 
 </div>
 
 
-
 <script>
 
 
-/* =========================================================
+/* =========================
    STATE
-========================================================= */
+========================= */
 
-let schedule = [];
+const state = {
 
-let currentView = "nearest";
+  data: [],
 
+  view: "nearest"
 
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function $(id) {
-
-  return document.getElementById(id);
-
-}
+};
 
 
-function pad(value) {
+/* =========================
+   RUSSIAN DATE
+========================= */
 
-  return String(value)
-    .padStart(2, "0");
+const RU_DAYS = [
 
-}
+  "Воскресенье",
 
+  "Понедельник",
 
-function localDateString(
-  date = new Date()
-) {
+  "Вторник",
 
-  return [
+  "Среда",
 
-    date.getFullYear(),
+  "Четверг",
 
-    pad(
-      date.getMonth() + 1
-    ),
+  "Пятница",
 
-    pad(
-      date.getDate()
-    )
+  "Суббота"
 
-  ].join("-");
-
-}
+];
 
 
-function addDays(
-  date,
-  amount
-) {
+const RU_MONTHS = [
 
-  const result =
-    new Date(date);
+  "января",
 
-  result.setDate(
-    result.getDate() + amount
-  );
+  "февраля",
 
-  return result;
+  "марта",
 
-}
+  "апреля",
+
+  "мая",
+
+  "июня",
+
+  "июля",
+
+  "августа",
+
+  "сентября",
+
+  "октября",
+
+  "ноября",
+
+  "декабря"
+
+];
 
 
-function dateFromString(
-  value
-) {
+/* =========================
+   SUBJECT THEMES
+========================= */
 
-  return new Date(
-    value + "T00:00:00"
-  );
-
-}
+const THEMES = {
 
 
-function formatDate(
-  value
-) {
+  "Военная подготовка": {
 
-  return dateFromString(
-    value
-  ).toLocaleDateString(
-    "ru-RU",
+    a: "#32d69b",
+
+    b: "#65efbf",
+
+    icon: "military"
+
+  },
+
+
+  "Бухгалтерский учет и отчетность": {
+
+    a: "#f1c84b",
+
+    b: "#ffe17a",
+
+    icon: "ledger"
+
+  },
+
+
+  "Статистика": {
+
+    a: "#9a78ff",
+
+    b: "#c1a9ff",
+
+    icon: "stats"
+
+  },
+
+
+  "Анализ данных": {
+
+    a: "#42a5ff",
+
+    b: "#79c4ff",
+
+    icon: "data"
+
+  },
+
+
+  "Иностранный язык в сфере международных экономических отношений": {
+
+    a: "#e36b8f",
+
+    b: "#ff9ab6",
+
+    icon: "language"
+
+  },
+
+
+  "Концепции современного естествознания": {
+
+    a: "#55c9d7",
+
+    b: "#8cebf4",
+
+    icon: "science"
+
+  },
+
+
+  "Налоги и налоговая система Российской Федерации": {
+
+    a: "#ff8b55",
+
+    b: "#ffb083",
+
+    icon: "tax"
+
+  },
+
+
+  "Принятие стратегических решений в области национальной политики": {
+
+    a: "#c995ff",
+
+    b: "#e0bcff",
+
+    icon: "strategy"
+
+  },
+
+
+  "Экономическая теория": {
+
+    a: "#4fcf87",
+
+    b: "#8be5ad",
+
+    icon: "economy"
+
+  }
+
+};
+
+
+/* =========================
+   FALLBACK THEME
+========================= */
+
+function themeFor(subject) {
+
+  return (
+
+    THEMES[subject] ||
+
     {
-      day: "numeric",
-      month: "long"
+
+      a: "#8b93ff",
+
+      b: "#b3b9ff",
+
+      icon: "default"
+
     }
+
   );
 
 }
 
 
-function formatWeekday(
-  value
-) {
-
-  return dateFromString(
-    value
-  ).toLocaleDateString(
-    "ru-RU",
-    {
-      weekday: "long"
-    }
-  );
-
-}
-
-
-/* =========================================================
+/* =========================
    HTML ESCAPE
-========================================================= */
+========================= */
 
-function escapeHtml(
-  value
-) {
+function esc(value) {
 
-  return String(
-    value ?? ""
-  )
+  return String(value ?? "")
 
     .replace(
-      /&/g,
-      "&amp;"
-    )
+      /[&<>"']/g,
+      function(match) {
 
-    .replace(
-      /</g,
-      "&lt;"
-    )
+        return {
 
-    .replace(
-      />/g,
-      "&gt;"
-    )
+          "&": "&amp;",
 
-    .replace(
-      /"/g,
-      "&quot;"
-    )
+          "<": "&lt;",
 
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+          ">": "&gt;",
 
-}
+          '"': "&quot;",
 
+          "'": "&#039;"
 
-/* =========================================================
-   LESSON DATETIME
-========================================================= */
-
-function lessonDateTime(
-  lesson,
-  field
-) {
-
-  return new Date(
-    `${lesson.date}T${lesson[field]}:00`
-  );
-
-}
-
-
-function isCurrentLesson(
-  lesson
-) {
-
-  const now =
-    new Date();
-
-  const start =
-    lessonDateTime(
-      lesson,
-      "beginLesson"
-    );
-
-  const end =
-    lessonDateTime(
-      lesson,
-      "endLesson"
-    );
-
-  return (
-    now >= start &&
-    now < end
-  );
-
-}
-
-
-function hasEnded(
-  lesson
-) {
-
-  return (
-    new Date()
-    >=
-    lessonDateTime(
-      lesson,
-      "endLesson"
-    )
-  );
-
-}
-
-
-/* =========================================================
-   SORT
-========================================================= */
-
-function sortLessons(
-  lessons
-) {
-
-  return [
-    ...lessons
-  ].sort(
-    (
-      a,
-      b
-    ) => {
-
-      const dateCompare =
-        (a.date || "")
-        .localeCompare(
-          b.date || ""
-        );
-
-
-      if(
-        dateCompare !== 0
-      ) {
-
-        return dateCompare;
+        }[match];
 
       }
+    );
+
+}
 
 
-      return (
-        (a.beginLesson || "")
-        .localeCompare(
-          b.beginLesson || ""
-        )
-      );
+/* =========================
+   DATE HELPERS
+========================= */
 
-    }
+function parseDate(value) {
+
+  const parts =
+    value
+      .split("-")
+      .map(Number);
+
+
+  return new Date(
+
+    parts[0],
+
+    parts[1] - 1,
+
+    parts[2]
+
   );
 
 }
 
 
-/* =========================================================
-   SUBJECT TYPE
-========================================================= */
+function dateKey(date) {
 
-function getSubjectType(
-  subject = ""
-) {
-
-  const s =
-    subject.toLowerCase();
+  const y =
+    date.getFullYear();
 
 
-  /*
-    МАТЕМАТИКА
-  */
-
-  if(
-    /математ|матан|алгебр|геометр|мат\.? анализ/.test(s)
-  ) {
-
-    return "math";
-
-  }
+  const m =
+    String(
+      date.getMonth() + 1
+    ).padStart(2, "0");
 
 
-  /*
-    КИТАЙСКИЙ
-  */
-
-  if(
-    /китай|кит\.?\s*язык|中文|китайск/.test(s)
-  ) {
-
-    return "chinese";
-
-  }
+  const d =
+    String(
+      date.getDate()
+    ).padStart(2, "0");
 
 
-  /*
-    АНАЛИЗ ДАННЫХ / СТАТИСТИКА
-  */
-
-  if(
-    /анализ данных|статист|data/.test(s)
-  ) {
-
-    return "data";
-
-  }
-
-
-  /*
-    ЭКОНОМИКА / ФИНАНСЫ
-  */
-
-  if(
-    /эконом|финанс|бухгалтер|учет|учёт|рынок/.test(s)
-  ) {
-
-    return "finance";
-
-  }
-
-
-  /*
-    ВОЕННАЯ ПОДГОТОВКА
-  */
-
-  if(
-    /военн|военная подготовка/.test(s)
-  ) {
-
-    return "military";
-
-  }
-
-
-  /*
-    ФИЗКУЛЬТУРА
-  */
-
-  if(
-    /физкультур|физическая культура|спорт/.test(s)
-  ) {
-
-    return "sport";
-
-  }
-
-
-  return "default";
+  return `${y}-${m}-${d}`;
 
 }
 
 
-/* =========================================================
-   EXTRA FIELDS
-========================================================= */
-
-function getAddress(
-  lesson
-) {
+function dateText(date) {
 
   return (
-    lesson.address ||
-    lesson.adress ||
-    lesson.location ||
-    lesson.addressName ||
-    lesson.fullAddress ||
-    ""
+
+    date.getDate() +
+
+    " " +
+
+    RU_MONTHS[
+      date.getMonth()
+    ]
+
   );
 
 }
 
 
-function getLessonType(
-  lesson
-) {
+function formatUpdated() {
 
   return (
-    lesson.lessonType ||
-    lesson.kindOfWork ||
-    lesson.kind ||
-    lesson.type ||
-    lesson.form ||
-    ""
-  );
 
-}
+    "Обновлено в " +
 
-
-/* =========================================================
-   NEXT LESSON
-========================================================= */
-
-function findNextLesson() {
-
-  const sorted =
-    sortLessons(
-      schedule
-    );
-
-
-  const current =
-    sorted.find(
-      lesson =>
-        isCurrentLesson(
-          lesson
-        )
-    );
-
-
-  if(
-    current
-  ) {
-
-    return {
-
-      lesson:
-        current,
-
-      current:
-        true
-
-    };
-
-  }
-
-
-  const next =
-    sorted.find(
-      lesson =>
-        !hasEnded(
-          lesson
-        )
-    );
-
-
-  if(
-    next
-  ) {
-
-    return {
-
-      lesson:
-        next,
-
-      current:
-        false
-
-    };
-
-  }
-
-
-  return null;
-
-}
-
-
-/* =========================================================
-   RENDER NEXT
-========================================================= */
-
-function renderNextLesson() {
-
-  const container =
-    $("nextLesson");
-
-
-  const result =
-    findNextLesson();
-
-
-  if(
-    !result
-  ) {
-
-    container.innerHTML = `
-
-      <section class="hero">
-
-        <div class="hero-content">
-
-          <div class="eyebrow">
-            Расписание
-          </div>
-
-          <div class="hero-subject">
-            Ближайших занятий нет ✦
-          </div>
-
-        </div>
-
-      </section>
-
-    `;
-
-    return;
-
-  }
-
-
-  const lesson =
-    result.lesson;
-
-
-  container.innerHTML = `
-
-    <section class="hero">
-
-      <div class="hero-content">
-
-
-        ${
-          result.current
-
-            ?
-
-          `
-          <div class="live">
-
-            <span class="live-dot"></span>
-
-            СЕЙЧАС ИДЁТ
-
-          </div>
-          `
-
-            :
-
-          `
-          <div class="eyebrow">
-            Следующая пара
-          </div>
-          `
-
+    new Date()
+      .toLocaleTimeString(
+        "ru-RU",
+        {
+          hour: "2-digit",
+          minute: "2-digit"
         }
+      )
+
+  );
+
+}
 
 
-        <div class="hero-time">
+/* =========================
+   SUBJECT MOTIFS
+========================= */
 
-          ${escapeHtml(
-            lesson.beginLesson
-          )}
-
-          –
-
-          ${escapeHtml(
-            lesson.endLesson
-          )}
-
-        </div>
+function motif(type) {
 
 
-        <div class="hero-subject">
+  const common = `
 
-          ${escapeHtml(
-            lesson.discipline ||
-            "Предмет не указан"
-          )}
+    fill="none"
 
-        </div>
+    stroke="currentColor"
 
+    stroke-width="1.5"
 
-        <div class="hero-info">
+    stroke-linecap="round"
 
+    stroke-linejoin="round"
 
-          <span class="hero-chip">
-
-            📅
-
-            ${escapeHtml(
-              formatWeekday(
-                lesson.date
-              )
-            )}
-
-            ,
-
-            ${escapeHtml(
-              formatDate(
-                lesson.date
-              )
-            )}
-
-          </span>
+  `;
 
 
-          ${
-            lesson.lecturer
-
-              ?
-
-            `
-            <span class="hero-chip">
-
-              👨‍🏫
-
-              ${escapeHtml(
-                lesson.lecturer
-              )}
-
-            </span>
-            `
-
-              :
-
-            ""
-          }
+  const map = {
 
 
-          ${
-            lesson.auditorium
+    /* Военная подготовка */
 
-              ?
+    military: `
 
-            `
-            <span class="hero-chip">
+      <path d="M15 22h120"/>
 
-              🏫
+      <path
+        d="M22 18l20-14 20 14"
+      />
 
-              ${escapeHtml(
-                lesson.auditorium
-              )}
+      <path
+        d="M77 18l18-13 32 18"
+      />
 
-            </span>
-            `
+      <path
+        d="M24 42h100"
+      />
 
-              :
+      <path
+        d="M35 57h80"
+      />
 
-            ""
-          }
+      <path
+        d="M48 72h54"
+      />
 
-
-          ${
-            lesson.building
-
-              ?
-
-            `
-            <span class="hero-chip">
-
-              📍
-
-              ${escapeHtml(
-                lesson.building
-              )}
-
-            </span>
-            `
-
-              :
-
-            ""
-          }
+    `,
 
 
-        </div>
+    /* Бухгалтерский учет */
+
+    ledger: `
+
+      <path
+        d="M20 15h104v65H20z"
+      />
+
+      <path
+        d="M42 15v65"
+      />
+
+      <path
+        d="M72 15v65"
+      />
+
+      <path
+        d="M100 15v65"
+      />
+
+      <path
+        d="M20 34h104"
+      />
+
+      <path
+        d="M20 54h104"
+      />
+
+      <path
+        d="M112 8l20 12-20 12"
+      />
+
+    `,
 
 
-      </div>
+    /* Статистика */
 
-    </section>
+    stats: `
+
+      <path
+        d="M18 78V22M18 78h118"
+      />
+
+      <circle
+        cx="36"
+        cy="64"
+        r="2.5"
+      />
+
+      <circle
+        cx="58"
+        cy="54"
+        r="2.5"
+      />
+
+      <circle
+        cx="79"
+        cy="42"
+        r="2.5"
+      />
+
+      <circle
+        cx="103"
+        cy="31"
+        r="2.5"
+      />
+
+      <path
+        d="M36 64l22-10 21-12 24-11"
+      />
+
+    `,
+
+
+    /* Анализ данных */
+
+    data: `
+
+      <path
+        d="M24 24h96v54H24z"
+      />
+
+      <path
+        d="M43 24v54"
+      />
+
+      <path
+        d="M67 24v54"
+      />
+
+      <path
+        d="M91 24v54"
+      />
+
+      <path
+        d="M24 42h96"
+      />
+
+      <path
+        d="M24 60h96"
+      />
+
+      <circle
+        cx="34"
+        cy="34"
+        r="2"
+      />
+
+      <circle
+        cx="78"
+        cy="51"
+        r="2"
+      />
+
+      <circle
+        cx="106"
+        cy="69"
+        r="2"
+      />
+
+    `,
+
+
+    /* Иностранный язык */
+
+    language: `
+
+      <path
+        d="M20 22h70a10 10 0 0 1 10 10v20a10 10 0 0 1-10 10H55l-14 12v-12H30a10 10 0 0 1-10-10V22z"
+      />
+
+      <path
+        d="M37 38h32"
+      />
+
+      <path
+        d="M37 48h20"
+      />
+
+      <path
+        d="M111 24c9 8 12 18 7 30-4 10-13 17-24 20"
+      />
+
+    `,
+
+
+    /* Естествознание */
+
+    science: `
+
+      <ellipse
+        cx="72"
+        cy="48"
+        rx="52"
+        ry="19"
+      />
+
+      <ellipse
+        cx="72"
+        cy="48"
+        rx="52"
+        ry="19"
+        transform="rotate(60 72 48)"
+      />
+
+      <ellipse
+        cx="72"
+        cy="48"
+        rx="52"
+        ry="19"
+        transform="rotate(-60 72 48)"
+      />
+
+      <circle
+        cx="72"
+        cy="48"
+        r="5"
+      />
+
+    `,
+
+
+    /* Налоги */
+
+    tax: `
+
+      <path
+        d="M28 12h70l18 18v54H28z"
+      />
+
+      <path
+        d="M98 12v20h18"
+      />
+
+      <path
+        d="M44 47h55"
+      />
+
+      <path
+        d="M44 61h39"
+      />
+
+      <circle
+        cx="55"
+        cy="29"
+        r="6"
+      />
+
+      <path
+        d="M120 12l13 13M133 12l-13 13"
+      />
+
+    `,
+
+
+    /* Стратегия */
+
+    strategy: `
+
+      <path
+        d="M25 72V52M25 52h34M59 52V34M59 34h30M59 52h30M89 34V22M89 34v18M89 52h26"
+      />
+
+      <circle
+        cx="25"
+        cy="72"
+        r="4"
+      />
+
+      <circle
+        cx="59"
+        cy="52"
+        r="4"
+      />
+
+      <circle
+        cx="89"
+        cy="34"
+        r="4"
+      />
+
+      <circle
+        cx="115"
+        cy="52"
+        r="4"
+      />
+
+    `,
+
+
+    /* Экономика */
+
+    economy: `
+
+      <path
+        d="M18 78V18M18 78h120"
+      />
+
+      <path
+        d="M28 68c15-2 19-19 33-18 15 1 15 14 28 11 13-3 15-25 37-35"
+      />
+
+      <path
+        d="M116 26h10v10"
+      />
+
+    `,
+
+
+    /* Default */
+
+    default: `
+
+      <circle
+        cx="72"
+        cy="48"
+        r="28"
+      />
+
+      <path
+        d="M72 20v56"
+      />
+
+      <path
+        d="M44 48h56"
+      />
+
+    `
+
+  };
+
+
+  return `
+
+    <svg
+
+      viewBox="0 0 145 95"
+
+      ${common}
+
+      style="color:var(--accent)"
+
+    >
+
+      ${map[type] || map.default}
+
+    </svg>
 
   `;
 
 }
 
 
-/* =========================================================
-   STATS
-========================================================= */
+/* =========================
+   CARD
+========================= */
 
-function renderStats() {
-
-  const today =
-    localDateString();
+function cardTemplate(lesson) {
 
 
-  const todayLessons =
-    schedule.filter(
-      lesson =>
-        lesson.date ===
-        today
-    );
-
-
-  const totalMinutes =
-    todayLessons.reduce(
-      (
-        total,
-        lesson
-      ) => {
-
-        const start =
-          lessonDateTime(
-            lesson,
-            "beginLesson"
-          );
-
-        const end =
-          lessonDateTime(
-            lesson,
-            "endLesson"
-          );
-
-
-        return (
-
-          total +
-
-          Math.max(
-            0,
-            (
-              end - start
-            ) / 60000
-          )
-
-        );
-
-      },
-      0
-    );
-
-
-  const hours =
-    Math.floor(
-      totalMinutes / 60
-    );
-
-
-  const minutes =
-    Math.round(
-      totalMinutes % 60
-    );
-
-
-  const buildings =
-    new Set(
-
-      todayLessons
-
-        .map(
-          lesson =>
-            lesson.building
-        )
-
-        .filter(Boolean)
-
-    ).size;
-
-
-  $("stats").innerHTML = `
-
-    <div class="stat">
-
-      <div class="stat-value">
-        ${todayLessons.length}
-      </div>
-
-      <div class="stat-label">
-        пар сегодня
-      </div>
-
-    </div>
-
-
-    <div class="stat">
-
-      <div class="stat-value">
-
-        ${
-          hours > 0
-
-            ?
-
-          `${hours}ч ${minutes}м`
-
-            :
-
-          `${minutes}м`
-        }
-
-      </div>
-
-      <div class="stat-label">
-        учебного времени
-      </div>
-
-    </div>
-
-
-    <div class="stat">
-
-      <div class="stat-value">
-        ${buildings}
-      </div>
-
-      <div class="stat-label">
-        корпуса сегодня
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-
-/* =========================================================
-   LESSON CARD
-========================================================= */
-
-function renderLesson(
-  lesson
-) {
-
-  const current =
-    isCurrentLesson(
-      lesson
-    );
-
-
-  const type =
-    getSubjectType(
+  const theme =
+    themeFor(
       lesson.discipline
     );
 
 
-  const address =
-    getAddress(
-      lesson
-    );
+  const id =
 
+    `${lesson.date}-` +
 
-  const lessonType =
-    getLessonType(
-      lesson
-    );
+    `${lesson.beginLesson}-` +
+
+    `${Math.random()
+      .toString(36)
+      .slice(2)}`;
 
 
   return `
 
     <article
 
-      class="
-        lesson
-        ${type}
-        ${current ? "current" : ""}
+      class="card"
+
+      style="
+
+        --accent:${theme.a};
+
+        --accent2:${theme.b};
+
       "
 
-      data-lesson-id="${escapeHtml(
-
-        lesson.date +
-        "_" +
-        lesson.beginLesson +
-        "_" +
-        lesson.discipline
-
-      )}"
+      data-id="${id}"
 
     >
 
 
-      <div class="lesson-visual"></div>
+      <div class="card-main">
 
 
-      <div class="lesson-top">
+        <div class="motif">
 
-
-        <div class="lesson-main">
-
-
-          <div class="lesson-time">
-
-            ${escapeHtml(
-              lesson.beginLesson ||
-              ""
-            )}
-
-            –
-
-            ${escapeHtml(
-              lesson.endLesson ||
-              ""
-            )}
-
-          </div>
-
-
-          <div class="lesson-subject">
-
-            ${escapeHtml(
-              lesson.discipline ||
-              "Предмет не указан"
-            )}
-
-          </div>
-
+          ${motif(theme.icon)}
 
         </div>
 
 
-        ${
-          current
+        <div class="time">
 
-            ?
+          ${esc(
+            lesson.beginLesson
+          )}
 
-          `
-          <div class="current-badge">
-            СЕЙЧАС
-          </div>
-          `
+          —
 
-            :
+          ${esc(
+            lesson.endLesson
+          )}
 
-          ""
-        }
+        </div>
 
 
-      </div>
+        <div class="subject">
+
+          ${esc(
+            lesson.discipline
+          )}
+
+        </div>
 
 
-      <div class="lesson-meta">
+        <div class="meta">
 
 
-        ${
-          lesson.lecturer
-
-            ?
-
-          `
-          <span class="meta-pill">
+          <span class="pill">
 
             👨‍🏫
 
-            ${escapeHtml(
-              lesson.lecturer
-            )}
+            <b>
+
+              ${esc(
+                lesson.lecturer ||
+                "Не указан"
+              )}
+
+            </b>
 
           </span>
-          `
-
-            :
-
-          ""
-        }
 
 
-        ${
-          lesson.auditorium
-
-            ?
-
-          `
-          <span class="meta-pill">
+          <span class="pill">
 
             🏫
 
-            ${escapeHtml(
-              lesson.auditorium
-            )}
+            <b>
+
+              ${esc(
+                lesson.auditorium ||
+                "Не указана"
+              )}
+
+            </b>
 
           </span>
-          `
-
-            :
-
-          ""
-        }
 
 
-        ${
-          lesson.building
-
-            ?
-
-          `
-          <span class="meta-pill">
+          <span class="pill">
 
             📍
 
-            ${escapeHtml(
-              lesson.building
-            )}
+            <b>
+
+              ${esc(
+                lesson.building ||
+                "Не указан"
+              )}
+
+            </b>
 
           </span>
-          `
 
-            :
 
-          ""
-        }
+        </div>
 
 
       </div>
 
 
-      <!--
-        РАСКРЫВАЕМАЯ ИНФОРМАЦИЯ
-      -->
+      <!-- EXPANDED -->
 
-      <div class="lesson-details">
+      <div class="card-details">
 
-
-        <div class="lesson-details-inner">
+        <div class="details-inner">
 
 
-          <div class="details-divider"></div>
+          <div class="details">
 
 
-          ${
-            lesson.lecturer
+            <div>
 
-              ?
-
-            `
-            <div class="detail-row">
-
-              <span class="detail-label">
+              <div class="detail-label">
                 Преподаватель
-              </span>
+              </div>
 
-              <span class="detail-value">
-                ${escapeHtml(
-                  lesson.lecturer
+              <div class="detail-value">
+
+                ${esc(
+                  lesson.lecturer ||
+                  "—"
                 )}
-              </span>
+
+              </div>
 
             </div>
-            `
-
-              :
-
-            ""
-          }
 
 
-          ${
-            lesson.auditorium
+            <div>
 
-              ?
-
-            `
-            <div class="detail-row">
-
-              <span class="detail-label">
+              <div class="detail-label">
                 Аудитория
-              </span>
+              </div>
 
-              <span class="detail-value">
-                ${escapeHtml(
-                  lesson.auditorium
+              <div class="detail-value">
+
+                ${esc(
+                  lesson.auditorium ||
+                  "—"
                 )}
-              </span>
+
+              </div>
 
             </div>
-            `
-
-              :
-
-            ""
-          }
 
 
-          ${
-            lesson.building
+            <div>
 
-              ?
+              <div class="detail-label">
+                Корпус / адрес
+              </div>
 
-            `
-            <div class="detail-row">
+              <div class="detail-value">
 
-              <span class="detail-label">
-                Корпус
-              </span>
-
-              <span class="detail-value">
-                ${escapeHtml(
-                  lesson.building
+                ${esc(
+                  lesson.building ||
+                  "—"
                 )}
-              </span>
+
+              </div>
 
             </div>
-            `
-
-              :
-
-            ""
-          }
 
 
-          ${
-            address
+            <div>
 
-              ?
-
-            `
-            <div class="detail-row">
-
-              <span class="detail-label">
-                Адрес
-              </span>
-
-              <span class="detail-value">
-                ${escapeHtml(
-                  address
-                )}
-              </span>
-
-            </div>
-            `
-
-              :
-
-            ""
-          }
-
-
-          ${
-            lessonType
-
-              ?
-
-            `
-            <div class="detail-row">
-
-              <span class="detail-label">
+              <div class="detail-label">
                 Тип занятия
-              </span>
+              </div>
 
-              <span class="detail-value">
-                ${escapeHtml(
-                  lessonType
+              <div class="detail-value">
+
+                ${esc(
+                  lesson.kindOfWork ||
+                  "—"
                 )}
-              </span>
+
+              </div>
 
             </div>
-            `
 
-              :
-
-            ""
-          }
-
-
-          <div class="expand-hint">
-
-            Нажмите, чтобы свернуть
 
           </div>
 
 
         </div>
-
 
       </div>
 
@@ -3477,477 +1829,552 @@ function renderLesson(
 }
 
 
-/* =========================================================
-   FILTER
-========================================================= */
+/* =========================
+   CARD CLICK
+========================= */
 
-function getLessons() {
-
-  const today =
-    new Date();
+function attachCards() {
 
 
-  const todayString =
-    localDateString(
-      today
+  document
+    .querySelectorAll(".card")
+    .forEach(
+      card => {
+
+
+        card.addEventListener(
+          "click",
+          () => {
+
+            card.classList.toggle(
+              "open"
+            );
+
+          }
+        );
+
+
+      }
     );
-
-
-  /* Сегодня */
-
-  if(
-    currentView === "today"
-  ) {
-
-    return schedule.filter(
-      lesson =>
-        lesson.date ===
-        todayString
-    );
-
-  }
-
-
-  /* Завтра */
-
-  if(
-    currentView === "tomorrow"
-  ) {
-
-    const tomorrow =
-      localDateString(
-        addDays(
-          today,
-          1
-        )
-      );
-
-
-    return schedule.filter(
-      lesson =>
-        lesson.date ===
-        tomorrow
-    );
-
-  }
-
-
-  /* Неделя */
-
-  if(
-    currentView === "week"
-  ) {
-
-    const end =
-      localDateString(
-        addDays(
-          today,
-          6
-        )
-      );
-
-
-    return schedule.filter(
-      lesson =>
-
-        lesson.date >=
-        todayString
-
-        &&
-
-        lesson.date <=
-        end
-
-    );
-
-  }
-
-
-  /* Месяц */
-
-  if(
-    currentView === "month"
-  ) {
-
-    const end =
-      localDateString(
-        addDays(
-          today,
-          29
-        )
-      );
-
-
-    return schedule.filter(
-      lesson =>
-
-        lesson.date >=
-        todayString
-
-        &&
-
-        lesson.date <=
-        end
-
-    );
-
-  }
-
-
-  /*
-    БЛИЖАЙШЕЕ
-  */
-
-  const futureDates = [
-
-    ...new Set(
-
-      sortLessons(
-        schedule
-      )
-
-        .filter(
-          lesson =>
-            lesson.date >=
-            todayString
-        )
-
-        .map(
-          lesson =>
-            lesson.date
-        )
-
-    )
-
-  ];
-
-
-  if(
-    !futureDates.length
-  ) {
-
-    return [];
-
-  }
-
-
-  return schedule.filter(
-    lesson =>
-      lesson.date ===
-      futureDates[0]
-  );
 
 }
 
 
-/* =========================================================
-   EMPTY STATE
-========================================================= */
+/* =========================
+   GROUP BY DATE
+========================= */
 
-function renderEmptyState() {
-
-  let title =
-    "Занятий нет";
+function groupByDate(items) {
 
 
-  let text =
-    "В выбранном периоде занятий не найдено.";
+  const groups =
+    new Map();
 
 
-  if(
-    currentView === "today"
-  ) {
+  items
+    .sort(
+      (a,b) =>
 
-    title =
-      "Сегодня свободный день";
+        (
+          a.date +
+          a.beginLesson
+        )
+        .localeCompare(
+          b.date +
+          b.beginLesson
+        )
 
-
-    text =
-      "На сегодня занятий нет.";
-
-  }
-
-
-  if(
-    currentView === "tomorrow"
-  ) {
-
-    title =
-      "Завтра занятий нет";
+    )
+    .forEach(
+      lesson => {
 
 
-    text =
-      "Можно спокойно планировать день.";
+        if (
+          !groups.has(
+            lesson.date
+          )
+        ) {
 
-  }
+          groups.set(
+            lesson.date,
+            []
+          );
 
-
-  if(
-    currentView === "week"
-  ) {
-
-    title =
-      "Неделя свободна";
-
-
-    text =
-      "На ближайшие 7 дней занятий нет.";
-
-  }
+        }
 
 
-  if(
-    currentView === "month"
-  ) {
+        groups
+          .get(
+            lesson.date
+          )
+          .push(
+            lesson
+          );
 
-    title =
-      "Занятий нет";
+
+      }
+    );
 
 
-    text =
-      "На ближайшие 30 дней занятий нет.";
+  return groups;
 
-  }
+}
+
+
+/* =========================
+   DAY
+========================= */
+
+function dayBlock(
+  date,
+  lessons
+) {
+
+
+  const d =
+    parseDate(date);
 
 
   return `
 
-    <div class="empty">
+    <section class="day">
 
-      <div class="empty-icon">
-        ✦
+
+      <div class="day-head">
+
+
+        <div>
+
+
+          <div class="day-title">
+
+            ${RU_DAYS[
+              d.getDay()
+            ]}
+
+          </div>
+
+
+          <div class="day-date">
+
+            ${dateText(d)}
+
+          </div>
+
+
+        </div>
+
+
+        <div class="count">
+
+          ${lessons.length}
+
+          ${
+            lessons.length === 1
+              ? "пара"
+              : lessons.length < 5
+                ? "пары"
+                : "пар"
+          }
+
+        </div>
+
+
       </div>
 
-      <div class="empty-title">
-        ${title}
+
+      <div class="cards">
+
+        ${lessons
+          .map(cardTemplate)
+          .join("")}
+
       </div>
 
-      <div class="empty-text">
-        ${text}
-      </div>
 
-    </div>
+    </section>
 
   `;
 
 }
 
 
-/* =========================================================
-   MAIN RENDER
-========================================================= */
+/* =========================
+   RENDER
+========================= */
 
-function renderSchedule() {
-
-  const container =
-    $("schedule");
+function render(items) {
 
 
-  const lessons =
-    getLessons();
+  const content =
+    document.getElementById(
+      "content"
+    );
 
 
-  if(
-    !lessons.length
+  if (
+    !items.length
   ) {
 
-    container.innerHTML =
-      renderEmptyState();
+    content.innerHTML = `
+
+      <div class="empty">
+
+        На этот период
+        занятий нет.
+
+      </div>
+
+    `;
 
     return;
 
   }
 
 
-  const grouped = {};
+  const groups =
+    groupByDate(items);
 
 
-  lessons.forEach(
-    lesson => {
+  content.innerHTML =
 
-      if(
-        !grouped[
-          lesson.date
-        ]
-      ) {
-
-        grouped[
-          lesson.date
-        ] = [];
-
-      }
-
-
-      grouped[
-        lesson.date
-      ].push(
-        lesson
-      );
-
-    }
-  );
-
-
-  const dates =
-    Object.keys(
-      grouped
-    ).sort();
-
-
-  container.innerHTML =
-
-    dates
+    [...groups]
 
       .map(
-        date => {
+        ([date, lessons]) =>
 
-          const dayLessons =
-            sortLessons(
-              grouped[date]
-            );
+          dayBlock(
+            date,
+            lessons
+          )
 
-
-          const count =
-            dayLessons.length;
-
-
-          const countText =
-
-            count === 1
-
-              ?
-
-            "пара"
-
-              :
-
-            count < 5
-
-              ?
-
-            "пары"
-
-              :
-
-            "пар";
-
-
-          return `
-
-            <section class="day">
-
-
-              <div class="day-heading">
-
-
-                <div>
-
-
-                  <div class="weekday">
-
-                    ${escapeHtml(
-                      formatWeekday(
-                        date
-                      )
-                    )}
-
-                  </div>
-
-
-                  <div class="date">
-
-                    ${escapeHtml(
-                      formatDate(
-                        date
-                      )
-                    )}
-
-                  </div>
-
-
-                </div>
-
-
-                <div class="day-count">
-
-                  ${count}
-
-                  ${countText}
-
-                </div>
-
-
-              </div>
-
-
-              <div class="lesson-grid">
-
-
-                ${dayLessons
-
-                  .map(
-                    renderLesson
-                  )
-
-                  .join("")
-
-                }
-
-
-              </div>
-
-
-            </section>
-
-          `;
-
-        }
       )
 
       .join("");
 
+
+  attachCards();
+
 }
 
 
-/* =========================================================
-   LOAD SCHEDULE
-========================================================= */
+/* =========================
+   TODAY
+========================= */
 
-async function loadSchedule() {
-
-  const button =
-    $("refreshButton");
+function nowDate() {
 
 
-  const updated =
-    $("updated");
+  const date =
+    new Date();
 
 
-  button.classList.add(
-    "loading"
+  date.setHours(
+    0,
+    0,
+    0,
+    0
   );
 
 
-  button.textContent =
-    "↻ Обновление...";
+  return date;
+
+}
+
+
+/* =========================
+   TOMORROW
+========================= */
+
+function tomorrow() {
+
+
+  const date =
+    nowDate();
+
+
+  date.setDate(
+    date.getDate() + 1
+  );
+
+
+  return date;
+
+}
+
+
+/* =========================
+   WEEK END
+========================= */
+
+function weekEnd(
+  date
+) {
+
+
+  const end =
+    new Date(date);
+
+
+  end.setDate(
+    end.getDate() + 6
+  );
+
+
+  return end;
+
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+function viewItems() {
+
+
+  const all =
+
+    state.data
+      .slice()
+      .sort(
+        (a,b) =>
+
+          (
+            a.date +
+            a.beginLesson
+          )
+          .localeCompare(
+            b.date +
+            b.beginLesson
+          )
+      );
+
+
+  const today =
+    nowDate();
+
+
+  const todayKey =
+    dateKey(today);
+
+
+  const tomorrowKey =
+    dateKey(
+      tomorrow()
+    );
+
+
+  /* TODAY */
+
+  if (
+    state.view === "today"
+  ) {
+
+    return all.filter(
+      lesson =>
+
+        lesson.date ===
+        todayKey
+    );
+
+  }
+
+
+  /* TOMORROW */
+
+  if (
+    state.view === "tomorrow"
+  ) {
+
+    return all.filter(
+      lesson =>
+
+        lesson.date ===
+        tomorrowKey
+    );
+
+  }
+
+
+  /* WEEK */
+
+  if (
+    state.view === "week"
+  ) {
+
+
+    const end =
+      weekEnd(today);
+
+
+    return all.filter(
+      lesson => {
+
+
+        const date =
+          parseDate(
+            lesson.date
+          );
+
+
+        return (
+
+          date >= today &&
+
+          date <= end
+
+        );
+
+      }
+    );
+
+  }
+
+
+  /* MONTH */
+
+  if (
+    state.view === "month"
+  ) {
+
+
+    return all.filter(
+      lesson => {
+
+
+        const date =
+          parseDate(
+            lesson.date
+          );
+
+
+        return (
+
+          date.getFullYear() ===
+          today.getFullYear()
+
+          &&
+
+          date.getMonth() ===
+          today.getMonth()
+
+        );
+
+      }
+    );
+
+  }
+
+
+  /* =====================
+     NEAREST
+  ===================== */
+
+
+  return all
+
+    .filter(
+      lesson =>
+
+        parseDate(
+          lesson.date
+        ) >= today
+    )
+
+    .slice(
+      0,
+      8
+    );
+
+}
+
+
+/* =========================
+   RENDER CURRENT VIEW
+========================= */
+
+function renderCurrent() {
+
+
+  document
+    .querySelectorAll(".tab")
+    .forEach(
+      button => {
+
+
+        button.classList.toggle(
+
+          "active",
+
+          button.dataset.view ===
+          state.view
+
+        );
+
+
+      }
+    );
+
+
+  render(
+    viewItems()
+  );
+
+}
+
+
+/* =========================
+   LOAD
+========================= */
+
+async function load() {
+
+
+  const content =
+    document.getElementById(
+      "content"
+    );
+
+
+  content.innerHTML = `
+
+    <div class="loading">
+
+      Загружаю расписание…
+
+    </div>
+
+  `;
 
 
   try {
 
 
     const response =
+
       await fetch(
-        "schedule.json?t=" +
-        Date.now()
+
+        "./schedule.json?ts=" +
+        Date.now(),
+
+        {
+
+          cache:
+            "no-store"
+
+        }
+
       );
 
 
-    if(
+    if (
       !response.ok
     ) {
 
       throw new Error(
-        "Не удалось загрузить schedule.json"
+        "HTTP " +
+        response.status
       );
 
     }
@@ -3957,46 +2384,30 @@ async function loadSchedule() {
       await response.json();
 
 
-    if(
+    if (
       !Array.isArray(data)
     ) {
 
       throw new Error(
-        "schedule.json имеет неверный формат"
+        "schedule.json должен содержать массив"
       );
 
     }
 
 
-    schedule =
-      sortLessons(
-
-        data.filter(
-          lesson =>
-            lesson.date
-        )
-
-      );
+    state.data =
+      data;
 
 
-    updated.textContent =
-      "Обновлено в " +
-
-      new Date()
-        .toLocaleTimeString(
-          "ru-RU",
-          {
-            hour: "2-digit",
-            minute: "2-digit"
-          }
-        );
+    document
+      .getElementById(
+        "updatedText"
+      )
+      .textContent =
+      formatUpdated();
 
 
-    renderNextLesson();
-
-    renderStats();
-
-    renderSchedule();
+    renderCurrent();
 
 
   }
@@ -4004,22 +2415,49 @@ async function loadSchedule() {
   catch(error) {
 
 
-    console.error(
-      error
-    );
-
-
-    $("schedule").innerHTML = `
+    content.innerHTML = `
 
       <div class="error">
 
-        <strong>
-          Не удалось загрузить расписание
-        </strong>
 
-        ${escapeHtml(
+        <b>
+
+          Не удалось
+          загрузить расписание.
+
+        </b>
+
+
+        <br>
+        <br>
+
+
+        Проверь, что
+
+        <code>
+          index.html
+        </code>
+
+        и
+
+        <code>
+          schedule.json
+        </code>
+
+        лежат в одной папке
+        GitHub Pages.
+
+
+        <br>
+        <br>
+
+
+        Ошибка:
+
+        ${esc(
           error.message
         )}
+
 
       </div>
 
@@ -4028,186 +2466,65 @@ async function loadSchedule() {
 
   }
 
-  finally {
-
-
-    button.classList.remove(
-      "loading"
-    );
-
-
-    button.textContent =
-      "↻ Обновить";
-
-  }
-
 }
 
 
-/* =========================================================
-   TAB BUTTONS
-========================================================= */
+/* =========================
+   TAB CLICK
+========================= */
 
 document
-  .querySelectorAll(
-    ".tab"
+  .getElementById(
+    "tabs"
   )
-  .forEach(
-    button => {
-
-
-      button.addEventListener(
-        "click",
-        () => {
-
-
-          document
-            .querySelectorAll(
-              ".tab"
-            )
-            .forEach(
-              item =>
-                item.classList.remove(
-                  "active"
-                )
-            );
-
-
-          button.classList.add(
-            "active"
-          );
-
-
-          currentView =
-            button.dataset.view;
-
-
-          renderSchedule();
-
-
-          window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-          });
-
-
-        }
-      );
-
-
-    }
-  );
-
-
-/* =========================================================
-   CARD EXPANSION
-========================================================= */
-
-document.addEventListener(
-  "click",
-  event => {
-
-
-    const card =
-      event.target.closest(
-        ".lesson"
-      );
-
-
-    if(
-      !card
-    ) {
-
-      return;
-
-    }
-
-
-    /*
-      Закрываем остальные карточки,
-      чтобы одновременно не было
-      огромного количества раскрытых
-      блоков.
-    */
-
-    document
-      .querySelectorAll(
-        ".lesson.expanded"
-      )
-      .forEach(
-        item => {
-
-          if(
-            item !== card
-          ) {
-
-            item.classList.remove(
-              "expanded"
-            );
-
-          }
-
-        }
-      );
-
-
-    card.classList.toggle(
-      "expanded"
-    );
-
-
-  }
-);
-
-
-/* =========================================================
-   REFRESH BUTTON
-========================================================= */
-
-$("refreshButton")
   .addEventListener(
     "click",
-    loadSchedule
+    event => {
+
+
+      const button =
+        event.target.closest(
+          ".tab"
+        );
+
+
+      if (
+        !button
+      ) return;
+
+
+      state.view =
+        button.dataset.view;
+
+
+      renderCurrent();
+
+    }
   );
 
 
-/* =========================================================
-   INITIAL LOAD
-========================================================= */
+/* =========================
+   REFRESH
+========================= */
 
-loadSchedule();
-
-
-/* =========================================================
-   LIVE CLOCK / CURRENT LESSON
-========================================================= */
-
-setInterval(
-  () => {
-
-    renderNextLesson();
-
-    renderStats();
-
-    renderSchedule();
-
-  },
-  60 * 1000
-);
+document
+  .getElementById(
+    "refresh"
+  )
+  .addEventListener(
+    "click",
+    load
+  );
 
 
-/* =========================================================
-   DATA REFRESH
-========================================================= */
+/* =========================
+   START
+========================= */
 
-setInterval(
-  loadSchedule,
-  5 * 60 * 1000
-);
+load();
+
 
 </script>
 
-
 </body>
-
 </html>
