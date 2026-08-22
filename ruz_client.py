@@ -57,3 +57,7 @@ if __name__ == "__main__":
     print("\nРасписание на ближайшие 7 дней:")
     schedule = get_schedule(group_id)
     print(schedule)
+    import json
+
+    with open("schedule.json", "w", encoding="utf-8") as f:
+        json.dump(schedule, f, ensure_ascii=False, indent=2)
