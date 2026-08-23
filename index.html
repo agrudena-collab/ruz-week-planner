@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,viewport-fit=cover"
+>
 
 <title>РУЗ · МеждОт25-2</title>
 
@@ -85,13 +90,14 @@ body::before{
   background-size:38px 38px;
 }
 
-body.menu-open{
-  overflow:hidden;
-}
-
 button{
   font:inherit;
 }
+
+
+/* =========================
+   CONTAINER
+========================= */
 
 .container{
   width:min(
@@ -123,6 +129,7 @@ button{
   margin-bottom:20px;
 }
 
+
 .brand{
 
   display:flex;
@@ -131,6 +138,7 @@ button{
 
   align-items:center;
 }
+
 
 .logo{
 
@@ -159,6 +167,7 @@ button{
     rgba(79,140,255,.35);
 }
 
+
 .title{
 
   font-size:30px;
@@ -167,6 +176,7 @@ button{
 
   letter-spacing:-1px;
 }
+
 
 .group{
 
@@ -177,6 +187,7 @@ button{
   margin-top:3px;
 }
 
+
 .header-right{
 
   display:flex;
@@ -185,6 +196,7 @@ button{
 
   gap:10px;
 }
+
 
 .updated{
 
@@ -195,33 +207,17 @@ button{
 
 
 /* =========================
-   HEADER BUTTONS
+   MENU BUTTON
 ========================= */
-
-.menu-button,
-.refresh{
-
-  border:0;
-
-  cursor:pointer;
-
-  transition:
-    transform .2s,
-    opacity .2s;
-}
 
 .menu-button{
 
-  width:45px;
-  height:45px;
+  border:0;
 
-  display:grid;
+  width:52px;
+  height:52px;
 
-  place-items:center;
-
-  border-radius:14px;
-
-  color:var(--text);
+  border-radius:17px;
 
   background:
     rgba(255,255,255,.07);
@@ -229,18 +225,35 @@ button{
   border:
     1px solid var(--line);
 
-  font-size:22px;
+  color:white;
 
-  line-height:1;
+  font-size:25px;
+
+  display:grid;
+
+  place-items:center;
+
+  cursor:pointer;
+
+  transition:.2s;
 }
 
-.menu-button:active,
-.refresh:active{
+.menu-button:hover{
+  background:rgba(255,255,255,.12);
+}
 
+.menu-button:active{
   transform:scale(.95);
 }
 
+
+/* =========================
+   REFRESH
+========================= */
+
 .refresh{
+
+  border:0;
 
   border-radius:14px;
 
@@ -251,10 +264,21 @@ button{
   color:#080a0f;
 
   font-weight:800;
+
+  cursor:pointer;
+
+  transition:
+    transform .2s,
+    opacity .2s;
 }
 
-.refresh.loading{
 
+.refresh:active{
+  transform:scale(.95);
+}
+
+
+.refresh.loading{
   opacity:.55;
 }
 
@@ -269,76 +293,74 @@ button{
 
   inset:0;
 
-  z-index:100;
-
   background:
     rgba(0,0,0,.55);
 
+  backdrop-filter:blur(6px);
+
+  z-index:90;
+
   opacity:0;
 
-  visibility:hidden;
+  pointer-events:none;
 
-  transition:
-    opacity .25s ease,
-    visibility .25s ease;
-
-  backdrop-filter:blur(4px);
+  transition:.25s;
 }
+
 
 .menu-overlay.open{
 
   opacity:1;
 
-  visibility:visible;
+  pointer-events:auto;
 }
 
 
 .side-menu{
 
-  position:absolute;
+  position:fixed;
 
-  left:0;
+  z-index:100;
+
   top:0;
-  bottom:0;
+  right:0;
+
+  height:100vh;
 
   width:min(
-    330px,
-    86vw
+    360px,
+    88vw
   );
 
   padding:
-    22px
-    18px
-    30px;
+    24px
+    18px;
 
   background:
-    linear-gradient(
-      180deg,
-      rgba(20,24,35,.99),
-      rgba(9,12,19,.99)
-    );
+    rgba(14,17,26,.97);
 
-  border-right:
+  border-left:
     1px solid var(--line);
 
   box-shadow:
-    20px 0 60px
-    rgba(0,0,0,.4);
+    -20px 0 60px
+    rgba(0,0,0,.45);
 
   transform:
-    translateX(-100%);
+    translateX(100%);
 
   transition:
-    transform .3s
-    cubic-bezier(.2,.8,.2,1);
+    transform .28s ease;
 
   overflow-y:auto;
 }
 
-.menu-overlay.open .side-menu{
+
+.side-menu.open{
 
   transform:
     translateX(0);
+
 }
 
 
@@ -350,53 +372,35 @@ button{
 
   justify-content:space-between;
 
-  margin-bottom:28px;
+  margin-bottom:25px;
 }
+
 
 .menu-title{
 
-  font-size:20px;
+  font-size:22px;
 
   font-weight:900;
 }
 
-.menu-close{
 
-  width:40px;
-  height:40px;
+.menu-close{
 
   border:0;
 
-  border-radius:12px;
+  width:42px;
+  height:42px;
+
+  border-radius:13px;
 
   background:
     rgba(255,255,255,.07);
 
-  color:var(--text);
+  color:white;
 
-  font-size:22px;
+  font-size:24px;
 
   cursor:pointer;
-}
-
-
-.menu-group{
-
-  color:var(--muted);
-
-  font-size:11px;
-
-  font-weight:900;
-
-  text-transform:uppercase;
-
-  letter-spacing:1.2px;
-
-  margin:
-    0
-    0
-    10px
-    5px;
 }
 
 
@@ -406,7 +410,7 @@ button{
 
   flex-direction:column;
 
-  gap:5px;
+  gap:8px;
 }
 
 
@@ -414,23 +418,16 @@ button{
 
   width:100%;
 
-  display:flex;
+  border:1px solid transparent;
 
-  align-items:center;
+  border-radius:16px;
 
-  gap:13px;
+  padding:15px;
 
-  padding:
-    13px
-    14px;
+  background:
+    rgba(255,255,255,.045);
 
-  border:0;
-
-  border-radius:14px;
-
-  background:transparent;
-
-  color:#c7cedb;
+  color:#dce1ea;
 
   text-align:left;
 
@@ -438,81 +435,43 @@ button{
 
   cursor:pointer;
 
-  transition:
-    background .2s,
-    color .2s,
-    transform .2s;
+  transition:.2s;
 }
+
 
 .menu-item:hover{
 
   background:
-    rgba(255,255,255,.06);
+    rgba(255,255,255,.09);
 
-  color:#fff;
 }
 
-.menu-item:active{
-
-  transform:scale(.98);
-}
 
 .menu-item.active{
 
-  color:#fff;
+  background:#fff;
 
-  background:
-    rgba(79,140,255,.15);
+  color:#111;
 
-  box-shadow:
-    inset 0 0 0 1px
-    rgba(79,140,255,.18);
 }
 
 
-.menu-icon{
+.menu-item small{
 
-  width:30px;
-  height:30px;
+  display:block;
 
-  display:grid;
+  margin-top:4px;
 
-  place-items:center;
-
-  border-radius:10px;
-
-  background:
-    rgba(255,255,255,.06);
-
-  font-size:15px;
-
-  flex:none;
-}
-
-.menu-item.active .menu-icon{
-
-  background:
-    rgba(79,140,255,.2);
-}
-
-
-.menu-footer{
-
-  margin-top:30px;
-
-  padding:
-    14px;
-
-  border:
-    1px solid var(--line);
-
-  border-radius:16px;
-
-  color:#697286;
+  color:var(--muted);
 
   font-size:11px;
 
-  line-height:1.5;
+  font-weight:600;
+}
+
+
+.menu-item.active small{
+  color:#555;
 }
 
 
@@ -547,6 +506,7 @@ button{
   backdrop-filter:blur(20px);
 }
 
+
 .hero::after{
 
   content:"";
@@ -571,12 +531,14 @@ button{
   filter:blur(5px);
 }
 
+
 .hero-content{
 
   position:relative;
 
   z-index:1;
 }
+
 
 .eyebrow{
 
@@ -592,6 +554,7 @@ button{
 
   margin-bottom:12px;
 }
+
 
 .live{
 
@@ -616,6 +579,7 @@ button{
   margin-bottom:12px;
 }
 
+
 .dot{
 
   width:7px;
@@ -624,11 +588,8 @@ button{
   border-radius:50%;
 
   background:#07120d;
-
-  box-shadow:
-    0 0 0 5px
-    rgba(7,18,13,.12);
 }
+
 
 .hero-time{
 
@@ -643,6 +604,7 @@ button{
   margin-bottom:12px;
 }
 
+
 .hero-subject{
 
   font-size:28px;
@@ -654,6 +616,7 @@ button{
   margin-bottom:18px;
 }
 
+
 .chips{
 
   display:flex;
@@ -662,6 +625,7 @@ button{
 
   gap:8px;
 }
+
 
 .chip{
 
@@ -699,6 +663,7 @@ button{
   margin-bottom:20px;
 }
 
+
 .stat{
 
   border:
@@ -710,11 +675,8 @@ button{
   border-radius:20px;
 
   padding:17px;
-
-  box-shadow:
-    0 12px 30px
-    rgba(0,0,0,.18);
 }
+
 
 .stat-value{
 
@@ -722,6 +684,7 @@ button{
 
   font-weight:900;
 }
+
 
 .stat-label{
 
@@ -742,6 +705,7 @@ button{
   margin-bottom:34px;
 }
 
+
 .day-heading{
 
   display:flex;
@@ -756,6 +720,7 @@ button{
     11px;
 }
 
+
 .weekday{
 
   font-size:23px;
@@ -765,6 +730,7 @@ button{
   text-transform:capitalize;
 }
 
+
 .date{
 
   color:var(--muted);
@@ -773,6 +739,7 @@ button{
 
   margin-top:3px;
 }
+
 
 .count{
 
@@ -808,6 +775,7 @@ button{
   gap:11px;
 }
 
+
 .lesson{
 
   position:relative;
@@ -832,11 +800,9 @@ button{
     0 14px 35px
     rgba(0,0,0,.2);
 
-  transition:
-    transform .2s,
-    border-color .2s,
-    box-shadow .2s;
+  transition:.2s;
 }
+
 
 .lesson:hover{
 
@@ -845,11 +811,8 @@ button{
 
   border-color:
     rgba(255,255,255,.18);
-
-  box-shadow:
-    0 20px 45px
-    rgba(0,0,0,.3);
 }
+
 
 .lesson::before{
 
@@ -866,6 +829,7 @@ button{
   background:
     var(--accent,var(--blue));
 }
+
 
 .lesson::after{
 
@@ -889,6 +853,7 @@ button{
   filter:blur(15px);
 }
 
+
 .lesson.current{
 
   border-color:
@@ -902,6 +867,7 @@ button{
     rgba(39,223,145,.1);
 }
 
+
 .lesson-top{
 
   display:flex;
@@ -910,6 +876,7 @@ button{
 
   gap:12px;
 }
+
 
 .time{
 
@@ -920,6 +887,7 @@ button{
 
   font-size:15px;
 }
+
 
 .subject{
 
@@ -933,9 +901,8 @@ button{
     9px
     0
     13px;
-
-  max-width:90%;
 }
+
 
 .meta{
 
@@ -945,6 +912,7 @@ button{
 
   gap:7px;
 }
+
 
 .meta span{
 
@@ -963,6 +931,7 @@ button{
 
   border-radius:10px;
 }
+
 
 .badge{
 
@@ -1007,6 +976,7 @@ button{
   color:var(--muted);
 }
 
+
 .empty strong,
 .error strong{
 
@@ -1018,6 +988,7 @@ button{
 
   margin-bottom:7px;
 }
+
 
 .source{
 
@@ -1045,10 +1016,12 @@ button{
     padding-top:15px;
   }
 
+
   .title{
 
     font-size:26px;
   }
+
 
   .logo{
 
@@ -1056,15 +1029,27 @@ button{
     height:44px;
   }
 
+
   .updated{
 
     display:none;
   }
 
+
   .header-right{
 
     gap:6px;
   }
+
+
+  .menu-button{
+
+    width:45px;
+    height:45px;
+
+    border-radius:14px;
+  }
+
 
   .refresh{
 
@@ -1075,11 +1060,6 @@ button{
     font-size:12px;
   }
 
-  .menu-button{
-
-    width:42px;
-    height:42px;
-  }
 
   .hero{
 
@@ -1088,6 +1068,7 @@ button{
     border-radius:24px;
   }
 
+
   .hero-time{
 
     font-size:42px;
@@ -1095,15 +1076,18 @@ button{
     letter-spacing:-2px;
   }
 
+
   .hero-subject{
 
     font-size:22px;
   }
 
+
   .stats{
 
     gap:7px;
   }
+
 
   .stat{
 
@@ -1112,38 +1096,39 @@ button{
     border-radius:16px;
   }
 
+
   .stat-value{
 
     font-size:20px;
   }
+
 
   .stat-label{
 
     font-size:10px;
   }
 
+
   .grid{
 
     grid-template-columns:1fr;
   }
+
 
   .lesson{
 
     border-radius:19px;
   }
 
-  .side-menu{
-
-    width:86vw;
-  }
-
 }
 
 </style>
+
 </head>
 
 
 <body>
+
 
 <!-- =========================
      SIDE MENU
@@ -1152,161 +1137,138 @@ button{
 <div
   class="menu-overlay"
   id="menuOverlay"
+></div>
+
+
+<aside
+  class="side-menu"
+  id="sideMenu"
 >
 
-  <aside
-    class="side-menu"
-    id="sideMenu"
-  >
+  <div class="menu-header">
 
-    <div class="menu-header">
-
-      <div class="menu-title">
-        Расписание
-      </div>
-
-      <button
-        class="menu-close"
-        id="menuClose"
-        aria-label="Закрыть меню"
-      >
-        ×
-      </button>
-
+    <div class="menu-title">
+      Расписание
     </div>
 
+    <button
+      class="menu-close"
+      id="menuClose"
+    >
+      ×
+    </button>
 
-    <div class="menu-group">
-      Разделы
-    </div>
-
-
-    <div class="menu-items">
-
-      <button
-        class="menu-item active"
-        data-view="nearest"
-      >
-
-        <span class="menu-icon">
-          ⚡
-        </span>
-
-        <span>
-          Ближайшее
-        </span>
-
-      </button>
+  </div>
 
 
-      <button
-        class="menu-item"
-        data-view="today"
-      >
-
-        <span class="menu-icon">
-          📅
-        </span>
-
-        <span>
-          Сегодня
-        </span>
-
-      </button>
+  <div class="menu-items">
 
 
-      <button
-        class="menu-item"
-        data-view="tomorrow"
-      >
+    <button
+      class="menu-item active"
+      data-view="nearest"
+    >
 
-        <span class="menu-icon">
-          ➜
-        </span>
+      🏠 Ближайшее
 
-        <span>
-          Завтра
-        </span>
+      <small>
+        Главная страница
+      </small>
 
-      </button>
+    </button>
 
 
-      <button
-        class="menu-item"
-        data-view="week"
-      >
+    <button
+      class="menu-item"
+      data-view="today"
+    >
 
-        <span class="menu-icon">
-          ▦
-        </span>
+      📅 Сегодня
 
-        <span>
-          Неделя
-        </span>
+      <small>
+        Все пары сегодня
+      </small>
 
-      </button>
+    </button>
 
 
-      <button
-        class="menu-item"
-        data-view="month"
-      >
+    <button
+      class="menu-item"
+      data-view="tomorrow"
+    >
 
-        <span class="menu-icon">
-          ▣
-        </span>
+      ➡️ Завтра
 
-        <span>
-          Месяц
-        </span>
+      <small>
+        Расписание на завтра
+      </small>
 
-      </button>
+    </button>
 
 
-      <button
-        class="menu-item"
-        data-view="archive"
-      >
+    <button
+      class="menu-item"
+      data-view="week"
+    >
 
-        <span class="menu-icon">
-          🗃
-        </span>
+      🗓 Неделя
 
-        <span>
-          Архив
-        </span>
+      <small>
+        Ближайшие 7 дней
+      </small>
 
-      </button>
-
-    </div>
+    </button>
 
 
-    <div class="menu-footer">
+    <button
+      class="menu-item"
+      data-view="month"
+    >
 
-      МеждОт25-2 · РУЗ
+      📆 Месяц
 
-      <br>
+      <small>
+        Ближайшие 30 дней
+      </small>
 
-      Прошедшее расписание
-      сохраняется в архиве.
+    </button>
 
-    </div>
 
-  </aside>
+    <button
+      class="menu-item"
+      data-view="archive"
+    >
 
-</div>
+      🗄 Архив
+
+      <small>
+        Прошедшие занятия
+      </small>
+
+    </button>
+
+
+  </div>
+
+</aside>
 
 
 <div class="container">
 
 
+<!-- =========================
+     HEADER
+========================= -->
+
 <header class="header">
+
 
   <div class="brand">
 
     <div class="logo">
       R
     </div>
+
 
     <div>
 
@@ -1325,6 +1287,7 @@ button{
 
   <div class="header-right">
 
+
     <div
       class="updated"
       id="updated"
@@ -1335,8 +1298,8 @@ button{
 
     <button
       class="menu-button"
-      id="menuOpen"
-      aria-label="Открыть меню"
+      id="menuButton"
+      aria-label="Меню"
     >
       ☰
     </button>
@@ -1349,19 +1312,35 @@ button{
       ↻ Обновить
     </button>
 
+
   </div>
+
 
 </header>
 
 
+<!-- =========================
+     NEXT LESSON
+     ПОКАЗЫВАЕТСЯ ТОЛЬКО
+     НА "БЛИЖАЙШЕЕ"
+========================= -->
+
 <div id="nextLesson"></div>
 
+
+<!-- =========================
+     STATS
+========================= -->
 
 <div
   class="stats"
   id="stats"
 ></div>
 
+
+<!-- =========================
+     SCHEDULE
+========================= -->
 
 <main id="schedule">
 
@@ -1384,6 +1363,11 @@ button{
 
 <script>
 
+
+/* =========================
+   STATE
+========================= */
+
 let schedule = [];
 
 let archive = [];
@@ -1391,19 +1375,19 @@ let archive = [];
 let currentView = "nearest";
 
 
-const $ = id =>
-  document.getElementById(id);
+/* =========================
+   HELPERS
+========================= */
+
+const $ =
+  id =>
+    document.getElementById(id);
 
 
-const pad = n =>
-  String(n).padStart(2,"0");
+const pad =
+  n =>
+    String(n).padStart(2,"0");
 
-
-/*
-================================
-DATE
-================================
-*/
 
 function localDateString(
   d = new Date()
@@ -1473,31 +1457,39 @@ function formatWeekday(v){
 }
 
 
-/*
-================================
-SECURITY
-================================
-*/
-
 function esc(v){
 
   return String(
     v ?? ""
   )
-  .replace(/&/g,"&amp;")
-  .replace(/</g,"&lt;")
-  .replace(/>/g,"&gt;")
-  .replace(/"/g,"&quot;")
-  .replace(/'/g,"&#039;");
+
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+
+  .replace(
+    /</g,
+    "&lt;"
+  )
+
+  .replace(
+    />/g,
+    "&gt;"
+  )
+
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+
+  .replace(
+    /'/g,
+    "&#039;"
+  );
 
 }
 
-
-/*
-================================
-LESSON TIME
-================================
-*/
 
 function dt(
   lesson,
@@ -1517,16 +1509,21 @@ function current(lesson){
     new Date();
 
   return (
-    now >= dt(
+
+    now >=
+    dt(
       lesson,
       "beginLesson"
     )
+
     &&
+
     now <
     dt(
       lesson,
       "endLesson"
     )
+
   );
 
 }
@@ -1535,12 +1532,14 @@ function current(lesson){
 function ended(lesson){
 
   return (
+
     new Date()
     >=
     dt(
       lesson,
       "endLesson"
     )
+
   );
 
 }
@@ -1549,6 +1548,7 @@ function ended(lesson){
 function sort(lessons){
 
   return [...lessons].sort(
+
     (a,b) =>
 
       (a.date || "")
@@ -1568,11 +1568,9 @@ function sort(lessons){
 }
 
 
-/*
-================================
-SUBJECT ACCENT
-================================
-*/
+/* =========================
+   ACCENT
+========================= */
 
 function accent(
   subject = ""
@@ -1585,45 +1583,35 @@ function accent(
   if(
     /статист|математ|анализ/.test(s)
   ){
-
     return "#9b6cff";
-
   }
 
 
   if(
     /китай|кит|язык/.test(s)
   ){
-
     return "#ff5ca8";
-
   }
 
 
   if(
     /англ|english/.test(s)
   ){
-
     return "#42d9ff";
-
   }
 
 
   if(
     /бух|учет|финанс/.test(s)
   ){
-
     return "#ffd166";
-
   }
 
 
   if(
     /военн|физ|спорт/.test(s)
   ){
-
     return "#27df91";
-
   }
 
 
@@ -1632,11 +1620,9 @@ function accent(
 }
 
 
-/*
-================================
-NEXT LESSON
-================================
-*/
+/* =========================
+   NEXT LESSON
+========================= */
 
 function next(){
 
@@ -1677,13 +1663,38 @@ function next(){
 }
 
 
-function renderNext(){
+/* =========================
+   RENDER NEXT
+========================= */
 
-  const result =
-    next();
+function renderNext(){
 
   const container =
     $("nextLesson");
+
+
+  /*
+    ВАЖНО:
+
+    Блок "Следующая пара"
+    существует ТОЛЬКО
+    на домашней странице
+    "Ближайшее".
+  */
+
+  if(
+    currentView !== "nearest"
+  ){
+
+    container.innerHTML = "";
+
+    return;
+
+  }
+
+
+  const result =
+    next();
 
 
   if(!result){
@@ -1723,10 +1734,11 @@ function renderNext(){
 
       <div class="hero-content">
 
+
         ${
           result.current
 
-            ?
+          ?
 
           `
           <div class="live">
@@ -1738,7 +1750,7 @@ function renderNext(){
           </div>
           `
 
-            :
+          :
 
           `
           <div class="eyebrow">
@@ -1775,6 +1787,7 @@ function renderNext(){
 
         <div class="chips">
 
+
           <span class="chip">
 
             📅
@@ -1799,7 +1812,7 @@ function renderNext(){
           ${
             lesson.lecturer
 
-              ?
+            ?
 
             `
             <span class="chip">
@@ -1813,7 +1826,7 @@ function renderNext(){
             </span>
             `
 
-              :
+            :
 
             ""
           }
@@ -1822,7 +1835,7 @@ function renderNext(){
           ${
             lesson.auditorium
 
-              ?
+            ?
 
             `
             <span class="chip">
@@ -1836,7 +1849,7 @@ function renderNext(){
             </span>
             `
 
-              :
+            :
 
             ""
           }
@@ -1845,7 +1858,7 @@ function renderNext(){
           ${
             lesson.building
 
-              ?
+            ?
 
             `
             <span class="chip">
@@ -1859,10 +1872,11 @@ function renderNext(){
             </span>
             `
 
-              :
+            :
 
             ""
           }
+
 
         </div>
 
@@ -1875,11 +1889,9 @@ function renderNext(){
 }
 
 
-/*
-================================
-STATS
-================================
-*/
+/* =========================
+   STATS
+========================= */
 
 function renderStats(){
 
@@ -1896,6 +1908,7 @@ function renderStats(){
 
   const minutes =
     lessons.reduce(
+
       (
         total,
         lesson
@@ -1904,6 +1917,7 @@ function renderStats(){
         total +
 
         Math.max(
+
           0,
 
           (
@@ -1911,17 +1925,23 @@ function renderStats(){
               lesson,
               "endLesson"
             )
+
             -
+
             dt(
               lesson,
               "beginLesson"
             )
           )
+
           /
+
           60000
+
         ),
 
       0
+
     );
 
 
@@ -1974,11 +1994,11 @@ function renderStats(){
         ${
           hours
 
-            ?
+          ?
 
           `${hours}ч ${mins}м`
 
-            :
+          :
 
           `${mins}м`
         }
@@ -2009,11 +2029,9 @@ function renderStats(){
 }
 
 
-/*
-================================
-LESSON CARD
-================================
-*/
+/* =========================
+   LESSON CARD
+========================= */
 
 function lessonCard(
   lesson
@@ -2042,9 +2060,12 @@ function lessonCard(
 
     >
 
+
       <div class="lesson-top">
 
+
         <div>
+
 
           <div class="time">
 
@@ -2070,13 +2091,14 @@ function lessonCard(
 
           </div>
 
+
         </div>
 
 
         ${
           isNow
 
-            ?
+          ?
 
           `
           <div class="badge">
@@ -2084,20 +2106,22 @@ function lessonCard(
           </div>
           `
 
-            :
+          :
 
           ""
         }
+
 
       </div>
 
 
       <div class="meta">
 
+
         ${
           lesson.lecturer
 
-            ?
+          ?
 
           `
           <span>
@@ -2108,7 +2132,7 @@ function lessonCard(
           </span>
           `
 
-            :
+          :
 
           ""
         }
@@ -2117,7 +2141,7 @@ function lessonCard(
         ${
           lesson.auditorium
 
-            ?
+          ?
 
           `
           <span>
@@ -2128,7 +2152,7 @@ function lessonCard(
           </span>
           `
 
-            :
+          :
 
           ""
         }
@@ -2137,7 +2161,7 @@ function lessonCard(
         ${
           lesson.building
 
-            ?
+          ?
 
           `
           <span>
@@ -2148,12 +2172,14 @@ function lessonCard(
           </span>
           `
 
-            :
+          :
 
           ""
         }
 
+
       </div>
+
 
     </article>
 
@@ -2162,28 +2188,11 @@ function lessonCard(
 }
 
 
-/*
-================================
-FILTER
-================================
-*/
+/* =========================
+   FILTER
+========================= */
 
 function getLessons(){
-
-  /*
-  ARCHIVE
-  */
-
-  if(
-    currentView === "archive"
-  ){
-
-    return sort(
-      archive
-    );
-
-  }
-
 
   const today =
     new Date();
@@ -2194,6 +2203,54 @@ function getLessons(){
       today
     );
 
+
+  /* БЛИЖАЙШЕЕ */
+
+  if(
+    currentView === "nearest"
+  ){
+
+    const futureDates = [
+
+      ...new Set(
+
+        sort(schedule)
+
+          .filter(
+            x =>
+              x.date >=
+              todayString
+          )
+
+          .map(
+            x =>
+              x.date
+          )
+
+      )
+
+    ];
+
+
+    if(
+      !futureDates.length
+    ){
+
+      return [];
+
+    }
+
+
+    return schedule.filter(
+      x =>
+        x.date ===
+        futureDates[0]
+    );
+
+  }
+
+
+  /* СЕГОДНЯ */
 
   if(
     currentView === "today"
@@ -2207,6 +2264,8 @@ function getLessons(){
 
   }
 
+
+  /* ЗАВТРА */
 
   if(
     currentView === "tomorrow"
@@ -2230,6 +2289,8 @@ function getLessons(){
   }
 
 
+  /* НЕДЕЛЯ */
+
   if(
     currentView === "week"
   ){
@@ -2247,13 +2308,17 @@ function getLessons(){
       x =>
         x.date >=
         todayString
+
         &&
+
         x.date <=
         end
     );
 
   }
 
+
+  /* МЕСЯЦ */
 
   if(
     currentView === "month"
@@ -2272,7 +2337,9 @@ function getLessons(){
       x =>
         x.date >=
         todayString
+
         &&
+
         x.date <=
         end
     );
@@ -2280,51 +2347,27 @@ function getLessons(){
   }
 
 
-  const futureDates = [
-
-    ...new Set(
-
-      sort(schedule)
-
-        .filter(
-          x =>
-            x.date >=
-            todayString
-        )
-
-        .map(
-          x =>
-            x.date
-        )
-
-    )
-
-  ];
-
+  /* АРХИВ */
 
   if(
-    !futureDates.length
+    currentView === "archive"
   ){
 
-    return [];
+    return sort(
+      archive
+    );
 
   }
 
 
-  return schedule.filter(
-    x =>
-      x.date ===
-      futureDates[0]
-  );
+  return [];
 
 }
 
 
-/*
-================================
-RENDER
-================================
-*/
+/* =========================
+   RENDER SCHEDULE
+========================= */
 
 function renderSchedule(){
 
@@ -2340,45 +2383,20 @@ function renderSchedule(){
     !lessons.length
   ){
 
-    if(
-      currentView === "archive"
-    ){
+    container.innerHTML = `
 
-      container.innerHTML = `
+      <div class="empty">
 
-        <div class="empty">
+        <strong>
+          Занятий нет
+        </strong>
 
-          <strong>
-            Архив пока пуст
-          </strong>
+        В выбранном периоде
+        расписание свободно.
 
-          Прошедшие пары появятся здесь
-          автоматически.
+      </div>
 
-        </div>
-
-      `;
-
-    }
-
-    else{
-
-      container.innerHTML = `
-
-        <div class="empty">
-
-          <strong>
-            Занятий нет
-          </strong>
-
-          В выбранном периоде
-          расписание свободно.
-
-        </div>
-
-      `;
-
-    }
+    `;
 
     return;
 
@@ -2429,9 +2447,12 @@ function renderSchedule(){
 
           <section class="day">
 
+
             <div class="day-heading">
 
+
               <div>
+
 
                 <div class="weekday">
 
@@ -2454,6 +2475,7 @@ function renderSchedule(){
 
                 </div>
 
+
               </div>
 
 
@@ -2463,13 +2485,26 @@ function renderSchedule(){
 
                 ${
                   grouped[date].length === 1
-                    ? "пара"
-                    : grouped[date].length < 5
-                      ? "пары"
-                      : "пар"
+
+                  ?
+
+                  "пара"
+
+                  :
+
+                  grouped[date].length < 5
+
+                  ?
+
+                  "пары"
+
+                  :
+
+                  "пар"
                 }
 
               </div>
+
 
             </div>
 
@@ -2479,12 +2514,15 @@ function renderSchedule(){
               ${sort(
                 grouped[date]
               )
+
               .map(
                 lessonCard
               )
+
               .join("")}
 
             </div>
+
 
           </section>
 
@@ -2496,11 +2534,9 @@ function renderSchedule(){
 }
 
 
-/*
-================================
-LOAD
-================================
-*/
+/* =========================
+   LOAD SCHEDULE
+========================= */
 
 async function loadSchedule(){
 
@@ -2519,30 +2555,16 @@ async function loadSchedule(){
 
   try{
 
-    const cacheBust =
-      Date.now();
 
-
-    const [
-      scheduleResponse,
-      archiveResponse
-    ] = await Promise.all([
-
-      fetch(
+    const response =
+      await fetch(
         "schedule.json?t=" +
-        cacheBust
-      ),
-
-      fetch(
-        "archive.json?t=" +
-        cacheBust
-      )
-
-    ]);
+        Date.now()
+      );
 
 
     if(
-      !scheduleResponse.ok
+      !response.ok
     ){
 
       throw new Error(
@@ -2552,27 +2574,12 @@ async function loadSchedule(){
     }
 
 
-    if(
-      !archiveResponse.ok
-    ){
-
-      throw new Error(
-        "Не удалось загрузить archive.json"
-      );
-
-    }
-
-
-    const scheduleData =
-      await scheduleResponse.json();
-
-
-    const archiveData =
-      await archiveResponse.json();
+    const data =
+      await response.json();
 
 
     if(
-      !Array.isArray(scheduleData)
+      !Array.isArray(data)
     ){
 
       throw new Error(
@@ -2582,32 +2589,10 @@ async function loadSchedule(){
     }
 
 
-    if(
-      !Array.isArray(archiveData)
-    ){
-
-      throw new Error(
-        "Неверный формат archive.json"
-      );
-
-    }
-
-
     schedule =
       sort(
 
-        scheduleData.filter(
-          x =>
-            x.date
-        )
-
-      );
-
-
-    archive =
-      sort(
-
-        archiveData.filter(
+        data.filter(
           x =>
             x.date
         )
@@ -2634,10 +2619,12 @@ async function loadSchedule(){
 
     renderSchedule();
 
+
   }
 
 
   catch(error){
+
 
     $("schedule").innerHTML = `
 
@@ -2655,10 +2642,12 @@ async function loadSchedule(){
 
     `;
 
+
   }
 
 
   finally{
+
 
     button.classList.remove(
       "loading"
@@ -2668,103 +2657,121 @@ async function loadSchedule(){
     button.textContent =
       "↻ Обновить";
 
+
   }
 
 }
 
 
-/*
-================================
-MENU
-================================
-*/
+/* =========================
+   LOAD ARCHIVE
+========================= */
 
-const menuOverlay =
-  $("menuOverlay");
+async function loadArchive(){
 
-const menuOpen =
-  $("menuOpen");
+  try{
 
-const menuClose =
-  $("menuClose");
+    const response =
+      await fetch(
+        "archive.json?t=" +
+        Date.now()
+      );
 
+
+    if(
+      !response.ok
+    ){
+
+      archive = [];
+
+      return;
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    archive =
+      Array.isArray(data)
+      ? sort(data)
+      : [];
+
+
+  }
+
+  catch{
+
+    archive = [];
+
+  }
+
+}
+
+
+/* =========================
+   MENU
+========================= */
 
 function openMenu(){
 
-  menuOverlay.classList.add(
-    "open"
-  );
+  $("sideMenu")
+    .classList.add(
+      "open"
+    );
 
-  document.body.classList.add(
-    "menu-open"
-  );
+  $("menuOverlay")
+    .classList.add(
+      "open"
+    );
 
 }
 
 
 function closeMenu(){
 
-  menuOverlay.classList.remove(
-    "open"
-  );
+  $("sideMenu")
+    .classList.remove(
+      "open"
+    );
 
-  document.body.classList.remove(
-    "menu-open"
-  );
+  $("menuOverlay")
+    .classList.remove(
+      "open"
+    );
 
 }
 
 
-menuOpen.addEventListener(
-  "click",
-  openMenu
-);
+/* =========================
+   MENU BUTTON
+========================= */
+
+$("menuButton")
+  .addEventListener(
+    "click",
+    openMenu
+  );
 
 
-menuClose.addEventListener(
-  "click",
-  closeMenu
-);
+$("menuClose")
+  .addEventListener(
+    "click",
+    closeMenu
+  );
 
 
-menuOverlay.addEventListener(
-  "click",
-  event => {
-
-    if(
-      event.target ===
-      menuOverlay
-    ){
-
-      closeMenu();
-
-    }
-
-  }
-);
+$("menuOverlay")
+  .addEventListener(
+    "click",
+    closeMenu
+  );
 
 
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if(
-      event.key === "Escape"
-    ){
-
-      closeMenu();
-
-    }
-
-  }
-);
-
-
-/*
-================================
-MENU ITEMS
-================================
-*/
+/* =========================
+   MENU ITEMS
+========================= */
 
 document
   .querySelectorAll(
@@ -2775,7 +2782,8 @@ document
 
       button.addEventListener(
         "click",
-        () => {
+        async () => {
+
 
           document
             .querySelectorAll(
@@ -2800,7 +2808,34 @@ document
 
           closeMenu();
 
+
+          /*
+            ВАЖНО:
+
+            renderNext() вызывается
+            при каждом переключении.
+
+            Поэтому при переходе
+            с "Ближайшее" на любой
+            другой раздел карточка
+            "Следующая пара"
+            исчезает.
+          */
+
+          renderNext();
+
           renderSchedule();
+
+
+          if(
+            currentView === "archive"
+          ){
+
+            await loadArchive();
+
+            renderSchedule();
+
+          }
 
         }
       );
@@ -2809,32 +2844,60 @@ document
 );
 
 
-/*
-================================
-REFRESH
-================================
-*/
+/* =========================
+   REFRESH
+========================= */
 
 $("refreshButton")
   .addEventListener(
     "click",
-    loadSchedule
+    async () => {
+
+      await loadSchedule();
+
+      if(
+        currentView === "archive"
+      ){
+
+        await loadArchive();
+
+        renderSchedule();
+
+      }
+
+    }
   );
 
 
-/*
-================================
-START
-================================
-*/
+/* =========================
+   START
+========================= */
 
-loadSchedule();
+async function start(){
+
+  /*
+    Всегда начинаем
+    с домашней страницы.
+  */
+
+  currentView =
+    "nearest";
 
 
-/*
-Проверяем текущую пару
-каждую минуту.
-*/
+  await loadArchive();
+
+  await loadSchedule();
+
+}
+
+
+start();
+
+
+/* =========================
+   CURRENT LESSON
+   UPDATE EVERY MINUTE
+========================= */
 
 setInterval(
   () => {
@@ -2850,15 +2913,16 @@ setInterval(
 );
 
 
-/*
-Проверяем новые данные
-каждые 5 минут.
-*/
+/* =========================
+   NEW SCHEDULE DATA
+   EVERY 5 MINUTES
+========================= */
 
 setInterval(
   loadSchedule,
   5 * 60 * 1000
 );
+
 
 </script>
 
