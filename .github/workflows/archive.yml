@@ -1,0 +1,113 @@
+name: Archive passed lessons
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Каждый день в 03:10 по Москве
+    - cron: "10 0 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Archive passed lessons
+        shell: python
+        run: |
+          import json
+          from pathlib import Path
+          from datetime import datetime
+
+          schedule_file = Path("schedule.json")
+          archive_file = Path("archive.json")
+
+          if not schedule_file.exists():
+              raise SystemExit("schedule.json not found")
+
+          if not archive_file.exists():
+              archive_file.write_text("[]", encoding="utf-8")
+
+          with schedule_file.open("r", encoding="utf-8") as f:
+              schedule = json.load(f)
+
+          with archive_file.open("r", encoding="utf-8") as f:
+              archive = json.load(f)
+
+          if not isinstance(schedule, list):
+              raise SystemExit("schedule.json must contain an array")
+
+          if not isinstance(archive, list):
+              raise SystemExit("archive.json must contain an array")
+
+          # Дата по Москве.
+          # GitHub Actions работает в UTC, поэтому здесь
+          # явно используем московское время.
+          from zoneinfo import ZoneInfo
+
+          today = datetime.now(
+              ZoneInfo("Europe/Moscow")
+          ).date().isoformat()
+
+          def lesson_key(lesson):
+              return (
+                  lesson.get("date", ""),
+                  lesson.get("beginLesson", ""),
+                  lesson.get("endLesson", ""),
+                  lesson.get("discipline", ""),
+                  lesson.get("lecturer", ""),
+                  lesson.get("auditorium", ""),
+                  lesson.get("building", ""),
+                  lesson.get("typeLesson", "")
+              )
+
+          existing = {
+              lesson_key(lesson)
+              for lesson in archive
+          }
+
+          added = 0
+
+          for lesson in schedule:
+              lesson_date = lesson.get("date")
+
+              if not lesson_date:
+                  continue
+
+              # В архив попадают только полностью прошедшие даты.
+              if lesson_date >= today:
+                  continue
+
+              key = lesson_key(lesson)
+
+              if key in existing:
+                  continue
+
+              archive.append(lesson)
+              existing.add(key)
+              added += 1
+
+          archive.sort(
+              key=lambda lesson: (
+                  lesson.get("date", ""),
+                  lesson.get("beginLesson", "")
+              )
+          )
+
+          with archive_file.open("w", encoding="utf-8") as f:
+              json.dump(
+                  archive,
+                  f,
+                  ensure_ascii=False,
+                  indent=2
+              )
+              f.write("\n")
+
+          print(f"Today's date in Moscow: {today}")
+          print(f"New lessons archived: {added}")
+          print(f"Total archived lessons: {len(archive)}")
