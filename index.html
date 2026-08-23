@@ -35,15 +35,14 @@
   href="icon.png"
 >
 
-<link
-  rel="manifest"
-  href="manifest.json"
->
-
 <title>Расписание · МеждОт25-2</title>
 
 
 <style>
+
+/* =========================================
+   ROOT
+========================================= */
 
 :root{
 
@@ -68,6 +67,10 @@
 
 }
 
+
+/* =========================================
+   RESET
+========================================= */
 
 *{
   box-sizing:border-box;
@@ -113,6 +116,9 @@ body{
   padding-top:
     env(safe-area-inset-top);
 
+  padding-bottom:
+    env(safe-area-inset-bottom);
+
 }
 
 
@@ -151,227 +157,9 @@ button{
 }
 
 
-/* =================================
-   MENU
-================================= */
-
-.menu-overlay{
-
-  position:fixed;
-
-  inset:0;
-
-  background:rgba(0,0,0,.48);
-
-  backdrop-filter:blur(4px);
-
-  z-index:90;
-
-  opacity:0;
-
-  visibility:hidden;
-
-  transition:.25s;
-
-}
-
-
-.menu-overlay.open{
-
-  opacity:1;
-
-  visibility:visible;
-
-}
-
-
-.side-menu{
-
-  position:fixed;
-
-  z-index:100;
-
-  left:0;
-
-  top:0;
-
-  bottom:0;
-
-  width:min(
-    330px,
-    86vw
-  );
-
-  padding:
-
-    calc(
-      20px + env(safe-area-inset-top)
-    )
-
-    18px
-
-    calc(
-      25px + env(safe-area-inset-bottom)
-    );
-
-  background:
-
-    linear-gradient(
-      145deg,
-      rgba(18,22,34,.98),
-      rgba(8,11,18,.99)
-    );
-
-  border-right:
-    1px solid
-    var(--line);
-
-  box-shadow:
-    25px 0 70px
-    rgba(0,0,0,.45);
-
-  transform:
-    translateX(-105%);
-
-  transition:
-    transform .28s
-    cubic-bezier(.2,.8,.2,1);
-
-}
-
-
-.side-menu.open{
-
-  transform:
-    translateX(0);
-
-}
-
-
-.menu-header{
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:space-between;
-
-  margin-bottom:25px;
-
-}
-
-
-.menu-title{
-
-  font-size:22px;
-
-  font-weight:900;
-
-}
-
-
-.menu-close{
-
-  width:42px;
-
-  height:42px;
-
-  border:0;
-
-  border-radius:14px;
-
-  background:
-    rgba(255,255,255,.07);
-
-  color:white;
-
-  font-size:23px;
-
-  cursor:pointer;
-
-}
-
-
-.menu-list{
-
-  display:flex;
-
-  flex-direction:column;
-
-  gap:7px;
-
-}
-
-
-.menu-item{
-
-  width:100%;
-
-  border:0;
-
-  border-radius:16px;
-
-  padding:15px;
-
-  text-align:left;
-
-  color:#cbd1dd;
-
-  background:transparent;
-
-  font-weight:800;
-
-  cursor:pointer;
-
-  transition:.2s;
-
-}
-
-
-.menu-item:hover{
-
-  background:
-    rgba(255,255,255,.06);
-
-  color:white;
-
-}
-
-
-.menu-item.active{
-
-  color:#111;
-
-  background:white;
-
-}
-
-
-.menu-item-icon{
-
-  display:inline-block;
-
-  width:28px;
-
-  font-size:18px;
-
-}
-
-
-.menu-divider{
-
-  height:1px;
-
-  background:var(--line);
-
-  margin:10px 0;
-
-}
-
-
-/* =================================
+/* =========================================
    CONTAINER
-================================= */
+========================================= */
 
 .container{
 
@@ -383,25 +171,24 @@ button{
   margin:auto;
 
   padding:
-
-    15px
+    18px
     0
     80px;
 
 }
 
 
-/* =================================
+/* =========================================
    HEADER
-================================= */
+========================================= */
 
 .header{
 
   display:flex;
 
-  align-items:center;
-
   justify-content:space-between;
+
+  align-items:center;
 
   margin-bottom:20px;
 
@@ -414,35 +201,57 @@ button{
 
   align-items:center;
 
-  gap:12px;
+  gap:13px;
 
 }
 
 
+/*
+  Теперь вместо буквы R —
+  кнопка меню.
+*/
+
 .menu-button{
 
-  width:48px;
+  width:50px;
 
-  height:48px;
+  height:50px;
 
   border:1px solid var(--line);
 
-  border-radius:16px;
+  border-radius:17px;
 
   background:
-    rgba(255,255,255,.07);
+    linear-gradient(
+      135deg,
+      rgba(79,140,255,.25),
+      rgba(155,108,255,.25)
+    );
 
   color:white;
-
-  font-size:23px;
-
-  cursor:pointer;
 
   display:grid;
 
   place-items:center;
 
-  flex-shrink:0;
+  font-size:25px;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 10px 35px
+    rgba(79,140,255,.18);
+
+  transition:
+    transform .2s,
+    background .2s;
+
+}
+
+
+.menu-button:active{
+
+  transform:scale(.94);
 
 }
 
@@ -505,6 +314,17 @@ button{
 
   cursor:pointer;
 
+  transition:
+    transform .2s,
+    opacity .2s;
+
+}
+
+
+.refresh:active{
+
+  transform:scale(.95);
+
 }
 
 
@@ -515,9 +335,261 @@ button{
 }
 
 
-/* =================================
+/* =========================================
+   SIDE MENU
+========================================= */
+
+.menu-overlay{
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:100;
+
+  background:
+    rgba(0,0,0,.58);
+
+  backdrop-filter:blur(7px);
+
+  opacity:0;
+
+  pointer-events:none;
+
+  transition:
+    opacity .25s;
+
+}
+
+
+.menu-overlay.open{
+
+  opacity:1;
+
+  pointer-events:auto;
+
+}
+
+
+.side-menu{
+
+  position:fixed;
+
+  left:0;
+
+  top:0;
+
+  bottom:0;
+
+  z-index:101;
+
+  width:min(
+    380px,
+    88vw
+  );
+
+  background:
+
+    linear-gradient(
+      160deg,
+      #101421,
+      #090b12
+    );
+
+  border-right:
+    1px solid
+    rgba(255,255,255,.08);
+
+  box-shadow:
+    25px 0 70px
+    rgba(0,0,0,.45);
+
+  transform:
+    translateX(-105%);
+
+  transition:
+    transform .28s
+    cubic-bezier(.22,.8,.25,1);
+
+  padding:
+
+    calc(
+      20px +
+      env(safe-area-inset-top)
+    )
+
+    20px
+
+    calc(
+      20px +
+      env(safe-area-inset-bottom)
+    );
+
+}
+
+
+.side-menu.open{
+
+  transform:
+    translateX(0);
+
+}
+
+
+.menu-header{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  margin-bottom:25px;
+
+}
+
+
+.menu-title{
+
+  font-size:25px;
+
+  font-weight:900;
+
+}
+
+
+.menu-close{
+
+  width:44px;
+
+  height:44px;
+
+  border:1px solid var(--line);
+
+  border-radius:14px;
+
+  background:
+    rgba(255,255,255,.055);
+
+  color:white;
+
+  font-size:25px;
+
+  cursor:pointer;
+
+}
+
+
+.menu-list{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:7px;
+
+}
+
+
+.menu-item{
+
+  width:100%;
+
+  border:0;
+
+  background:transparent;
+
+  color:#b9c0ce;
+
+  text-align:left;
+
+  padding:14px 16px;
+
+  border-radius:15px;
+
+  font-size:17px;
+
+  font-weight:800;
+
+  cursor:pointer;
+
+  transition:
+    background .2s,
+    color .2s,
+    transform .2s;
+
+}
+
+
+.menu-item:hover{
+
+  color:white;
+
+  background:
+    rgba(255,255,255,.055);
+
+}
+
+
+.menu-item:active{
+
+  transform:scale(.98);
+
+}
+
+
+.menu-item.active{
+
+  color:#111;
+
+  background:#fff;
+
+  box-shadow:
+    0 7px 25px
+    rgba(255,255,255,.1);
+
+}
+
+
+.menu-divider{
+
+  height:1px;
+
+  background:
+    var(--line);
+
+  margin:
+    8px 0;
+
+}
+
+
+.menu-footer{
+
+  position:absolute;
+
+  left:20px;
+
+  right:20px;
+
+  bottom:
+    calc(
+      20px +
+      env(safe-area-inset-bottom)
+    );
+
+  color:#606878;
+
+  text-align:center;
+
+  font-size:11px;
+
+}
+
+
+/* =========================================
    HERO
-================================= */
+========================================= */
 
 .hero{
 
@@ -543,6 +615,8 @@ button{
     );
 
   box-shadow:var(--shadow);
+
+  backdrop-filter:blur(20px);
 
 }
 
@@ -637,6 +711,10 @@ button{
 
   background:#07120d;
 
+  box-shadow:
+    0 0 0 5px
+    rgba(7,18,13,.12);
+
 }
 
 
@@ -700,9 +778,9 @@ button{
 }
 
 
-/* =================================
+/* =========================================
    STATS
-================================= */
+========================================= */
 
 .stats{
 
@@ -713,7 +791,7 @@ button{
 
   gap:10px;
 
-  margin-bottom:20px;
+  margin-bottom:27px;
 
 }
 
@@ -729,6 +807,10 @@ button{
   border-radius:20px;
 
   padding:17px;
+
+  box-shadow:
+    0 12px 30px
+    rgba(0,0,0,.18);
 
 }
 
@@ -753,40 +835,9 @@ button{
 }
 
 
-/* =================================
-   PAGE TITLE
-================================= */
-
-.page-title{
-
-  margin-bottom:22px;
-
-}
-
-
-.page-title h1{
-
-  margin:0;
-
-  font-size:32px;
-
-  font-weight:950;
-
-}
-
-
-.page-title p{
-
-  margin:6px 0 0;
-
-  color:var(--muted);
-
-}
-
-
-/* =================================
+/* =========================================
    DAYS
-================================= */
+========================================= */
 
 .day{
 
@@ -854,9 +905,9 @@ button{
 }
 
 
-/* =================================
+/* =========================================
    CARDS
-================================= */
+========================================= */
 
 .grid{
 
@@ -894,6 +945,26 @@ button{
   box-shadow:
     0 14px 35px
     rgba(0,0,0,.2);
+
+  transition:
+    transform .2s,
+    border-color .2s,
+    box-shadow .2s;
+
+}
+
+
+.lesson:hover{
+
+  transform:
+    translateY(-3px);
+
+  border-color:
+    rgba(255,255,255,.18);
+
+  box-shadow:
+    0 20px 45px
+    rgba(0,0,0,.3);
 
 }
 
@@ -992,7 +1063,9 @@ button{
   line-height:1.18;
 
   margin:
-    9px 0 13px;
+    9px
+    0
+    13px;
 
   max-width:90%;
 
@@ -1050,96 +1123,16 @@ button{
 }
 
 
-/* =================================
-   ARCHIVE
-================================= */
-
-.archive-header{
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:space-between;
-
-  margin-bottom:20px;
-
-}
-
-
-.archive-header h1{
-
-  margin:0;
-
-  font-size:32px;
-
-  font-weight:950;
-
-}
-
-
-.archive-count{
-
-  color:#b8c0cf;
-
-  background:
-    rgba(255,255,255,.055);
-
-  border:
-    1px solid var(--line);
-
-  padding:8px 11px;
-
-  border-radius:12px;
-
-  font-size:12px;
-
-  font-weight:800;
-
-}
-
-
-.archive-empty{
-
-  padding:50px 20px;
-
-  text-align:center;
-
-  border:
-    1px solid var(--line);
-
-  border-radius:22px;
-
-  background:
-    rgba(16,19,28,.75);
-
-  color:var(--muted);
-
-}
-
-
-.archive-empty strong{
-
-  display:block;
-
-  color:var(--text);
-
-  font-size:20px;
-
-  margin-bottom:8px;
-
-}
-
-
-/* =================================
+/* =========================================
    EMPTY / ERROR
-================================= */
+========================================= */
 
 .empty,
 .error{
 
   padding:
-    45px 20px;
+    45px
+    20px;
 
   text-align:center;
 
@@ -1170,6 +1163,43 @@ button{
 }
 
 
+/* =========================================
+   ARCHIVE HEADER
+========================================= */
+
+.archive-header{
+
+  margin-bottom:20px;
+
+}
+
+
+.archive-title{
+
+  font-size:30px;
+
+  font-weight:900;
+
+  letter-spacing:-1px;
+
+}
+
+
+.archive-subtitle{
+
+  color:var(--muted);
+
+  margin-top:5px;
+
+  font-size:13px;
+
+}
+
+
+/* =========================================
+   SOURCE
+========================================= */
+
 .source{
 
   text-align:center;
@@ -1183,11 +1213,19 @@ button{
 }
 
 
-/* =================================
+/* =========================================
    MOBILE
-================================= */
+========================================= */
 
 @media(max-width:700px){
+
+  body{
+
+    padding-top:
+      env(safe-area-inset-top);
+
+  }
+
 
   .container{
 
@@ -1199,20 +1237,29 @@ button{
   }
 
 
-  .title{
-
-    font-size:25px;
-
-  }
-
-
   .menu-button{
 
     width:44px;
 
     height:44px;
 
-    border-radius:15px;
+    border-radius:14px;
+
+    font-size:22px;
+
+  }
+
+
+  .title{
+
+    font-size:24px;
+
+  }
+
+
+  .group{
+
+    font-size:13px;
 
   }
 
@@ -1227,7 +1274,10 @@ button{
   .refresh{
 
     padding:
-      10px 12px;
+      10px
+      12px;
+
+    font-size:12px;
 
   }
 
@@ -1301,14 +1351,60 @@ button{
   }
 
 
-  .archive-header h1{
+  .weekday{
 
-    font-size:27px;
+    font-size:22px;
+
+  }
+
+
+  .side-menu{
+
+    width:
+      min(
+        350px,
+        86vw
+      );
 
   }
 
 }
 
+
+/* =========================================
+   VERY SMALL PHONES
+========================================= */
+
+@media(max-width:380px){
+
+  .title{
+
+    font-size:21px;
+
+  }
+
+
+  .group{
+
+    font-size:11px;
+
+  }
+
+
+  .refresh{
+
+    font-size:11px;
+
+  }
+
+
+  .hero-time{
+
+    font-size:36px;
+
+  }
+
+}
 
 </style>
 
@@ -1318,9 +1414,9 @@ button{
 <body>
 
 
-<!-- =================================
-     MENU
-================================= -->
+<!-- =======================================
+     SIDE MENU
+======================================= -->
 
 <div
   class="menu-overlay"
@@ -1342,6 +1438,7 @@ button{
     <button
       class="menu-close"
       id="menuClose"
+      aria-label="Закрыть меню"
     >
       ×
     </button>
@@ -1355,13 +1452,7 @@ button{
       class="menu-item active"
       data-view="nearest"
     >
-
-      <span class="menu-item-icon">
-        🏠
-      </span>
-
-      Ближайшее
-
+      🏠&nbsp; Ближайшее
     </button>
 
 
@@ -1369,13 +1460,7 @@ button{
       class="menu-item"
       data-view="today"
     >
-
-      <span class="menu-item-icon">
-        📅
-      </span>
-
-      Сегодня
-
+      📅&nbsp; Сегодня
     </button>
 
 
@@ -1383,13 +1468,7 @@ button{
       class="menu-item"
       data-view="tomorrow"
     >
-
-      <span class="menu-item-icon">
-        🌅
-      </span>
-
-      Завтра
-
+      ➡️&nbsp; Завтра
     </button>
 
 
@@ -1397,13 +1476,7 @@ button{
       class="menu-item"
       data-view="week"
     >
-
-      <span class="menu-item-icon">
-        📆
-      </span>
-
-      Неделя
-
+      📆&nbsp; Неделя
     </button>
 
 
@@ -1411,43 +1484,40 @@ button{
       class="menu-item"
       data-view="month"
     >
-
-      <span class="menu-item-icon">
-        🗓️
-      </span>
-
-      Месяц
-
+      🗓️&nbsp; Месяц
     </button>
 
 
     <div class="menu-divider"></div>
 
 
+    <!-- НОВЫЙ РАЗДЕЛ -->
+
     <button
       class="menu-item"
       data-view="archive"
     >
-
-      <span class="menu-item-icon">
-        🗄️
-      </span>
-
-      Архив
-
+      🗄️&nbsp; Архив
     </button>
 
   </nav>
 
+
+  <div class="menu-footer">
+
+    МеждОт25-2 · РУЗ
+
+  </div>
+
 </aside>
 
 
+<!-- =======================================
+     MAIN
+======================================= -->
+
 <div class="container">
 
-
-<!-- =================================
-     HEADER
-================================= -->
 
 <header class="header">
 
@@ -1455,14 +1525,14 @@ button{
   <div class="brand">
 
 
+    <!-- КНОПКА МЕНЮ СЛЕВА -->
+
     <button
       class="menu-button"
       id="menuOpen"
       aria-label="Открыть меню"
     >
-
       ☰
-
     </button>
 
 
@@ -1477,7 +1547,6 @@ button{
       </div>
 
     </div>
-
 
   </div>
 
@@ -1503,21 +1572,41 @@ button{
 
   </div>
 
-
 </header>
 
 
-<!-- =================================
-     CONTENT
-================================= -->
+<!-- =======================================
+     NEXT LESSON
+     ПОКАЗЫВАЕТСЯ ТОЛЬКО В БЛИЖАЙШЕМ
+======================================= -->
 
-<div id="appContent">
+<div id="nextLesson"></div>
+
+
+<!-- =======================================
+     STATS
+     ПОКАЗЫВАЕТСЯ ТОЛЬКО В БЛИЖАЙШЕМ И СЕГОДНЯ
+======================================= -->
+
+<div
+  class="stats"
+  id="stats"
+></div>
+
+
+<!-- =======================================
+     CONTENT
+======================================= -->
+
+<main id="schedule">
 
   <div class="empty">
+
     Загрузка расписания...
+
   </div>
 
-</div>
+</main>
 
 
 <div class="source">
@@ -1532,6 +1621,9 @@ button{
 
 <script>
 
+/* =========================================
+   DATA
+========================================= */
 
 let schedule = [];
 
@@ -1540,22 +1632,16 @@ let archive = [];
 let currentView = "nearest";
 
 
+/* =========================================
+   HELPERS
+========================================= */
+
 const $ = id =>
   document.getElementById(id);
 
 
-/* =================================
-   DATE
-================================= */
-
-function pad(n){
-
-  return String(n).padStart(
-    2,
-    "0"
-  );
-
-}
+const pad = n =>
+  String(n).padStart(2,"0");
 
 
 function localDateString(
@@ -1565,10 +1651,18 @@ function localDateString(
   return (
 
     d.getFullYear()
+
     + "-"
-    + pad(d.getMonth()+1)
+
+    + pad(
+      d.getMonth() + 1
+    )
+
     + "-"
-    + pad(d.getDate())
+
+    + pad(
+      d.getDate()
+    )
 
   );
 
@@ -1628,10 +1722,6 @@ function formatWeekday(v){
 }
 
 
-/* =================================
-   SECURITY
-================================= */
-
 function esc(v){
 
   return String(
@@ -1666,19 +1756,13 @@ function esc(v){
 }
 
 
-/* =================================
-   TIME
-================================= */
-
 function dt(
   lesson,
   field
 ){
 
   return new Date(
-
     `${lesson.date}T${lesson[field]}:00`
-
   );
 
 }
@@ -1715,7 +1799,9 @@ function ended(lesson){
   return (
 
     new Date()
+
     >=
+
     dt(
       lesson,
       "endLesson"
@@ -1726,10 +1812,6 @@ function ended(lesson){
 }
 
 
-/* =================================
-   SORT
-================================= */
-
 function sort(lessons){
 
   return [...lessons].sort(
@@ -1737,25 +1819,25 @@ function sort(lessons){
     (a,b) =>
 
       (a.date || "")
-      .localeCompare(
-        b.date || ""
-      )
+        .localeCompare(
+          b.date || ""
+        )
 
       ||
 
       (a.beginLesson || "")
-      .localeCompare(
-        b.beginLesson || ""
-      )
+        .localeCompare(
+          b.beginLesson || ""
+        )
 
   );
 
 }
 
 
-/* =================================
+/* =========================================
    ACCENT
-================================= */
+========================================= */
 
 function accent(
   subject = ""
@@ -1815,9 +1897,9 @@ function accent(
 }
 
 
-/* =================================
-   NEXT
-================================= */
+/* =========================================
+   NEXT LESSON
+========================================= */
 
 function next(){
 
@@ -1834,8 +1916,11 @@ function next(){
   if(c){
 
     return {
+
       lesson:c,
+
       current:true
+
     };
 
   }
@@ -1850,19 +1935,22 @@ function next(){
 
   return n
 
-    ? {
+    ?
+
+      {
+
         lesson:n,
+
         current:false
+
       }
 
-    : null;
+    :
+
+      null;
 
 }
 
-
-/* =================================
-   HERO
-================================= */
 
 function renderNext(){
 
@@ -1870,9 +1958,13 @@ function renderNext(){
     next();
 
 
+  const container =
+    $("nextLesson");
+
+
   if(!result){
 
-    return `
+    container.innerHTML = `
 
       <section class="hero">
 
@@ -1892,6 +1984,8 @@ function renderNext(){
 
     `;
 
+    return;
+
   }
 
 
@@ -1899,7 +1993,7 @@ function renderNext(){
     result.lesson;
 
 
-  return `
+  container.innerHTML = `
 
     <section class="hero">
 
@@ -1909,25 +2003,30 @@ function renderNext(){
         ${
           result.current
 
-          ?
+            ?
 
           `
-          <div class="live">
 
-            <span class="dot"></span>
+            <div class="live">
 
-            СЕЙЧАС ИДЁТ
+              <span class="dot"></span>
 
-          </div>
-          `
+              СЕЙЧАС ИДЁТ
 
-          :
+            </div>
 
           `
-          <div class="eyebrow">
-            Следующая пара
-          </div>
+
+            :
+
           `
+
+            <div class="eyebrow">
+              Следующая пара
+            </div>
+
+          `
+
         }
 
 
@@ -1983,69 +2082,78 @@ function renderNext(){
           ${
             lesson.lecturer
 
-            ?
+              ?
 
             `
-            <span class="chip">
 
-              👨‍🏫
+              <span class="chip">
 
-              ${esc(
-                lesson.lecturer
-              )}
+                👨‍🏫
 
-            </span>
+                ${esc(
+                  lesson.lecturer
+                )}
+
+              </span>
+
             `
 
-            :
+              :
 
             ""
+
           }
 
 
           ${
             lesson.auditorium
 
-            ?
+              ?
 
             `
-            <span class="chip">
 
-              🏫
+              <span class="chip">
 
-              ${esc(
-                lesson.auditorium
-              )}
+                🏫
 
-            </span>
+                ${esc(
+                  lesson.auditorium
+                )}
+
+              </span>
+
             `
 
-            :
+              :
 
             ""
+
           }
 
 
           ${
             lesson.building
 
-            ?
+              ?
 
             `
-            <span class="chip">
 
-              📍
+              <span class="chip">
 
-              ${esc(
-                lesson.building
-              )}
+                📍
 
-            </span>
+                ${esc(
+                  lesson.building
+                )}
+
+              </span>
+
             `
 
-            :
+              :
 
             ""
+
           }
 
 
@@ -2060,9 +2168,9 @@ function renderNext(){
 }
 
 
-/* =================================
+/* =========================================
    STATS
-================================= */
+========================================= */
 
 function renderStats(){
 
@@ -2145,61 +2253,66 @@ function renderStats(){
     ).size;
 
 
-  return `
+  $("stats").innerHTML = `
 
-    <div class="stats">
+    <div class="stat">
 
+      <div class="stat-value">
 
-      <div class="stat">
-
-        <div class="stat-value">
-          ${lessons.length}
-        </div>
-
-        <div class="stat-label">
-          пар сегодня
-        </div>
+        ${lessons.length}
 
       </div>
 
+      <div class="stat-label">
 
-      <div class="stat">
+        пар сегодня
 
-        <div class="stat-value">
+      </div>
 
-          ${
-            hours
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-value">
+
+        ${
+          hours
 
             ?
 
-            `${hours}ч ${mins}м`
+          `${hours}ч ${mins}м`
 
             :
 
-            `${mins}м`
-          }
+          `${mins}м`
 
-        </div>
-
-        <div class="stat-label">
-          учебного времени
-        </div>
+        }
 
       </div>
 
+      <div class="stat-label">
 
-      <div class="stat">
-
-        <div class="stat-value">
-          ${buildings}
-        </div>
-
-        <div class="stat-label">
-          корпуса сегодня
-        </div>
+        учебного времени
 
       </div>
 
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-value">
+
+        ${buildings}
+
+      </div>
+
+      <div class="stat-label">
+
+        корпуса сегодня
+
+      </div>
 
     </div>
 
@@ -2208,9 +2321,9 @@ function renderStats(){
 }
 
 
-/* =================================
+/* =========================================
    LESSON CARD
-================================= */
+========================================= */
 
 function lessonCard(
   lesson
@@ -2277,17 +2390,22 @@ function lessonCard(
         ${
           isNow
 
-          ?
+            ?
 
           `
-          <div class="badge">
-            СЕЙЧАС
-          </div>
+
+            <div class="badge">
+
+              СЕЙЧАС
+
+            </div>
+
           `
 
-          :
+            :
 
           ""
+
         }
 
 
@@ -2300,69 +2418,78 @@ function lessonCard(
         ${
           lesson.lecturer
 
-          ?
+            ?
 
           `
-          <span>
 
-            👨‍🏫
+            <span>
 
-            ${esc(
-              lesson.lecturer
-            )}
+              👨‍🏫
 
-          </span>
+              ${esc(
+                lesson.lecturer
+              )}
+
+            </span>
+
           `
 
-          :
+            :
 
           ""
+
         }
 
 
         ${
           lesson.auditorium
 
-          ?
+            ?
 
           `
-          <span>
 
-            🏫
+            <span>
 
-            ${esc(
-              lesson.auditorium
-            )}
+              🏫
 
-          </span>
+              ${esc(
+                lesson.auditorium
+              )}
+
+            </span>
+
           `
 
-          :
+            :
 
           ""
+
         }
 
 
         ${
           lesson.building
 
-          ?
+            ?
 
           `
-          <span>
 
-            📍
+            <span>
 
-            ${esc(
-              lesson.building
-            )}
+              📍
 
-          </span>
+              ${esc(
+                lesson.building
+              )}
+
+            </span>
+
           `
 
-          :
+            :
 
           ""
+
         }
 
 
@@ -2376,19 +2503,23 @@ function lessonCard(
 }
 
 
-/* =================================
-   GROUP DAYS
-================================= */
+/* =========================================
+   GROUP LESSONS BY DATE
+========================================= */
 
-function renderDays(
+function renderGroupedLessons(
   lessons
 ){
+
+  const container =
+    $("schedule");
+
 
   if(
     !lessons.length
   ){
 
-    return `
+    container.innerHTML = `
 
       <div class="empty">
 
@@ -2402,6 +2533,8 @@ function renderDays(
       </div>
 
     `;
+
+    return;
 
   }
 
@@ -2441,39 +2574,72 @@ function renderDays(
     ).sort();
 
 
-  return dates
+  container.innerHTML =
 
-    .map(
+    dates
 
-      date => `
+      .map(
 
-        <section class="day">
+        date => `
 
-
-          <div class="day-heading">
-
-
-            <div>
+          <section class="day">
 
 
-              <div class="weekday">
+            <div class="day-heading">
 
-                ${esc(
-                  formatWeekday(
-                    date
-                  )
-                )}
+
+              <div>
+
+
+                <div class="weekday">
+
+                  ${esc(
+                    formatWeekday(
+                      date
+                    )
+                  )}
+
+                </div>
+
+
+                <div class="date">
+
+                  ${esc(
+                    formatDate(
+                      date
+                    )
+                  )}
+
+                </div>
+
 
               </div>
 
 
-              <div class="date">
+              <div class="count">
 
-                ${esc(
-                  formatDate(
-                    date
-                  )
-                )}
+                ${grouped[date].length}
+
+                ${
+                  grouped[date].length === 1
+
+                    ?
+
+                  "пара"
+
+                    :
+
+                  grouped[date].length < 5
+
+                    ?
+
+                  "пары"
+
+                    :
+
+                  "пар"
+
+                }
 
               </div>
 
@@ -2481,65 +2647,35 @@ function renderDays(
             </div>
 
 
-            <div class="count">
+            <div class="grid">
 
-              ${grouped[date].length}
+              ${sort(
+                grouped[date]
+              )
 
-              ${
-                grouped[date].length === 1
+              .map(
+                lessonCard
+              )
 
-                ?
-
-                "пара"
-
-                :
-
-                grouped[date].length < 5
-
-                ?
-
-                "пары"
-
-                :
-
-                "пар"
-              }
+              .join("")}
 
             </div>
 
 
-          </div>
+          </section>
 
+        `
 
-          <div class="grid">
+      )
 
-            ${sort(
-              grouped[date]
-            )
-
-            .map(
-              lessonCard
-            )
-
-            .join("")}
-
-          </div>
-
-
-        </section>
-
-      `
-
-    )
-
-    .join("");
+      .join("");
 
 }
 
 
-/* =================================
-   FILTER
-================================= */
+/* =========================================
+   NORMAL SCHEDULE FILTER
+========================================= */
 
 function getLessons(){
 
@@ -2602,6 +2738,7 @@ function getLessons(){
 
 
     return schedule.filter(
+
       x =>
 
         x.date >=
@@ -2631,6 +2768,7 @@ function getLessons(){
 
 
     return schedule.filter(
+
       x =>
 
         x.date >=
@@ -2646,6 +2784,8 @@ function getLessons(){
   }
 
 
+  /* Ближайшее */
+
   const futureDates = [
 
     ...new Set(
@@ -2653,9 +2793,12 @@ function getLessons(){
       sort(schedule)
 
         .filter(
+
           x =>
+
             x.date >=
             todayString
+
         )
 
         .map(
@@ -2678,180 +2821,320 @@ function getLessons(){
 
 
   return schedule.filter(
+
     x =>
+
       x.date ===
       futureDates[0]
+
   );
 
 }
 
 
-/* =================================
-   ARCHIVE
-================================= */
+/* =========================================
+   RENDER CURRENT VIEW
+========================================= */
 
-function renderArchive(){
+function renderSchedule(){
 
-  const sorted =
-    sort(archive);
-
-
-  if(
-    !sorted.length
-  ){
-
-    return `
-
-      <div class="archive-header">
-
-        <div>
-
-          <h1>
-            Архив
-          </h1>
-
-          <p>
-            Прошедшие пары
-          </p>
-
-        </div>
-
-      </div>
-
-
-      <div class="archive-empty">
-
-        <strong>
-          Архив пока пуст
-        </strong>
-
-        После прохождения занятий
-        они будут автоматически
-        появляться здесь.
-
-      </div>
-
-    `;
-
-  }
-
-
-  return `
-
-    <div class="archive-header">
-
-      <div>
-
-        <h1>
-          Архив
-        </h1>
-
-        <p>
-          Прошедшие пары
-        </p>
-
-      </div>
-
-
-      <div class="archive-count">
-
-        ${sorted.length}
-
-        ${
-          sorted.length === 1
-          ? "пара"
-          : sorted.length < 5
-          ? "пары"
-          : "пар"
-        }
-
-      </div>
-
-    </div>
-
-
-    ${renderDays(sorted)}
-
-  `;
-
-}
-
-
-/* =================================
-   RENDER PAGE
-================================= */
-
-function render(){
-
-  const container =
-    $("appContent");
-
-
-  if(
-    currentView === "nearest"
-  ){
-
-    container.innerHTML =
-
-      renderNext()
-
-      +
-
-      renderStats()
-
-      +
-
-      renderDays(
-        getLessons()
-      );
-
-    return;
-
-  }
-
-
-  if(
-    currentView === "today"
-  ){
-
-    container.innerHTML =
-
-      renderStats()
-
-      +
-
-      renderDays(
-        getLessons()
-      );
-
-    return;
-
-  }
-
+  /* =======================================
+     АРХИВ
+  ======================================= */
 
   if(
     currentView === "archive"
   ){
 
-    container.innerHTML =
-      renderArchive();
+    renderArchive();
 
     return;
 
   }
 
 
-  container.innerHTML =
-    renderDays(
-      getLessons()
-    );
+  /* =======================================
+     БЛИЖАЙШЕЕ
+     HERO + STATS
+  ======================================= */
+
+  if(
+    currentView === "nearest"
+  ){
+
+    $("nextLesson").style.display =
+      "block";
+
+    $("stats").style.display =
+      "grid";
+
+    renderNext();
+
+    renderStats();
+
+  }
+
+
+  /* =======================================
+     СЕГОДНЯ
+     STATS, НО БЕЗ HERO
+  ======================================= */
+
+  else if(
+    currentView === "today"
+  ){
+
+    $("nextLesson").style.display =
+      "none";
+
+    $("stats").style.display =
+      "grid";
+
+    renderStats();
+
+  }
+
+
+  /* =======================================
+     ЗАВТРА / НЕДЕЛЯ / МЕСЯЦ
+  ======================================= */
+
+  else{
+
+    $("nextLesson").style.display =
+      "none";
+
+    $("stats").style.display =
+      "none";
+
+  }
+
+
+  renderGroupedLessons(
+    getLessons()
+  );
 
 }
 
 
-/* =================================
+/* =========================================
+   ARCHIVE
+========================================= */
+
+function renderArchive(){
+
+  $("nextLesson").style.display =
+    "none";
+
+
+  $("stats").style.display =
+    "none";
+
+
+  const container =
+    $("schedule");
+
+
+  if(
+    !Array.isArray(archive)
+    ||
+    !archive.length
+  ){
+
+    container.innerHTML = `
+
+      <section class="archive-header">
+
+        <div class="archive-title">
+          Архив
+        </div>
+
+        <div class="archive-subtitle">
+          Прошедшие занятия
+        </div>
+
+      </section>
+
+
+      <div class="empty">
+
+        <strong>
+          Архив пока пуст
+        </strong>
+
+        После завершения занятий
+        GitHub Action автоматически
+        добавит их сюда.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  const sorted =
+    sort(archive);
+
+
+  container.innerHTML = `
+
+    <section class="archive-header">
+
+      <div class="archive-title">
+        Архив
+      </div>
+
+      <div class="archive-subtitle">
+
+        Прошедшие занятия ·
+        ${sorted.length} ${
+          sorted.length === 1
+            ? "пара"
+            : sorted.length < 5
+              ? "пары"
+              : "пар"
+        }
+
+      </div>
+
+    </section>
+
+  `;
+
+
+  const grouped = {};
+
+
+  sorted.forEach(
+    lesson => {
+
+      if(
+        !grouped[
+          lesson.date
+        ]
+      ){
+
+        grouped[
+          lesson.date
+        ] = [];
+
+      }
+
+
+      grouped[
+        lesson.date
+      ].push(
+        lesson
+      );
+
+    }
+  );
+
+
+  const dates =
+    Object.keys(
+      grouped
+    ).sort();
+
+
+  const html =
+
+    dates
+
+      .map(
+
+        date => `
+
+          <section class="day">
+
+
+            <div class="day-heading">
+
+
+              <div>
+
+
+                <div class="weekday">
+
+                  ${esc(
+                    formatWeekday(
+                      date
+                    )
+                  )}
+
+                </div>
+
+
+                <div class="date">
+
+                  ${esc(
+                    formatDate(
+                      date
+                    )
+                  )}
+
+                </div>
+
+
+              </div>
+
+
+              <div class="count">
+
+                ${grouped[date].length}
+
+                ${
+                  grouped[date].length === 1
+                    ? "пара"
+                    : grouped[date].length < 5
+                      ? "пары"
+                      : "пар"
+                }
+
+              </div>
+
+
+            </div>
+
+
+            <div class="grid">
+
+              ${sort(
+                grouped[date]
+              )
+
+              .map(
+                lessonCard
+              )
+
+              .join("")}
+
+            </div>
+
+
+          </section>
+
+        `
+
+      )
+
+      .join("");
+
+
+  container.insertAdjacentHTML(
+    "beforeend",
+    html
+  );
+
+}
+
+
+/* =========================================
    LOAD SCHEDULE
-================================= */
+========================================= */
 
 async function loadSchedule(){
 
@@ -2918,47 +3201,46 @@ async function loadSchedule(){
 
 
     $("updated").textContent =
-
-      "Обновлено в "
-
-      +
+      "Обновлено в " +
 
       new Date()
-
         .toLocaleTimeString(
-
           "ru-RU",
-
           {
             hour:"2-digit",
             minute:"2-digit"
           }
-
         );
 
 
-    render();
+    renderSchedule();
 
   }
 
 
   catch(error){
 
-    $("appContent").innerHTML = `
+    if(
+      currentView !== "archive"
+    ){
 
-      <div class="error">
+      $("schedule").innerHTML = `
 
-        <strong>
-          Не удалось загрузить расписание
-        </strong>
+        <div class="error">
 
-        ${esc(
-          error.message
-        )}
+          <strong>
+            Не удалось загрузить расписание
+          </strong>
 
-      </div>
+          ${esc(
+            error.message
+          )}
 
-    `;
+        </div>
+
+      `;
+
+    }
 
   }
 
@@ -2978,9 +3260,9 @@ async function loadSchedule(){
 }
 
 
-/* =================================
+/* =========================================
    LOAD ARCHIVE
-================================= */
+========================================= */
 
 async function loadArchive(){
 
@@ -2988,14 +3270,11 @@ async function loadArchive(){
 
     const response =
       await fetch(
-
         "archive.json?t=" +
         Date.now(),
-
         {
           cache:"no-store"
         }
-
       );
 
 
@@ -3003,9 +3282,15 @@ async function loadArchive(){
       !response.ok
     ){
 
-      throw new Error(
-        "archive.json not found"
-      );
+      /*
+        Если archive.json ещё не создан
+        или временно недоступен —
+        считаем архив пустым.
+      */
+
+      archive = [];
+
+      return;
 
     }
 
@@ -3018,9 +3303,9 @@ async function loadArchive(){
       !Array.isArray(data)
     ){
 
-      throw new Error(
-        "Invalid archive format"
-      );
+      archive = [];
+
+      return;
 
     }
 
@@ -3035,63 +3320,79 @@ async function loadArchive(){
 
       );
 
-
-    if(
-      currentView === "archive"
-    ){
-
-      render();
-
-    }
-
   }
 
 
   catch(error){
 
-    console.log(
-      "Archive:",
-      error.message
+    console.error(
+      "Archive loading error:",
+      error
     );
+
+    archive = [];
 
   }
 
 }
 
 
-/* =================================
+/* =========================================
+   LOAD EVERYTHING
+========================================= */
+
+async function loadAll(){
+
+  await Promise.all([
+
+    loadSchedule(),
+
+    loadArchive()
+
+  ]);
+
+
+  renderSchedule();
+
+}
+
+
+/* =========================================
    MENU
-================================= */
-
-const sideMenu =
-  $("sideMenu");
-
-const menuOverlay =
-  $("menuOverlay");
-
+========================================= */
 
 function openMenu(){
 
-  sideMenu.classList.add(
-    "open"
-  );
+  $("sideMenu")
+    .classList
+    .add("open");
 
-  menuOverlay.classList.add(
-    "open"
-  );
+
+  $("menuOverlay")
+    .classList
+    .add("open");
+
+
+  document.body.style.overflow =
+    "hidden";
 
 }
 
 
 function closeMenu(){
 
-  sideMenu.classList.remove(
-    "open"
-  );
+  $("sideMenu")
+    .classList
+    .remove("open");
 
-  menuOverlay.classList.remove(
-    "open"
-  );
+
+  $("menuOverlay")
+    .classList
+    .remove("open");
+
+
+  document.body.style.overflow =
+    "";
 
 }
 
@@ -3110,16 +3411,16 @@ $("menuClose")
   );
 
 
-menuOverlay
+$("menuOverlay")
   .addEventListener(
     "click",
     closeMenu
   );
 
 
-/* =================================
+/* =========================================
    MENU ITEMS
-================================= */
+========================================= */
 
 document
   .querySelectorAll(
@@ -3135,15 +3436,17 @@ document
 
         () => {
 
+
           document
             .querySelectorAll(
               ".menu-item"
             )
             .forEach(
               item =>
-                item.classList.remove(
-                  "active"
-                )
+                item.classList
+                  .remove(
+                    "active"
+                  )
             );
 
 
@@ -3158,12 +3461,8 @@ document
 
           closeMenu();
 
-          render();
 
-          window.scrollTo({
-            top:0,
-            behavior:"smooth"
-          });
+          renderSchedule();
 
         }
 
@@ -3174,69 +3473,87 @@ document
   );
 
 
-/* =================================
+/* =========================================
    REFRESH
-================================= */
+========================================= */
 
 $("refreshButton")
   .addEventListener(
+
     "click",
+
     async () => {
 
-      await loadSchedule();
-
-      await loadArchive();
+      await loadAll();
 
     }
+
   );
 
 
-/* =================================
+/* =========================================
    START
-================================= */
+========================================= */
 
-loadSchedule();
-
-loadArchive();
+loadAll();
 
 
-/*
-   Проверяем текущее занятие
-   каждую минуту.
-*/
+/* =========================================
+   UPDATE CURRENT LESSON
+   EVERY MINUTE
+========================================= */
 
 setInterval(
 
   () => {
 
-    render();
+    if(
+      currentView ===
+      "nearest"
+    ){
+
+      renderNext();
+
+      renderStats();
+
+      renderGroupedLessons(
+        getLessons()
+      );
+
+    }
+
+    else if(
+      currentView ===
+      "today"
+    ){
+
+      renderStats();
+
+      renderGroupedLessons(
+        getLessons()
+      );
+
+    }
 
   },
 
-  60000
+  60 * 1000
 
 );
 
 
-/*
-   Проверяем новые данные
-   каждые 5 минут.
-*/
+/* =========================================
+   UPDATE SCHEDULE
+   EVERY 5 MINUTES
+========================================= */
 
 setInterval(
 
-  async () => {
-
-    await loadSchedule();
-
-    await loadArchive();
-
-  },
+  loadAll,
 
   5 * 60 * 1000
 
 );
-
 
 </script>
 
