@@ -61,9 +61,6 @@ body{
   min-height:100vh;
 }
 
-
-/* Фоновая сетка */
-
 body::before{
   content:"";
 
@@ -88,11 +85,9 @@ body::before{
   background-size:38px 38px;
 }
 
-
 button{
   font:inherit;
 }
-
 
 .container{
   width:min(
@@ -124,7 +119,6 @@ button{
   margin-bottom:20px;
 }
 
-
 .brand{
 
   display:flex;
@@ -133,7 +127,6 @@ button{
 
   align-items:center;
 }
-
 
 .logo{
 
@@ -162,7 +155,6 @@ button{
     rgba(79,140,255,.35);
 }
 
-
 .title{
 
   font-size:30px;
@@ -171,7 +163,6 @@ button{
 
   letter-spacing:-1px;
 }
-
 
 .group{
 
@@ -182,7 +173,6 @@ button{
   margin-top:3px;
 }
 
-
 .header-right{
 
   display:flex;
@@ -192,14 +182,12 @@ button{
   gap:10px;
 }
 
-
 .updated{
 
   color:var(--muted);
 
   font-size:12px;
 }
-
 
 .refresh{
 
@@ -222,18 +210,14 @@ button{
     opacity .2s;
 }
 
-
 .refresh:active{
 
   transform:scale(.95);
-
 }
-
 
 .refresh.loading{
 
   opacity:.55;
-
 }
 
 
@@ -268,7 +252,6 @@ button{
   backdrop-filter:blur(20px);
 }
 
-
 .hero::after{
 
   content:"";
@@ -293,14 +276,12 @@ button{
   filter:blur(5px);
 }
 
-
 .hero-content{
 
   position:relative;
 
   z-index:1;
 }
-
 
 .eyebrow{
 
@@ -316,7 +297,6 @@ button{
 
   margin-bottom:12px;
 }
-
 
 .live{
 
@@ -341,7 +321,6 @@ button{
   margin-bottom:12px;
 }
 
-
 .dot{
 
   width:7px;
@@ -356,7 +335,6 @@ button{
     rgba(7,18,13,.12);
 }
 
-
 .hero-time{
 
   font-size:58px;
@@ -370,7 +348,6 @@ button{
   margin-bottom:12px;
 }
 
-
 .hero-subject{
 
   font-size:28px;
@@ -382,7 +359,6 @@ button{
   margin-bottom:18px;
 }
 
-
 .chips{
 
   display:flex;
@@ -391,7 +367,6 @@ button{
 
   gap:8px;
 }
-
 
 .chip{
 
@@ -429,7 +404,6 @@ button{
   margin-bottom:20px;
 }
 
-
 .stat{
 
   border:
@@ -447,14 +421,12 @@ button{
     rgba(0,0,0,.18);
 }
 
-
 .stat-value{
 
   font-size:25px;
 
   font-weight:900;
 }
-
 
 .stat-label{
 
@@ -481,7 +453,6 @@ button{
   margin-bottom:27px;
 }
 
-
 .tabs{
 
   display:flex;
@@ -502,7 +473,6 @@ button{
 
   overflow:auto;
 }
-
 
 .tab{
 
@@ -527,13 +497,10 @@ button{
   transition:.2s;
 }
 
-
 .tab:hover{
 
   color:white;
-
 }
-
 
 .tab.active{
 
@@ -556,7 +523,6 @@ button{
   margin-bottom:34px;
 }
 
-
 .day-heading{
 
   display:flex;
@@ -571,7 +537,6 @@ button{
     11px;
 }
 
-
 .weekday{
 
   font-size:23px;
@@ -581,7 +546,6 @@ button{
   text-transform:capitalize;
 }
 
-
 .date{
 
   color:var(--muted);
@@ -590,7 +554,6 @@ button{
 
   margin-top:3px;
 }
-
 
 .count{
 
@@ -626,7 +589,6 @@ button{
   gap:11px;
 }
 
-
 .lesson{
 
   position:relative;
@@ -657,7 +619,6 @@ button{
     box-shadow .2s;
 }
 
-
 .lesson:hover{
 
   transform:
@@ -670,9 +631,6 @@ button{
     0 20px 45px
     rgba(0,0,0,.3);
 }
-
-
-/* Цвет предмета */
 
 .lesson::before{
 
@@ -689,9 +647,6 @@ button{
   background:
     var(--accent,var(--blue));
 }
-
-
-/* Светящийся шар */
 
 .lesson::after{
 
@@ -715,7 +670,6 @@ button{
   filter:blur(15px);
 }
 
-
 .lesson.current{
 
   border-color:
@@ -729,7 +683,6 @@ button{
     rgba(39,223,145,.1);
 }
 
-
 .lesson-top{
 
   display:flex;
@@ -738,7 +691,6 @@ button{
 
   gap:12px;
 }
-
 
 .time{
 
@@ -749,7 +701,6 @@ button{
 
   font-size:15px;
 }
-
 
 .subject{
 
@@ -767,7 +718,6 @@ button{
   max-width:90%;
 }
 
-
 .meta{
 
   display:flex;
@@ -776,7 +726,6 @@ button{
 
   gap:7px;
 }
-
 
 .meta span{
 
@@ -795,7 +744,6 @@ button{
 
   border-radius:10px;
 }
-
 
 .badge{
 
@@ -840,7 +788,6 @@ button{
   color:var(--muted);
 }
 
-
 .empty strong,
 .error strong{
 
@@ -852,7 +799,6 @@ button{
 
   margin-bottom:7px;
 }
-
 
 .source{
 
@@ -880,12 +826,10 @@ button{
     padding-top:15px;
   }
 
-
   .title{
 
     font-size:26px;
   }
-
 
   .logo{
 
@@ -893,12 +837,10 @@ button{
     height:44px;
   }
 
-
   .updated{
 
     display:none;
   }
-
 
   .hero{
 
@@ -907,7 +849,6 @@ button{
     border-radius:24px;
   }
 
-
   .hero-time{
 
     font-size:42px;
@@ -915,18 +856,15 @@ button{
     letter-spacing:-2px;
   }
 
-
   .hero-subject{
 
     font-size:22px;
   }
 
-
   .stats{
 
     gap:7px;
   }
-
 
   .stat{
 
@@ -935,36 +873,30 @@ button{
     border-radius:16px;
   }
 
-
   .stat-value{
 
     font-size:20px;
   }
-
 
   .stat-label{
 
     font-size:10px;
   }
 
-
   .grid{
 
     grid-template-columns:1fr;
   }
-
 
   .lesson{
 
     border-radius:19px;
   }
 
-
   .tabs-wrap{
 
     top:5px;
   }
-
 
   .tab{
 
@@ -1080,6 +1012,13 @@ button{
       Месяц
     </button>
 
+    <button
+      class="tab"
+      data-view="archive"
+    >
+      Архив
+    </button>
+
   </nav>
 
 </div>
@@ -1107,6 +1046,8 @@ button{
 <script>
 
 let schedule = [];
+
+let archive = [];
 
 let currentView = "nearest";
 
@@ -1872,6 +1813,21 @@ FILTER
 
 function getLessons(){
 
+  /*
+  Архив
+  */
+
+  if(
+    currentView === "archive"
+  ){
+
+    return sort(
+      archive
+    );
+
+  }
+
+
   const today =
     new Date();
 
@@ -2027,20 +1983,45 @@ function renderSchedule(){
     !lessons.length
   ){
 
-    container.innerHTML = `
+    if(
+      currentView === "archive"
+    ){
 
-      <div class="empty">
+      container.innerHTML = `
 
-        <strong>
-          Занятий нет
-        </strong>
+        <div class="empty">
 
-        В выбранном периоде
-        расписание свободно.
+          <strong>
+            Архив пока пуст
+          </strong>
 
-      </div>
+          Прошедшие пары появятся здесь
+          автоматически.
 
-    `;
+        </div>
+
+      `;
+
+    }
+
+    else{
+
+      container.innerHTML = `
+
+        <div class="empty">
+
+          <strong>
+            Занятий нет
+          </strong>
+
+          В выбранном периоде
+          расписание свободно.
+
+        </div>
+
+      `;
+
+    }
 
     return;
 
@@ -2181,15 +2162,30 @@ async function loadSchedule(){
 
   try{
 
-    const response =
-      await fetch(
+    const cacheBust =
+      Date.now();
+
+
+    const [
+      scheduleResponse,
+      archiveResponse
+    ] = await Promise.all([
+
+      fetch(
         "schedule.json?t=" +
-        Date.now()
-      );
+        cacheBust
+      ),
+
+      fetch(
+        "archive.json?t=" +
+        cacheBust
+      )
+
+    ]);
 
 
     if(
-      !response.ok
+      !scheduleResponse.ok
     ){
 
       throw new Error(
@@ -2199,12 +2195,27 @@ async function loadSchedule(){
     }
 
 
-    const data =
-      await response.json();
+    if(
+      !archiveResponse.ok
+    ){
+
+      throw new Error(
+        "Не удалось загрузить archive.json"
+      );
+
+    }
+
+
+    const scheduleData =
+      await scheduleResponse.json();
+
+
+    const archiveData =
+      await archiveResponse.json();
 
 
     if(
-      !Array.isArray(data)
+      !Array.isArray(scheduleData)
     ){
 
       throw new Error(
@@ -2214,10 +2225,32 @@ async function loadSchedule(){
     }
 
 
+    if(
+      !Array.isArray(archiveData)
+    ){
+
+      throw new Error(
+        "Неверный формат archive.json"
+      );
+
+    }
+
+
     schedule =
       sort(
 
-        data.filter(
+        scheduleData.filter(
+          x =>
+            x.date
+        )
+
+      );
+
+
+    archive =
+      sort(
+
+        archiveData.filter(
           x =>
             x.date
         )
