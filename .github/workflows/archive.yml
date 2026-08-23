@@ -23,6 +23,7 @@ jobs:
           import json
           from pathlib import Path
           from datetime import datetime
+          from zoneinfo import ZoneInfo
 
           schedule_file = Path("schedule.json")
           archive_file = Path("archive.json")
@@ -45,11 +46,7 @@ jobs:
           if not isinstance(archive, list):
               raise SystemExit("archive.json must contain an array")
 
-          # Дата по Москве.
-          # GitHub Actions работает в UTC, поэтому здесь
-          # явно используем московское время.
-          from zoneinfo import ZoneInfo
-
+          # Текущая дата по Москве
           today = datetime.now(
               ZoneInfo("Europe/Moscow")
           ).date().isoformat()
@@ -73,13 +70,13 @@ jobs:
 
           added = 0
 
+          # Добавляем в архив все даты, которые уже прошли
           for lesson in schedule:
               lesson_date = lesson.get("date")
 
               if not lesson_date:
                   continue
 
-              # В архив попадают только полностью прошедшие даты.
               if lesson_date >= today:
                   continue
 
@@ -92,6 +89,7 @@ jobs:
               existing.add(key)
               added += 1
 
+          # Сортировка архива по дате и времени
           archive.sort(
               key=lambda lesson: (
                   lesson.get("date", ""),
@@ -99,6 +97,7 @@ jobs:
               )
           )
 
+          # Сохраняем архив
           with archive_file.open("w", encoding="utf-8") as f:
               json.dump(
                   archive,
@@ -111,3 +110,18 @@ jobs:
           print(f"Today's date in Moscow: {today}")
           print(f"New lessons archived: {added}")
           print(f"Total archived lessons: {len(archive)}")
+
+      - name: Save archive to GitHub
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add archive.json
+
+          if git diff --cached --quiet; then
+            echo "No new lessons to archive"
+            exit 0
+          fi
+
+          git commit -m "Update lesson archive"
+          git push
