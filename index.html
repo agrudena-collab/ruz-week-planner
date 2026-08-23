@@ -85,6 +85,10 @@ body::before{
   background-size:38px 38px;
 }
 
+body.menu-open{
+  overflow:hidden;
+}
+
 button{
   font:inherit;
 }
@@ -189,9 +193,54 @@ button{
   font-size:12px;
 }
 
+
+/* =========================
+   HEADER BUTTONS
+========================= */
+
+.menu-button,
 .refresh{
 
   border:0;
+
+  cursor:pointer;
+
+  transition:
+    transform .2s,
+    opacity .2s;
+}
+
+.menu-button{
+
+  width:45px;
+  height:45px;
+
+  display:grid;
+
+  place-items:center;
+
+  border-radius:14px;
+
+  color:var(--text);
+
+  background:
+    rgba(255,255,255,.07);
+
+  border:
+    1px solid var(--line);
+
+  font-size:22px;
+
+  line-height:1;
+}
+
+.menu-button:active,
+.refresh:active{
+
+  transform:scale(.95);
+}
+
+.refresh{
 
   border-radius:14px;
 
@@ -202,22 +251,268 @@ button{
   color:#080a0f;
 
   font-weight:800;
-
-  cursor:pointer;
-
-  transition:
-    transform .2s,
-    opacity .2s;
-}
-
-.refresh:active{
-
-  transform:scale(.95);
 }
 
 .refresh.loading{
 
   opacity:.55;
+}
+
+
+/* =========================
+   SIDE MENU
+========================= */
+
+.menu-overlay{
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:100;
+
+  background:
+    rgba(0,0,0,.55);
+
+  opacity:0;
+
+  visibility:hidden;
+
+  transition:
+    opacity .25s ease,
+    visibility .25s ease;
+
+  backdrop-filter:blur(4px);
+}
+
+.menu-overlay.open{
+
+  opacity:1;
+
+  visibility:visible;
+}
+
+
+.side-menu{
+
+  position:absolute;
+
+  left:0;
+  top:0;
+  bottom:0;
+
+  width:min(
+    330px,
+    86vw
+  );
+
+  padding:
+    22px
+    18px
+    30px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(20,24,35,.99),
+      rgba(9,12,19,.99)
+    );
+
+  border-right:
+    1px solid var(--line);
+
+  box-shadow:
+    20px 0 60px
+    rgba(0,0,0,.4);
+
+  transform:
+    translateX(-100%);
+
+  transition:
+    transform .3s
+    cubic-bezier(.2,.8,.2,1);
+
+  overflow-y:auto;
+}
+
+.menu-overlay.open .side-menu{
+
+  transform:
+    translateX(0);
+}
+
+
+.menu-header{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  margin-bottom:28px;
+}
+
+.menu-title{
+
+  font-size:20px;
+
+  font-weight:900;
+}
+
+.menu-close{
+
+  width:40px;
+  height:40px;
+
+  border:0;
+
+  border-radius:12px;
+
+  background:
+    rgba(255,255,255,.07);
+
+  color:var(--text);
+
+  font-size:22px;
+
+  cursor:pointer;
+}
+
+
+.menu-group{
+
+  color:var(--muted);
+
+  font-size:11px;
+
+  font-weight:900;
+
+  text-transform:uppercase;
+
+  letter-spacing:1.2px;
+
+  margin:
+    0
+    0
+    10px
+    5px;
+}
+
+
+.menu-items{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:5px;
+}
+
+
+.menu-item{
+
+  width:100%;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:13px;
+
+  padding:
+    13px
+    14px;
+
+  border:0;
+
+  border-radius:14px;
+
+  background:transparent;
+
+  color:#c7cedb;
+
+  text-align:left;
+
+  font-weight:800;
+
+  cursor:pointer;
+
+  transition:
+    background .2s,
+    color .2s,
+    transform .2s;
+}
+
+.menu-item:hover{
+
+  background:
+    rgba(255,255,255,.06);
+
+  color:#fff;
+}
+
+.menu-item:active{
+
+  transform:scale(.98);
+}
+
+.menu-item.active{
+
+  color:#fff;
+
+  background:
+    rgba(79,140,255,.15);
+
+  box-shadow:
+    inset 0 0 0 1px
+    rgba(79,140,255,.18);
+}
+
+
+.menu-icon{
+
+  width:30px;
+  height:30px;
+
+  display:grid;
+
+  place-items:center;
+
+  border-radius:10px;
+
+  background:
+    rgba(255,255,255,.06);
+
+  font-size:15px;
+
+  flex:none;
+}
+
+.menu-item.active .menu-icon{
+
+  background:
+    rgba(79,140,255,.2);
+}
+
+
+.menu-footer{
+
+  margin-top:30px;
+
+  padding:
+    14px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:16px;
+
+  color:#697286;
+
+  font-size:11px;
+
+  line-height:1.5;
 }
 
 
@@ -435,82 +730,6 @@ button{
   font-size:12px;
 
   margin-top:4px;
-}
-
-
-/* =========================
-   TABS
-========================= */
-
-.tabs-wrap{
-
-  position:sticky;
-
-  top:8px;
-
-  z-index:20;
-
-  margin-bottom:27px;
-}
-
-.tabs{
-
-  display:flex;
-
-  gap:5px;
-
-  padding:5px;
-
-  border:
-    1px solid var(--line);
-
-  background:
-    rgba(14,17,25,.78);
-
-  backdrop-filter:blur(20px);
-
-  border-radius:17px;
-
-  overflow:auto;
-}
-
-.tab{
-
-  border:0;
-
-  background:transparent;
-
-  color:var(--muted);
-
-  padding:11px 15px;
-
-  border-radius:12px;
-
-  font-weight:800;
-
-  cursor:pointer;
-
-  white-space:nowrap;
-
-  min-width:105px;
-
-  transition:.2s;
-}
-
-.tab:hover{
-
-  color:white;
-}
-
-.tab.active{
-
-  color:#111;
-
-  background:#fff;
-
-  box-shadow:
-    0 4px 18px
-    rgba(255,255,255,.12);
 }
 
 
@@ -842,6 +1061,26 @@ button{
     display:none;
   }
 
+  .header-right{
+
+    gap:6px;
+  }
+
+  .refresh{
+
+    padding:
+      10px
+      11px;
+
+    font-size:12px;
+  }
+
+  .menu-button{
+
+    width:42px;
+    height:42px;
+  }
+
   .hero{
 
     padding:21px;
@@ -893,20 +1132,9 @@ button{
     border-radius:19px;
   }
 
-  .tabs-wrap{
+  .side-menu{
 
-    top:5px;
-  }
-
-  .tab{
-
-    min-width:88px;
-
-    padding:
-      10px
-      9px;
-
-    font-size:12px;
+    width:86vw;
   }
 
 }
@@ -916,6 +1144,158 @@ button{
 
 
 <body>
+
+<!-- =========================
+     SIDE MENU
+========================= -->
+
+<div
+  class="menu-overlay"
+  id="menuOverlay"
+>
+
+  <aside
+    class="side-menu"
+    id="sideMenu"
+  >
+
+    <div class="menu-header">
+
+      <div class="menu-title">
+        Расписание
+      </div>
+
+      <button
+        class="menu-close"
+        id="menuClose"
+        aria-label="Закрыть меню"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="menu-group">
+      Разделы
+    </div>
+
+
+    <div class="menu-items">
+
+      <button
+        class="menu-item active"
+        data-view="nearest"
+      >
+
+        <span class="menu-icon">
+          ⚡
+        </span>
+
+        <span>
+          Ближайшее
+        </span>
+
+      </button>
+
+
+      <button
+        class="menu-item"
+        data-view="today"
+      >
+
+        <span class="menu-icon">
+          📅
+        </span>
+
+        <span>
+          Сегодня
+        </span>
+
+      </button>
+
+
+      <button
+        class="menu-item"
+        data-view="tomorrow"
+      >
+
+        <span class="menu-icon">
+          ➜
+        </span>
+
+        <span>
+          Завтра
+        </span>
+
+      </button>
+
+
+      <button
+        class="menu-item"
+        data-view="week"
+      >
+
+        <span class="menu-icon">
+          ▦
+        </span>
+
+        <span>
+          Неделя
+        </span>
+
+      </button>
+
+
+      <button
+        class="menu-item"
+        data-view="month"
+      >
+
+        <span class="menu-icon">
+          ▣
+        </span>
+
+        <span>
+          Месяц
+        </span>
+
+      </button>
+
+
+      <button
+        class="menu-item"
+        data-view="archive"
+      >
+
+        <span class="menu-icon">
+          🗃
+        </span>
+
+        <span>
+          Архив
+        </span>
+
+      </button>
+
+    </div>
+
+
+    <div class="menu-footer">
+
+      МеждОт25-2 · РУЗ
+
+      <br>
+
+      Прошедшее расписание
+      сохраняется в архиве.
+
+    </div>
+
+  </aside>
+
+</div>
+
 
 <div class="container">
 
@@ -952,6 +1332,16 @@ button{
       Загрузка...
     </div>
 
+
+    <button
+      class="menu-button"
+      id="menuOpen"
+      aria-label="Открыть меню"
+    >
+      ☰
+    </button>
+
+
     <button
       class="refresh"
       id="refreshButton"
@@ -971,57 +1361,6 @@ button{
   class="stats"
   id="stats"
 ></div>
-
-
-<div class="tabs-wrap">
-
-  <nav class="tabs">
-
-    <button
-      class="tab active"
-      data-view="nearest"
-    >
-      Ближайшее
-    </button>
-
-    <button
-      class="tab"
-      data-view="today"
-    >
-      Сегодня
-    </button>
-
-    <button
-      class="tab"
-      data-view="tomorrow"
-    >
-      Завтра
-    </button>
-
-    <button
-      class="tab"
-      data-view="week"
-    >
-      Неделя
-    </button>
-
-    <button
-      class="tab"
-      data-view="month"
-    >
-      Месяц
-    </button>
-
-    <button
-      class="tab"
-      data-view="archive"
-    >
-      Архив
-    </button>
-
-  </nav>
-
-</div>
 
 
 <main id="schedule">
@@ -1059,6 +1398,12 @@ const $ = id =>
 const pad = n =>
   String(n).padStart(2,"0");
 
+
+/*
+================================
+DATE
+================================
+*/
 
 function localDateString(
   d = new Date()
@@ -1128,6 +1473,12 @@ function formatWeekday(v){
 }
 
 
+/*
+================================
+SECURITY
+================================
+*/
+
 function esc(v){
 
   return String(
@@ -1141,6 +1492,12 @@ function esc(v){
 
 }
 
+
+/*
+================================
+LESSON TIME
+================================
+*/
 
 function dt(
   lesson,
@@ -1213,7 +1570,7 @@ function sort(lessons){
 
 /*
 ================================
-ЦВЕТ ПРЕДМЕТА
+SUBJECT ACCENT
 ================================
 */
 
@@ -1814,7 +2171,7 @@ FILTER
 function getLessons(){
 
   /*
-  Архив
+  ARCHIVE
   */
 
   if(
@@ -2318,13 +2675,100 @@ async function loadSchedule(){
 
 /*
 ================================
-TABS
+MENU
+================================
+*/
+
+const menuOverlay =
+  $("menuOverlay");
+
+const menuOpen =
+  $("menuOpen");
+
+const menuClose =
+  $("menuClose");
+
+
+function openMenu(){
+
+  menuOverlay.classList.add(
+    "open"
+  );
+
+  document.body.classList.add(
+    "menu-open"
+  );
+
+}
+
+
+function closeMenu(){
+
+  menuOverlay.classList.remove(
+    "open"
+  );
+
+  document.body.classList.remove(
+    "menu-open"
+  );
+
+}
+
+
+menuOpen.addEventListener(
+  "click",
+  openMenu
+);
+
+
+menuClose.addEventListener(
+  "click",
+  closeMenu
+);
+
+
+menuOverlay.addEventListener(
+  "click",
+  event => {
+
+    if(
+      event.target ===
+      menuOverlay
+    ){
+
+      closeMenu();
+
+    }
+
+  }
+);
+
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key === "Escape"
+    ){
+
+      closeMenu();
+
+    }
+
+  }
+);
+
+
+/*
+================================
+MENU ITEMS
 ================================
 */
 
 document
   .querySelectorAll(
-    ".tab"
+    ".menu-item"
   )
   .forEach(
     button => {
@@ -2335,7 +2779,7 @@ document
 
           document
             .querySelectorAll(
-              ".tab"
+              ".menu-item"
             )
             .forEach(
               item =>
@@ -2353,6 +2797,8 @@ document
           currentView =
             button.dataset.view;
 
+
+          closeMenu();
 
           renderSchedule();
 
