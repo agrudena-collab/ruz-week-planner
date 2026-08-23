@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
 
 <meta charset="UTF-8">
@@ -410,13 +411,13 @@ button{
 }
 
 
-.brand{
+.header-left{
 
   display:flex;
 
-  gap:13px;
-
   align-items:center;
+
+  gap:12px;
 }
 
 
@@ -445,16 +446,6 @@ button{
   font-weight:650;
 
   margin-top:3px;
-}
-
-
-.header-left{
-
-  display:flex;
-
-  align-items:center;
-
-  gap:12px;
 }
 
 
@@ -2367,7 +2358,7 @@ function getLessons(){
   /*
    Ближайшее.
    Показываем только
-   ближайший день.
+   ближайший учебный день.
   */
 
   const futureDates = [
@@ -2578,9 +2569,40 @@ function renderSchedule(){
 function render(){
 
   /*
-   Карточка следующей пары
-   существует ТОЛЬКО
-   на главной странице.
+   СТАТИСТИКА:
+
+   Показываем только:
+   1. Ближайшее — главная
+   2. Сегодня
+
+   Скрываем:
+   3. Завтра
+   4. Неделя
+   5. Месяц
+  */
+
+  if(
+    currentView === "nearest" ||
+    currentView === "today"
+  ){
+
+    $("stats").style.display =
+      "grid";
+
+  }else{
+
+    $("stats").style.display =
+      "none";
+
+  }
+
+
+  /*
+   БОЛЬШАЯ КАРТОЧКА
+   «Следующая пара»
+
+   Только на главной
+   «Ближайшее».
   */
 
   if(
@@ -2589,6 +2611,8 @@ function render(){
 
     $("nextLesson").style.display =
       "block";
+
+    renderNext();
 
   }else{
 
@@ -2686,23 +2710,7 @@ async function loadSchedule(){
         );
 
 
-    /*
-     Обновляем следующую пару
-     только если открыта
-     главная.
-    */
-
-    if(
-      currentView === "nearest"
-    ){
-
-      renderNext();
-
-    }
-
-
     render();
-
 
   }
 
@@ -2845,35 +2853,10 @@ document
             button.dataset.view;
 
 
-          /*
-           Если вернулись
-           на «Ближайшее» —
-           снова показываем
-           большую карточку.
-          */
-
-          if(
-            currentView === "nearest"
-          ){
-
-            $("nextLesson").style.display =
-              "block";
-
-            renderNext();
-
-          }else{
-
-            $("nextLesson").style.display =
-              "none";
-
-          }
-
-
-          renderSchedule();
-
-          renderStats();
+          render();
 
           closeMenu();
+
 
           window.scrollTo({
             top:0,
@@ -2904,7 +2887,7 @@ $("refreshButton")
 
 /*
  При открытии сайта
- всегда открывается
+ автоматически открывается
  «Ближайшее».
 */
 
@@ -2923,17 +2906,7 @@ loadSchedule();
 setInterval(
   () => {
 
-    if(
-      currentView === "nearest"
-    ){
-
-      renderNext();
-
-    }
-
-    renderStats();
-
-    renderSchedule();
+    render();
 
   },
   60000
@@ -2952,8 +2925,7 @@ setInterval(
 
 
 /*
- Закрытие меню
- клавишей Escape.
+ Escape закрывает меню.
 */
 
 document.addEventListener(
