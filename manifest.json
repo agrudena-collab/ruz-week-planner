@@ -1,0 +1,12 @@
+{
+  "name": "Расписание МеждОт25-2",
+  "short_name": "Расписание",
+  "description": "Расписание учебной группы МеждОт25-2",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#07090f",
+  "theme_color": "#07090f",
+  "lang": "ru"
+}
