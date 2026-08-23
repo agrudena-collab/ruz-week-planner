@@ -12,6 +12,32 @@
 
 <title>РУЗ · МеждОт25-2</title>
 
+<!-- PWA -->
+<link
+  rel="manifest"
+  href="./manifest.json"
+>
+
+<meta
+  name="theme-color"
+  content="#07090f"
+>
+
+<meta
+  name="apple-mobile-web-app-capable"
+  content="yes"
+>
+
+<meta
+  name="apple-mobile-web-app-status-bar-style"
+  content="black-translucent"
+>
+
+<meta
+  name="apple-mobile-web-app-title"
+  content="Расписание"
+>
+
 <style>
 
 :root{
@@ -73,11 +99,6 @@ body{
   min-height:100vh;
 }
 
-
-/* =========================
-   BACKGROUND GRID
-========================= */
-
 body::before{
 
   content:"";
@@ -104,7 +125,6 @@ body::before{
 
   background-size:38px 38px;
 }
-
 
 button{
   font:inherit;
@@ -142,21 +162,14 @@ button{
     background .2s;
 }
 
-
 .menu-button:hover{
-
   background:
     rgba(255,255,255,.1);
-
 }
-
 
 .menu-button:active{
-
   transform:scale(.94);
-
 }
-
 
 .menu-overlay{
 
@@ -180,15 +193,12 @@ button{
   backdrop-filter:blur(3px);
 }
 
-
 .menu-overlay.open{
 
   opacity:1;
 
   visibility:visible;
-
 }
-
 
 .side-menu{
 
@@ -232,17 +242,13 @@ button{
   transition:
     transform .3s
     cubic-bezier(.22,.8,.25,1);
-
 }
-
 
 .side-menu.open{
 
   transform:
     translateX(0);
-
 }
-
 
 .menu-header{
 
@@ -253,18 +259,14 @@ button{
   align-items:center;
 
   margin-bottom:25px;
-
 }
-
 
 .menu-title{
 
   font-size:22px;
 
   font-weight:900;
-
 }
-
 
 .menu-close{
 
@@ -285,7 +287,6 @@ button{
   cursor:pointer;
 }
 
-
 .menu-list{
 
   display:flex;
@@ -294,7 +295,6 @@ button{
 
   gap:7px;
 }
-
 
 .menu-item{
 
@@ -320,11 +320,8 @@ button{
 
   transition:
     background .2s,
-    color .2s,
-    transform .2s;
-
+    color .2s;
 }
-
 
 .menu-item:hover{
 
@@ -332,18 +329,14 @@ button{
     rgba(255,255,255,.06);
 
   color:white;
-
 }
-
 
 .menu-item.active{
 
   background:white;
 
   color:#111;
-
 }
-
 
 .menu-item-icon{
 
@@ -354,13 +347,11 @@ button{
   font-size:18px;
 }
 
-
 .menu-footer{
 
   position:absolute;
 
   left:18px;
-
   right:18px;
 
   bottom:22px;
@@ -370,7 +361,6 @@ button{
   font-size:11px;
 
   text-align:center;
-
 }
 
 
@@ -407,9 +397,7 @@ button{
   align-items:center;
 
   margin-bottom:20px;
-
 }
-
 
 .header-left{
 
@@ -420,14 +408,12 @@ button{
   gap:12px;
 }
 
-
 .brand-text{
 
   display:flex;
 
   flex-direction:column;
 }
-
 
 .title{
 
@@ -438,7 +424,6 @@ button{
   letter-spacing:-1px;
 }
 
-
 .group{
 
   color:var(--muted);
@@ -447,7 +432,6 @@ button{
 
   margin-top:3px;
 }
-
 
 .header-right{
 
@@ -458,14 +442,12 @@ button{
   gap:10px;
 }
 
-
 .updated{
 
   color:var(--muted);
 
   font-size:12px;
 }
-
 
 .refresh{
 
@@ -490,18 +472,12 @@ button{
     opacity .2s;
 }
 
-
 .refresh:active{
-
   transform:scale(.95);
-
 }
 
-
 .refresh.loading{
-
   opacity:.55;
-
 }
 
 
@@ -536,7 +512,6 @@ button{
   backdrop-filter:blur(20px);
 }
 
-
 .hero::after{
 
   content:"";
@@ -561,14 +536,12 @@ button{
   filter:blur(5px);
 }
 
-
 .hero-content{
 
   position:relative;
 
   z-index:1;
 }
-
 
 .eyebrow{
 
@@ -584,7 +557,6 @@ button{
 
   margin-bottom:12px;
 }
-
 
 .live{
 
@@ -611,7 +583,6 @@ button{
   margin-bottom:12px;
 }
 
-
 .dot{
 
   width:7px;
@@ -620,12 +591,7 @@ button{
   border-radius:50%;
 
   background:#07120d;
-
-  box-shadow:
-    0 0 0 5px
-    rgba(7,18,13,.12);
 }
-
 
 .hero-time{
 
@@ -640,7 +606,6 @@ button{
   margin-bottom:12px;
 }
 
-
 .hero-subject{
 
   font-size:28px;
@@ -652,7 +617,6 @@ button{
   margin-bottom:18px;
 }
 
-
 .chips{
 
   display:flex;
@@ -661,7 +625,6 @@ button{
 
   gap:8px;
 }
-
 
 .chip{
 
@@ -701,7 +664,6 @@ button{
   margin-bottom:27px;
 }
 
-
 .stat{
 
   border:
@@ -713,12 +675,7 @@ button{
   border-radius:20px;
 
   padding:17px;
-
-  box-shadow:
-    0 12px 30px
-    rgba(0,0,0,.18);
 }
-
 
 .stat-value{
 
@@ -726,7 +683,6 @@ button{
 
   font-weight:900;
 }
-
 
 .stat-label{
 
@@ -747,7 +703,6 @@ button{
   margin-bottom:34px;
 }
 
-
 .day-heading{
 
   display:flex;
@@ -762,7 +717,6 @@ button{
     11px;
 }
 
-
 .weekday{
 
   font-size:23px;
@@ -772,7 +726,6 @@ button{
   text-transform:capitalize;
 }
 
-
 .date{
 
   color:var(--muted);
@@ -781,7 +734,6 @@ button{
 
   margin-top:3px;
 }
-
 
 .count{
 
@@ -819,7 +771,6 @@ button{
   gap:11px;
 }
 
-
 .lesson{
 
   position:relative;
@@ -846,10 +797,8 @@ button{
 
   transition:
     transform .2s,
-    border-color .2s,
-    box-shadow .2s;
+    border-color .2s;
 }
-
 
 .lesson:hover{
 
@@ -858,12 +807,7 @@ button{
 
   border-color:
     rgba(255,255,255,.18);
-
-  box-shadow:
-    0 20px 45px
-    rgba(0,0,0,.3);
 }
-
 
 .lesson::before{
 
@@ -880,7 +824,6 @@ button{
   background:
     var(--accent,var(--blue));
 }
-
 
 .lesson::after{
 
@@ -904,7 +847,6 @@ button{
   filter:blur(15px);
 }
 
-
 .lesson.current{
 
   border-color:
@@ -918,7 +860,6 @@ button{
     rgba(39,223,145,.1);
 }
 
-
 .lesson-top{
 
   display:flex;
@@ -927,7 +868,6 @@ button{
 
   gap:12px;
 }
-
 
 .time{
 
@@ -938,7 +878,6 @@ button{
 
   font-size:15px;
 }
-
 
 .subject{
 
@@ -952,10 +891,7 @@ button{
     9px
     0
     13px;
-
-  max-width:90%;
 }
-
 
 .meta{
 
@@ -965,7 +901,6 @@ button{
 
   gap:7px;
 }
-
 
 .meta span{
 
@@ -986,7 +921,6 @@ button{
 
   border-radius:10px;
 }
-
 
 .badge{
 
@@ -1033,7 +967,6 @@ button{
   color:var(--muted);
 }
 
-
 .empty strong,
 .error strong{
 
@@ -1045,7 +978,6 @@ button{
 
   margin-bottom:7px;
 }
-
 
 .source{
 
@@ -1073,18 +1005,15 @@ button{
     padding-top:15px;
   }
 
-
   .title{
 
     font-size:25px;
   }
 
-
   .updated{
 
     display:none;
   }
-
 
   .menu-button{
 
@@ -1093,7 +1022,6 @@ button{
 
     border-radius:14px;
   }
-
 
   .refresh{
 
@@ -1104,14 +1032,12 @@ button{
     font-size:12px;
   }
 
-
   .hero{
 
     padding:21px;
 
     border-radius:24px;
   }
-
 
   .hero-time{
 
@@ -1120,18 +1046,15 @@ button{
     letter-spacing:-2px;
   }
 
-
   .hero-subject{
 
     font-size:22px;
   }
 
-
   .stats{
 
     gap:7px;
   }
-
 
   .stat{
 
@@ -1140,24 +1063,20 @@ button{
     border-radius:16px;
   }
 
-
   .stat-value{
 
     font-size:20px;
   }
-
 
   .stat-label{
 
     font-size:10px;
   }
 
-
   .grid{
 
     grid-template-columns:1fr;
   }
-
 
   .lesson{
 
@@ -1355,7 +1274,6 @@ button{
 
 <!-- =========================
      NEXT LESSON
-     ONLY NEAREST
 ========================= -->
 
 <div id="nextLesson"></div>
@@ -1402,8 +1320,9 @@ let schedule = [];
 let currentView = "nearest";
 
 
-const $ = id =>
-  document.getElementById(id);
+const $ =
+  id =>
+    document.getElementById(id);
 
 
 /* =========================
@@ -1566,7 +1485,8 @@ function current(lesson){
 
     &&
 
-    now < dt(
+    now <
+    dt(
       lesson,
       "endLesson"
     )
@@ -1581,9 +1501,7 @@ function ended(lesson){
   return (
 
     new Date()
-
     >=
-
     dt(
       lesson,
       "endLesson"
@@ -1601,6 +1519,7 @@ function ended(lesson){
 function sort(lessons){
 
   return [...lessons].sort(
+
     (a,b) =>
 
       (a.date || "")
@@ -1958,9 +1877,11 @@ function renderStats(){
         total +
 
         Math.max(
+
           0,
 
           (
+
             dt(
               lesson,
               "endLesson"
@@ -2254,8 +2175,6 @@ function getLessons(){
     );
 
 
-  /* Сегодня */
-
   if(
     currentView === "today"
   ){
@@ -2268,8 +2187,6 @@ function getLessons(){
 
   }
 
-
-  /* Завтра */
 
   if(
     currentView === "tomorrow"
@@ -2292,8 +2209,6 @@ function getLessons(){
 
   }
 
-
-  /* Неделя */
 
   if(
     currentView === "week"
@@ -2323,8 +2238,6 @@ function getLessons(){
 
   }
 
-
-  /* Месяц */
 
   if(
     currentView === "month"
@@ -2356,9 +2269,9 @@ function getLessons(){
 
 
   /*
-   Ближайшее.
-   Показываем только
-   ближайший учебный день.
+   Ближайшее:
+   показываем ближайший
+   учебный день.
   */
 
   const futureDates = [
@@ -2569,16 +2482,9 @@ function renderSchedule(){
 function render(){
 
   /*
-   СТАТИСТИКА:
-
-   Показываем только:
-   1. Ближайшее — главная
-   2. Сегодня
-
-   Скрываем:
-   3. Завтра
-   4. Неделя
-   5. Месяц
+   Статистика только:
+   - Ближайшее
+   - Сегодня
   */
 
   if(
@@ -2598,11 +2504,8 @@ function render(){
 
 
   /*
-   БОЛЬШАЯ КАРТОЧКА
-   «Следующая пара»
-
-   Только на главной
-   «Ближайшее».
+   Следующая пара только:
+   - Ближайшее
   */
 
   if(
@@ -2713,6 +2616,7 @@ async function loadSchedule(){
     render();
 
   }
+
 
   catch(error){
 
@@ -2859,8 +2763,11 @@ document
 
 
           window.scrollTo({
+
             top:0,
+
             behavior:"smooth"
+
           });
 
         }
@@ -2882,14 +2789,53 @@ $("refreshButton")
 
 
 /* =========================
-   START
+   PWA SERVICE WORKER
 ========================= */
 
-/*
- При открытии сайта
- автоматически открывается
- «Ближайшее».
-*/
+if(
+  "serviceWorker" in navigator
+){
+
+  window.addEventListener(
+    "load",
+    () => {
+
+      navigator.serviceWorker
+        .register(
+          "./sw.js"
+        )
+
+        .then(
+          registration => {
+
+            console.log(
+              "PWA Service Worker зарегистрирован:",
+              registration.scope
+            );
+
+          }
+        )
+
+        .catch(
+          error => {
+
+            console.error(
+              "Ошибка Service Worker:",
+              error
+            );
+
+          }
+        );
+
+    }
+  );
+
+}
+
+
+/* =========================
+   START
+========================= */
 
 currentView =
   "nearest";
