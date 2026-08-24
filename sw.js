@@ -66,3 +66,5 @@ self.addEventListener("fetch", event => {
       .then(cached => cached || fetch(event.request))
   );
 });
+
+// Keep this branch synchronized so the PR workflow can install the UI.
