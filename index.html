@@ -1,766 +1,1298 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Расписание">
-<meta name="theme-color" content="#07090f">
-<link rel="apple-touch-icon" href="icon.png">
-<title>Расписание · МеждОт25-2</title>
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,viewport-fit=cover"
+>
+
+<meta
+  name="theme-color"
+  content="#0b1020"
+>
+
+<title>Расписание — МеждОт25-2</title>
 
 <style>
+
 :root{
-  --bg:#07090f;
-  --text:#f7f8fb;
-  --muted:#8e96a8;
+  --bg:#080b14;
+  --panel:#0d1220;
+  --panel2:#111827;
   --line:rgba(255,255,255,.09);
-  --blue:#4f8cff;
-  --purple:#9b6cff;
-  --green:#27df91;
-  --yellow:#ffd166;
-  --pink:#ff5ca8;
-  --cyan:#42d9ff;
-  --shadow:0 25px 70px rgba(0,0,0,.35)
+  --text:#f5f7fb;
+  --muted:#8993a7;
+  --soft:#b9c1d0;
+  --white:#fff;
+
+  --radius:24px;
+
+  --shadow:
+    0 18px 55px
+    rgba(0,0,0,.28);
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
 
 body{
+
   margin:0;
+
   color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+
   background:
-    radial-gradient(circle at 15% 0%,rgba(79,140,255,.22),transparent 28%),
-    radial-gradient(circle at 90% 15%,rgba(155,108,255,.18),transparent 25%),
+
+    radial-gradient(
+      circle at 20% -10%,
+      rgba(91,107,255,.12),
+      transparent 32%
+    ),
+
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(44,211,153,.06),
+      transparent 28%
+    ),
+
     var(--bg);
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    Inter,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  -webkit-font-smoothing:
+    antialiased;
+
   min-height:100vh;
-  padding-top:env(safe-area-inset-top);
-  padding-bottom:env(safe-area-inset-bottom)
 }
 
-body:before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  opacity:.28;
-  background-image:
-    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
-  background-size:38px 38px
+button,
+input,
+select{
+  font:inherit;
 }
 
-button,input,select{font:inherit}
+.app{
 
-.container{
-  width:min(1050px,calc(100% - 28px));
+  max-width:1100px;
+
   margin:auto;
-  padding:18px 0 80px
+
+  padding:
+    18px
+    18px
+    60px;
 }
+
+.top{
+
+  position:sticky;
+
+  top:0;
+
+  z-index:20;
+
+  padding:
+    8px
+    0
+    14px;
+
+  background:
+    linear-gradient(
+      var(--bg) 72%,
+      transparent
+    );
+
+  backdrop-filter:
+    blur(12px);
+}
+
 
 /* =========================
    HEADER
 ========================= */
 
 .header{
+
   display:flex;
+
+  align-items:flex-end;
+
   justify-content:space-between;
-  align-items:center;
-  margin-bottom:20px
+
+  gap:18px;
+
+  margin-bottom:16px;
 }
 
 .brand{
+
   display:flex;
+
   align-items:center;
-  gap:13px
+
+  gap:13px;
 }
 
 .menu-button{
+
   width:50px;
+
   height:50px;
-  border:1px solid var(--line);
-  border-radius:17px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:16px;
+
   background:
     linear-gradient(
       135deg,
-      rgba(79,140,255,.25),
-      rgba(155,108,255,.25)
+      #6d72ff,
+      #8b5cf6
     );
+
   color:#fff;
+
   display:grid;
+
   place-items:center;
-  font-size:25px;
+
+  font-size:23px;
+
   cursor:pointer;
-  box-shadow:0 10px 35px rgba(79,140,255,.18);
-  transition:.2s
+
+  box-shadow:
+    0 10px 30px
+    rgba(104,91,255,.25);
+
+  transition:
+    transform .2s;
 }
 
 .menu-button:active{
-  transform:scale(.94)
+  transform:scale(.97);
 }
 
-.title{
-  font-size:30px;
-  font-weight:900;
-  letter-spacing:-1px
+h1{
+
+  font-size:28px;
+
+  line-height:1.05;
+
+  margin:
+    0
+    0
+    5px;
+
+  letter-spacing:-.8px;
 }
 
-.group{
+.subtitle{
+
   color:var(--muted);
-  font-weight:650;
-  margin-top:3px
-}
 
-.header-right{
-  display:flex;
-  align-items:center;
-  gap:10px
+  font-size:14px;
 }
 
 .updated{
+
   color:var(--muted);
-  font-size:12px
+
+  font-size:13px;
+
+  text-align:right;
 }
 
 .refresh{
-  border:0;
-  border-radius:14px;
-  padding:11px 14px;
-  background:#fff;
-  color:#080a0f;
-  font-weight:800;
-  cursor:pointer
+
+  margin-top:6px;
+
+  border:
+    1px solid var(--line);
+
+  background:#121827;
+
+  padding:
+    9px
+    13px;
+
+  border-radius:13px;
+
+  cursor:pointer;
+
+  font-weight:700;
 }
 
-.refresh.loading{
-  opacity:.55
+.refresh:active{
+  transform:scale(.98);
 }
+
 
 /* =========================
-   MENU
+   TABS
 ========================= */
 
-.menu-overlay{
-  position:fixed;
-  inset:0;
-  z-index:100;
-  background:rgba(0,0,0,.58);
-  backdrop-filter:blur(7px);
-  opacity:0;
-  pointer-events:none;
-  transition:.25s
-}
+.tabs{
 
-.menu-overlay.open{
-  opacity:1;
-  pointer-events:auto
-}
-
-.side-menu{
-  position:fixed;
-  left:0;
-  top:0;
-  bottom:0;
-  z-index:101;
-  width:min(380px,88vw);
-  background:linear-gradient(160deg,#101421,#090b12);
-  border-right:1px solid rgba(255,255,255,.08);
-  box-shadow:25px 0 70px rgba(0,0,0,.45);
-  transform:translateX(-105%);
-  transition:transform .28s cubic-bezier(.22,.8,.25,1);
-  padding:
-    calc(20px + env(safe-area-inset-top))
-    20px
-    calc(20px + env(safe-area-inset-bottom))
-}
-
-.side-menu.open{
-  transform:translateX(0)
-}
-
-.menu-header{
   display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:25px
+
+  gap:5px;
+
+  padding:5px;
+
+  background:
+    rgba(255,255,255,.055);
+
+  border:
+    1px solid var(--line);
+
+  border-radius:17px;
+
+  overflow:auto;
 }
 
-.menu-title{
-  font-size:25px;
-  font-weight:900
-}
+.tab{
 
-.menu-close{
-  width:44px;
-  height:44px;
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:rgba(255,255,255,.055);
-  color:#fff;
-  font-size:25px;
-  cursor:pointer
-}
+  flex:
+    1 0 120px;
 
-.menu-list{
-  display:flex;
-  flex-direction:column;
-  gap:7px
-}
-
-.menu-item{
-  width:100%;
   border:0;
+
   background:transparent;
-  color:#b9c0ce;
-  text-align:left;
-  padding:14px 16px;
-  border-radius:15px;
-  font-size:17px;
-  font-weight:800;
-  cursor:pointer
+
+  color:var(--muted);
+
+  padding:
+    11px
+    8px;
+
+  border-radius:12px;
+
+  cursor:pointer;
+
+  font-weight:750;
+
+  font-size:14px;
+
+  white-space:nowrap;
 }
 
-.menu-item:hover{
-  color:#fff;
-  background:rgba(255,255,255,.055)
+.tab.active{
+
+  background:#f7f8fb;
+
+  color:#111827;
+
+  box-shadow:
+    0 4px 18px
+    rgba(0,0,0,.2);
 }
 
-.menu-item.active{
-  color:#111;
-  background:#fff;
-  box-shadow:0 7px 25px rgba(255,255,255,.1)
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+  padding-top:8px;
 }
 
-.menu-divider{
-  height:1px;
-  background:var(--line);
-  margin:8px 0
-}
-
-.menu-footer{
-  position:absolute;
-  left:20px;
-  right:20px;
-  bottom:calc(20px + env(safe-area-inset-bottom));
-  color:#606878;
-  text-align:center;
-  font-size:11px
-}
 
 /* =========================
    HERO
 ========================= */
 
 .hero{
+
+  --accent:#7c83ff;
+  --accent2:#9aa0ff;
+
   position:relative;
+
   overflow:hidden;
-  border:1px solid var(--line);
-  border-radius:30px;
-  padding:30px;
-  margin-bottom:13px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:
+    var(--radius);
+
+  padding:24px;
+
+  margin-bottom:18px;
+
   background:
     linear-gradient(
       135deg,
-      rgba(24,30,47,.96),
-      rgba(12,15,25,.92)
+      rgba(255,255,255,.06),
+      rgba(255,255,255,.018)
     );
+
   box-shadow:var(--shadow);
-  backdrop-filter:blur(20px)
 }
 
-.hero:after{
+.hero::before{
+
   content:"";
+
   position:absolute;
-  width:360px;
-  height:360px;
-  border-radius:50%;
-  right:-130px;
-  top:-170px;
+
+  left:0;
+  top:0;
+  bottom:0;
+
+  width:4px;
+
   background:
-    radial-gradient(
-      circle,
-      rgba(79,140,255,.35),
-      transparent 65%
-    );
-  filter:blur(5px)
+    var(--accent);
 }
 
-.hero-content{
+.hero::after{
+
+  content:"";
+
+  position:absolute;
+
+  width:240px;
+
+  height:160px;
+
+  right:-60px;
+
+  top:-35px;
+
+  border-radius:50%;
+
+  background:
+    var(--accent);
+
+  opacity:.09;
+
+  filter:blur(25px);
+}
+
+.hero > *{
   position:relative;
-  z-index:1
+  z-index:1;
 }
 
 .eyebrow{
-  font-size:12px;
-  text-transform:uppercase;
-  letter-spacing:1.5px;
-  color:var(--cyan);
-  font-weight:900;
-  margin-bottom:12px
-}
 
-.live{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  color:#07120d;
-  background:var(--green);
-  padding:7px 10px;
-  border-radius:10px;
+  color:var(--accent2);
+
   font-size:11px;
-  font-weight:900;
-  margin-bottom:12px
-}
 
-.dot{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:#07120d
+  font-weight:900;
+
+  text-transform:uppercase;
+
+  letter-spacing:1.3px;
+
+  margin-bottom:10px;
 }
 
 .hero-time{
-  font-size:58px;
+
+  font-size:38px;
+
   line-height:1;
+
   font-weight:950;
-  letter-spacing:-3px;
-  margin-bottom:12px
+
+  letter-spacing:-2px;
+
+  margin-bottom:10px;
 }
 
 .hero-subject{
-  font-size:28px;
+
+  font-size:25px;
+
+  line-height:1.15;
+
   font-weight:900;
-  max-width:750px;
-  margin-bottom:12px
+
+  margin-bottom:13px;
 }
 
 .hero-countdown{
+
   display:inline-flex;
+
   align-items:center;
-  gap:9px;
-  margin-bottom:18px;
-  padding:10px 13px;
-  border:1px solid var(--line);
-  border-radius:13px;
-  background:rgba(255,255,255,.065);
-  color:#cbd1dd;
+
+  gap:8px;
+
+  border:
+    1px solid var(--line);
+
+  background:
+    rgba(255,255,255,.055);
+
+  border-radius:12px;
+
+  padding:
+    9px
+    12px;
+
+  color:var(--soft);
+
   font-size:13px;
-  font-weight:800
+
+  font-weight:800;
+
+  margin-bottom:14px;
 }
 
 .hero-countdown strong{
-  color:var(--green);
-  font-size:17px;
-  font-variant-numeric:tabular-nums
+
+  color:#6fe8ba;
+
+  font-size:16px;
+
+  font-variant-numeric:
+    tabular-nums;
 }
 
 .chips{
+
   display:flex;
+
   flex-wrap:wrap;
-  gap:8px
+
+  gap:7px;
 }
 
 .chip{
-  padding:9px 11px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.055);
-  border-radius:12px;
-  color:#cbd1dd;
-  font-size:13px;
-  font-weight:650
-}
 
-/* =========================
-   STATS
-========================= */
+  border:
+    1px solid
+    rgba(255,255,255,.085);
 
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-bottom:20px
-}
+  background:
+    rgba(0,0,0,.16);
 
-.stat{
-  border:1px solid var(--line);
-  background:rgba(16,19,28,.78);
-  border-radius:20px;
-  padding:17px;
-  box-shadow:0 12px 30px rgba(0,0,0,.18)
-}
+  color:#aeb7c7;
 
-.stat-value{
-  font-size:25px;
-  font-weight:900
-}
+  border-radius:10px;
 
-.stat-label{
-  color:var(--muted);
+  padding:
+    7px
+    9px;
+
   font-size:12px;
-  margin-top:4px
+
+  white-space:nowrap;
 }
 
-/* =========================
-   SEARCH / FILTER
-========================= */
-
-.toolbar{
-  display:grid;
-  grid-template-columns:1fr auto auto;
-  gap:9px;
-  margin-bottom:14px
-}
-
-.search{
-  min-width:0;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:11px 13px;
-  background:rgba(16,19,28,.82);
-  border:1px solid var(--line);
-  border-radius:14px
-}
-
-.search input{
-  width:100%;
-  border:0;
-  outline:0;
-  background:transparent;
-  color:#fff;
-  font-size:14px
-}
-
-.search input::placeholder{
-  color:#697184
-}
-
-.filter-select{
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:rgba(16,19,28,.82);
-  color:#dce2ed;
-  padding:0 12px;
-  outline:0;
-  min-width:130px
-}
-
-.clear-btn{
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:rgba(255,255,255,.055);
-  color:#b9c0ce;
-  padding:0 14px;
-  cursor:pointer
-}
-
-.clear-btn:hover{
-  color:#fff
-}
-
-/* =========================
-   DATE NAVIGATION
-========================= */
-
-.date-nav{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-bottom:22px
-}
-
-.date-nav button{
-  width:43px;
-  height:40px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:rgba(255,255,255,.055);
-  color:#fff;
-  cursor:pointer
-}
-
-.date-nav button:active{
-  transform:scale(.96)
-}
-
-.date-nav-main{
-  flex:1;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-height:40px;
-  padding:0 14px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:rgba(16,19,28,.72);
-  font-weight:850
-}
-
-.date-nav-main small{
-  color:var(--muted);
-  font-weight:650;
-  margin-left:7px
-}
 
 /* =========================
    DAYS
 ========================= */
 
 .day{
-  margin-bottom:34px
+  margin:24px 0 0;
 }
 
-.day-heading{
+.day-head{
+
   display:flex;
+
+  align-items:center;
+
   justify-content:space-between;
-  align-items:end;
-  padding:0 4px 11px
+
+  margin:
+    0
+    4px
+    11px;
 }
 
-.weekday{
-  font-size:23px;
-  font-weight:900;
-  text-transform:capitalize
+.day-title{
+
+  font-size:20px;
+
+  font-weight:850;
+
+  letter-spacing:-.35px;
 }
 
-.date{
+.day-date{
+
   color:var(--muted);
+
   font-size:13px;
-  margin-top:3px
+
+  margin-top:3px;
 }
 
 .count{
-  color:#b8c0cf;
-  background:rgba(255,255,255,.055);
-  border:1px solid var(--line);
-  padding:7px 10px;
-  border-radius:12px;
-  font-size:11px;
-  font-weight:800
+
+  color:var(--muted);
+
+  font-size:12px;
+
+  border:
+    1px solid var(--line);
+
+  padding:
+    6px
+    9px;
+
+  border-radius:999px;
 }
+
 
 /* =========================
-   LESSON CARDS
+   CARDS
 ========================= */
 
-.grid{
+.cards{
+
   display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:11px
+
+  gap:11px;
 }
 
-.lesson{
+.card{
+
+  --accent:#7c83ff;
+  --accent2:#9aa0ff;
+
   position:relative;
+
   overflow:hidden;
-  border:1px solid var(--line);
+
+  border:
+    1px solid var(--line);
+
   border-radius:22px;
-  padding:18px;
+
   background:
     linear-gradient(
-      145deg,
-      rgba(20,24,35,.96),
-      rgba(12,15,23,.92)
+      135deg,
+      rgba(255,255,255,.055),
+      rgba(255,255,255,.018)
     );
-  box-shadow:0 14px 35px rgba(0,0,0,.2);
-  transition:.2s
-}
 
-.lesson:hover{
-  transform:translateY(-3px);
-  border-color:rgba(255,255,255,.18)
-}
-
-.lesson:before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  bottom:0;
-  width:4px;
-  background:var(--accent,var(--blue))
-}
-
-.lesson:after{
-  content:"";
-  position:absolute;
-  width:150px;
-  height:150px;
-  border-radius:50%;
-  right:-90px;
-  bottom:-100px;
-  background:var(--accent,var(--blue));
-  opacity:.12;
-  filter:blur(15px)
-}
-
-.lesson.current{
-  border-color:rgba(39,223,145,.60);
   box-shadow:
-    0 0 0 1px rgba(39,223,145,.14),
-    0 20px 55px rgba(39,223,145,.12)
+    0 8px 26px
+    rgba(0,0,0,.16);
+
+  cursor:pointer;
+
+  transition:
+    transform .22s ease,
+    border-color .22s ease,
+    background .22s ease;
 }
 
-.lesson.future{
-  border-color:rgba(79,140,255,.13)
+.card:hover{
+
+  transform:
+    translateY(-2px);
+
+  border-color:
+    color-mix(
+      in srgb,
+      var(--accent) 38%,
+      transparent
+    );
 }
 
-.lesson.ended{
-  opacity:.55;
-  filter:saturate(.65)
+.card.open{
+
+  border-color:
+    color-mix(
+      in srgb,
+      var(--accent) 50%,
+      transparent
+    );
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.075),
+      rgba(255,255,255,.025)
+    );
 }
 
-.lesson-top{
-  display:flex;
-  justify-content:space-between;
-  gap:12px
+.card::before{
+
+  content:"";
+
+  position:absolute;
+
+  inset:
+    0
+    auto
+    0
+    0;
+
+  width:4px;
+
+  background:
+    var(--accent);
+}
+
+.card.current{
+
+  border-color:
+    rgba(44,211,153,.55);
+
+  box-shadow:
+    0
+    0
+    0
+    1px
+    rgba(44,211,153,.1);
+}
+
+.card.ended{
+  opacity:.5;
+}
+
+.card-main{
+
+  padding:
+    18px
+    18px
+    16px
+    21px;
+
+  position:relative;
+
+  min-height:145px;
 }
 
 .time{
-  color:var(--accent,var(--blue));
-  font-weight:900;
-  font-size:15px
+
+  font-size:16px;
+
+  font-weight:850;
+
+  color:var(--accent2);
+
+  letter-spacing:.2px;
 }
 
 .subject{
-  font-size:20px;
-  font-weight:900;
-  line-height:1.18;
-  margin:9px 0 8px;
-  max-width:90%
+
+  font-size:21px;
+
+  line-height:1.13;
+
+  font-weight:850;
+
+  letter-spacing:-.45px;
+
+  margin:
+    8px
+    0
+    14px;
+
+  max-width:75%;
 }
 
-/* =========================
-   TYPES
-========================= */
+.meta{
 
-.lesson-type{
-  display:inline-flex;
-  align-items:center;
-  width:max-content;
-  margin-bottom:13px;
-  padding:6px 9px;
-  border-radius:9px;
-  font-size:10px;
-  font-weight:900;
-  color:#dce2ed;
-  background:rgba(255,255,255,.065);
-  border:1px solid rgba(255,255,255,.08)
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:7px;
 }
 
-.lesson-type.lecture{
-  color:#8fc0ff;
-  background:rgba(79,140,255,.11);
-  border-color:rgba(79,140,255,.18)
+.pill{
+
+  border:
+    1px solid
+    rgba(255,255,255,.085);
+
+  background:
+    rgba(0,0,0,.16);
+
+  color:#aeb7c7;
+
+  border-radius:10px;
+
+  padding:
+    6px
+    9px;
+
+  font-size:12px;
+
+  white-space:nowrap;
 }
 
-.lesson-type.seminar{
-  color:#c4a5ff;
-  background:rgba(155,108,255,.11);
-  border-color:rgba(155,108,255,.18)
+.pill b{
+
+  color:#dce1eb;
+
+  font-weight:700;
 }
 
-.lesson-type.military{
-  color:#7ff0bd;
-  background:rgba(39,223,145,.10);
-  border-color:rgba(39,223,145,.18)
+.motif{
+
+  position:absolute;
+
+  right:15px;
+
+  top:15px;
+
+  width:150px;
+
+  height:95px;
+
+  opacity:.4;
+
+  pointer-events:none;
 }
+
 
 /* =========================
    STATUS
 ========================= */
 
-.badge{
-  height:max-content;
-  padding:6px 8px;
-  border-radius:9px;
-  font-size:9px;
-  font-weight:950;
-  white-space:nowrap
+.status-now{
+
+  color:#72eabd;
+
+  border-color:
+    rgba(44,211,153,.25);
+
+  background:
+    rgba(44,211,153,.08);
 }
 
-.badge.now{
-  color:#07120d;
-  background:var(--green);
-  box-shadow:0 0 15px rgba(39,223,145,.18)
+.status-future{
+
+  color:#9ea9ff;
+
+  background:
+    rgba(91,107,255,.08);
 }
 
-.badge.future{
-  color:#aebfff;
-  background:rgba(79,140,255,.14);
-  border:1px solid rgba(79,140,255,.22)
+.status-ended{
+
+  color:#7f899d;
+
+  background:
+    rgba(255,255,255,.04);
 }
 
-.badge.done{
-  color:#aeb6c5;
-  background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.08)
-}
 
 /* =========================
-   META
+   DETAILS
 ========================= */
 
-.meta{
+.card-details{
+
+  display:grid;
+
+  grid-template-rows:
+    0fr;
+
+  transition:
+    grid-template-rows
+    .28s
+    ease;
+}
+
+.card.open .card-details{
+
+  grid-template-rows:
+    1fr;
+}
+
+.details-inner{
+
+  overflow:hidden;
+}
+
+.details{
+
+  border-top:
+    1px solid var(--line);
+
+  padding:
+    15px
+    18px
+    17px
+    21px;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  gap:
+    11px
+    20px;
+}
+
+.detail-label{
+
+  font-size:11px;
+
+  color:#737e92;
+
+  text-transform:uppercase;
+
+  letter-spacing:.8px;
+
+  margin-bottom:3px;
+}
+
+.detail-value{
+
+  font-size:13px;
+
+  color:#e2e6ed;
+
+  line-height:1.35;
+}
+
+
+/* =========================
+   STATISTICS
+========================= */
+
+.stats-page{
+
   display:flex;
-  flex-wrap:wrap;
-  gap:7px
+
+  flex-direction:column;
+
+  gap:14px;
 }
 
-.meta span{
-  font-size:11px;
-  color:#aeb6c5;
-  background:rgba(255,255,255,.055);
-  border:1px solid rgba(255,255,255,.06);
-  padding:7px 9px;
-  border-radius:10px
+.stats-panel{
+
+  border:
+    1px solid var(--line);
+
+  border-radius:22px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.055),
+      rgba(255,255,255,.018)
+    );
+
+  padding:18px;
 }
+
+.stats-title{
+
+  margin:
+    0
+    0
+    14px;
+
+  font-size:21px;
+}
+
+.periods{
+
+  display:flex;
+
+  gap:7px;
+
+  overflow:auto;
+
+  margin-bottom:15px;
+}
+
+.period-btn{
+
+  border:
+    1px solid var(--line);
+
+  background:
+    rgba(255,255,255,.04);
+
+  color:var(--muted);
+
+  padding:
+    9px
+    13px;
+
+  border-radius:11px;
+
+  cursor:pointer;
+
+  white-space:nowrap;
+
+  font-weight:750;
+}
+
+.period-btn.active{
+
+  background:#f7f8fb;
+
+  color:#111827;
+}
+
+.stat-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      1fr
+    );
+
+  gap:9px;
+}
+
+.stat-box{
+
+  border:
+    1px solid var(--line);
+
+  border-radius:16px;
+
+  background:
+    rgba(0,0,0,.12);
+
+  padding:13px;
+}
+
+.stat-box b{
+
+  display:block;
+
+  font-size:22px;
+
+  margin-bottom:4px;
+}
+
+.stat-box span{
+
+  color:var(--muted);
+
+  font-size:11px;
+}
+
+.chart-list{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:10px;
+}
+
+.chart-row{
+
+  display:grid;
+
+  grid-template-columns:
+    170px
+    1fr
+    32px;
+
+  gap:9px;
+
+  align-items:center;
+
+  font-size:12px;
+}
+
+.chart-track{
+
+  height:8px;
+
+  border-radius:99px;
+
+  background:
+    rgba(255,255,255,.07);
+
+  overflow:hidden;
+}
+
+.chart-fill{
+
+  height:100%;
+
+  border-radius:99px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #6d72ff,
+      #8b5cf6
+    );
+}
+
 
 /* =========================
-   ARCHIVE / EMPTY
+   NOTIFICATIONS
 ========================= */
 
-.archive-header{
-  margin-bottom:20px
+.notify-page{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:14px;
 }
 
-.archive-title{
-  font-size:30px;
-  font-weight:900;
-  letter-spacing:-1px
-}
+.notify-panel{
 
-.archive-subtitle{
-  color:var(--muted);
-  margin-top:5px;
-  font-size:13px
-}
+  border:
+    1px solid var(--line);
 
-.empty,
-.error{
-  padding:45px 20px;
-  text-align:center;
-  border:1px solid var(--line);
   border-radius:22px;
-  background:rgba(16,19,28,.75);
-  color:var(--muted)
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.055),
+      rgba(255,255,255,.018)
+    );
+
+  padding:18px;
 }
 
-.empty strong,
-.error strong{
-  display:block;
-  color:var(--text);
-  font-size:19px;
-  margin-bottom:7px
+.notify-row{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  gap:14px;
+
+  padding:
+    14px
+    0;
+
+  border-bottom:
+    1px solid var(--line);
 }
 
-.source{
+.notify-row:last-child{
+  border-bottom:0;
+}
+
+.notify-title{
+  font-weight:800;
+}
+
+.notify-sub{
+
+  margin-top:4px;
+
+  color:var(--muted);
+
+  font-size:12px;
+
+  line-height:1.4;
+}
+
+.switch{
+
+  position:relative;
+
+  width:50px;
+
+  height:30px;
+
+  flex:none;
+}
+
+.switch input{
+
+  opacity:0;
+
+  width:0;
+
+  height:0;
+}
+
+.slider{
+
+  position:absolute;
+
+  inset:0;
+
+  border-radius:99px;
+
+  background:#343b4d;
+
+  cursor:pointer;
+
+  transition:.2s;
+}
+
+.slider::before{
+
+  content:"";
+
+  position:absolute;
+
+  width:22px;
+
+  height:22px;
+
+  left:4px;
+
+  top:4px;
+
+  border-radius:50%;
+
+  background:#fff;
+
+  transition:.2s;
+}
+
+.switch input:checked +
+.slider{
+
+  background:#2cd399;
+}
+
+.switch input:checked +
+.slider::before{
+
+  transform:
+    translateX(20px);
+}
+
+.notify-actions{
+
+  display:flex;
+
+  gap:8px;
+
+  flex-wrap:wrap;
+
+  margin-top:14px;
+}
+
+.notify-btn{
+
+  border:
+    1px solid var(--line);
+
+  background:#121827;
+
+  color:#fff;
+
+  padding:
+    10px
+    13px;
+
+  border-radius:12px;
+
+  cursor:pointer;
+
+  font-weight:750;
+}
+
+.notify-select{
+
+  border:
+    1px solid var(--line);
+
+  background:#121827;
+
+  color:#fff;
+
+  padding:
+    9px
+    11px;
+
+  border-radius:12px;
+
+  outline:0;
+}
+
+.notice{
+
+  color:var(--muted);
+
+  font-size:12px;
+
+  line-height:1.5;
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+
+  border:
+    1px dashed var(--line);
+
+  border-radius:20px;
+
+  padding:
+    34px
+    20px;
+
+  color:var(--muted);
+
   text-align:center;
-  color:#606878;
-  font-size:11px;
-  margin-top:35px
 }
+
+.loading{
+
+  text-align:center;
+
+  color:var(--muted);
+
+  padding:
+    60px
+    0;
+}
+
+.error{
+
+  border:
+    1px
+    solid
+    rgba(255,90,90,.28);
+
+  background:
+    rgba(255,80,80,.07);
+
+  padding:18px;
+
+  border-radius:18px;
+
+  color:#ffb5b5;
+}
+
 
 /* =========================
    MOBILE
@@ -768,565 +1300,557 @@ button,input,select{font:inherit}
 
 @media(max-width:700px){
 
-  .container{
-    width:calc(100% - 18px);
-    padding-top:10px
+  .app{
+
+    padding:
+      12px
+      12px
+      45px;
   }
 
-  .menu-button{
-    width:44px;
-    height:44px;
-    border-radius:14px;
-    font-size:22px
-  }
+  .header{
 
-  .title{
-    font-size:24px
-  }
-
-  .group{
-    font-size:13px
+    align-items:flex-start;
   }
 
   .updated{
-    display:none
+    display:none;
   }
 
-  .refresh{
-    padding:10px 12px;
-    font-size:12px
+  h1{
+    font-size:25px;
+  }
+
+  .tabs{
+    overflow:auto;
+  }
+
+  .tab{
+
+    flex-basis:
+      105px;
+
+    font-size:12px;
+
+    padding:
+      10px
+      4px;
   }
 
   .hero{
-    padding:21px;
-    border-radius:24px
+    padding:20px;
   }
 
   .hero-time{
-    font-size:42px;
-    letter-spacing:-2px
+    font-size:32px;
   }
 
   .hero-subject{
-    font-size:22px
+    font-size:21px;
   }
 
-  .hero-countdown{
-    font-size:12px
+  .subject{
+    font-size:19px;
+
+    max-width:82%;
   }
 
-  .hero-countdown strong{
-    font-size:15px
+  .details{
+    grid-template-columns:1fr;
   }
 
-  .stats{
-    gap:7px
+  .motif{
+
+    right:5px;
+
+    opacity:.25;
+
+    width:125px;
   }
 
-  .stat{
-    padding:13px;
-    border-radius:16px
+  .stat-grid{
+
+    grid-template-columns:
+      repeat(
+        2,
+        1fr
+      );
   }
 
-  .stat-value{
-    font-size:20px
+  .chart-row{
+
+    grid-template-columns:
+      1fr
+      auto;
   }
 
-  .stat-label{
-    font-size:10px
-  }
+  .chart-track{
 
-  .toolbar{
-    grid-template-columns:1fr 1fr
-  }
+    grid-column:
+      1 / -1;
 
-  .search{
-    grid-column:1/-1
-  }
-
-  .filter-select{
-    min-width:0
-  }
-
-  .clear-btn{
-    min-height:42px
-  }
-
-  .grid{
-    grid-template-columns:1fr
-  }
-
-  .lesson{
-    border-radius:19px
-  }
-
-  .weekday{
-    font-size:22px
-  }
-
-  .side-menu{
-    width:min(350px,86vw)
-  }
-
-  .date-nav-main{
-    font-size:13px
-  }
-
-  .date-nav-main small{
-    display:none
+    grid-row:2;
   }
 }
 
-@media(max-width:380px){
+@media(prefers-reduced-motion:reduce){
 
-  .title{
-    font-size:21px
-  }
+  *{
 
-  .group{
-    font-size:11px
-  }
+    scroll-behavior:auto!important;
 
-  .refresh{
-    font-size:11px
-  }
-
-  .hero-time{
-    font-size:36px
+    transition:none!important;
   }
 }
+
 </style>
 </head>
 
+
 <body>
 
-<div class="menu-overlay" id="menuOverlay"></div>
+<div class="app">
 
-<aside class="side-menu" id="sideMenu">
+  <div class="top">
 
-  <div class="menu-header">
+    <div class="header">
 
-    <div class="menu-title">
-      Расписание
-    </div>
+      <div class="brand">
 
-    <button
-      class="menu-close"
-      id="menuClose"
-      aria-label="Закрыть меню"
-    >
-      ×
-    </button>
+        <button
+          class="menu-button"
+          id="menuToggle"
+          aria-label="Меню"
+        >
+          ☰
+        </button>
 
-  </div>
+        <div>
 
-  <nav class="menu-list">
+          <h1>
+            Расписание
+          </h1>
 
-    <button
-      class="menu-item active"
-      data-view="nearest"
-    >
-      🏠&nbsp; Ближайшее
-    </button>
+          <div class="subtitle">
+            МеждОт25-2
+          </div>
 
-    <button
-      class="menu-item"
-      data-view="today"
-    >
-      📅&nbsp; Сегодня
-    </button>
+        </div>
 
-    <button
-      class="menu-item"
-      data-view="tomorrow"
-    >
-      ➡️&nbsp; Завтра
-    </button>
-
-    <button
-      class="menu-item"
-      data-view="week"
-    >
-      📆&nbsp; Неделя
-    </button>
-
-    <button
-      class="menu-item"
-      data-view="month"
-    >
-      🗓️&nbsp; Месяц
-    </button>
-
-    <div class="menu-divider"></div>
-
-    <button
-      class="menu-item"
-      data-view="archive"
-    >
-      🗄️&nbsp; Архив
-    </button>
-
-  </nav>
-
-  <div class="menu-footer">
-    МеждОт25-2 · РУЗ
-  </div>
-
-</aside>
-
-
-<div class="container">
-
-<header class="header">
-
-  <div class="brand">
-
-    <button
-      class="menu-button"
-      id="menuOpen"
-      aria-label="Открыть меню"
-    >
-      ☰
-    </button>
-
-    <div>
-
-      <div class="title">
-        Расписание
       </div>
 
-      <div class="group">
-        МеждОт25-2 · РУЗ
+
+      <div class="updated">
+
+        <div id="updatedText">
+          Загрузка…
+        </div>
+
+        <button
+          class="refresh"
+          id="refresh"
+        >
+          ↻ Обновить
+        </button>
+
       </div>
 
     </div>
 
-  </div>
-
-  <div class="header-right">
 
     <div
-      class="updated"
-      id="updated"
+      class="tabs"
+      id="tabs"
     >
-      Загрузка...
+
+      <button
+        class="tab active"
+        data-view="nearest"
+      >
+        Ближайшее
+      </button>
+
+      <button
+        class="tab"
+        data-view="today"
+      >
+        Сегодня
+      </button>
+
+      <button
+        class="tab"
+        data-view="tomorrow"
+      >
+        Завтра
+      </button>
+
+      <button
+        class="tab"
+        data-view="week"
+      >
+        Неделя
+      </button>
+
+      <button
+        class="tab"
+        data-view="month"
+      >
+        Месяц
+      </button>
+
+      <button
+        class="tab"
+        data-view="stats"
+      >
+        Статистика
+      </button>
+
+      <button
+        class="tab"
+        data-view="notifications"
+      >
+        Уведомления
+      </button>
+
     </div>
 
-    <button
-      class="refresh"
-      id="refreshButton"
-    >
-      ↻ Обновить
-    </button>
-
-  </div>
-
-</header>
-
-
-<div id="nextLesson"></div>
-
-<div
-  class="stats"
-  id="stats"
-></div>
-
-
-<div
-  class="toolbar"
-  id="toolbar"
->
-
-  <label
-    class="search"
-    aria-label="Поиск"
-  >
-
-    🔎
-
-    <input
-      id="searchInput"
-      type="search"
-      placeholder="Предмет, преподаватель, аудитория..."
-      autocomplete="off"
-    >
-
-  </label>
-
-
-  <select
-    id="typeFilter"
-    class="filter-select"
-    aria-label="Тип занятия"
-  >
-
-    <option value="all">
-      Все типы
-    </option>
-
-    <option value="lecture">
-      Лекции
-    </option>
-
-    <option value="seminar">
-      Семинары
-    </option>
-
-    <option value="military">
-      Военная подготовка
-    </option>
-
-    <option value="other">
-      Другие
-    </option>
-
-  </select>
-
-
-  <button
-    class="clear-btn"
-    id="clearFilters"
-  >
-    Сбросить
-  </button>
-
-</div>
-
-
-<div
-  class="date-nav"
-  id="dateNav"
->
-
-  <button
-    id="datePrev"
-    aria-label="Предыдущий период"
-  >
-    ‹
-  </button>
-
-
-  <div
-    class="date-nav-main"
-    id="dateNavMain"
-  >
-    Сегодня
   </div>
 
 
-  <button
-    id="dateNext"
-    aria-label="Следующий период"
+  <main
+    class="content"
+    id="content"
   >
-    ›
-  </button>
 
-</div>
+    <div class="loading">
+      Загружаю расписание…
+    </div>
 
-
-<main id="schedule">
-
-  <div class="empty">
-    Загрузка расписания...
-  </div>
-
-</main>
-
-
-<div class="source">
-
-  Автоматически обновляется
-  из РУЗ · МеждОт25-2
-
-</div>
+  </main>
 
 </div>
 
 
 <script>
 
-const TARGET_GROUP =
-  "МеждОт25-2";
+const state = {
+
+  data: [],
+
+  view: "nearest"
+
+};
 
 
-let schedule = [];
-
-let archive = [];
-
-let currentView =
-  "nearest";
-
-let selectedDate =
-  new Date();
-
-let searchText =
-  "";
-
-let typeFilter =
-  "all";
-
-let lastHeroKey =
-  "";
+let statsPeriod =
+  localStorage.getItem(
+    "statsPeriod"
+  ) || "week";
 
 
-const $ =
-  id =>
-    document.getElementById(id);
+let notificationSettings = {
+
+  enabled: false,
+
+  minutes: 15
+
+};
 
 
-const pad =
-  n =>
-    String(n).padStart(
-      2,
-      "0"
+try{
+
+  notificationSettings =
+    Object.assign(
+
+      notificationSettings,
+
+      JSON.parse(
+        localStorage.getItem(
+          "notificationSettings"
+        ) || "{}"
+      )
+
     );
 
+}
+catch{
 
-function localDateString(
-  d = new Date()
+}
+
+
+let notificationTimers = [];
+
+
+/* =========================
+   DAYS / MONTHS
+========================= */
+
+const RU_DAYS = [
+
+  "Воскресенье",
+
+  "Понедельник",
+
+  "Вторник",
+
+  "Среда",
+
+  "Четверг",
+
+  "Пятница",
+
+  "Суббота"
+
+];
+
+
+const RU_MONTHS = [
+
+  "января",
+
+  "февраля",
+
+  "марта",
+
+  "апреля",
+
+  "мая",
+
+  "июня",
+
+  "июля",
+
+  "августа",
+
+  "сентября",
+
+  "октября",
+
+  "ноября",
+
+  "декабря"
+
+];
+
+
+/* =========================
+   THEMES
+========================= */
+
+const THEMES = {
+
+  "Военная подготовка":{
+    a:"#32d69b",
+    b:"#65efbf",
+    icon:"military"
+  },
+
+  "Бухгалтерский учет и отчетность":{
+    a:"#f1c84b",
+    b:"#ffe17a",
+    icon:"ledger"
+  },
+
+  "Статистика":{
+    a:"#9a78ff",
+    b:"#c1a9ff",
+    icon:"stats"
+  },
+
+  "Анализ данных":{
+    a:"#42a5ff",
+    b:"#79c4ff",
+    icon:"data"
+  },
+
+  "Иностранный язык в сфере международных экономических отношений":{
+    a:"#e36b8f",
+    b:"#ff9ab6",
+    icon:"language"
+  },
+
+  "Концепции современного естествознания":{
+    a:"#55c9d7",
+    b:"#8cebf4",
+    icon:"science"
+  },
+
+  "Налоги и налоговая система Российской Федерации":{
+    a:"#ff8b55",
+    b:"#ffb083",
+    icon:"tax"
+  },
+
+  "Принятие стратегических решений в области национальной политики":{
+    a:"#c995ff",
+    b:"#e0bcff",
+    icon:"strategy"
+  },
+
+  "Экономическая теория":{
+    a:"#4fcf87",
+    b:"#8be5ad",
+    icon:"economy"
+  }
+
+};
+
+
+function themeFor(
+  subject
+){
+
+  return (
+    THEMES[
+      subject
+    ]
+
+    ||
+
+    {
+
+      a:"#8b93ff",
+      b:"#b3b9ff",
+      icon:"default"
+
+    }
+
+  );
+
+}
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function esc(
+  value
+){
+
+  return String(
+    value ?? ""
+  ).replace(
+    /[&<>"']/g,
+    symbol => ({
+
+      "&":"&amp;",
+
+      "<":"&lt;",
+
+      ">":"&gt;",
+
+      '"':"&quot;",
+
+      "'":"&#039;"
+
+    }[symbol])
+
+  );
+
+}
+
+
+function parseDate(
+  value
+){
+
+  const [
+    year,
+    month,
+    day
+  ] =
+    value
+      .split("-")
+      .map(Number);
+
+
+  return new Date(
+    year,
+    month - 1,
+    day
+  );
+
+}
+
+
+function dateKey(
+  date
+){
+
+  return date
+    .toISOString()
+    .slice(
+      0,
+      10
+    );
+
+}
+
+
+function dateText(
+  date
 ){
 
   return (
 
-    d.getFullYear()
+    `${date.getDate()} ` +
 
-    + "-"
-
-    + pad(
-      d.getMonth() + 1
-    )
-
-    + "-"
-
-    + pad(
-      d.getDate()
-    )
+    RU_MONTHS[
+      date.getMonth()
+    ]
 
   );
 
 }
 
 
-function addDays(
-  d,
-  n
-){
+function nowDate(){
 
-  const x =
-    new Date(d);
+  const date =
+    new Date();
 
-  x.setDate(
-    x.getDate() + n
+  date.setHours(
+    0,
+    0,
+    0,
+    0
   );
 
-  return x;
+  return date;
 
 }
 
 
-function dateFromString(
-  v
-){
+function tomorrow(){
 
-  return new Date(
-    v + "T00:00:00"
+  const date =
+    nowDate();
+
+  date.setDate(
+    date.getDate() + 1
   );
+
+  return date;
 
 }
 
 
-function formatDate(
-  v
-){
+function formatUpdated(){
 
-  return dateFromString(
-    v
-  )
-  .toLocaleDateString(
-    "ru-RU",
-    {
-      day:"numeric",
-      month:"long"
-    }
-  );
+  return (
 
-}
+    "Обновлено в " +
 
+    new Date()
+      .toLocaleTimeString(
+        "ru-RU",
+        {
+          hour:"2-digit",
+          minute:"2-digit"
+        }
+      )
 
-function formatFullDate(
-  v
-){
-
-  return dateFromString(
-    v
-  )
-  .toLocaleDateString(
-    "ru-RU",
-    {
-      day:"numeric",
-      month:"long",
-      year:"numeric"
-    }
-  );
-
-}
-
-
-function formatWeekday(
-  v
-){
-
-  return dateFromString(
-    v
-  )
-  .toLocaleDateString(
-    "ru-RU",
-    {
-      weekday:"long"
-    }
-  );
-
-}
-
-
-function esc(
-  v
-){
-
-  return String(
-    v ?? ""
-  )
-  .replace(
-    /&/g,
-    "&amp;"
-  )
-  .replace(
-    /</g,
-    "&lt;"
-  )
-  .replace(
-    />/g,
-    "&gt;"
-  )
-  .replace(
-    /"/g,
-    "&quot;"
-  )
-  .replace(
-    /'/g,
-    "&#039;"
-  );
-
-}
-
-
-function dt(
-  lesson,
-  field
-){
-
-  return new Date(
-    `${lesson.date}T${lesson[field]}:00`
   );
 
 }
@@ -1336,60 +1860,29 @@ function dt(
    STATUS
 ========================= */
 
-function current(
+function lessonStatus(
   lesson
 ){
 
   const now =
     new Date();
 
-  return (
 
-    now >=
-    dt(
-      lesson,
-      "beginLesson"
-    )
-
-    &&
-
-    now <
-    dt(
-      lesson,
-      "endLesson"
-    )
-
-  );
-
-}
+  const start =
+    new Date(
+      `${lesson.date}T${lesson.beginLesson}:00`
+    );
 
 
-function ended(
-  lesson
-){
+  const end =
+    new Date(
+      `${lesson.date}T${lesson.endLesson}:00`
+    );
 
-  return (
-
-    new Date()
-    >=
-    dt(
-      lesson,
-      "endLesson"
-    )
-
-  );
-
-}
-
-
-function lessonStatus(
-  lesson
-){
 
   if(
-    current(
-      lesson
-    )
+    now >= start &&
+    now < end
   ){
 
     return "current";
@@ -1398,9 +1891,7 @@ function lessonStatus(
 
 
   if(
-    ended(
-      lesson
-    )
+    now >= end
   ){
 
     return "ended";
@@ -1409,44 +1900,6 @@ function lessonStatus(
 
 
   return "future";
-
-}
-
-
-/* =========================
-   SORT
-========================= */
-
-function sort(
-  lessons
-){
-
-  return [
-    ...lessons
-  ].sort(
-
-    (
-      a,
-      b
-    ) =>
-
-      (
-        a.date || ""
-      )
-      .localeCompare(
-        b.date || ""
-      )
-
-      ||
-
-      (
-        a.beginLesson || ""
-      )
-      .localeCompare(
-        b.beginLesson || ""
-      )
-
-  );
 
 }
 
@@ -1463,60 +1916,58 @@ function countdown(
     Math.max(
       0,
       Math.floor(
-        milliseconds /
-        1000
+        milliseconds / 1000
       )
     );
 
 
   const days =
     Math.floor(
-      seconds /
-      86400
+      seconds / 86400
     );
 
 
-  seconds %=
-    86400;
+  seconds %= 86400;
 
 
   const hours =
     Math.floor(
-      seconds /
-      3600
+      seconds / 3600
     );
 
 
-  seconds %=
-    3600;
+  seconds %= 3600;
 
 
   const minutes =
     Math.floor(
-      seconds /
-      60
+      seconds / 60
     );
 
 
-  seconds %=
-    60;
+  seconds %= 60;
 
 
   if(
-    days
-    > 0
+    days > 0
   ){
 
     return (
 
       `${days}д ` +
 
-      `${pad(
+      `${String(
         hours
+      ).padStart(
+        2,
+        "0"
       )}ч ` +
 
-      `${pad(
+      `${String(
         minutes
+      ).padStart(
+        2,
+        "0"
       )}м`
 
     );
@@ -1526,16 +1977,25 @@ function countdown(
 
   return (
 
-    `${pad(
+    `${String(
       hours
+    ).padStart(
+      2,
+      "0"
     )}:` +
 
-    `${pad(
+    `${String(
       minutes
+    ).padStart(
+      2,
+      "0"
     )}:` +
 
-    `${pad(
+    `${String(
       seconds
+    ).padStart(
+      2,
+      "0"
     )}`
 
   );
@@ -1547,405 +2007,143 @@ function countdown(
    LESSON TYPE
 ========================= */
 
-function lessonType(
-  lesson
+function typeInfo(
+  value
 ){
 
   const raw =
     String(
-      lesson.kindOfWork ??
-      ""
+      value || ""
     ).trim();
+
+
+  const text =
+    raw.toLowerCase();
 
 
   if(
     !raw
   ){
 
-    return null;
+    return "";
 
   }
 
 
-  const value =
-    raw.toLowerCase();
-
-
   if(
-    value === "лекции"
-    ||
-    value === "лекция"
+    text.includes(
+      "лекц"
+    )
   ){
 
-    return {
-
-      text:
-        "Лекция",
-
-      className:
-        "lecture",
-
-      icon:
-        "🎓",
-
-      key:
-        "lecture"
-
-    };
+    return "🎓 Лекция";
 
   }
 
 
   if(
-    value.includes(
-      "практичес"
-    )
-    ||
-    value.includes(
+    text.includes(
       "семинар"
     )
+    ||
+    text.includes(
+      "практичес"
+    )
   ){
 
-    return {
-
-      text:
-        "Семинар",
-
-      className:
-        "seminar",
-
-      icon:
-        "📝",
-
-      key:
-        "seminar"
-
-    };
+    return "📝 Семинар";
 
   }
 
 
   if(
-    value.includes(
+    text.includes(
       "военная подготовка"
     )
   ){
 
-    return {
-
-      text:
-        "Военная подготовка",
-
-      className:
-        "military",
-
-      icon:
-        "🪖",
-
-      key:
-        "military"
-
-    };
+    return "🪖 Военная подготовка";
 
   }
 
 
-  return {
-
-    text:
-      raw,
-
-    className:
-      "",
-
-    icon:
-      "🎓",
-
-    key:
-      "other"
-
-  };
+  return `🎓 ${raw}`;
 
 }
 
 
 /* =========================
-   SUBJECT COLORS
-========================= */
-
-function accent(
-  subject = ""
-){
-
-  const s =
-    subject.toLowerCase();
-
-
-  if(
-    /статист|математ|анализ/
-    .test(s)
-  ){
-
-    return "#9b6cff";
-
-  }
-
-
-  if(
-    /китай|кит|язык/
-    .test(s)
-  ){
-
-    return "#ff5ca8";
-
-  }
-
-
-  if(
-    /англ|english/
-    .test(s)
-  ){
-
-    return "#42d9ff";
-
-  }
-
-
-  if(
-    /бух|учет|финанс/
-    .test(s)
-  ){
-
-    return "#ffd166";
-
-  }
-
-
-  if(
-    /военн|физ|спорт/
-    .test(s)
-  ){
-
-    return "#27df91";
-
-  }
-
-
-  return "#4f8cff";
-
-}
-
-
-/* =========================
-   GROUP FILTER
-========================= */
-
-function belongsToTargetGroup(
-  lesson
-){
-
-  const group =
-    String(
-      lesson.group ??
-      ""
-    ).trim();
-
-
-  if(
-    group ===
-    TARGET_GROUP
-  ){
-
-    return true;
-
-  }
-
-
-  const stream =
-    String(
-      lesson.stream ??
-      ""
-    )
-    .replace(
-      /[\[\]"']/g,
-      ""
-    );
-
-
-  const parts =
-    stream
-      .split(
-        /[;,]/
-      )
-      .map(
-        value =>
-          value.trim()
-      )
-      .filter(
-        Boolean
-      );
-
-
-  return (
-
-    parts.includes(
-      TARGET_GROUP
-    )
-
-    ||
-
-    stream.includes(
-      TARGET_GROUP
-    )
-
-  );
-
-}
-
-
-/* =========================
-   SEARCH FILTER
-========================= */
-
-function matchesFilters(
-  lesson
-){
-
-  const type =
-    lessonType(
-      lesson
-    );
-
-
-  if(
-    typeFilter !==
-    "all"
-  ){
-
-    if(
-      !type
-      ||
-      type.key !==
-      typeFilter
-    ){
-
-      return false;
-
-    }
-
-  }
-
-
-  if(
-    !searchText
-  ){
-
-    return true;
-
-  }
-
-
-  const query =
-    searchText.toLowerCase();
-
-
-  return [
-
-    lesson.discipline,
-
-    lesson.lecturer,
-
-    lesson.auditorium,
-
-    lesson.building,
-
-    lesson.kindOfWork
-
-  ]
-
-  .some(
-    value =>
-      String(
-        value ?? ""
-      )
-      .toLowerCase()
-      .includes(
-        query
-      )
-  );
-
-}
-
-
-function filtered(
-  lessons
-){
-
-  return lessons.filter(
-    matchesFilters
-  );
-
-}
-
-
-/* =========================
-   NEXT
+   FIND NEXT
 ========================= */
 
 function nextLesson(){
 
-  const sorted =
-    sort(
-      schedule
-    );
+  const lessons =
+    state.data
+      .slice()
+      .sort(
+        (
+          a,
+          b
+        ) =>
+
+          (
+            a.date +
+            a.beginLesson
+          ).localeCompare(
+
+            b.date +
+            b.beginLesson
+
+          )
+
+      );
 
 
-  const currentLesson =
-    sorted.find(
+  const current =
+    lessons.find(
       lesson =>
-        current(
+        lessonStatus(
           lesson
-        )
+        ) ===
+        "current"
     );
 
 
   if(
-    currentLesson
+    current
   ){
 
     return {
 
-      lesson:
-        currentLesson,
+      lesson:current,
 
-      current:
-        true
+      current:true
 
     };
 
   }
 
 
-  const future =
-    sorted.find(
+  const next =
+    lessons.find(
       lesson =>
-        !ended(
+        lessonStatus(
           lesson
-        )
+        ) ===
+        "future"
     );
 
 
   if(
-    future
+    next
   ){
 
     return {
 
-      lesson:
-        future,
+      lesson:next,
 
-      current:
-        false
+      current:false
 
     };
 
@@ -1953,449 +2151,6 @@ function nextLesson(){
 
 
   return null;
-
-}
-
-
-/* =========================
-   HERO
-========================= */
-
-function renderNext(){
-
-  const result =
-    nextLesson();
-
-
-  const container =
-    $(
-      "nextLesson"
-    );
-
-
-  if(
-    !result
-  ){
-
-    container.innerHTML = `
-
-      <section class="hero">
-
-        <div class="hero-content">
-
-          <div class="eyebrow">
-            Расписание
-          </div>
-
-          <div class="hero-subject">
-            Ближайших занятий нет ✨
-          </div>
-
-        </div>
-
-      </section>
-
-    `;
-
-    return;
-
-  }
-
-
-  const lesson =
-    result.lesson;
-
-
-  const type =
-    lessonType(
-      lesson
-    );
-
-
-  const target =
-
-    result.current
-
-    ?
-
-    dt(
-      lesson,
-      "endLesson"
-    )
-
-    :
-
-    dt(
-      lesson,
-      "beginLesson"
-    );
-
-
-  container.innerHTML = `
-
-    <section class="hero">
-
-      <div class="hero-content">
-
-
-        ${
-          result.current
-
-          ?
-
-          `
-            <div class="live">
-
-              <span class="dot"></span>
-
-              СЕЙЧАС ИДЁТ
-
-            </div>
-          `
-
-          :
-
-          `
-            <div class="eyebrow">
-
-              Следующая пара
-
-            </div>
-          `
-        }
-
-
-        <div class="hero-time">
-
-          ${esc(
-            lesson.beginLesson
-          )}
-
-          –
-
-          ${esc(
-            lesson.endLesson
-          )}
-
-        </div>
-
-
-        <div class="hero-subject">
-
-          ${esc(
-            lesson.discipline ||
-            "Предмет не указан"
-          )}
-
-        </div>
-
-
-        <div class="hero-countdown">
-
-          <span>
-
-            ${
-              result.current
-              ? "⏳ Осталось"
-              : "⏱️ До пары"
-            }
-
-          </span>
-
-
-          <strong
-            id="heroCountdown"
-          >
-
-            ${countdown(
-              target -
-              new Date()
-            )}
-
-          </strong>
-
-        </div>
-
-
-        <div class="chips">
-
-          ${
-            type
-
-            ?
-
-            `
-
-              <span class="chip">
-
-                ${type.icon}
-
-                ${esc(
-                  type.text
-                )}
-
-              </span>
-
-            `
-
-            :
-
-            ""
-          }
-
-
-          <span class="chip">
-
-            📅
-
-            ${esc(
-              formatWeekday(
-                lesson.date
-              )
-            )}
-
-            ,
-
-            ${esc(
-              formatDate(
-                lesson.date
-              )
-            )}
-
-          </span>
-
-
-          ${
-            lesson.lecturer
-
-            ?
-
-            `
-
-              <span class="chip">
-
-                👨‍🏫
-
-                ${esc(
-                  lesson.lecturer
-                )}
-
-              </span>
-
-            `
-
-            :
-
-            ""
-          }
-
-
-          ${
-            lesson.auditorium
-
-            ?
-
-            `
-
-              <span class="chip">
-
-                🏫
-
-                ${esc(
-                  lesson.auditorium
-                )}
-
-              </span>
-
-            `
-
-            :
-
-            ""
-          }
-
-
-          ${
-            lesson.building
-
-            ?
-
-            `
-
-              <span class="chip">
-
-                📍
-
-                ${esc(
-                  lesson.building
-                )}
-
-              </span>
-
-            `
-
-            :
-
-            ""
-          }
-
-
-        </div>
-
-      </div>
-
-    </section>
-
-  `;
-
-}
-
-
-/* =========================
-   STATS
-========================= */
-
-function renderStats(){
-
-  const today =
-    localDateString();
-
-
-  const lessons =
-    schedule.filter(
-      lesson =>
-        lesson.date ===
-        today
-    );
-
-
-  const minutes =
-    lessons.reduce(
-
-      (
-        total,
-        lesson
-      ) =>
-
-        total +
-
-        Math.max(
-
-          0,
-
-          (
-            dt(
-              lesson,
-              "endLesson"
-            )
-
-            -
-
-            dt(
-              lesson,
-              "beginLesson"
-            )
-          )
-
-          / 60000
-
-        ),
-
-      0
-
-    );
-
-
-  const hours =
-    Math.floor(
-      minutes /
-      60
-    );
-
-
-  const mins =
-    Math.round(
-      minutes %
-      60
-    );
-
-
-  const buildings =
-    new Set(
-
-      lessons
-
-        .map(
-          lesson =>
-            lesson.building
-        )
-
-        .filter(
-          Boolean
-        )
-
-    ).size;
-
-
-  $(
-    "stats"
-  ).innerHTML = `
-
-    <div class="stat">
-
-      <div class="stat-value">
-
-        ${lessons.length}
-
-      </div>
-
-      <div class="stat-label">
-
-        пар сегодня
-
-      </div>
-
-    </div>
-
-
-    <div class="stat">
-
-      <div class="stat-value">
-
-        ${
-          hours
-          ? `${hours}ч ${mins}м`
-          : `${mins}м`
-        }
-
-      </div>
-
-      <div class="stat-label">
-
-        учебного времени
-
-      </div>
-
-    </div>
-
-
-    <div class="stat">
-
-      <div class="stat-value">
-
-        ${buildings}
-
-      </div>
-
-      <div class="stat-label">
-
-        корпуса сегодня
-
-      </div>
-
-    </div>
-
-  `;
 
 }
 
@@ -2421,11 +2176,11 @@ function statusBadge(
 
     return `
 
-      <div class="badge now">
-
-        СЕЙЧАС
-
-      </div>
+      <span
+        class="pill status-now"
+      >
+        🟢 <b>Сейчас</b>
+      </span>
 
     `;
 
@@ -2439,11 +2194,11 @@ function statusBadge(
 
     return `
 
-      <div class="badge done">
-
-        ЗАВЕРШЕНО
-
-      </div>
+      <span
+        class="pill status-ended"
+      >
+        ⚪ <b>Завершено</b>
+      </span>
 
     `;
 
@@ -2452,11 +2207,11 @@ function statusBadge(
 
   return `
 
-    <div class="badge future">
-
-      ПРЕДСТОИТ
-
-    </div>
+    <span
+      class="pill status-future"
+    >
+      🔵 <b>Предстоит</b>
+    </span>
 
   `;
 
@@ -2464,28 +2219,246 @@ function statusBadge(
 
 
 /* =========================
-   LESSON CARD
+   MOTIFS
 ========================= */
 
-function lessonCard(
+function motif(
+  type
+){
+
+  const common =
+
+    `fill="none"
+     stroke="currentColor"
+     stroke-width="1.5"
+     stroke-linecap="round"
+     stroke-linejoin="round"`;
+
+
+  const motifs = {
+
+    military:`
+
+      <path d="M15 22h120M22 18l20-14 20 14M77 18l18-13 32 18"/>
+
+      <path d="M24 42h100M35 57h80M48 72h54"/>
+
+    `,
+
+    ledger:`
+
+      <path d="M20 15h104v65H20z"/>
+
+      <path d="M42 15v65M72 15v65M100 15v65"/>
+
+      <path d="M20 34h104M20 54h104"/>
+
+    `,
+
+    stats:`
+
+      <path d="M18 78V22M18 78h118"/>
+
+      <circle
+        cx="36"
+        cy="64"
+        r="2.5"
+      />
+
+      <circle
+        cx="58"
+        cy="54"
+        r="2.5"
+      />
+
+      <circle
+        cx="79"
+        cy="42"
+        r="2.5"
+      />
+
+      <circle
+        cx="103"
+        cy="31"
+        r="2.5"
+      />
+
+      <path d="M36 64l22-10 21-12 24-11"/>
+
+    `,
+
+    data:`
+
+      <path d="M24 24h96v54H24z"/>
+
+      <path d="M43 24v54M67 24v54M91 24v54"/>
+
+      <path d="M24 42h96M24 60h96"/>
+
+      <circle cx="34" cy="34" r="2"/>
+
+      <circle cx="78" cy="51" r="2"/>
+
+      <circle cx="106" cy="69" r="2"/>
+
+    `,
+
+    language:`
+
+      <path d="M20 22h70a10 10 0 0 1 10 10v20a10 10 0 0 1-10 10H55l-14 12v-12H30a10 10 0 0 1-10-10V22z"/>
+
+      <path d="M37 38h32M37 48h20"/>
+
+      <path d="M111 24c9 8 12 18 7 30-4 10-13 17-24 20"/>
+
+    `,
+
+    science:`
+
+      <ellipse
+        cx="72"
+        cy="48"
+        rx="52"
+        ry="19"
+      />
+
+      <ellipse
+        cx="72"
+        cy="48"
+        rx="52"
+        ry="19"
+        transform="rotate(60 72 48)"
+      />
+
+      <ellipse
+        cx="72"
+        cy="48"
+        rx="52"
+        ry="19"
+        transform="rotate(-60 72 48)"
+      />
+
+      <circle
+        cx="72"
+        cy="48"
+        r="5"
+      />
+
+    `,
+
+    tax:`
+
+      <path d="M28 12h70l18 18v54H28z"/>
+
+      <path d="M98 12v20h18"/>
+
+      <path d="M44 47h55M44 61h39"/>
+
+      <circle
+        cx="55"
+        cy="29"
+        r="6"
+      />
+
+    `,
+
+    strategy:`
+
+      <path d="M25 72V52M25 52h34M59 52V34M59 34h30M59 52h30M89 34V22M89 34v18M89 52h26"/>
+
+      <circle
+        cx="25"
+        cy="72"
+        r="4"
+      />
+
+      <circle
+        cx="59"
+        cy="52"
+        r="4"
+      />
+
+      <circle
+        cx="89"
+        cy="34"
+        r="4"
+      />
+
+      <circle
+        cx="115"
+        cy="52"
+        r="4"
+      />
+
+    `,
+
+    economy:`
+
+      <path d="M18 78V18M18 78h120"/>
+
+      <path d="M28 68c15-2 19-19 33-18 15 1 15 14 28 11 13-3 15-25 37-35"/>
+
+      <path d="M116 26h10v10"/>
+
+    `,
+
+    default:`
+
+      <circle
+        cx="72"
+        cy="48"
+        r="28"
+      />
+
+      <path
+        d="M72 20v56M44 48h56"
+      />
+
+    `
+
+  };
+
+
+  return `
+
+    <svg
+      viewBox="0 0 145 95"
+      ${common}
+      style="color:var(--accent)"
+    >
+
+      ${
+        motifs[
+          type
+        ] ||
+
+        motifs.default
+      }
+
+    </svg>
+
+  `;
+
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+function cardTemplate(
   lesson
 ){
+
+  const theme =
+    themeFor(
+      lesson.discipline
+    );
+
 
   const status =
     lessonStatus(
       lesson
-    );
-
-
-  const type =
-    lessonType(
-      lesson
-    );
-
-
-  const color =
-    accent(
-      lesson.discipline
     );
 
 
@@ -2494,169 +2467,224 @@ function lessonCard(
     <article
 
       class="
-        lesson
+        card
         ${status}
       "
 
       style="
-        --accent:${color};
+        --accent:${theme.a};
+        --accent2:${theme.b};
       "
 
     >
 
+      <div
+        class="card-main"
+      >
 
-      <div class="lesson-top">
-
-
-        <div>
-
-
-          <div class="time">
-
-            ${esc(
-              lesson.beginLesson
-            )}
-
-            –
-
-            ${esc(
-              lesson.endLesson
-            )}
-
-          </div>
-
-
-          <div class="subject">
-
-            ${esc(
-              lesson.discipline ||
-              "Предмет не указан"
-            )}
-
-          </div>
-
+        <div class="motif">
 
           ${
-            type
-
-            ?
-
-            `
-
-              <div
-                class="
-                  lesson-type
-                  ${type.className}
-                "
-              >
-
-                ${type.icon}
-
-                ${esc(
-                  type.text
-                )}
-
-              </div>
-
-            `
-
-            :
-
-            ""
+            motif(
+              theme.icon
+            )
           }
-
 
         </div>
 
 
-        ${statusBadge(
-          lesson
-        )}
+        <div class="time">
 
+          ${esc(
+            lesson.beginLesson
+          )}
+
+          —
+
+          ${esc(
+            lesson.endLesson
+          )}
+
+        </div>
+
+
+        <div class="subject">
+
+          ${esc(
+            lesson.discipline
+          )}
+
+        </div>
+
+
+        <div class="meta">
+
+
+          ${statusBadge(
+            lesson
+          )}
+
+
+          <span class="pill">
+
+            🎓
+
+            <b>
+
+              ${esc(
+                typeInfo(
+                  lesson.kindOfWork
+                ) ||
+                "Тип не указан"
+              )}
+
+            </b>
+
+          </span>
+
+
+          <span class="pill">
+
+            👨‍🏫
+
+            <b>
+
+              ${esc(
+                lesson.lecturer ||
+                "Не указан"
+              )}
+
+            </b>
+
+          </span>
+
+
+          <span class="pill">
+
+            🏫
+
+            <b>
+
+              ${esc(
+                lesson.auditorium ||
+                "Не указана"
+              )}
+
+            </b>
+
+          </span>
+
+
+        </div>
 
       </div>
 
 
-      <div class="meta">
+      <div
+        class="card-details"
+      >
+
+        <div
+          class="details-inner"
+        >
+
+          <div class="details">
 
 
-        ${
-          lesson.lecturer
+            <div>
 
-          ?
+              <div
+                class="detail-label"
+              >
+                Преподаватель
+              </div>
 
-          `
+              <div
+                class="detail-value"
+              >
 
-            <span>
+                ${esc(
+                  lesson.lecturer_title ||
+                  lesson.lecturer ||
+                  "—"
+                )}
 
-              👨‍🏫
+              </div>
 
-              ${esc(
-                lesson.lecturer
-              )}
-
-            </span>
-
-          `
-
-          :
-
-          ""
-        }
+            </div>
 
 
-        ${
-          lesson.auditorium
+            <div>
 
-          ?
+              <div
+                class="detail-label"
+              >
+                Аудитория
+              </div>
 
-          `
+              <div
+                class="detail-value"
+              >
 
-            <span>
+                ${esc(
+                  lesson.auditorium ||
+                  "—"
+                )}
 
-              🏫
+              </div>
 
-              ${esc(
-                lesson.auditorium
-              )}
-
-            </span>
-
-          `
-
-          :
-
-          ""
-        }
+            </div>
 
 
-        ${
-          lesson.building
+            <div>
 
-          ?
+              <div
+                class="detail-label"
+              >
+                Корпус / адрес
+              </div>
 
-          `
+              <div
+                class="detail-value"
+              >
 
-            <span>
+                ${esc(
+                  lesson.building ||
+                  "—"
+                )}
 
-              📍
+              </div>
 
-              ${esc(
-                lesson.building
-              )}
+            </div>
 
-            </span>
 
-          `
+            <div>
 
-          :
+              <div
+                class="detail-label"
+              >
+                Тип занятия
+              </div>
 
-          ""
-        }
+              <div
+                class="detail-value"
+              >
 
+                ${esc(
+                  lesson.kindOfWork ||
+                  "—"
+                )}
+
+              </div>
+
+            </div>
+
+
+          </div>
+
+        </div>
 
       </div>
-
 
     </article>
 
@@ -2666,574 +2694,403 @@ function lessonCard(
 
 
 /* =========================
-   GROUP + RENDER
+   CARDS
 ========================= */
 
-function groupAndRender(
-  lessons
+function attachCards(){
+
+  document
+    .querySelectorAll(
+      ".card"
+    )
+    .forEach(
+      card => {
+
+        card.addEventListener(
+          "click",
+          () => {
+
+            card.classList.toggle(
+              "open"
+            );
+
+          }
+        );
+
+      }
+    );
+
+}
+
+
+/* =========================
+   GROUP BY DATE
+========================= */
+
+function groupByDate(
+  items
 ){
 
-  const container =
-    $(
-      "schedule"
+  const map =
+    new Map();
+
+
+  items
+    .sort(
+      (
+        a,
+        b
+      ) =>
+
+        (
+          a.date +
+          a.beginLesson
+        ).localeCompare(
+
+          b.date +
+          b.beginLesson
+
+        )
+    )
+    .forEach(
+      lesson => {
+
+        if(
+          !map.has(
+            lesson.date
+          )
+        ){
+
+          map.set(
+            lesson.date,
+            []
+          );
+
+        }
+
+
+        map
+          .get(
+            lesson.date
+          )
+          .push(
+            lesson
+          );
+
+      }
     );
 
 
-  if(
-    !lessons.length
-  ){
+  return map;
 
-    container.innerHTML = `
-
-      <div class="empty">
-
-        <strong>
-          Занятий нет
-        </strong>
-
-        В выбранном периоде
-        ничего не найдено.
-
-      </div>
-
-    `;
-
-    return;
-
-  }
+}
 
 
-  const grouped = {};
+/* =========================
+   DAY
+========================= */
+
+function dayBlock(
+  date,
+  items
+){
+
+  const day =
+    parseDate(
+      date
+    );
 
 
-  lessons.forEach(
-    lesson => {
+  return `
 
-      if(
-        !grouped[
-          lesson.date
-        ]
-      ){
+    <section
+      class="day"
+    >
 
-        grouped[
-          lesson.date
-        ] = [];
+      <div
+        class="day-head"
+      >
 
-      }
+        <div>
 
-
-      grouped[
-        lesson.date
-      ].push(
-        lesson
-      );
-
-    }
-  );
-
-
-  container.innerHTML =
-
-    Object.keys(
-      grouped
-    )
-
-    .sort()
-
-    .map(
-
-      date => `
-
-        <section class="day">
-
-          <div class="day-heading">
-
-
-            <div>
-
-              <div class="weekday">
-
-                ${esc(
-                  formatWeekday(
-                    date
-                  )
-                )}
-
-              </div>
-
-
-              <div class="date">
-
-                ${esc(
-                  formatDate(
-                    date
-                  )
-                )}
-
-              </div>
-
-            </div>
-
-
-            <div class="count">
-
-              ${
-                grouped[
-                  date
-                ].length
-              }
-
-              ${
-                grouped[
-                  date
-                ].length === 1
-                ? "пара"
-                : grouped[
-                    date
-                  ].length < 5
-                ? "пары"
-                : "пар"
-              }
-
-            </div>
-
-
-          </div>
-
-
-          <div class="grid">
+          <div
+            class="day-title"
+          >
 
             ${
-              sort(
-                grouped[
-                  date
-                ]
-              )
-
-              .map(
-                lessonCard
-              )
-
-              .join("")
+              RU_DAYS[
+                day.getDay()
+              ]
             }
 
           </div>
 
 
-        </section>
+          <div
+            class="day-date"
+          >
 
-      `
+            ${dateText(
+              day
+            )}
 
-    )
+          </div>
 
-    .join("");
+        </div>
+
+
+        <div class="count">
+
+          ${
+            items.length
+          }
+
+          ${
+            items.length === 1
+
+              ?
+
+            "пара"
+
+              :
+
+            items.length < 5
+
+              ?
+
+            "пары"
+
+              :
+
+            "пар"
+          }
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="cards"
+      >
+
+        ${
+          items
+            .map(
+              cardTemplate
+            )
+            .join("")
+        }
+
+      </div>
+
+    </section>
+
+  `;
 
 }
 
 
 /* =========================
-   BASE FILTER
+   VIEW ITEMS
 ========================= */
 
-function getBaseLessons(){
+function currentItems(){
 
-  const day =
-    localDateString(
-      selectedDate
-    );
+  const all =
+    state.data
+      .slice()
+      .sort(
+        (
+          a,
+          b
+        ) =>
 
+          (
+            a.date +
+            a.beginLesson
+          ).localeCompare(
 
-  if(
-    currentView ===
-    "today"
-  ){
+            b.date +
+            b.beginLesson
 
-    return schedule.filter(
-      lesson =>
-        lesson.date ===
-        day
-    );
-
-  }
-
-
-  if(
-    currentView ===
-    "tomorrow"
-  ){
-
-    const tomorrow =
-      localDateString(
-        addDays(
-          selectedDate,
-          1
-        )
+          )
       );
-
-
-    return schedule.filter(
-      lesson =>
-        lesson.date ===
-        tomorrow
-    );
-
-  }
-
-
-  if(
-    currentView ===
-    "week"
-  ){
-
-    const end =
-      localDateString(
-        addDays(
-          selectedDate,
-          6
-        )
-      );
-
-
-    return schedule.filter(
-      lesson =>
-
-        lesson.date >=
-        day
-
-        &&
-
-        lesson.date <=
-        end
-
-    );
-
-  }
-
-
-  if(
-    currentView ===
-    "month"
-  ){
-
-    const end =
-      localDateString(
-        addDays(
-          selectedDate,
-          29
-        )
-      );
-
-
-    return schedule.filter(
-      lesson =>
-
-        lesson.date >=
-        day
-
-        &&
-
-        lesson.date <=
-        end
-
-    );
-
-  }
 
 
   const today =
-    localDateString();
+    nowDate();
 
 
-  const dates =
-
-    [
-
-      ...new Set(
-
-        sort(
-          schedule
-        )
-
-        .filter(
-          lesson =>
-            lesson.date >=
-            today
-        )
-
-        .map(
-          lesson =>
-            lesson.date
-        )
-
-      )
-
-    ];
+  const todayKey =
+    dateKey(
+      today
+    );
 
 
-  return dates.length
-
-    ?
-
-    schedule.filter(
-      lesson =>
-        lesson.date ===
-        dates[0]
-    )
-
-    :
-
-    [];
-
-}
-
-
-/* =========================
-   DATE NAV
-========================= */
-
-function renderDateNav(){
-
-  const nav =
-    $(
-      "dateNav"
+  const tomorrowKey =
+    dateKey(
+      tomorrow()
     );
 
 
   if(
-    currentView ===
-    "nearest"
-    ||
-    currentView ===
-    "archive"
-  ){
-
-    nav.style.display =
-      "none";
-
-    return;
-
-  }
-
-
-  nav.style.display =
-    "flex";
-
-
-  const day =
-    localDateString(
-      selectedDate
-    );
-
-
-  if(
-    currentView ===
+    state.view ===
     "today"
   ){
 
-    $(
-      "dateNavMain"
-    ).innerHTML =
-
-      `Сегодня
-       <small>
-         ${esc(
-           formatFullDate(
-             day
-           )
-         )}
-       </small>`;
+    return all.filter(
+      lesson =>
+        lesson.date ===
+        todayKey
+    );
 
   }
 
 
-  else if(
-    currentView ===
+  if(
+    state.view ===
     "tomorrow"
   ){
 
-    const d =
-      localDateString(
-        addDays(
-          selectedDate,
-          1
-        )
-      );
-
-
-    $(
-      "dateNavMain"
-    ).innerHTML =
-
-      `Завтра
-       <small>
-         ${esc(
-           formatFullDate(
-             d
-           )
-         )}
-       </small>`;
+    return all.filter(
+      lesson =>
+        lesson.date ===
+        tomorrowKey
+    );
 
   }
 
 
-  else if(
-    currentView ===
+  if(
+    state.view ===
     "week"
   ){
 
     const end =
-      localDateString(
-        addDays(
-          selectedDate,
-          6
-        )
+      new Date(
+        today
       );
 
+    end.setDate(
+      end.getDate() + 6
+    );
 
-    $(
-      "dateNavMain"
-    ).innerHTML =
 
-      `Неделя
-       <small>
-         ${esc(
-           formatDate(
-             day
-           )
-         )}
-         —
-         ${esc(
-           formatDate(
-             end
-           )
-         )}
-       </small>`;
+    return all.filter(
+      lesson => {
+
+        const date =
+          parseDate(
+            lesson.date
+          );
+
+
+        return (
+
+          date >=
+          today
+
+          &&
+
+          date <=
+          end
+
+        );
+
+      }
+    );
 
   }
 
 
-  else{
+  if(
+    state.view ===
+    "month"
+  ){
 
-    const end =
-      localDateString(
-        addDays(
-          selectedDate,
-          29
-        )
-      );
+    return all.filter(
+      lesson => {
+
+        const date =
+          parseDate(
+            lesson.date
+          );
 
 
-    $(
-      "dateNavMain"
-    ).innerHTML =
+        return (
 
-      `Период
+          date.getFullYear() ===
+          today.getFullYear()
 
-       <small>
+          &&
 
-         ${esc(
-           formatDate(
-             day
-           )
-         )}
+          date.getMonth() ===
+          today.getMonth()
 
-         —
+        );
 
-         ${esc(
-           formatDate(
-             end
-           )
-         )}
-
-       </small>`;
+      }
+    );
 
   }
+
+
+  const next =
+    nextLesson();
+
+
+  if(
+    !next
+  ){
+
+    return [];
+
+  }
+
+
+  return [
+
+    next.lesson,
+
+    ...all.filter(
+      lesson =>
+        lesson.date ===
+        next.lesson.date
+        &&
+        lesson !==
+        next.lesson
+    )
+
+  ].slice(
+    0,
+    8
+  );
 
 }
 
 
 /* =========================
-   ARCHIVE
+   RENDER NEAREST
 ========================= */
 
-function renderArchive(){
+function renderNearest(){
 
-  $(
-    "nextLesson"
-  ).style.display =
-    "none";
-
-
-  $(
-    "stats"
-  ).style.display =
-    "none";
-
-
-  $(
-    "dateNav"
-  ).style.display =
-    "none";
-
-
-  const lessons =
-    filtered(
-      archive
-    );
-
-
-  const container =
-    $(
-      "schedule"
-    );
+  const next =
+    nextLesson();
 
 
   if(
-    !lessons.length
+    !next
   ){
 
-    container.innerHTML = `
-
-      <section
-        class="archive-header"
-      >
-
-        <div
-          class="archive-title"
-        >
-          Архив
-        </div>
-
-        <div
-          class="archive-subtitle"
-        >
-          ${archive.length
-            ? "По вашему фильтру ничего не найдено"
-            : "Прошедшие занятия"
-          }
-        </div>
-
-      </section>
-
+    document.getElementById(
+      "content"
+    ).innerHTML = `
 
       <div class="empty">
 
-        <strong>
-
-          ${
-            archive.length
-            ? "Ничего не найдено"
-            : "Архив пока пуст"
-          }
-
-        </strong>
-
-
-        ${
-          archive.length
-          ? "Измени поиск или фильтр."
-          : "После завершения занятий GitHub Action автоматически добавит их сюда."
-        }
+        Ближайших занятий нет.
 
       </div>
 
@@ -3244,64 +3101,168 @@ function renderArchive(){
   }
 
 
-  const grouped = {};
+  const lesson =
+    next.lesson;
 
 
-  sort(
-    lessons
-  ).forEach(
-    lesson => {
-
-      if(
-        !grouped[
-          lesson.date
-        ]
-      ){
-
-        grouped[
-          lesson.date
-        ] = [];
-
-      }
+  const theme =
+    themeFor(
+      lesson.discipline
+    );
 
 
-      grouped[
-        lesson.date
-      ].push(
+  const target =
+
+    next.current
+
+      ?
+
+    new Date(
+      `${lesson.date}T${lesson.endLesson}:00`
+    )
+
+      :
+
+    new Date(
+      `${lesson.date}T${lesson.beginLesson}:00`
+    );
+
+
+  const rest =
+    currentItems().filter(
+      item =>
+        item !==
         lesson
-      );
-
-    }
-  );
+    );
 
 
-  container.innerHTML = `
+  document.getElementById(
+    "content"
+  ).innerHTML = `
 
     <section
-      class="archive-header"
+      class="hero"
+      style="
+        --accent:${theme.a};
+        --accent2:${theme.b};
+      "
     >
 
       <div
-        class="archive-title"
+        class="eyebrow"
       >
-        Архив
+
+        ${
+          next.current
+          ? "Сейчас идёт"
+          : "Следующая пара"
+        }
+
       </div>
 
 
       <div
-        class="archive-subtitle"
+        class="hero-time"
       >
 
-        Показано
-        ${lessons.length}
+        ${esc(
+          lesson.beginLesson
+        )}
+
+        —
+
+        ${esc(
+          lesson.endLesson
+        )}
+
+      </div>
+
+
+      <div
+        class="hero-subject"
+      >
+
+        ${esc(
+          lesson.discipline
+        )}
+
+      </div>
+
+
+      <div
+        class="hero-countdown"
+      >
 
         ${
-          lessons.length === 1
-          ? "пара"
-          : lessons.length < 5
-          ? "пары"
-          : "пар"
+          next.current
+          ? "⏳ Осталось"
+          : "⏱ До пары"
         }
+
+        <strong
+          id="heroTimer"
+        >
+
+          ${countdown(
+            target -
+            new Date()
+          )}
+
+        </strong>
+
+      </div>
+
+
+      <div class="chips">
+
+        <span class="chip">
+
+          ${esc(
+            typeInfo(
+              lesson.kindOfWork
+            )
+          )}
+
+        </span>
+
+
+        <span class="chip">
+
+          📅
+
+          ${esc(
+            dateText(
+              parseDate(
+                lesson.date
+              )
+            )
+          )}
+
+        </span>
+
+
+        <span class="chip">
+
+          👨‍🏫
+
+          ${esc(
+            lesson.lecturer ||
+            "—"
+          )}
+
+        </span>
+
+
+        <span class="chip">
+
+          🏫
+
+          ${esc(
+            lesson.auditorium ||
+            "—"
+          )}
+
+        </span>
 
       </div>
 
@@ -3309,86 +3270,1245 @@ function renderArchive(){
 
 
     ${
+      rest.length
 
-      Object.keys(
-        grouped
+      ?
+
+      groupByDate(
+        rest
       )
 
-      .sort()
+      &&
 
-      .map(
+      [...groupByDate(
+        rest
+      )]
 
-        date => `
+        .map(
+          (
+            [
+              date,
+              items
+            ]
+          ) =>
+            dayBlock(
+              date,
+              items
+            )
+        )
+        .join("")
 
-          <section class="day">
+      :
 
-            <div class="day-heading">
-
-              <div>
-
-                <div class="weekday">
-
-                  ${esc(
-                    formatWeekday(
-                      date
-                    )
-                  )}
-
-                </div>
-
-                <div class="date">
-
-                  ${esc(
-                    formatDate(
-                      date
-                    )
-                  )}
-
-                </div>
-
-              </div>
-
-
-              <div class="count">
-
-                ${
-                  grouped[
-                    date
-                  ].length
-                }
-
-              </div>
-
-            </div>
-
-
-            <div class="grid">
-
-              ${
-                sort(
-                  grouped[
-                    date
-                  ]
-                )
-                .map(
-                  lessonCard
-                )
-                .join("")
-              }
-
-            </div>
-
-          </section>
-
-        `
-
-      )
-
-      .join("")
+      ""
 
     }
 
   `;
+
+
+  attachCards();
+
+}
+
+
+/* =========================
+   RENDER LIST
+========================= */
+
+function renderList(
+  items
+){
+
+  const container =
+    document.getElementById(
+      "content"
+    );
+
+
+  if(
+    !items.length
+  ){
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        На этот период
+        занятий нет.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+
+    [
+
+      ...groupByDate(
+        items
+      )
+
+    ]
+
+      .map(
+        (
+          [
+            date,
+            lessons
+          ]
+        ) =>
+          dayBlock(
+            date,
+            lessons
+          )
+      )
+
+      .join("");
+
+
+  attachCards();
+
+}
+
+
+/* =========================
+   STATISTICS DATA
+========================= */
+
+function statisticsItems(){
+
+  const now =
+    new Date();
+
+
+  const start =
+    new Date(
+      now
+    );
+
+
+  const end =
+    new Date(
+      now
+    );
+
+
+  if(
+    statsPeriod ===
+    "week"
+  ){
+
+    const mondayIndex =
+      (
+        now.getDay() +
+        6
+      ) % 7;
+
+
+    start.setDate(
+      now.getDate() -
+      mondayIndex
+    );
+
+
+    end.setDate(
+      start.getDate() +
+      6
+    );
+
+  }
+
+
+  else if(
+    statsPeriod ===
+    "month"
+  ){
+
+    start.setDate(
+      1
+    );
+
+
+    end.setMonth(
+      start.getMonth() +
+      1
+    );
+
+
+    end.setDate(
+      0
+    );
+
+  }
+
+
+  else{
+
+    /*
+      Для семестра берём
+      текущий учебный год.
+    */
+
+    if(
+      now.getMonth() < 7
+    ){
+
+      start.setFullYear(
+        now.getFullYear() - 1
+      );
+
+      start.setMonth(
+        8,
+        1
+      );
+
+      end.setFullYear(
+        now.getFullYear()
+      );
+
+      end.setMonth(
+        1,
+        28
+      );
+
+    }
+
+    else{
+
+      start.setFullYear(
+        now.getFullYear()
+      );
+
+      start.setMonth(
+        8,
+        1
+      );
+
+      end.setFullYear(
+        now.getFullYear() + 1
+      );
+
+      end.setMonth(
+        1,
+        28
+      );
+
+    }
+
+  }
+
+
+  const startKey =
+    dateKey(
+      start
+    );
+
+
+  const endKey =
+    dateKey(
+      end
+    );
+
+
+  return state.data.filter(
+    lesson =>
+      lesson.date >=
+      startKey
+      &&
+      lesson.date <=
+      endKey
+  );
+
+}
+
+
+/* =========================
+   STATISTICS
+========================= */
+
+function renderStats(){
+
+  const items =
+    statisticsItems();
+
+
+  let minutes = 0;
+
+
+  items.forEach(
+    lesson => {
+
+      const start =
+        new Date(
+          `${lesson.date}T${lesson.beginLesson}:00`
+        );
+
+
+      const end =
+        new Date(
+          `${lesson.date}T${lesson.endLesson}:00`
+        );
+
+
+      minutes +=
+        Math.max(
+          0,
+          (
+            end -
+            start
+          ) / 60000
+        );
+
+    }
+  );
+
+
+  const hours =
+    Math.floor(
+      minutes / 60
+    );
+
+
+  const mins =
+    Math.round(
+      minutes % 60
+    );
+
+
+  const lectures =
+    items.filter(
+      lesson =>
+        /лекц/i.test(
+          lesson.kindOfWork ||
+          ""
+        )
+    ).length;
+
+
+  const seminars =
+    items.filter(
+      lesson =>
+        /семинар|практичес/i.test(
+          lesson.kindOfWork ||
+          ""
+        )
+    ).length;
+
+
+  const military =
+    items.filter(
+      lesson =>
+        /военная подготовка/i.test(
+          lesson.kindOfWork ||
+          ""
+        )
+    ).length;
+
+
+  const teachers =
+    new Set(
+      items
+        .map(
+          lesson =>
+            lesson.lecturer
+        )
+        .filter(
+          Boolean
+        )
+    ).size;
+
+
+  const buildings =
+    new Set(
+      items
+        .map(
+          lesson =>
+            lesson.building
+        )
+        .filter(
+          Boolean
+        )
+    ).size;
+
+
+  const subjects = {};
+
+
+  items.forEach(
+    lesson => {
+
+      const name =
+        lesson.discipline ||
+        "Без названия";
+
+
+      subjects[name] =
+        (
+          subjects[name] ||
+          0
+        ) + 1;
+
+    }
+  );
+
+
+  const topSubjects =
+
+    Object
+      .entries(
+        subjects
+      )
+      .sort(
+        (
+          a,
+          b
+        ) =>
+          b[1] -
+          a[1]
+      )
+      .slice(
+        0,
+        10
+      );
+
+
+  const maxSubject =
+    topSubjects[0]?.[1] ||
+    1;
+
+
+  document.getElementById(
+    "content"
+  ).innerHTML = `
+
+    <div
+      class="stats-page"
+    >
+
+      <section
+        class="stats-panel"
+      >
+
+        <h2
+          class="stats-title"
+        >
+
+          📊 Учебная статистика
+
+        </h2>
+
+
+        <div
+          class="periods"
+        >
+
+          <button
+            class="
+              period-btn
+              ${
+                statsPeriod === "week"
+                ? "active"
+                : ""
+              }
+            "
+            data-period="week"
+          >
+            Неделя
+          </button>
+
+
+          <button
+            class="
+              period-btn
+              ${
+                statsPeriod === "month"
+                ? "active"
+                : ""
+              }
+            "
+            data-period="month"
+          >
+            Месяц
+          </button>
+
+
+          <button
+            class="
+              period-btn
+              ${
+                statsPeriod === "semester"
+                ? "active"
+                : ""
+              }
+            "
+            data-period="semester"
+          >
+            Семестр
+          </button>
+
+        </div>
+
+
+        <div
+          class="stat-grid"
+        >
+
+          <div class="stat-box">
+
+            <b>
+              ${items.length}
+            </b>
+
+            <span>
+              Всего пар
+            </span>
+
+          </div>
+
+
+          <div class="stat-box">
+
+            <b>
+
+              ${hours}ч
+              ${mins}м
+
+            </b>
+
+            <span>
+              Учебного времени
+            </span>
+
+          </div>
+
+
+          <div class="stat-box">
+
+            <b>
+              ${lectures}
+            </b>
+
+            <span>
+              Лекций
+            </span>
+
+          </div>
+
+
+          <div class="stat-box">
+
+            <b>
+              ${seminars}
+            </b>
+
+            <span>
+              Семинаров
+            </span>
+
+          </div>
+
+
+          <div class="stat-box">
+
+            <b>
+              ${military}
+            </b>
+
+            <span>
+              Военная подготовка
+            </span>
+
+          </div>
+
+
+          <div class="stat-box">
+
+            <b>
+              ${teachers}
+            </b>
+
+            <span>
+              Преподавателей
+            </span>
+
+          </div>
+
+
+          <div class="stat-box">
+
+            <b>
+              ${buildings}
+            </b>
+
+            <span>
+              Корпусов
+            </span>
+
+          </div>
+
+
+          <div class="stat-box">
+
+            <b>
+              ${
+                Object.keys(
+                  subjects
+                ).length
+              }
+            </b>
+
+            <span>
+              Предметов
+            </span>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <section
+        class="stats-panel"
+      >
+
+        <h2
+          class="stats-title"
+        >
+          📚 Предметы
+        </h2>
+
+
+        <div
+          class="chart-list"
+        >
+
+          ${
+            topSubjects.length
+
+            ?
+
+            topSubjects
+              .map(
+                (
+                  [
+                    name,
+                    count
+                  ]
+                ) => `
+
+                  <div
+                    class="chart-row"
+                  >
+
+                    <span>
+
+                      ${esc(
+                        name
+                      )}
+
+                    </span>
+
+                    <div
+                      class="chart-track"
+                    >
+
+                      <div
+                        class="chart-fill"
+                        style="
+                          width:
+                          ${
+                            (
+                              count /
+                              maxSubject
+                            ) *
+                            100
+                          }%;
+                        "
+                      ></div>
+
+                    </div>
+
+                    <b>
+
+                      ${count}
+
+                    </b>
+
+                  </div>
+
+                `
+              )
+              .join("")
+
+            :
+
+            `
+              <div
+                class="empty"
+              >
+                Нет данных
+              </div>
+            `
+
+          }
+
+        </div>
+
+      </section>
+
+    </div>
+
+  `;
+
+
+  document
+    .querySelectorAll(
+      "[data-period]"
+    )
+    .forEach(
+      button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            statsPeriod =
+              button.dataset.period;
+
+
+            localStorage.setItem(
+              "statsPeriod",
+              statsPeriod
+            );
+
+
+            renderStats();
+
+          }
+        );
+
+      }
+    );
+
+}
+
+
+/* =========================
+   NOTIFICATIONS
+========================= */
+
+function saveNotificationSettings(){
+
+  localStorage.setItem(
+
+    "notificationSettings",
+
+    JSON.stringify(
+      notificationSettings
+    )
+
+  );
+
+}
+
+
+async function requestNotifications(){
+
+  if(
+    !(
+      "Notification"
+      in
+      window
+    )
+  ){
+
+    alert(
+      "Этот браузер не поддерживает уведомления."
+    );
+
+    return;
+
+  }
+
+
+  const permission =
+    await Notification.requestPermission();
+
+
+  if(
+    permission ===
+    "granted"
+  ){
+
+    notificationSettings.enabled =
+      true;
+
+
+    saveNotificationSettings();
+
+
+    scheduleNotifications();
+
+
+    renderNotifications();
+
+  }
+
+  else{
+
+    alert(
+      "Разрешение на уведомления не получено."
+    );
+
+  }
+
+}
+
+
+function scheduleNotifications(){
+
+  notificationTimers
+    .forEach(
+      clearTimeout
+    );
+
+
+  notificationTimers = [];
+
+
+  if(
+    !notificationSettings.enabled
+    ||
+    !(
+      "Notification"
+      in
+      window
+    )
+    ||
+    Notification.permission !==
+    "granted"
+  ){
+
+    return;
+
+  }
+
+
+  const now =
+    Date.now();
+
+
+  state.data
+    .slice()
+    .sort(
+      (
+        a,
+        b
+      ) =>
+
+        (
+          a.date +
+          a.beginLesson
+        ).localeCompare(
+
+          b.date +
+          b.beginLesson
+
+        )
+    )
+    .forEach(
+      lesson => {
+
+        const start =
+          new Date(
+            `${lesson.date}T${lesson.beginLesson}:00`
+          ).getTime();
+
+
+        const trigger =
+          start -
+          (
+            notificationSettings.minutes *
+            60000
+          );
+
+
+        if(
+          trigger >
+          now
+          &&
+          trigger <
+          (
+            now +
+            7 *
+            24 *
+            60 *
+            60 *
+            1000
+          )
+        ){
+
+          const timer =
+            setTimeout(
+              () => {
+
+                new Notification(
+                  "Скоро пара",
+                  {
+                    body:
+                      `${lesson.discipline} · ${lesson.beginLesson}–${lesson.endLesson}`,
+
+                    icon:
+                      "icon.png"
+                  }
+                );
+
+
+                scheduleNotifications();
+
+              },
+
+              trigger -
+              now
+            );
+
+
+          notificationTimers.push(
+            timer
+          );
+
+        }
+
+      }
+    );
+
+}
+
+
+function renderNotifications(){
+
+  document.getElementById(
+    "content"
+  ).innerHTML = `
+
+    <div
+      class="notify-page"
+    >
+
+      <section
+        class="notify-panel"
+      >
+
+        <h2
+          style="
+            margin:
+              0
+              0
+              5px;
+          "
+        >
+
+          🔔 Уведомления
+
+        </h2>
+
+
+        <div
+          class="notice"
+        >
+
+          Настройки сохраняются
+          только на этом устройстве.
+
+        </div>
+
+
+        <div
+          class="notify-row"
+        >
+
+          <div>
+
+            <div
+              class="notify-title"
+            >
+              Напоминать о парах
+            </div>
+
+            <div
+              class="notify-sub"
+            >
+
+              Показывать уведомление
+              перед началом занятия.
+
+            </div>
+
+          </div>
+
+
+          <label
+            class="switch"
+          >
+
+            <input
+              type="checkbox"
+              id="notifyToggle"
+              ${
+                notificationSettings.enabled
+                ? "checked"
+                : ""
+              }
+            >
+
+            <span
+              class="slider"
+            ></span>
+
+          </label>
+
+        </div>
+
+
+        <div
+          class="notify-row"
+        >
+
+          <div>
+
+            <div
+              class="notify-title"
+            >
+              Напомнить за
+            </div>
+
+            <div
+              class="notify-sub"
+            >
+              Время до начала пары.
+            </div>
+
+          </div>
+
+
+          <select
+            class="notify-select"
+            id="notifyMinutes"
+          >
+
+            <option
+              value="5"
+              ${
+                notificationSettings.minutes === 5
+                ? "selected"
+                : ""
+              }
+            >
+              5 минут
+            </option>
+
+            <option
+              value="10"
+              ${
+                notificationSettings.minutes === 10
+                ? "selected"
+                : ""
+              }
+            >
+              10 минут
+            </option>
+
+            <option
+              value="15"
+              ${
+                notificationSettings.minutes === 15
+                ? "selected"
+                : ""
+              }
+            >
+              15 минут
+            </option>
+
+            <option
+              value="30"
+              ${
+                notificationSettings.minutes === 30
+                ? "selected"
+                : ""
+              }
+            >
+              30 минут
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div
+          class="notify-actions"
+        >
+
+          <button
+            class="notify-btn"
+            id="allowNotif"
+          >
+            🔔 Разрешить уведомления
+          </button>
+
+
+          <button
+            class="notify-btn"
+            id="testNotif"
+          >
+            Проверить
+          </button>
+
+        </div>
+
+
+        <div
+          class="notice"
+          style="
+            margin-top:14px;
+          "
+        >
+
+          Это первая версия уведомлений:
+          они планируются, пока страница
+          открыта. Настоящие фоновые
+          Push-уведомления для iPhone/iPad
+          подключим следующим этапом.
+
+        </div>
+
+      </section>
+
+    </div>
+
+  `;
+
+
+  document
+    .getElementById(
+      "notifyToggle"
+    )
+    .addEventListener(
+      "change",
+      async event => {
+
+        if(
+          event.target.checked
+        ){
+
+          await requestNotifications();
+
+        }
+
+        else{
+
+          notificationSettings.enabled =
+            false;
+
+
+          saveNotificationSettings();
+
+
+          scheduleNotifications();
+
+
+          renderNotifications();
+
+        }
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      "notifyMinutes"
+    )
+    .addEventListener(
+      "change",
+      event => {
+
+        notificationSettings.minutes =
+          Number(
+            event.target.value
+          );
+
+
+        saveNotificationSettings();
+
+
+        scheduleNotifications();
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      "allowNotif"
+    )
+    .addEventListener(
+      "click",
+      requestNotifications
+    );
+
+
+  document
+    .getElementById(
+      "testNotif"
+    )
+    .addEventListener(
+      "click",
+      async () => {
+
+        if(
+          notificationSettings.enabled ===
+          false
+        ){
+
+          await requestNotifications();
+
+        }
+
+
+        if(
+          "Notification"
+          in
+          window
+          &&
+          Notification.permission ===
+          "granted"
+        ){
+
+          new Notification(
+            "Расписание",
+            {
+
+              body:
+                "Тестовое уведомление работает.",
+
+              icon:
+                "icon.png"
+
+            }
+          );
+
+        }
+
+      }
+    );
 
 }
 
@@ -3397,200 +4517,95 @@ function renderArchive(){
    RENDER
 ========================= */
 
-function renderSchedule(){
+function render(){
+
+  document
+    .querySelectorAll(
+      ".tab"
+    )
+    .forEach(
+      button => {
+
+        button.classList.toggle(
+
+          "active",
+
+          button.dataset.view ===
+          state.view
+
+        );
+
+      }
+    );
+
 
   if(
-    currentView ===
-    "archive"
+    state.view ===
+    "nearest"
   ){
 
-    renderArchive();
+    renderNearest();
 
     return;
 
   }
 
 
-  $(
-    "toolbar"
-  ).style.display =
-    "grid";
-
-
   if(
-    currentView ===
-    "nearest"
+    state.view ===
+    "stats"
   ){
 
-    $(
-      "nextLesson"
-    ).style.display =
-      "block";
-
-
-    $(
-      "stats"
-    ).style.display =
-      "grid";
-
-
-    renderNext();
     renderStats();
 
-  }
-
-  else{
-
-    $(
-      "nextLesson"
-    ).style.display =
-      "none";
-
-
-    $(
-      "stats"
-    ).style.display =
-
-      currentView ===
-      "today"
-
-      ?
-
-      "grid"
-
-      :
-
-      "none";
-
-
-    if(
-      currentView ===
-      "today"
-    ){
-
-      renderStats();
-
-    }
+    return;
 
   }
 
 
-  renderDateNav();
+  if(
+    state.view ===
+    "notifications"
+  ){
+
+    renderNotifications();
+
+    return;
+
+  }
 
 
-  groupAndRender(
-
-    filtered(
-      getBaseLessons()
-    )
-
+  renderList(
+    currentItems()
   );
 
 }
 
 
 /* =========================
-   VIEW
+   LOAD DATA
 ========================= */
 
-function setView(
-  view
-){
+async function load(){
 
-  currentView =
-    view;
+  document.getElementById(
+    "content"
+  ).innerHTML = `
 
+    <div class="loading">
 
-  if(
-    view ===
-    "today"
-  ){
+      Загружаю расписание…
 
-    selectedDate =
-      new Date();
+    </div>
 
-  }
-
-
-  if(
-    view ===
-    "tomorrow"
-  ){
-
-    selectedDate =
-      new Date();
-
-  }
-
-
-  document
-    .querySelectorAll(
-      ".menu-item"
-    )
-    .forEach(
-      button =>
-        button.classList.toggle(
-          "active",
-          button.dataset.view ===
-          view
-        )
-    );
-
-
-  renderSchedule();
-
-}
-
-
-/* =========================
-   FILTER UPDATE
-========================= */
-
-function updateFilters(){
-
-  searchText =
-    $(
-      "searchInput"
-    ).value.trim();
-
-
-  typeFilter =
-    $(
-      "typeFilter"
-    ).value;
-
-
-  renderSchedule();
-
-}
-
-
-/* =========================
-   LOAD SCHEDULE
-========================= */
-
-async function loadSchedule(){
-
-  const button =
-    $(
-      "refreshButton"
-    );
-
-
-  button.classList.add(
-    "loading"
-  );
-
-
-  button.textContent =
-    "↻ Обновление...";
+  `;
 
 
   try{
 
     const response =
       await fetch(
-        "schedule.json?t=" +
+        "./schedule.json?ts=" +
         Date.now(),
         {
           cache:
@@ -3604,7 +4619,8 @@ async function loadSchedule(){
     ){
 
       throw new Error(
-        "Не удалось загрузить schedule.json"
+        "HTTP " +
+        response.status
       );
 
     }
@@ -3621,97 +4637,68 @@ async function loadSchedule(){
     ){
 
       throw new Error(
-        "Неверный формат schedule.json"
+        "schedule.json должен содержать массив"
       );
 
     }
 
 
-    schedule =
-      sort(
-
-        data.filter(
-          lesson =>
-
-            lesson.date
-
-            &&
-
-            belongsToTargetGroup(
-              lesson
-            )
-
-        )
-
-      );
+    state.data =
+      data;
 
 
-    $(
-      "updated"
+    document.getElementById(
+      "updatedText"
     ).textContent =
-
-      "Обновлено в " +
-
-      new Date()
-        .toLocaleTimeString(
-          "ru-RU",
-          {
-            hour:"2-digit",
-            minute:"2-digit"
-          }
-        );
+      formatUpdated();
 
 
-    renderSchedule();
+    render();
+
+
+    scheduleNotifications();
 
   }
-
 
   catch(
     error
   ){
 
-    if(
-      currentView !==
-      "archive"
-    ){
+    document.getElementById(
+      "content"
+    ).innerHTML = `
 
-      $(
-        "schedule"
-      ).innerHTML = `
+      <div
+        class="error"
+      >
 
-        <div
-          class="error"
-        >
+        <b>
+          Не удалось загрузить
+          schedule.json.
+        </b>
 
-          <strong>
+        <br><br>
 
-            Не удалось загрузить расписание
+        Проверь, что
+        <code>
+          index.html
+        </code>
+        и
+        <code>
+          schedule.json
+        </code>
+        находятся в одной папке.
 
-          </strong>
+        <br><br>
 
-          ${esc(
-            error.message
-          )}
+        Ошибка:
+        ${esc(
+          error.message
+        )}
 
-        </div>
+      </div>
 
-      `;
-
-    }
-
-  }
-
-
-  finally{
-
-    button.classList.remove(
-      "loading"
-    );
-
-
-    button.textContent =
-      "↻ Обновить";
+    `;
 
   }
 
@@ -3719,540 +4706,89 @@ async function loadSchedule(){
 
 
 /* =========================
-   LOAD ARCHIVE
-========================= */
-
-async function loadArchive(){
-
-  try{
-
-    const response =
-      await fetch(
-        "archive.json?t=" +
-        Date.now(),
-        {
-          cache:
-            "no-store"
-        }
-      );
-
-
-    if(
-      !response.ok
-    ){
-
-      archive =
-        [];
-
-      return;
-
-    }
-
-
-    const data =
-      await response.json();
-
-
-    archive =
-
-      Array.isArray(
-        data
-      )
-
-      ?
-
-      sort(
-
-        data.filter(
-          lesson =>
-
-            lesson.date
-
-            &&
-
-            belongsToTargetGroup(
-              lesson
-            )
-
-        )
-
-      )
-
-      :
-
-      [];
-
-  }
-
-
-  catch(
-    error
-  ){
-
-    console.error(
-      "Archive loading error:",
-      error
-    );
-
-    archive =
-      [];
-
-  }
-
-}
-
-
-/* =========================
-   LOAD ALL
-========================= */
-
-async function loadAll(){
-
-  await Promise.all([
-
-    loadSchedule(),
-
-    loadArchive()
-
-  ]);
-
-
-  renderSchedule();
-
-
-  lastHeroKey =
-    heroKey();
-
-}
-
-
-/* =========================
-   HERO UPDATE
-========================= */
-
-function heroKey(){
-
-  const result =
-    nextLesson();
-
-
-  if(
-    !result
-  ){
-
-    return "";
-
-  }
-
-
-  return [
-
-    result.lesson.date,
-
-    result.lesson.beginLesson,
-
-    result.lesson.endLesson,
-
-    result.current
-      ? "current"
-      : "next"
-
-  ].join("|");
-
-}
-
-
-function updateHero(){
-
-  if(
-    currentView !==
-    "nearest"
-  ){
-
-    return;
-
-  }
-
-
-  const result =
-    nextLesson();
-
-
-  const key =
-    heroKey();
-
-
-  if(
-    key !==
-    lastHeroKey
-  ){
-
-    renderNext();
-
-
-    lastHeroKey =
-      key;
-
-
-    return;
-
-  }
-
-
-  if(
-    !result
-  ){
-
-    return;
-
-  }
-
-
-  const target =
-
-    result.current
-
-    ?
-
-    dt(
-      result.lesson,
-      "endLesson"
-    )
-
-    :
-
-    dt(
-      result.lesson,
-      "beginLesson"
-    );
-
-
-  const element =
-    $(
-      "heroCountdown"
-    );
-
-
-  if(
-    element
-  ){
-
-    element.textContent =
-      countdown(
-        target -
-        new Date()
-      );
-
-  }
-
-}
-
-
-/* =========================
-   MENU
-========================= */
-
-function openMenu(){
-
-  $(
-    "sideMenu"
-  )
-  .classList
-  .add(
-    "open"
-  );
-
-
-  $(
-    "menuOverlay"
-  )
-  .classList
-  .add(
-    "open"
-  );
-
-
-  document.body.style.overflow =
-    "hidden";
-
-}
-
-
-function closeMenu(){
-
-  $(
-    "sideMenu"
-  )
-  .classList
-  .remove(
-    "open"
-  );
-
-
-  $(
-    "menuOverlay"
-  )
-  .classList
-  .remove(
-    "open"
-  );
-
-
-  document.body.style.overflow =
-    "";
-
-}
-
-
-$(
-  "menuOpen"
-)
-.addEventListener(
-  "click",
-  openMenu
-);
-
-
-$(
-  "menuClose"
-)
-.addEventListener(
-  "click",
-  closeMenu
-);
-
-
-$(
-  "menuOverlay"
-)
-.addEventListener(
-  "click",
-  closeMenu
-);
-
-
-/* =========================
-   MENU ITEMS
+   TABS
 ========================= */
 
 document
-  .querySelectorAll(
-    ".menu-item"
+  .getElementById(
+    "tabs"
   )
-  .forEach(
-    button => {
+  .addEventListener(
+    "click",
+    event => {
 
-      button.addEventListener(
-        "click",
-        () => {
+      const button =
+        event.target.closest(
+          ".tab"
+        );
 
-          closeMenu();
 
-          setView(
-            button.dataset.view
-          );
+      if(
+        !button
+      ){
 
-        }
-      );
+        return;
+
+      }
+
+
+      state.view =
+        button.dataset.view;
+
+
+      render();
 
     }
   );
 
 
 /* =========================
-   SEARCH
+   MENU BUTTON
 ========================= */
 
-$(
-  "searchInput"
-)
-.addEventListener(
-  "input",
-  updateFilters
-);
+document
+  .getElementById(
+    "menuToggle"
+  )
+  .addEventListener(
+    "click",
+    () => {
 
-
-$(
-  "typeFilter"
-)
-.addEventListener(
-  "change",
-  updateFilters
-);
-
-
-$(
-  "clearFilters"
-)
-.addEventListener(
-  "click",
-  () => {
-
-    $(
-      "searchInput"
-    ).value =
-      "";
-
-
-    $(
-      "typeFilter"
-    ).value =
-      "all";
-
-
-    searchText =
-      "";
-
-
-    typeFilter =
-      "all";
-
-
-    renderSchedule();
-
-  }
-);
-
-
-/* =========================
-   DATE NAVIGATION
-========================= */
-
-function shiftPeriod(
-  direction
-){
-
-  if(
-    currentView ===
-    "today"
-    ||
-    currentView ===
-    "tomorrow"
-  ){
-
-    selectedDate =
-      addDays(
-        selectedDate,
-        direction
+      alert(
+        "В следующем обновлении сюда можно вынести боковое меню."
       );
 
-  }
-
-
-  else if(
-    currentView ===
-    "week"
-  ){
-
-    selectedDate =
-      addDays(
-        selectedDate,
-        7 *
-        direction
-      );
-
-  }
-
-
-  else if(
-    currentView ===
-    "month"
-  ){
-
-    selectedDate =
-      addDays(
-        selectedDate,
-        30 *
-        direction
-      );
-
-  }
-
-
-  renderSchedule();
-
-}
-
-
-$(
-  "datePrev"
-)
-.addEventListener(
-  "click",
-  () =>
-    shiftPeriod(
-      -1
-    )
-);
-
-
-$(
-  "dateNext"
-)
-.addEventListener(
-  "click",
-  () =>
-    shiftPeriod(
-      1
-    )
-);
+    }
+  );
 
 
 /* =========================
    REFRESH
 ========================= */
 
-$(
-  "refreshButton"
-)
-.addEventListener(
-  "click",
-  loadAll
-);
+document
+  .getElementById(
+    "refresh"
+  )
+  .addEventListener(
+    "click",
+    load
+  );
 
 
 /* =========================
-   START
-========================= */
-
-loadAll();
-
-
-/* =========================
-   LIVE UPDATE
+   LIVE TIMER
 ========================= */
 
 setInterval(
   () => {
 
-    updateHero();
-
-
     if(
-      currentView ===
+      state.view ===
       "nearest"
-      ||
-      currentView ===
-      "today"
     ){
 
-      renderStats();
-
-    }
-
-
-    if(
-      currentView !==
-      "archive"
-    ){
-
-      groupAndRender(
-
-        filtered(
-          getBaseLessons()
-        )
-
-      );
+      renderNearest();
 
     }
 
@@ -4266,9 +4802,16 @@ setInterval(
 ========================= */
 
 setInterval(
-  loadAll,
+  load,
   5 * 60 * 1000
 );
+
+
+/* =========================
+   START
+========================= */
+
+load();
 
 </script>
 
