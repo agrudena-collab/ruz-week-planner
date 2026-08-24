@@ -718,6 +718,86 @@ button,input,select{font:inherit}
 }
 
 /* =========================
+   EXAMS
+========================= */
+
+.exam-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:11px
+}
+
+.exam-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:22px;
+  padding:20px;
+  background:linear-gradient(145deg,rgba(31,25,48,.96),rgba(14,14,24,.94));
+  box-shadow:0 14px 35px rgba(0,0,0,.2)
+}
+
+.exam-card:before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:4px;
+  background:var(--purple)
+}
+
+.exam-date{
+  color:#c4a5ff;
+  font-size:12px;
+  font-weight:850;
+  margin-bottom:10px;
+  text-transform:capitalize
+}
+
+.exam-time{
+  color:#9b6cff;
+  font-size:15px;
+  font-weight:900;
+  margin-bottom:8px
+}
+
+.exam-subject{
+  font-size:21px;
+  font-weight:900;
+  line-height:1.18;
+  margin-bottom:10px
+}
+
+.exam-type{
+  display:inline-flex;
+  width:max-content;
+  padding:7px 9px;
+  border-radius:10px;
+  color:#d8c9ff;
+  background:rgba(155,108,255,.11);
+  border:1px solid rgba(155,108,255,.18);
+  font-size:11px;
+  font-weight:850;
+  margin-bottom:13px
+}
+
+.exam-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px
+}
+
+.exam-meta span{
+  font-size:11px;
+  color:#aeb6c5;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.06);
+  padding:7px 9px;
+  border-radius:10px
+}
+
+/* =========================
    ARCHIVE / EMPTY
 ========================= */
 
@@ -856,6 +936,14 @@ button,input,select{font:inherit}
     grid-template-columns:1fr
   }
 
+  .exam-grid{
+    grid-template-columns:1fr
+  }
+
+  .exam-card{
+    border-radius:19px
+  }
+
   .lesson{
     border-radius:19px
   }
@@ -961,6 +1049,15 @@ button,input,select{font:inherit}
 
     <button
       class="menu-item"
+      data-view="exams"
+    >
+      🎓&nbsp; Экзамены и зачёты
+    </button>
+
+    <div class="menu-divider"></div>
+
+    <button
+      class="menu-item"
       data-view="archive"
     >
       🗄️&nbsp; Архив
@@ -1042,9 +1139,7 @@ button,input,select{font:inherit}
     aria-label="Поиск"
   >
 
-    🔎
-
-    <input
+    🔎    <input
       id="searchInput"
       type="search"
       placeholder="Предмет, преподаватель, аудитория..."
@@ -1152,6 +1247,8 @@ const TARGET_GROUP =
 let schedule = [];
 
 let archive = [];
+
+let exams = [];
 
 let currentView =
   "nearest";
@@ -2182,9 +2279,7 @@ function renderNext(){
 
               </span>
 
-            `
-
-            :
+            `            :
 
             ""
           }
@@ -3324,9 +3419,7 @@ function renderArchive(){
 
             <div class="day-heading">
 
-              <div>
-
-                <div class="weekday">
+              <div>                <div class="weekday">
 
                   ${esc(
                     formatWeekday(
@@ -3394,10 +3487,166 @@ function renderArchive(){
 
 
 /* =========================
+   EXAMS
+========================= */
+
+function examType(exam){
+  const raw = String(
+    exam.type ??
+    exam.kindOfWork ??
+    ""
+  ).trim();
+
+  return raw || "Экзамен / зачёт";
+}
+
+function examCard(exam){
+  return `
+    <article class="exam-card">
+      <div class="exam-date">
+        ${esc(formatDate(exam.date))}
+      </div>
+
+      <div class="exam-time">
+        ${esc(exam.time || exam.beginLesson || "Время не указано")}
+      </div>
+
+      <div class="exam-subject">
+        ${esc(exam.discipline || exam.subject || "Предмет не указан")}
+      </div>
+
+      <div class="exam-type">
+        🎓 ${esc(examType(exam))}
+      </div>
+
+      <div class="exam-meta">
+        ${exam.lecturer ? `<span>👨‍🏫 ${esc(exam.lecturer)}</span>` : ""}
+        ${exam.auditorium ? `<span>🏫 ${esc(exam.auditorium)}</span>` : ""}
+        ${exam.building ? `<span>📍 ${esc(exam.building)}</span>` : ""}
+        ${exam.note ? `<span>ℹ️ ${esc(exam.note)}</span>` : ""}
+      </div>
+    </article>
+  `;
+}
+
+function renderExams(){
+  $("nextLesson").style.display = "none";
+  $("stats").style.display = "none";
+  $("toolbar").style.display = "none";
+  $("dateNav").style.display = "none";
+
+  const container = $("schedule");
+
+  const filteredExams = exams.filter(exam => {
+    if(!searchText){
+      return true;
+    }
+
+    const query = searchText.toLowerCase();
+
+    return [
+      exam.discipline,
+      exam.subject,
+      exam.lecturer,
+      exam.auditorium,
+      exam.building,
+      exam.type,
+      exam.kindOfWork,
+      exam.note
+    ].some(value =>
+      String(value ?? "")
+        .toLowerCase()
+        .includes(query)
+    );
+  });
+
+  if(!filteredExams.length){
+    container.innerHTML = `
+      <section class="archive-header">
+        <div class="archive-title">
+          Экзамены и зачёты
+        </div>
+        <div class="archive-subtitle">
+          Предстоящая аттестация
+        </div>
+      </section>
+
+      <div class="empty">
+        <strong>
+          Пока ничего нет
+        </strong>
+        Добавьте данные в файл exams.json.
+      </div>
+    `;
+    return;
+  }
+
+  const grouped = {};
+
+  [...filteredExams]
+    .sort((a,b) =>
+      (a.date || "").localeCompare(b.date || "") ||
+      (a.time || a.beginLesson || "").localeCompare(b.time || b.beginLesson || "")
+    )
+    .forEach(exam => {
+      if(!grouped[exam.date]){
+        grouped[exam.date] = [];
+      }
+      grouped[exam.date].push(exam);
+    });
+
+  container.innerHTML = `
+    <section class="archive-header">
+      <div class="archive-title">
+        Экзамены и зачёты
+      </div>
+
+      <div class="archive-subtitle">
+        Показано ${filteredExams.length} ${filteredExams.length === 1 ? "мероприятие" : filteredExams.length < 5 ? "мероприятия" : "мероприятий"}
+      </div>
+    </section>
+
+    ${Object.keys(grouped).sort().map(date => `
+      <section class="day">
+        <div class="day-heading">
+          <div>
+            <div class="weekday">
+              ${esc(formatWeekday(date))}
+            </div>
+            <div class="date">
+              ${esc(formatFullDate(date))}
+            </div>
+          </div>
+
+          <div class="count">
+            ${grouped[date].length}
+          </div>
+        </div>
+
+        <div class="exam-grid">
+          ${grouped[date].map(examCard).join("")}
+        </div>
+      </section>
+    `).join("")}
+  `;
+}
+
+/* =========================
    RENDER
 ========================= */
 
 function renderSchedule(){
+
+  if(
+    currentView ===
+    "exams"
+  ){
+
+    renderExams();
+
+    return;
+
+  }
 
   if(
     currentView ===
@@ -3674,6 +3923,9 @@ async function loadSchedule(){
     if(
       currentView !==
       "archive"
+      &&
+      currentView !==
+      "exams"
     ){
 
       $(
@@ -3803,6 +4055,34 @@ async function loadArchive(){
 
 
 /* =========================
+   LOAD EXAMS
+========================= */
+
+async function loadExams(){
+  try{
+    const response = await fetch(
+      "exams.json?t=" + Date.now(),
+      { cache: "no-store" }
+    );
+
+    if(!response.ok){
+      exams = [];
+      return;
+    }
+
+    const data = await response.json();
+
+    exams = Array.isArray(data)
+      ? data.filter(exam => exam.date)
+      : [];
+  }
+  catch(error){
+    console.error("Exams loading error:", error);
+    exams = [];
+  }
+}
+
+/* =========================
    LOAD ALL
 ========================= */
 
@@ -3812,7 +4092,9 @@ async function loadAll(){
 
     loadSchedule(),
 
-    loadArchive()
+    loadArchive(),
+
+    loadExams()
 
   ]);
 
@@ -4244,6 +4526,9 @@ setInterval(
     if(
       currentView !==
       "archive"
+      &&
+      currentView !==
+      "exams"
     ){
 
       groupAndRender(
