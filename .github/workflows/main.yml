@@ -24,16 +24,23 @@ jobs:
       - name: Install requests
         run: pip install requests
 
+      - name: Save previous schedule
+        run: |
+          git show HEAD:schedule.json > schedule_previous.json 2>/dev/null || echo '[]' > schedule_previous.json
+
       - name: Run RUZ client
         run: python ruz_client.py
 
       - name: Run planner
         run: python planner.py
 
-      - name: Save schedule.json
+      - name: Detect schedule changes
+        run: python changes_detector.py
+
+      - name: Save schedule and changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add schedule.json
-          git diff --cached --quiet || git commit -m "Update schedule"
+          git add schedule.json changes.json
+          git diff --cached --quiet || git commit -m "Update schedule and detect changes"
           git push
