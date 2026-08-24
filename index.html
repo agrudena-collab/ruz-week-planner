@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
 
 <meta charset="UTF-8">
@@ -208,6 +209,7 @@ button{
 .menu-button{
 
   width:50px;
+
   height:50px;
 
   border:
@@ -238,8 +240,7 @@ button{
     rgba(79,140,255,.18);
 
   transition:
-    transform .2s,
-    background .2s;
+    transform .2s;
 
 }
 
@@ -307,9 +308,7 @@ button{
 
   cursor:pointer;
 
-  transition:
-    transform .2s,
-    opacity .2s;
+  transition:.2s;
 
 }
 
@@ -365,7 +364,9 @@ button{
   position:fixed;
 
   left:0;
+
   top:0;
+
   bottom:0;
 
   z-index:101;
@@ -448,6 +449,7 @@ button{
 .menu-close{
 
   width:44px;
+
   height:44px;
 
   border:
@@ -500,10 +502,7 @@ button{
 
   cursor:pointer;
 
-  transition:
-    background .2s,
-    color .2s,
-    transform .2s;
+  transition:.2s;
 
 }
 
@@ -554,6 +553,7 @@ button{
   position:absolute;
 
   left:20px;
+
   right:20px;
 
   bottom:
@@ -612,11 +612,13 @@ button{
   position:absolute;
 
   width:360px;
+
   height:360px;
 
   border-radius:50%;
 
   right:-130px;
+
   top:-170px;
 
   background:
@@ -686,6 +688,7 @@ button{
 .dot{
 
   width:7px;
+
   height:7px;
 
   border-radius:50%;
@@ -722,7 +725,50 @@ button{
 
   max-width:750px;
 
+  margin-bottom:14px;
+
+}
+
+
+.hero-countdown{
+
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:9px;
+
   margin-bottom:18px;
+
+  padding:
+    10px
+    13px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:13px;
+
+  background:
+    rgba(255,255,255,.065);
+
+  color:#cbd1dd;
+
+  font-size:13px;
+
+  font-weight:800;
+
+}
+
+
+.hero-countdown strong{
+
+  color:var(--green);
+
+  font-size:17px;
+
+  font-variant-numeric:
+    tabular-nums;
 
 }
 
@@ -887,7 +933,7 @@ button{
 
 
 /* =========================================
-   CARDS
+   LESSON CARDS
 ========================================= */
 
 .grid{
@@ -927,10 +973,7 @@ button{
     0 14px 35px
     rgba(0,0,0,.2);
 
-  transition:
-    transform .2s,
-    border-color .2s,
-    box-shadow .2s;
+  transition:.2s;
 
 }
 
@@ -1008,6 +1051,13 @@ button{
 }
 
 
+.lesson.ended{
+
+  opacity:.62;
+
+}
+
+
 .lesson-top{
 
   display:flex;
@@ -1050,7 +1100,7 @@ button{
 
 
 /* =========================================
-   TYPE OF LESSON
+   TYPE
 ========================================= */
 
 .lesson-type{
@@ -1072,8 +1122,6 @@ button{
   font-size:10px;
 
   font-weight:900;
-
-  letter-spacing:.1px;
 
   color:#dce2ed;
 
@@ -1126,6 +1174,71 @@ button{
 }
 
 
+/* =========================================
+   STATUS
+========================================= */
+
+.badge{
+
+  font-size:9px;
+
+  font-weight:950;
+
+  height:max-content;
+
+  padding:
+    6px
+    8px;
+
+  border-radius:9px;
+
+  white-space:nowrap;
+
+}
+
+
+.badge.now{
+
+  color:#07120d;
+
+  background:
+    var(--green);
+
+}
+
+
+.badge.future{
+
+  color:#aebfff;
+
+  background:
+    rgba(79,140,255,.14);
+
+  border:
+    1px solid
+    rgba(79,140,255,.22);
+
+}
+
+
+.badge.done{
+
+  color:#aeb6c5;
+
+  background:
+    rgba(255,255,255,.07);
+
+  border:
+    1px solid
+    rgba(255,255,255,.08);
+
+}
+
+
+/* =========================================
+   META
+========================================= */
+
 .meta{
 
   display:flex;
@@ -1150,29 +1263,11 @@ button{
     1px solid
     rgba(255,255,255,.06);
 
-  padding:7px 9px;
+  padding:
+    7px
+    9px;
 
   border-radius:10px;
-
-}
-
-
-.badge{
-
-  font-size:9px;
-
-  font-weight:950;
-
-  color:#07120d;
-
-  background:
-    var(--green);
-
-  height:max-content;
-
-  padding:6px 8px;
-
-  border-radius:9px;
 
 }
 
@@ -1273,14 +1368,6 @@ button{
 
 @media(max-width:700px){
 
-  body{
-
-    padding-top:
-      env(safe-area-inset-top);
-
-  }
-
-
   .container{
 
     width:
@@ -1294,6 +1381,7 @@ button{
   .menu-button{
 
     width:44px;
+
     height:44px;
 
     border-radius:14px;
@@ -1356,6 +1444,20 @@ button{
   .hero-subject{
 
     font-size:22px;
+
+  }
+
+
+  .hero-countdown{
+
+    font-size:12px;
+
+  }
+
+
+  .hero-countdown strong{
+
+    font-size:15px;
 
   }
 
@@ -1427,22 +1529,30 @@ button{
 @media(max-width:380px){
 
   .title{
+
     font-size:21px;
+
   }
 
 
   .group{
+
     font-size:11px;
+
   }
 
 
   .refresh{
+
     font-size:11px;
+
   }
 
 
   .hero-time{
+
     font-size:36px;
+
   }
 
 }
@@ -1455,9 +1565,9 @@ button{
 <body>
 
 
-<!-- =======================================
-     SIDE MENU
-======================================= -->
+<!-- =========================================
+     MENU
+========================================= -->
 
 <div
   class="menu-overlay"
@@ -1549,15 +1659,14 @@ button{
 </aside>
 
 
-<!-- =======================================
+<!-- =========================================
      MAIN
-======================================= -->
+========================================= -->
 
 <div class="container">
 
 
 <header class="header">
-
 
   <div class="brand">
 
@@ -1588,7 +1697,6 @@ button{
 
   <div class="header-right">
 
-
     <div
       class="updated"
       id="updated"
@@ -1605,7 +1713,6 @@ button{
     </button>
 
   </div>
-
 
 </header>
 
@@ -1638,7 +1745,6 @@ button{
 
 <script>
 
-
 /* =========================================
    DATA
 ========================================= */
@@ -1659,7 +1765,10 @@ const $ = id =>
 
 
 const pad = n =>
-  String(n).padStart(2,"0");
+  String(n).padStart(
+    2,
+    "0"
+  );
 
 
 function localDateString(
@@ -1667,23 +1776,36 @@ function localDateString(
 ){
 
   return (
+
     d.getFullYear()
+
     + "-"
-    + pad(d.getMonth()+1)
+
+    + pad(
+      d.getMonth() + 1
+    )
+
     + "-"
-    + pad(d.getDate())
+
+    + pad(
+      d.getDate()
+    )
+
   );
 
 }
 
 
-function addDays(d,n){
+function addDays(
+  d,
+  n
+){
 
   const x =
     new Date(d);
 
   x.setDate(
-    x.getDate()+n
+    x.getDate() + n
   );
 
   return x;
@@ -1733,11 +1855,30 @@ function esc(v){
     v ?? ""
   )
 
-  .replace(/&/g,"&amp;")
-  .replace(/</g,"&lt;")
-  .replace(/>/g,"&gt;")
-  .replace(/"/g,"&quot;")
-  .replace(/'/g,"&#039;");
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+
+  .replace(
+    /</g,
+    "&lt;"
+  )
+
+  .replace(
+    />/g,
+    "&gt;"
+  )
+
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+
+  .replace(
+    /'/g,
+    "&#039;"
+  );
 
 }
 
@@ -1785,7 +1926,9 @@ function ended(lesson){
   return (
 
     new Date()
+
     >=
+
     dt(
       lesson,
       "endLesson"
@@ -1820,10 +1963,64 @@ function sort(lessons){
 
 
 /* =========================================
-   TYPE OF LESSON
+   COUNTDOWN
 ========================================= */
 
-function lessonType(lesson){
+function countdown(
+  milliseconds
+){
+
+  let seconds =
+    Math.max(
+      0,
+      Math.floor(
+        milliseconds / 1000
+      )
+    );
+
+
+  const hours =
+    Math.floor(
+      seconds / 3600
+    );
+
+
+  seconds %= 3600;
+
+
+  const minutes =
+    Math.floor(
+      seconds / 60
+    );
+
+
+  seconds %= 60;
+
+
+  return (
+
+    hours > 0
+
+      ?
+
+    `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
+
+      :
+
+    `${pad(minutes)}:${pad(seconds)}`
+
+  );
+
+}
+
+
+/* =========================================
+   LESSON TYPE
+========================================= */
+
+function lessonType(
+  lesson
+){
 
   const value =
     String(
@@ -1831,15 +2028,21 @@ function lessonType(lesson){
     ).trim();
 
 
-  if(!value){
+  if(
+    !value
+  ){
+
     return null;
+
   }
 
 
+  const lower =
+    value.toLowerCase();
+
+
   if(
-    value === "Лекции"
-    ||
-    value.toLowerCase() === "лекции"
+    lower === "лекции"
   ){
 
     return {
@@ -1864,7 +2067,8 @@ function lessonType(lesson){
 
 
   if(
-    value === "Военная подготовка"
+    value ===
+    "Военная подготовка"
   ){
 
     return {
@@ -1884,10 +2088,88 @@ function lessonType(lesson){
 
 
 /* =========================================
+   LESSON STATUS
+========================================= */
+
+function lessonStatus(
+  lesson
+){
+
+  if(
+    current(lesson)
+  ){
+
+    return "current";
+
+  }
+
+
+  if(
+    ended(lesson)
+  ){
+
+    return "ended";
+
+  }
+
+
+  return "future";
+
+}
+
+
+function statusBadge(
+  lesson
+){
+
+  const status =
+    lessonStatus(
+      lesson
+    );
+
+
+  if(
+    status === "current"
+  ){
+
+    return `
+      <div class="badge now">
+        СЕЙЧАС
+      </div>
+    `;
+
+  }
+
+
+  if(
+    status === "ended"
+  ){
+
+    return `
+      <div class="badge done">
+        ЗАВЕРШЕНО
+      </div>
+    `;
+
+  }
+
+
+  return `
+    <div class="badge future">
+      ПРЕДСТОИТ
+    </div>
+  `;
+
+}
+
+
+/* =========================================
    ACCENT
 ========================================= */
 
-function accent(subject=""){
+function accent(
+  subject = ""
+){
 
   const s =
     subject.toLowerCase();
@@ -1953,36 +2235,44 @@ function next(){
     sort(schedule);
 
 
-  const c =
+  const currentLesson =
     sorted.find(
       current
     );
 
 
-  if(c){
+  if(
+    currentLesson
+  ){
 
     return {
-      lesson:c,
+
+      lesson:currentLesson,
+
       current:true
+
     };
 
   }
 
 
-  const n =
+  const futureLesson =
     sorted.find(
       x =>
         !ended(x)
     );
 
 
-  return n
+  return futureLesson
 
     ?
 
     {
-      lesson:n,
+
+      lesson:futureLesson,
+
       current:false
+
     }
 
     :
@@ -1991,6 +2281,10 @@ function next(){
 
 }
 
+
+/* =========================================
+   HERO
+========================================= */
 
 function renderNext(){
 
@@ -2002,7 +2296,9 @@ function renderNext(){
     $("nextLesson");
 
 
-  if(!result){
+  if(
+    !result
+  ){
 
     container.innerHTML = `
 
@@ -2034,7 +2330,32 @@ function renderNext(){
 
 
   const type =
-    lessonType(lesson);
+    lessonType(
+      lesson
+    );
+
+
+  const countdownValue =
+
+    result.current
+
+      ?
+
+    countdown(
+      dt(
+        lesson,
+        "endLesson"
+      ) - new Date()
+    )
+
+      :
+
+    countdown(
+      dt(
+        lesson,
+        "beginLesson"
+      ) - new Date()
+    );
 
 
   container.innerHTML = `
@@ -2047,7 +2368,7 @@ function renderNext(){
         ${
           result.current
 
-          ?
+            ?
 
           `
           <div class="live">
@@ -2059,7 +2380,7 @@ function renderNext(){
           </div>
           `
 
-          :
+            :
 
           `
           <div class="eyebrow">
@@ -2095,21 +2416,44 @@ function renderNext(){
         </div>
 
 
+        <div class="hero-countdown">
+
+          ${
+            result.current
+              ? "⏳ Осталось"
+              : "⏱️ Через"
+          }
+
+          <strong
+            id="heroCountdown"
+          >
+            ${countdownValue}
+          </strong>
+
+        </div>
+
+
         <div class="chips">
 
 
           ${
             type
 
-            ?
+              ?
 
             `
             <span class="chip">
-              🎓 ${esc(type.text)}
+
+              🎓
+
+              ${esc(
+                type.text
+              )}
+
             </span>
             `
 
-            :
+              :
 
             ""
 
@@ -2140,7 +2484,7 @@ function renderNext(){
           ${
             lesson.lecturer
 
-            ?
+              ?
 
             `
             <span class="chip">
@@ -2154,7 +2498,7 @@ function renderNext(){
             </span>
             `
 
-            :
+              :
 
             ""
 
@@ -2164,7 +2508,7 @@ function renderNext(){
           ${
             lesson.auditorium
 
-            ?
+              ?
 
             `
             <span class="chip">
@@ -2178,7 +2522,7 @@ function renderNext(){
             </span>
             `
 
-            :
+              :
 
             ""
 
@@ -2188,7 +2532,7 @@ function renderNext(){
           ${
             lesson.building
 
-            ?
+              ?
 
             `
             <span class="chip">
@@ -2202,7 +2546,7 @@ function renderNext(){
             </span>
             `
 
-            :
+              :
 
             ""
 
@@ -2267,7 +2611,7 @@ function renderStats(){
 
           )
 
-          /60000
+          / 60000
 
         ),
 
@@ -2278,13 +2622,13 @@ function renderStats(){
 
   const hours =
     Math.floor(
-      minutes/60
+      minutes / 60
     );
 
 
   const mins =
     Math.round(
-      minutes%60
+      minutes % 60
     );
 
 
@@ -2322,9 +2666,13 @@ function renderStats(){
 
         ${
           hours
-          ?
+
+            ?
+
           `${hours}ч ${mins}м`
-          :
+
+            :
+
           `${mins}м`
         }
 
@@ -2358,10 +2706,14 @@ function renderStats(){
    LESSON CARD
 ========================================= */
 
-function lessonCard(lesson){
+function lessonCard(
+  lesson
+){
 
-  const isNow =
-    current(lesson);
+  const status =
+    lessonStatus(
+      lesson
+    );
 
 
   const color =
@@ -2371,15 +2723,30 @@ function lessonCard(lesson){
 
 
   const type =
-    lessonType(lesson);
+    lessonType(
+      lesson
+    );
 
 
   return `
 
     <article
 
-      class="lesson
-      ${isNow ? "current" : ""}"
+      class="
+        lesson
+
+        ${
+          status === "current"
+            ? "current"
+            : ""
+        }
+
+        ${
+          status === "ended"
+            ? "ended"
+            : ""
+        }
+      "
 
       style="
         --accent:${color};
@@ -2422,7 +2789,7 @@ function lessonCard(lesson){
           ${
             type
 
-            ?
+              ?
 
             `
             <div
@@ -2431,11 +2798,17 @@ function lessonCard(lesson){
                 ${type.className}
               "
             >
-              🎓 ${esc(type.text)}
+
+              🎓
+
+              ${esc(
+                type.text
+              )}
+
             </div>
             `
 
-            :
+              :
 
             ""
 
@@ -2445,22 +2818,7 @@ function lessonCard(lesson){
         </div>
 
 
-        ${
-          isNow
-
-          ?
-
-          `
-          <div class="badge">
-            СЕЙЧАС
-          </div>
-          `
-
-          :
-
-          ""
-
-        }
+        ${statusBadge(lesson)}
 
 
       </div>
@@ -2472,18 +2830,21 @@ function lessonCard(lesson){
         ${
           lesson.lecturer
 
-          ?
+            ?
 
           `
           <span>
+
             👨‍🏫
+
             ${esc(
               lesson.lecturer
             )}
+
           </span>
           `
 
-          :
+            :
 
           ""
 
@@ -2493,18 +2854,21 @@ function lessonCard(lesson){
         ${
           lesson.auditorium
 
-          ?
+            ?
 
           `
           <span>
+
             🏫
+
             ${esc(
               lesson.auditorium
             )}
+
           </span>
           `
 
-          :
+            :
 
           ""
 
@@ -2514,18 +2878,21 @@ function lessonCard(lesson){
         ${
           lesson.building
 
-          ?
+            ?
 
           `
           <span>
+
             📍
+
             ${esc(
               lesson.building
             )}
+
           </span>
           `
 
-          :
+            :
 
           ""
 
@@ -2543,7 +2910,7 @@ function lessonCard(lesson){
 
 
 /* =========================================
-   GROUP LESSONS
+   GROUP BY DATE
 ========================================= */
 
 function renderGroupedLessons(
@@ -2554,7 +2921,9 @@ function renderGroupedLessons(
     $("schedule");
 
 
-  if(!lessons.length){
+  if(
+    !lessons.length
+  ){
 
     container.innerHTML = `
 
@@ -2583,16 +2952,23 @@ function renderGroupedLessons(
     lesson => {
 
       if(
-        !grouped[lesson.date]
+        !grouped[
+          lesson.date
+        ]
       ){
 
-        grouped[lesson.date] = [];
+        grouped[
+          lesson.date
+        ] = [];
 
       }
 
 
-      grouped[lesson.date]
-        .push(lesson);
+      grouped[
+        lesson.date
+      ].push(
+        lesson
+      );
 
     }
   );
@@ -2606,37 +2982,57 @@ function renderGroupedLessons(
 
   container.innerHTML =
 
-    dates.map(
+    dates
 
-      date => `
+      .map(
 
-        <section class="day">
+        date => `
 
-
-          <div class="day-heading">
-
-
-            <div>
+          <section class="day">
 
 
-              <div class="weekday">
+            <div class="day-heading">
 
-                ${esc(
-                  formatWeekday(
-                    date
-                  )
-                )}
+
+              <div>
+
+
+                <div class="weekday">
+
+                  ${esc(
+                    formatWeekday(
+                      date
+                    )
+                  )}
+
+                </div>
+
+
+                <div class="date">
+
+                  ${esc(
+                    formatDate(
+                      date
+                    )
+                  )}
+
+                </div>
+
 
               </div>
 
 
-              <div class="date">
+              <div class="count">
 
-                ${esc(
-                  formatDate(
-                    date
-                  )
-                )}
+                ${grouped[date].length}
+
+                ${
+                  grouped[date].length === 1
+                    ? "пара"
+                    : grouped[date].length < 5
+                      ? "пары"
+                      : "пар"
+                }
 
               </div>
 
@@ -2644,48 +3040,34 @@ function renderGroupedLessons(
             </div>
 
 
-            <div class="count">
+            <div class="grid">
 
-              ${grouped[date].length}
+              ${sort(
+                grouped[date]
+              )
 
-              ${
-                grouped[date].length === 1
-                ? "пара"
-                : grouped[date].length < 5
-                ? "пары"
-                : "пар"
-              }
+              .map(
+                lessonCard
+              )
+
+              .join("")}
 
             </div>
 
 
-          </div>
+          </section>
 
+        `
 
-          <div class="grid">
+      )
 
-            ${sort(
-              grouped[date]
-            )
-            .map(
-              lessonCard
-            )
-            .join("")}
-
-          </div>
-
-
-        </section>
-
-      `
-
-    ).join("");
+      .join("");
 
 }
 
 
 /* =========================================
-   NORMAL FILTER
+   FILTER
 ========================================= */
 
 function getLessons(){
@@ -2793,7 +3175,7 @@ function getLessons(){
   }
 
 
-  /* БЛИЖАЙШЕЕ */
+  /* Ближайшее */
 
   const futureDates = [
 
@@ -2904,16 +3286,23 @@ function renderArchive(){
     lesson => {
 
       if(
-        !grouped[lesson.date]
+        !grouped[
+          lesson.date
+        ]
       ){
 
-        grouped[lesson.date] = [];
+        grouped[
+          lesson.date
+        ] = [];
 
       }
 
 
-      grouped[lesson.date]
-        .push(lesson);
+      grouped[
+        lesson.date
+      ].push(
+        lesson
+      );
 
     }
   );
@@ -2945,10 +3334,10 @@ function renderArchive(){
 
         ${
           total === 1
-          ? "пара"
-          : total < 5
-          ? "пары"
-          : "пар"
+            ? "пара"
+            : total < 5
+              ? "пары"
+              : "пар"
         }
 
       </div>
@@ -2960,37 +3349,57 @@ function renderArchive(){
 
   const html =
 
-    dates.map(
+    dates
 
-      date => `
+      .map(
 
-        <section class="day">
+        date => `
 
-
-          <div class="day-heading">
-
-
-            <div>
+          <section class="day">
 
 
-              <div class="weekday">
+            <div class="day-heading">
 
-                ${esc(
-                  formatWeekday(
-                    date
-                  )
-                )}
+
+              <div>
+
+
+                <div class="weekday">
+
+                  ${esc(
+                    formatWeekday(
+                      date
+                    )
+                  )}
+
+                </div>
+
+
+                <div class="date">
+
+                  ${esc(
+                    formatDate(
+                      date
+                    )
+                  )}
+
+                </div>
+
 
               </div>
 
 
-              <div class="date">
+              <div class="count">
 
-                ${esc(
-                  formatDate(
-                    date
-                  )
-                )}
+                ${grouped[date].length}
+
+                ${
+                  grouped[date].length === 1
+                    ? "пара"
+                    : grouped[date].length < 5
+                      ? "пары"
+                      : "пар"
+                }
 
               </div>
 
@@ -2998,42 +3407,28 @@ function renderArchive(){
             </div>
 
 
-            <div class="count">
+            <div class="grid">
 
-              ${grouped[date].length}
+              ${sort(
+                grouped[date]
+              )
 
-              ${
-                grouped[date].length === 1
-                ? "пара"
-                : grouped[date].length < 5
-                ? "пары"
-                : "пар"
-              }
+              .map(
+                lessonCard
+              )
+
+              .join("")}
 
             </div>
 
 
-          </div>
+          </section>
 
+        `
 
-          <div class="grid">
+      )
 
-            ${sort(
-              grouped[date]
-            )
-            .map(
-              lessonCard
-            )
-            .join("")}
-
-          </div>
-
-
-        </section>
-
-      `
-
-    ).join("");
+      .join("");
 
 
   container.insertAdjacentHTML(
@@ -3045,11 +3440,10 @@ function renderArchive(){
 
 
 /* =========================================
-   RENDER CURRENT VIEW
+   RENDER
 ========================================= */
 
 function renderSchedule(){
-
 
   if(
     currentView === "archive"
@@ -3132,7 +3526,6 @@ async function loadSchedule(){
 
 
   try{
-
 
     const response =
       await fetch(
@@ -3232,6 +3625,7 @@ async function loadSchedule(){
       "loading"
     );
 
+
     button.textContent =
       "↻ Обновить";
 
@@ -3247,7 +3641,6 @@ async function loadSchedule(){
 async function loadArchive(){
 
   try{
-
 
     const response =
       await fetch(
@@ -3406,9 +3799,10 @@ document
     button => {
 
       button.addEventListener(
-        "click",
-        () => {
 
+        "click",
+
+        () => {
 
           document
             .querySelectorAll(
@@ -3438,6 +3832,7 @@ document
           renderSchedule();
 
         }
+
       );
 
     }
@@ -3451,12 +3846,15 @@ document
 
 $("refreshButton")
   .addEventListener(
+
     "click",
+
     async () => {
 
       await loadAll();
 
     }
+
   );
 
 
@@ -3468,14 +3866,18 @@ loadAll();
 
 
 /* =========================================
-   UPDATE CURRENT LESSON
-   EVERY MINUTE
+   UPDATE EVERY SECOND
 ========================================= */
 
 setInterval(
 
   () => {
 
+    /*
+      Главная:
+      обновляем герой, таймер,
+      статистику и статусы карточек.
+    */
 
     if(
       currentView ===
@@ -3493,6 +3895,12 @@ setInterval(
     }
 
 
+    /*
+      Сегодня:
+      обновляем статус карточек
+      каждую секунду.
+    */
+
     else if(
       currentView ===
       "today"
@@ -3507,25 +3915,44 @@ setInterval(
     }
 
 
+    /*
+      Завтра / Неделя / Месяц:
+      тоже обновляем статусы.
+    */
+
+    else if(
+      currentView !==
+      "archive"
+    ){
+
+      renderGroupedLessons(
+        getLessons()
+      );
+
+    }
+
+
   },
 
-  60 * 1000
+  1000
 
 );
 
 
 /* =========================================
-   UPDATE SCHEDULE
-   EVERY 5 MINUTES
+   UPDATE DATA EVERY 5 MINUTES
 ========================================= */
 
 setInterval(
-  loadAll,
-  5 * 60 * 1000
-);
 
+  loadAll,
+
+  5 * 60 * 1000
+
+);
 
 </script>
 
 </body>
+
 </html>
