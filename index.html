@@ -697,7 +697,6 @@ button,input,select{font:inherit}
   background:rgba(255,255,255,.07);
   border:1px solid rgba(255,255,255,.08)
 }
-
 /* =========================
    META
 ========================= */
@@ -733,7 +732,12 @@ button,input,select{font:inherit}
   border:1px solid rgba(255,255,255,.09);
   border-radius:22px;
   padding:20px;
-  background:linear-gradient(145deg,rgba(31,25,48,.96),rgba(14,14,24,.94));
+  background:
+    linear-gradient(
+      145deg,
+      rgba(31,25,48,.96),
+      rgba(14,14,24,.94)
+    );
   box-shadow:0 14px 35px rgba(0,0,0,.2)
 }
 
@@ -795,6 +799,115 @@ button,input,select{font:inherit}
   border:1px solid rgba(255,255,255,.06);
   padding:7px 9px;
   border-radius:10px
+}
+
+/* =========================
+   SCHEDULE CHANGES
+========================= */
+
+.changes-list{
+  display:grid;
+  gap:11px
+}
+
+.change-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:22px;
+  padding:18px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(24,28,40,.96),
+      rgba(12,15,23,.94)
+    );
+  box-shadow:0 14px 35px rgba(0,0,0,.2)
+}
+
+.change-card:before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:4px;
+  background:var(--cyan)
+}
+
+.change-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:12px
+}
+
+.change-subject{
+  font-size:19px;
+  font-weight:900;
+  line-height:1.2
+}
+
+.change-date{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:4px
+}
+
+.change-badge{
+  flex:none;
+  padding:6px 8px;
+  border-radius:9px;
+  color:#07120d;
+  background:var(--cyan);
+  font-size:9px;
+  font-weight:950;
+  white-space:nowrap
+}
+
+.change-row{
+  display:grid;
+  grid-template-columns:110px 1fr;
+  gap:10px;
+  padding:10px 0;
+  border-top:1px solid var(--line)
+}
+
+.change-label{
+  color:#aeb6c5;
+  font-size:12px;
+  font-weight:800
+}
+
+.change-values{
+  min-width:0;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:7px;
+  font-size:12px
+}
+
+.change-old{
+  color:#9da5b5;
+  text-decoration:line-through;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.06);
+  padding:6px 8px;
+  border-radius:9px
+}
+
+.change-new{
+  color:#dfffee;
+  background:rgba(39,223,145,.10);
+  border:1px solid rgba(39,223,145,.18);
+  padding:6px 8px;
+  border-radius:9px
+}
+
+.change-arrow{
+  color:#697184
 }
 
 /* =========================
@@ -940,6 +1053,19 @@ button,input,select{font:inherit}
     grid-template-columns:1fr
   }
 
+  .change-row{
+    grid-template-columns:1fr;
+    gap:5px
+  }
+
+  .change-head{
+    gap:8px
+  }
+
+  .change-subject{
+    font-size:17px
+  }
+
   .exam-card{
     border-radius:19px
   }
@@ -988,9 +1114,16 @@ button,input,select{font:inherit}
 
 <body>
 
-<div class="menu-overlay" id="menuOverlay"></div>
+<div
+  class="menu-overlay"
+  id="menuOverlay"
+></div>
 
-<aside class="side-menu" id="sideMenu">
+
+<aside
+  class="side-menu"
+  id="sideMenu"
+>
 
   <div class="menu-header">
 
@@ -1008,6 +1141,7 @@ button,input,select{font:inherit}
 
   </div>
 
+
   <nav class="menu-list">
 
     <button
@@ -1017,12 +1151,14 @@ button,input,select{font:inherit}
       🏠&nbsp; Ближайшее
     </button>
 
+
     <button
       class="menu-item"
       data-view="today"
     >
       📅&nbsp; Сегодня
     </button>
+
 
     <button
       class="menu-item"
@@ -1031,12 +1167,14 @@ button,input,select{font:inherit}
       ➡️&nbsp; Завтра
     </button>
 
+
     <button
       class="menu-item"
       data-view="week"
     >
       📆&nbsp; Неделя
     </button>
+
 
     <button
       class="menu-item"
@@ -1045,7 +1183,9 @@ button,input,select{font:inherit}
       🗓️&nbsp; Месяц
     </button>
 
+
     <div class="menu-divider"></div>
+
 
     <button
       class="menu-item"
@@ -1054,7 +1194,17 @@ button,input,select{font:inherit}
       🎓&nbsp; Экзамены и зачёты
     </button>
 
+
+    <button
+      class="menu-item"
+      data-view="changes"
+    >
+      🔄&nbsp; Изменения расписания
+    </button>
+
+
     <div class="menu-divider"></div>
+
 
     <button
       class="menu-item"
@@ -1064,6 +1214,7 @@ button,input,select{font:inherit}
     </button>
 
   </nav>
+
 
   <div class="menu-footer">
     МеждОт25-2 · РУЗ
@@ -1086,6 +1237,7 @@ button,input,select{font:inherit}
       ☰
     </button>
 
+
     <div>
 
       <div class="title">
@@ -1100,6 +1252,7 @@ button,input,select{font:inherit}
 
   </div>
 
+
   <div class="header-right">
 
     <div
@@ -1108,6 +1261,7 @@ button,input,select{font:inherit}
     >
       Загрузка...
     </div>
+
 
     <button
       class="refresh"
@@ -1122,6 +1276,7 @@ button,input,select{font:inherit}
 
 
 <div id="nextLesson"></div>
+
 
 <div
   class="stats"
@@ -1139,7 +1294,9 @@ button,input,select{font:inherit}
     aria-label="Поиск"
   >
 
-    🔎    <input
+    🔎
+
+    <input
       id="searchInput"
       type="search"
       placeholder="Предмет, преподаватель, аудитория..."
@@ -1238,9 +1395,8 @@ button,input,select{font:inherit}
 </div>
 
 
-<script>
-
-const TARGET_GROUP =
+<script>  
+ const TARGET_GROUP =
   "МеждОт25-2";
 
 
@@ -1249,6 +1405,8 @@ let schedule = [];
 let archive = [];
 
 let exams = [];
+
+let changes = [];
 
 let currentView =
   "nearest";
@@ -1266,9 +1424,15 @@ let lastHeroKey =
   "";
 
 
+/* =========================
+   BASIC HELPERS
+========================= */
+
 const $ =
   id =>
-    document.getElementById(id);
+    document.getElementById(
+      id
+    );
 
 
 const pad =
@@ -1986,7 +2150,7 @@ function filtered(
 
 
 /* =========================
-   NEXT
+   NEXT LESSON
 ========================= */
 
 function nextLesson(){
@@ -2134,7 +2298,6 @@ function renderNext(){
 
       <div class="hero-content">
 
-
         ${
           result.current
 
@@ -2279,7 +2442,9 @@ function renderNext(){
 
               </span>
 
-            `            :
+            `
+
+            :
 
             ""
           }
@@ -2843,7 +3008,6 @@ function groupAndRender(
 
           <div class="day-heading">
 
-
             <div>
 
               <div class="weekday">
@@ -2855,7 +3019,6 @@ function groupAndRender(
                 )}
 
               </div>
-
 
               <div class="date">
 
@@ -2892,7 +3055,6 @@ function groupAndRender(
 
             </div>
 
-
           </div>
 
 
@@ -2914,7 +3076,6 @@ function groupAndRender(
 
           </div>
 
-
         </section>
 
       `
@@ -2923,18 +3084,175 @@ function groupAndRender(
 
     .join("");
 
-}
-
-
+} 
 /* =========================
-   BASE FILTER
+   DATE RANGE
 ========================= */
 
 function getBaseLessons(){
 
-  const day =
+  return schedule.filter(
+    lesson =>
+      belongsToTargetGroup(
+        lesson
+      )
+  );
+
+}
+
+
+function getLessonsForDate(
+  date
+){
+
+  const value =
     localDateString(
-      selectedDate
+      date
+    );
+
+
+  return filtered(
+    getBaseLessons()
+      .filter(
+        lesson =>
+          lesson.date ===
+          value
+      )
+  );
+
+}
+
+
+function getWeekStart(
+  date
+){
+
+  const d =
+    new Date(
+      date
+    );
+
+
+  const day =
+    d.getDay();
+
+
+  const diff =
+    day === 0
+      ? -6
+      : 1 - day;
+
+
+  d.setDate(
+    d.getDate() +
+    diff
+  );
+
+
+  return d;
+
+}
+
+
+function getWeekLessons(
+  date
+){
+
+  const start =
+    getWeekStart(
+      date
+    );
+
+
+  const end =
+    addDays(
+      start,
+      6
+    );
+
+
+  const startValue =
+    localDateString(
+      start
+    );
+
+
+  const endValue =
+    localDateString(
+      end
+    );
+
+
+  return filtered(
+
+    getBaseLessons()
+      .filter(
+        lesson =>
+          lesson.date >=
+          startValue
+          &&
+          lesson.date <=
+          endValue
+      )
+
+  );
+
+}
+
+
+function getMonthLessons(
+  date
+){
+
+  const year =
+    date.getFullYear();
+
+
+  const month =
+    date.getMonth();
+
+
+  return filtered(
+
+    getBaseLessons()
+      .filter(
+        lesson => {
+
+          const d =
+            dateFromString(
+              lesson.date
+            );
+
+
+          return (
+
+            d.getFullYear() ===
+            year
+
+            &&
+
+            d.getMonth() ===
+            month
+
+          );
+
+        }
+      )
+
+  );
+
+}
+
+
+/* =========================
+   VIEW TITLE
+========================= */
+
+function updateViewTitle(){
+
+  const title =
+    $(
+      "dateNavMain"
     );
 
 
@@ -2943,11 +3261,10 @@ function getBaseLessons(){
     "today"
   ){
 
-    return schedule.filter(
-      lesson =>
-        lesson.date ===
-        day
-    );
+    title.innerHTML =
+      "Сегодня";
+
+    return;
 
   }
 
@@ -2957,20 +3274,10 @@ function getBaseLessons(){
     "tomorrow"
   ){
 
-    const tomorrow =
-      localDateString(
-        addDays(
-          selectedDate,
-          1
-        )
-      );
+    title.innerHTML =
+      "Завтра";
 
-
-    return schedule.filter(
-      lesson =>
-        lesson.date ===
-        tomorrow
-    );
+    return;
 
   }
 
@@ -2980,27 +3287,46 @@ function getBaseLessons(){
     "week"
   ){
 
-    const end =
-      localDateString(
-        addDays(
-          selectedDate,
-          6
-        )
+    const start =
+      getWeekStart(
+        selectedDate
       );
 
 
-    return schedule.filter(
-      lesson =>
+    const end =
+      addDays(
+        start,
+        6
+      );
 
-        lesson.date >=
-        day
 
-        &&
+    title.innerHTML = `
 
-        lesson.date <=
-        end
+      ${esc(
+        start.toLocaleDateString(
+          "ru-RU",
+          {
+            day:"numeric",
+            month:"short"
+          }
+        )
+      )}
 
-    );
+      –
+
+      ${esc(
+        end.toLocaleDateString(
+          "ru-RU",
+          {
+            day:"numeric",
+            month:"short"
+          }
+        )
+      )}
+
+    `;
+
+    return;
 
   }
 
@@ -3010,239 +3336,23 @@ function getBaseLessons(){
     "month"
   ){
 
-    const end =
-      localDateString(
-        addDays(
-          selectedDate,
-          29
-        )
-      );
-
-
-    return schedule.filter(
-      lesson =>
-
-        lesson.date >=
-        day
-
-        &&
-
-        lesson.date <=
-        end
-
-    );
-
-  }
-
-
-  const today =
-    localDateString();
-
-
-  const dates =
-
-    [
-
-      ...new Set(
-
-        sort(
-          schedule
-        )
-
-        .filter(
-          lesson =>
-            lesson.date >=
-            today
-        )
-
-        .map(
-          lesson =>
-            lesson.date
-        )
-
-      )
-
-    ];
-
-
-  return dates.length
-
-    ?
-
-    schedule.filter(
-      lesson =>
-        lesson.date ===
-        dates[0]
-    )
-
-    :
-
-    [];
-
-}
-
-
-/* =========================
-   DATE NAV
-========================= */
-
-function renderDateNav(){
-
-  const nav =
-    $(
-      "dateNav"
-    );
-
-
-  if(
-    currentView ===
-    "nearest"
-    ||
-    currentView ===
-    "archive"
-  ){
-
-    nav.style.display =
-      "none";
+    title.innerHTML =
+      selectedDate
+        .toLocaleDateString(
+          "ru-RU",
+          {
+            month:"long",
+            year:"numeric"
+          }
+        );
 
     return;
 
   }
 
 
-  nav.style.display =
-    "flex";
-
-
-  const day =
-    localDateString(
-      selectedDate
-    );
-
-
-  if(
-    currentView ===
-    "today"
-  ){
-
-    $(
-      "dateNavMain"
-    ).innerHTML =
-
-      `Сегодня
-       <small>
-         ${esc(
-           formatFullDate(
-             day
-           )
-         )}
-       </small>`;
-
-  }
-
-
-  else if(
-    currentView ===
-    "tomorrow"
-  ){
-
-    const d =
-      localDateString(
-        addDays(
-          selectedDate,
-          1
-        )
-      );
-
-
-    $(
-      "dateNavMain"
-    ).innerHTML =
-
-      `Завтра
-       <small>
-         ${esc(
-           formatFullDate(
-             d
-           )
-         )}
-       </small>`;
-
-  }
-
-
-  else if(
-    currentView ===
-    "week"
-  ){
-
-    const end =
-      localDateString(
-        addDays(
-          selectedDate,
-          6
-        )
-      );
-
-
-    $(
-      "dateNavMain"
-    ).innerHTML =
-
-      `Неделя
-       <small>
-         ${esc(
-           formatDate(
-             day
-           )
-         )}
-         —
-         ${esc(
-           formatDate(
-             end
-           )
-         )}
-       </small>`;
-
-  }
-
-
-  else{
-
-    const end =
-      localDateString(
-        addDays(
-          selectedDate,
-          29
-        )
-      );
-
-
-    $(
-      "dateNavMain"
-    ).innerHTML =
-
-      `Период
-
-       <small>
-
-         ${esc(
-           formatDate(
-             day
-           )
-         )}
-
-         —
-
-         ${esc(
-           formatDate(
-             end
-           )
-         )}
-
-       </small>`;
-
-  }
+  title.innerHTML =
+    "Ближайшее";
 
 }
 
@@ -3252,6 +3362,12 @@ function renderDateNav(){
 ========================= */
 
 function renderArchive(){
+
+  const container =
+    $(
+      "schedule"
+    );
+
 
   $(
     "nextLesson"
@@ -3266,25 +3382,19 @@ function renderArchive(){
 
 
   $(
+    "toolbar"
+  ).style.display =
+    "none";
+
+
+  $(
     "dateNav"
   ).style.display =
     "none";
 
 
-  const lessons =
-    filtered(
-      archive
-    );
-
-
-  const container =
-    $(
-      "schedule"
-    );
-
-
   if(
-    !lessons.length
+    !archive.length
   ){
 
     container.innerHTML = `
@@ -3302,10 +3412,7 @@ function renderArchive(){
         <div
           class="archive-subtitle"
         >
-          ${archive.length
-            ? "По вашему фильтру ничего не найдено"
-            : "Прошедшие занятия"
-          }
+          Предыдущие версии расписания
         </div>
 
       </section>
@@ -3314,21 +3421,11 @@ function renderArchive(){
       <div class="empty">
 
         <strong>
-
-          ${
-            archive.length
-            ? "Ничего не найдено"
-            : "Архив пока пуст"
-          }
-
+          Архив пока пуст
         </strong>
 
-
-        ${
-          archive.length
-          ? "Измени поиск или фильтр."
-          : "После завершения занятий GitHub Action автоматически добавит их сюда."
-        }
+        Здесь появятся
+        предыдущие расписания.
 
       </div>
 
@@ -3337,37 +3434,6 @@ function renderArchive(){
     return;
 
   }
-
-
-  const grouped = {};
-
-
-  sort(
-    lessons
-  ).forEach(
-    lesson => {
-
-      if(
-        !grouped[
-          lesson.date
-        ]
-      ){
-
-        grouped[
-          lesson.date
-        ] = [];
-
-      }
-
-
-      grouped[
-        lesson.date
-      ].push(
-        lesson
-      );
-
-    }
-  );
 
 
   container.innerHTML = `
@@ -3382,104 +3448,62 @@ function renderArchive(){
         Архив
       </div>
 
-
       <div
         class="archive-subtitle"
       >
-
-        Показано
-        ${lessons.length}
-
-        ${
-          lessons.length === 1
-          ? "пара"
-          : lessons.length < 5
-          ? "пары"
-          : "пар"
-        }
-
+        Предыдущие версии расписания
       </div>
 
     </section>
 
 
-    ${
+    <div class="changes-list">
 
-      Object.keys(
-        grouped
-      )
+      ${
+        archive
+          .map(
+            item => `
 
-      .sort()
+              <article
+                class="change-card"
+              >
 
-      .map(
+                <div
+                  class="change-head"
+                >
 
-        date => `
+                  <div>
 
-          <section class="day">
+                    <div
+                      class="change-subject"
+                    >
+                      ${esc(
+                        item.title ||
+                        "Архив расписания"
+                      )}
+                    </div>
 
-            <div class="day-heading">
+                    <div
+                      class="change-date"
+                    >
+                      ${esc(
+                        item.date ||
+                        ""
+                      )}
+                    </div>
 
-              <div>                <div class="weekday">
-
-                  ${esc(
-                    formatWeekday(
-                      date
-                    )
-                  )}
+                  </div>
 
                 </div>
 
-                <div class="date">
+              </article>
 
-                  ${esc(
-                    formatDate(
-                      date
-                    )
-                  )}
+            `
+          )
+          .join("")
+      }
 
-                </div>
-
-              </div>
-
-
-              <div class="count">
-
-                ${
-                  grouped[
-                    date
-                  ].length
-                }
-
-              </div>
-
-            </div>
-
-
-            <div class="grid">
-
-              ${
-                sort(
-                  grouped[
-                    date
-                  ]
-                )
-                .map(
-                  lessonCard
-                )
-                .join("")
-              }
-
-            </div>
-
-          </section>
-
-        `
-
-      )
-
-      .join("")
-
-    }
+    </div>
 
   `;
 
@@ -3490,174 +3514,1726 @@ function renderArchive(){
    EXAMS
 ========================= */
 
-function examType(exam){
-  const raw = String(
-    exam.type ??
-    exam.kindOfWork ??
-    ""
-  ).trim();
-
-  return raw || "Экзамен / зачёт";
-}
-
-function examCard(exam){
-  return `
-    <article class="exam-card">
-      <div class="exam-date">
-        ${esc(formatDate(exam.date))}
-      </div>
-
-      <div class="exam-time">
-        ${esc(exam.time || exam.beginLesson || "Время не указано")}
-      </div>
-
-      <div class="exam-subject">
-        ${esc(exam.discipline || exam.subject || "Предмет не указан")}
-      </div>
-
-      <div class="exam-type">
-        🎓 ${esc(examType(exam))}
-      </div>
-
-      <div class="exam-meta">
-        ${exam.lecturer ? `<span>👨‍🏫 ${esc(exam.lecturer)}</span>` : ""}
-        ${exam.auditorium ? `<span>🏫 ${esc(exam.auditorium)}</span>` : ""}
-        ${exam.building ? `<span>📍 ${esc(exam.building)}</span>` : ""}
-        ${exam.note ? `<span>ℹ️ ${esc(exam.note)}</span>` : ""}
-      </div>
-    </article>
-  `;
-}
-
 function renderExams(){
-  $("nextLesson").style.display = "none";
-  $("stats").style.display = "none";
-  $("toolbar").style.display = "none";
-  $("dateNav").style.display = "none";
 
-  const container = $("schedule");
-
-  const filteredExams = exams.filter(exam => {
-    if(!searchText){
-      return true;
-    }
-
-    const query = searchText.toLowerCase();
-
-    return [
-      exam.discipline,
-      exam.subject,
-      exam.lecturer,
-      exam.auditorium,
-      exam.building,
-      exam.type,
-      exam.kindOfWork,
-      exam.note
-    ].some(value =>
-      String(value ?? "")
-        .toLowerCase()
-        .includes(query)
+  const container =
+    $(
+      "schedule"
     );
-  });
 
-  if(!filteredExams.length){
+
+  $(
+    "nextLesson"
+  ).style.display =
+    "none";
+
+
+  $(
+    "stats"
+  ).style.display =
+    "none";
+
+
+  $(
+    "toolbar"
+  ).style.display =
+    "none";
+
+
+  $(
+    "dateNav"
+  ).style.display =
+    "none";
+
+
+  if(
+    !exams.length
+  ){
+
     container.innerHTML = `
-      <section class="archive-header">
-        <div class="archive-title">
+
+      <section
+        class="archive-header"
+      >
+
+        <div
+          class="archive-title"
+        >
           Экзамены и зачёты
         </div>
-        <div class="archive-subtitle">
-          Предстоящая аттестация
+
+        <div
+          class="archive-subtitle"
+        >
+          Предстоящие экзамены и зачёты
         </div>
+
       </section>
 
+
       <div class="empty">
+
         <strong>
           Пока ничего нет
         </strong>
-        Добавьте данные в файл exams.json.
+
+        Экзамены и зачёты
+        пока не добавлены.
+
       </div>
+
     `;
+
     return;
+
   }
 
-  const grouped = {};
 
-  [...filteredExams]
-    .sort((a,b) =>
-      (a.date || "").localeCompare(b.date || "") ||
-      (a.time || a.beginLesson || "").localeCompare(b.time || b.beginLesson || "")
-    )
-    .forEach(exam => {
-      if(!grouped[exam.date]){
-        grouped[exam.date] = [];
-      }
-      grouped[exam.date].push(exam);
-    });
+  const sorted =
+    [...exams]
+      .sort(
+        (a,b) => {
+
+          const ad =
+            `${a.date || ""} ${a.time || ""}`;
+
+          const bd =
+            `${b.date || ""} ${b.time || ""}`;
+
+          return ad.localeCompare(
+            bd
+          );
+
+        }
+      );
+
 
   container.innerHTML = `
-    <section class="archive-header">
-      <div class="archive-title">
+
+    <section
+      class="archive-header"
+    >
+
+      <div
+        class="archive-title"
+      >
         Экзамены и зачёты
       </div>
 
-      <div class="archive-subtitle">
-        Показано ${filteredExams.length} ${filteredExams.length === 1 ? "мероприятие" : filteredExams.length < 5 ? "мероприятия" : "мероприятий"}
+      <div
+        class="archive-subtitle"
+      >
+        ${sorted.length}
+        ${
+          sorted.length === 1
+            ? "мероприятие"
+            : sorted.length < 5
+            ? "мероприятия"
+            : "мероприятий"
+        }
       </div>
+
     </section>
 
-    ${Object.keys(grouped).sort().map(date => `
-      <section class="day">
-        <div class="day-heading">
-          <div>
-            <div class="weekday">
-              ${esc(formatWeekday(date))}
-            </div>
-            <div class="date">
-              ${esc(formatFullDate(date))}
-            </div>
-          </div>
 
-          <div class="count">
-            ${grouped[date].length}
-          </div>
-        </div>
+    <div class="exam-grid">
 
-        <div class="exam-grid">
-          ${grouped[date].map(examCard).join("")}
-        </div>
-      </section>
-    `).join("")}
+      ${sorted.map(
+        exam => `
+
+          <article
+            class="exam-card"
+          >
+
+            ${
+              exam.date
+
+              ?
+
+              `
+
+                <div
+                  class="exam-date"
+                >
+                  📅
+
+                  ${esc(
+                    formatFullDate(
+                      exam.date
+                    )
+                  )}
+
+                </div>
+
+              `
+
+              :
+
+              ""
+            }
+
+
+            ${
+              exam.time
+
+              ?
+
+              `
+
+                <div
+                  class="exam-time"
+                >
+
+                  ⏰
+
+                  ${esc(
+                    exam.time
+                  )}
+
+                </div>
+
+              `
+
+              :
+
+              ""
+            }
+
+
+            <div
+              class="exam-subject"
+            >
+
+              ${esc(
+                exam.discipline ||
+                exam.subject ||
+                "Без названия"
+              )}
+
+            </div>
+
+
+            ${
+              exam.type
+
+              ?
+
+              `
+
+                <div
+                  class="exam-type"
+                >
+
+                  🎓
+
+                  ${esc(
+                    exam.type
+                  )}
+
+                </div>
+
+              `
+
+              :
+
+              ""
+            }
+
+
+            <div
+              class="exam-meta"
+            >
+
+              ${
+                exam.lecturer
+
+                ?
+
+                `<span>
+                  👨‍🏫
+                  ${esc(
+                    exam.lecturer
+                  )}
+                </span>`
+
+                :
+
+                ""
+              }
+
+
+              ${
+                exam.auditorium
+
+                ?
+
+                `<span>
+                  🏫
+                  ${esc(
+                    exam.auditorium
+                  )}
+                </span>`
+
+                :
+
+                ""
+              }
+
+
+              ${
+                exam.building
+
+                ?
+
+                `<span>
+                  📍
+                  ${esc(
+                    exam.building
+                  )}
+                </span>`
+
+                :
+
+                ""
+              }
+
+            </div>
+
+          </article>
+
+        `
+      ).join("")}
+
+    </div>
+
   `;
+
 }
 
+
 /* =========================
-   RENDER
+   CHANGES
 ========================= */
 
-function renderSchedule(){
+const CHANGES_STORAGE_KEY =
+  "ruz-week-planner.previousSchedule.v1";
+
+
+const CHANGES_HISTORY_STORAGE_KEY =
+  "ruz-week-planner.changesHistory.v1";
+
+
+const CHANGE_FIELDS = [
+
+  {
+    key:"time",
+
+    label:"Время",
+
+    get:lesson => {
+
+      const begin =
+        lesson.beginLesson ||
+        "";
+
+      const end =
+        lesson.endLesson ||
+        "";
+
+      return begin || end
+        ? `${begin}–${end}`
+        : "";
+
+    }
+
+  },
+
+
+  {
+    key:"type",
+
+    label:"Тип",
+
+    get:lesson =>
+      lessonType(
+        lesson
+      )?.text ||
+      lesson.kindOfWork ||
+      ""
+
+  },
+
+
+  {
+    key:"lecturer",
+
+    label:"Преподаватель",
+
+    get:lesson =>
+      lesson.lecturer ||
+      ""
+
+  },
+
+
+  {
+    key:"auditorium",
+
+    label:"Аудитория",
+
+    get:lesson =>
+      lesson.auditorium ||
+      ""
+
+  },
+
+
+  {
+    key:"building",
+
+    label:"Корпус",
+
+    get:lesson =>
+      lesson.building ||
+      ""
+
+  }
+
+];
+
+
+function changeKey(
+  lesson
+){
+
+  const subject =
+    String(
+      lesson.discipline ||
+      lesson.subject ||
+      ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+  return [
+
+    lesson.date ||
+    "",
+
+    subject
+
+  ].join("|");
+
+}
+
+
+function indexLessonsByKey(
+  list
+){
+
+  const counters =
+    new Map();
+
+
+  const result =
+    new Map();
+
+
+  [...list]
+
+    .sort(
+      (a,b) =>
+
+        changeKey(a)
+          .localeCompare(
+            changeKey(b)
+          )
+
+        ||
+
+        (
+          a.beginLesson ||
+          ""
+        )
+        .localeCompare(
+          b.beginLesson ||
+          ""
+        )
+
+    )
+
+    .forEach(
+      lesson => {
+
+        const baseKey =
+          changeKey(
+            lesson
+          );
+
+
+        const index =
+          counters.get(
+            baseKey
+          ) || 0;
+
+
+        const key =
+          `${baseKey}|${index}`;
+
+
+        counters.set(
+          baseKey,
+          index + 1
+        );
+
+
+        result.set(
+          key,
+          lesson
+        );
+
+      }
+    );
+
+
+  return result;
+
+}
+
+
+function normaliseChange(
+  value
+){
+
+  return String(
+    value ?? ""
+  ).trim();
+
+}
+
+
+function detectLocalChanges(
+  previous,
+  current
+){
+
+  if(
+    !Array.isArray(
+      previous
+    )
+    ||
+    !previous.length
+  ){
+
+    return [];
+
+  }
+
+
+  const oldByKey =
+    indexLessonsByKey(
+      previous
+    );
+
+
+  const currentByKey =
+    indexLessonsByKey(
+      current
+    );
+
+
+  const detected = [];
+
+
+  currentByKey.forEach(
+    (
+      lesson,
+      key
+    ) => {
+
+      const oldLesson =
+        oldByKey.get(
+          key
+        );
+
+
+      if(
+        !oldLesson
+      ){
+
+        return;
+
+      }
+
+
+      const fieldChanges =
+        [];
+
+
+      CHANGE_FIELDS.forEach(
+        field => {
+
+          const oldValue =
+            normaliseChange(
+              field.get(
+                oldLesson
+              )
+            );
+
+
+          const newValue =
+            normaliseChange(
+              field.get(
+                lesson
+              )
+            );
+
+
+          if(
+            oldValue !==
+            newValue
+          ){
+
+            fieldChanges.push({
+
+              field:
+                field.key,
+
+              label:
+                field.label,
+
+              oldValue:
+                oldValue ||
+                "Не указано",
+
+              newValue:
+                newValue ||
+                "Не указано"
+
+            });
+
+          }
+
+        }
+      );
+
+
+      if(
+        fieldChanges.length
+      ){
+
+        detected.push({
+
+          date:
+            lesson.date,
+
+          discipline:
+            lesson.discipline ||
+            lesson.subject ||
+            "Предмет не указан",
+
+          changes:
+            fieldChanges
+
+        });
+
+      }
+
+    }
+  );
+
+
+  return detected;
+
+} 
+/* =========================
+   DATE RANGE
+========================= */
+
+function getBaseLessons(){
+
+  return schedule.filter(
+    lesson =>
+      belongsToTargetGroup(
+        lesson
+      )
+  );
+
+}
+
+
+function getLessonsForDate(
+  date
+){
+
+  const value =
+    localDateString(
+      date
+    );
+
+
+  return filtered(
+    getBaseLessons()
+      .filter(
+        lesson =>
+          lesson.date ===
+          value
+      )
+  );
+
+}
+
+
+function getWeekStart(
+  date
+){
+
+  const d =
+    new Date(
+      date
+    );
+
+
+  const day =
+    d.getDay();
+
+
+  const diff =
+    day === 0
+      ? -6
+      : 1 - day;
+
+
+  d.setDate(
+    d.getDate() +
+    diff
+  );
+
+
+  return d;
+
+}
+
+
+function getWeekLessons(
+  date
+){
+
+  const start =
+    getWeekStart(
+      date
+    );
+
+
+  const end =
+    addDays(
+      start,
+      6
+    );
+
+
+  const startValue =
+    localDateString(
+      start
+    );
+
+
+  const endValue =
+    localDateString(
+      end
+    );
+
+
+  return filtered(
+
+    getBaseLessons()
+      .filter(
+        lesson =>
+          lesson.date >=
+          startValue
+          &&
+          lesson.date <=
+          endValue
+      )
+
+  );
+
+}
+
+
+function getMonthLessons(
+  date
+){
+
+  const year =
+    date.getFullYear();
+
+
+  const month =
+    date.getMonth();
+
+
+  return filtered(
+
+    getBaseLessons()
+      .filter(
+        lesson => {
+
+          const d =
+            dateFromString(
+              lesson.date
+            );
+
+
+          return (
+
+            d.getFullYear() ===
+            year
+
+            &&
+
+            d.getMonth() ===
+            month
+
+          );
+
+        }
+      )
+
+  );
+
+}
+
+
+/* =========================
+   VIEW TITLE
+========================= */
+
+function updateViewTitle(){
+
+  const title =
+    $(
+      "dateNavMain"
+    );
+
 
   if(
     currentView ===
-    "exams"
+    "today"
   ){
 
-    renderExams();
+    title.innerHTML =
+      "Сегодня";
 
     return;
 
   }
 
+
   if(
     currentView ===
-    "archive"
+    "tomorrow"
   ){
 
-    renderArchive();
+    title.innerHTML =
+      "Завтра";
 
     return;
 
   }
+
+
+  if(
+    currentView ===
+    "week"
+  ){
+
+    const start =
+      getWeekStart(
+        selectedDate
+      );
+
+
+    const end =
+      addDays(
+        start,
+        6
+      );
+
+
+    title.innerHTML = `
+
+      ${esc(
+        start.toLocaleDateString(
+          "ru-RU",
+          {
+            day:"numeric",
+            month:"short"
+          }
+        )
+      )}
+
+      –
+
+      ${esc(
+        end.toLocaleDateString(
+          "ru-RU",
+          {
+            day:"numeric",
+            month:"short"
+          }
+        )
+      )}
+
+    `;
+
+    return;
+
+  }
+
+
+  if(
+    currentView ===
+    "month"
+  ){
+
+    title.innerHTML =
+      selectedDate
+        .toLocaleDateString(
+          "ru-RU",
+          {
+            month:"long",
+            year:"numeric"
+          }
+        );
+
+    return;
+
+  }
+
+
+  title.innerHTML =
+    "Ближайшее";
+
+}
+
+
+/* =========================
+   ARCHIVE
+========================= */
+
+function renderArchive(){
+
+  const container =
+    $(
+      "schedule"
+    );
+
+
+  $(
+    "nextLesson"
+  ).style.display =
+    "none";
+
+
+  $(
+    "stats"
+  ).style.display =
+    "none";
+
+
+  $(
+    "toolbar"
+  ).style.display =
+    "none";
+
+
+  $(
+    "dateNav"
+  ).style.display =
+    "none";
+
+
+  if(
+    !archive.length
+  ){
+
+    container.innerHTML = `
+
+      <section
+        class="archive-header"
+      >
+
+        <div
+          class="archive-title"
+        >
+          Архив
+        </div>
+
+        <div
+          class="archive-subtitle"
+        >
+          Предыдущие версии расписания
+        </div>
+
+      </section>
+
+
+      <div class="empty">
+
+        <strong>
+          Архив пока пуст
+        </strong>
+
+        Здесь появятся
+        предыдущие расписания.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML = `
+
+    <section
+      class="archive-header"
+    >
+
+      <div
+        class="archive-title"
+      >
+        Архив
+      </div>
+
+      <div
+        class="archive-subtitle"
+      >
+        Предыдущие версии расписания
+      </div>
+
+    </section>
+
+
+    <div class="changes-list">
+
+      ${
+        archive
+          .map(
+            item => `
+
+              <article
+                class="change-card"
+              >
+
+                <div
+                  class="change-head"
+                >
+
+                  <div>
+
+                    <div
+                      class="change-subject"
+                    >
+                      ${esc(
+                        item.title ||
+                        "Архив расписания"
+                      )}
+                    </div>
+
+                    <div
+                      class="change-date"
+                    >
+                      ${esc(
+                        item.date ||
+                        ""
+                      )}
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </article>
+
+            `
+          )
+          .join("")
+      }
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================
+   EXAMS
+========================= */
+
+function renderExams(){
+
+  const container =
+    $(
+      "schedule"
+    );
+
+
+  $(
+    "nextLesson"
+  ).style.display =
+    "none";
+
+
+  $(
+    "stats"
+  ).style.display =
+    "none";
+
+
+  $(
+    "toolbar"
+  ).style.display =
+    "none";
+
+
+  $(
+    "dateNav"
+  ).style.display =
+    "none";
+
+
+  if(
+    !exams.length
+  ){
+
+    container.innerHTML = `
+
+      <section
+        class="archive-header"
+      >
+
+        <div
+          class="archive-title"
+        >
+          Экзамены и зачёты
+        </div>
+
+        <div
+          class="archive-subtitle"
+        >
+          Предстоящие экзамены и зачёты
+        </div>
+
+      </section>
+
+
+      <div class="empty">
+
+        <strong>
+          Пока ничего нет
+        </strong>
+
+        Экзамены и зачёты
+        пока не добавлены.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  const sorted =
+    [...exams]
+      .sort(
+        (a,b) => {
+
+          const ad =
+            `${a.date || ""} ${a.time || ""}`;
+
+          const bd =
+            `${b.date || ""} ${b.time || ""}`;
+
+          return ad.localeCompare(
+            bd
+          );
+
+        }
+      );
+
+
+  container.innerHTML = `
+
+    <section
+      class="archive-header"
+    >
+
+      <div
+        class="archive-title"
+      >
+        Экзамены и зачёты
+      </div>
+
+      <div
+        class="archive-subtitle"
+      >
+        ${sorted.length}
+        ${
+          sorted.length === 1
+            ? "мероприятие"
+            : sorted.length < 5
+            ? "мероприятия"
+            : "мероприятий"
+        }
+      </div>
+
+    </section>
+
+
+    <div class="exam-grid">
+
+      ${sorted.map(
+        exam => `
+
+          <article
+            class="exam-card"
+          >
+
+            ${
+              exam.date
+
+              ?
+
+              `
+
+                <div
+                  class="exam-date"
+                >
+                  📅
+
+                  ${esc(
+                    formatFullDate(
+                      exam.date
+                    )
+                  )}
+
+                </div>
+
+              `
+
+              :
+
+              ""
+            }
+
+
+            ${
+              exam.time
+
+              ?
+
+              `
+
+                <div
+                  class="exam-time"
+                >
+
+                  ⏰
+
+                  ${esc(
+                    exam.time
+                  )}
+
+                </div>
+
+              `
+
+              :
+
+              ""
+            }
+
+
+            <div
+              class="exam-subject"
+            >
+
+              ${esc(
+                exam.discipline ||
+                exam.subject ||
+                "Без названия"
+              )}
+
+            </div>
+
+
+            ${
+              exam.type
+
+              ?
+
+              `
+
+                <div
+                  class="exam-type"
+                >
+
+                  🎓
+
+                  ${esc(
+                    exam.type
+                  )}
+
+                </div>
+
+              `
+
+              :
+
+              ""
+            }
+
+
+            <div
+              class="exam-meta"
+            >
+
+              ${
+                exam.lecturer
+
+                ?
+
+                `<span>
+                  👨‍🏫
+                  ${esc(
+                    exam.lecturer
+                  )}
+                </span>`
+
+                :
+
+                ""
+              }
+
+
+              ${
+                exam.auditorium
+
+                ?
+
+                `<span>
+                  🏫
+                  ${esc(
+                    exam.auditorium
+                  )}
+                </span>`
+
+                :
+
+                ""
+              }
+
+
+              ${
+                exam.building
+
+                ?
+
+                `<span>
+                  📍
+                  ${esc(
+                    exam.building
+                  )}
+                </span>`
+
+                :
+
+                ""
+              }
+
+            </div>
+
+          </article>
+
+        `
+      ).join("")}
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================
+   CHANGES
+========================= */
+
+const CHANGES_STORAGE_KEY =
+  "ruz-week-planner.previousSchedule.v1";
+
+
+const CHANGES_HISTORY_STORAGE_KEY =
+  "ruz-week-planner.changesHistory.v1";
+
+
+const CHANGE_FIELDS = [
+
+  {
+    key:"time",
+
+    label:"Время",
+
+    get:lesson => {
+
+      const begin =
+        lesson.beginLesson ||
+        "";
+
+      const end =
+        lesson.endLesson ||
+        "";
+
+      return begin || end
+        ? `${begin}–${end}`
+        : "";
+
+    }
+
+  },
+
+
+  {
+    key:"type",
+
+    label:"Тип",
+
+    get:lesson =>
+      lessonType(
+        lesson
+      )?.text ||
+      lesson.kindOfWork ||
+      ""
+
+  },
+
+
+  {
+    key:"lecturer",
+
+    label:"Преподаватель",
+
+    get:lesson =>
+      lesson.lecturer ||
+      ""
+
+  },
+
+
+  {
+    key:"auditorium",
+
+    label:"Аудитория",
+
+    get:lesson =>
+      lesson.auditorium ||
+      ""
+
+  },
+
+
+  {
+    key:"building",
+
+    label:"Корпус",
+
+    get:lesson =>
+      lesson.building ||
+      ""
+
+  }
+
+];
+
+
+function changeKey(
+  lesson
+){
+
+  const subject =
+    String(
+      lesson.discipline ||
+      lesson.subject ||
+      ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+  return [
+
+    lesson.date ||
+    "",
+
+    subject
+
+  ].join("|");
+
+}
+
+
+function indexLessonsByKey(
+  list
+){
+
+  const counters =
+    new Map();
+
+
+  const result =
+    new Map();
+
+
+  [...list]
+
+    .sort(
+      (a,b) =>
+
+        changeKey(a)
+          .localeCompare(
+            changeKey(b)
+          )
+
+        ||
+
+        (
+          a.beginLesson ||
+          ""
+        )
+        .localeCompare(
+          b.beginLesson ||
+          ""
+        )
+
+    )
+
+    .forEach(
+      lesson => {
+
+        const baseKey =
+          changeKey(
+            lesson
+          );
+
+
+        const index =
+          counters.get(
+            baseKey
+          ) || 0;
+
+
+        const key =
+          `${baseKey}|${index}`;
+
+
+        counters.set(
+          baseKey,
+          index + 1
+        );
+
+
+        result.set(
+          key,
+          lesson
+        );
+
+      }
+    );
+
+
+  return result;
+
+}
+
+
+function normaliseChange(
+  value
+){
+
+  return String(
+    value ?? ""
+  ).trim();
+
+}
+
+
+function detectLocalChanges(
+  previous,
+  current
+){
+
+  if(
+    !Array.isArray(
+      previous
+    )
+    ||
+    !previous.length
+  ){
+
+    return [];
+
+  }
+
+
+  const oldByKey =
+    indexLessonsByKey(
+      previous
+    );
+
+
+  const currentByKey =
+    indexLessonsByKey(
+      current
+    );
+
+
+  const detected = [];
+
+
+  currentByKey.forEach(
+    (
+      lesson,
+      key
+    ) => {
+
+      const oldLesson =
+        oldByKey.get(
+          key
+        );
+
+
+      if(
+        !oldLesson
+      ){
+
+        return;
+
+      }
+
+
+      const fieldChanges =
+        [];
+
+
+      CHANGE_FIELDS.forEach(
+        field => {
+
+          const oldValue =
+            normaliseChange(
+              field.get(
+                oldLesson
+              )
+            );
+
+
+          const newValue =
+            normaliseChange(
+              field.get(
+                lesson
+              )
+            );
+
+
+          if(
+            oldValue !==
+            newValue
+          ){
+
+            fieldChanges.push({
+
+              field:
+                field.key,
+
+              label:
+                field.label,
+
+              oldValue:
+                oldValue ||
+                "Не указано",
+
+              newValue:
+                newValue ||
+                "Не указано"
+
+            });
+
+          }
+
+        }
+      );
+
+
+      if(
+        fieldChanges.length
+      ){
+
+        detected.push({
+
+          date:
+            lesson.date,
+
+          discipline:
+            lesson.discipline ||
+            lesson.subject ||
+            "Предмет не указан",
+
+          changes:
+            fieldChanges
+
+        });
+
+      }
+
+    }
+  );
+
+
+  return detected;
+
+}  
+    /* =========================
+     NORMAL SCHEDULE VIEWS
+  ========================= */
+
+  $(
+    "nextLesson"
+  ).style.display =
+    currentView ===
+    "nearest"
+      ? "block"
+      : "none";
+
+
+  $(
+    "stats"
+  ).style.display =
+    (
+      currentView ===
+      "nearest"
+      ||
+      currentView ===
+      "today"
+    )
+      ? "grid"
+      : "none";
 
 
   $(
@@ -3666,80 +5242,236 @@ function renderSchedule(){
     "grid";
 
 
+  $(
+    "dateNav"
+  ).style.display =
+    currentView ===
+    "nearest"
+      ? "none"
+      : "flex";
+
+
+  updateViewTitle();
+
+
   if(
     currentView ===
     "nearest"
   ){
 
-    $(
-      "nextLesson"
-    ).style.display =
-      "block";
-
-
-    $(
-      "stats"
-    ).style.display =
-      "grid";
-
-
     renderNext();
+
     renderStats();
 
-  }
 
-  else{
-
-    $(
-      "nextLesson"
-    ).style.display =
-      "none";
+    const lessons =
+      filtered(
+        getBaseLessons()
+      );
 
 
-    $(
-      "stats"
-    ).style.display =
-
-      currentView ===
-      "today"
-
-      ?
-
-      "grid"
-
-      :
-
-      "none";
+    groupAndRender(
+      lessons
+    );
 
 
-    if(
-      currentView ===
-      "today"
-    ){
-
-      renderStats();
-
-    }
+    return;
 
   }
 
 
-  renderDateNav();
+  if(
+    currentView ===
+    "today"
+  ){
+
+    const lessons =
+      getLessonsForDate(
+        new Date()
+      );
 
 
-  groupAndRender(
+    renderStats();
 
-    filtered(
-      getBaseLessons()
-    )
 
-  );
+    groupAndRender(
+      lessons
+    );
+
+
+    return;
+
+  }
+
+
+  if(
+    currentView ===
+    "tomorrow"
+  ){
+
+    const tomorrow =
+      addDays(
+        new Date(),
+        1
+      );
+
+
+    const lessons =
+      getLessonsForDate(
+        tomorrow
+      );
+
+
+    groupAndRender(
+      lessons
+    );
+
+
+    return;
+
+  }
+
+
+  if(
+    currentView ===
+    "week"
+  ){
+
+    const lessons =
+      getWeekLessons(
+        selectedDate
+      );
+
+
+    groupAndRender(
+      lessons
+    );
+
+
+    return;
+
+  }
+
+
+  if(
+    currentView ===
+    "month"
+  ){
+
+    const lessons =
+      getMonthLessons(
+        selectedDate
+      );
+
+
+    groupAndRender(
+      lessons
+    );
+
+
+    return;
+
+  }
 
 }
 
 
 /* =========================
-   VIEW
+   NAVIGATION
+========================= */
+
+function shiftPeriod(
+  direction
+){
+
+  if(
+    currentView ===
+    "today"
+  ){
+
+    selectedDate =
+      addDays(
+        new Date(),
+        direction
+      );
+
+    currentView =
+      "week";
+
+  }
+
+
+  else if(
+    currentView ===
+    "tomorrow"
+  ){
+
+    selectedDate =
+      addDays(
+        new Date(),
+        1 +
+        direction
+      );
+
+    currentView =
+      "week";
+
+  }
+
+
+  else if(
+    currentView ===
+    "week"
+  ){
+
+    selectedDate =
+      addDays(
+        selectedDate,
+        direction * 7
+      );
+
+  }
+
+
+  else if(
+    currentView ===
+    "month"
+  ){
+
+    const next =
+      new Date(
+        selectedDate
+      );
+
+    next.setMonth(
+      next.getMonth() +
+      direction
+    );
+
+    selectedDate =
+      next;
+
+  }
+
+
+  else{
+
+    selectedDate =
+      addDays(
+        selectedDate,
+        direction
+      );
+
+  }
+
+
+  renderSchedule();
+
+}
+
+
+/* =========================
+   VIEW SWITCHING
 ========================= */
 
 function setView(
@@ -3767,6 +5499,31 @@ function setView(
   ){
 
     selectedDate =
+      addDays(
+        new Date(),
+        1
+      );
+
+  }
+
+
+  if(
+    view ===
+    "week"
+  ){
+
+    selectedDate =
+      new Date();
+
+  }
+
+
+  if(
+    view ===
+    "month"
+  ){
+
+    selectedDate =
       new Date();
 
   }
@@ -3777,44 +5534,308 @@ function setView(
       ".menu-item"
     )
     .forEach(
-      button =>
+      button => {
+
         button.classList.toggle(
           "active",
           button.dataset.view ===
           view
-        )
+        );
+
+      }
     );
 
 
+  if(
+    view ===
+    "changes"
+    ||
+    view ===
+    "exams"
+    ||
+    view ===
+    "archive"
+  ){
+
+    closeMenu();
+
+  }
+
+
   renderSchedule();
 
 }
 
 
 /* =========================
-   FILTER UPDATE
+   MENU
 ========================= */
 
-function updateFilters(){
+function openMenu(){
 
-  searchText =
-    $(
-      "searchInput"
-    ).value.trim();
-
-
-  typeFilter =
-    $(
-      "typeFilter"
-    ).value;
+  $(
+    "sideMenu"
+  ).classList.add(
+    "open"
+  );
 
 
-  renderSchedule();
+  $(
+    "menuOverlay"
+  ).classList.add(
+    "open"
+  );
+
+}
+
+
+function closeMenu(){
+
+  $(
+    "sideMenu"
+  ).classList.remove(
+    "open"
+  );
+
+
+  $(
+    "menuOverlay"
+  ).classList.remove(
+    "open"
+  );
 
 }
 
 
 /* =========================
+   FILTERS
+========================= */
+
+$(
+  "searchInput"
+)
+.addEventListener(
+  "input",
+  event => {
+
+    searchText =
+      event.target.value
+        .trim();
+
+
+    renderSchedule();
+
+  }
+);
+
+
+$(
+  "typeFilter"
+)
+.addEventListener(
+  "change",
+  event => {
+
+    typeFilter =
+      event.target.value;
+
+
+    renderSchedule();
+
+  }
+);
+
+
+$(
+  "clearFilters"
+)
+.addEventListener(
+  "click",
+  () => {
+
+    searchText =
+      "";
+
+    typeFilter =
+      "all";
+
+
+    $(
+      "searchInput"
+    ).value =
+      "";
+
+
+    $(
+      "typeFilter"
+    ).value =
+      "all";
+
+
+    renderSchedule();
+
+  }
+);
+
+
+/* =========================
+   MENU EVENTS
+========================= */
+
+$(
+  "menuOpen"
+)
+.addEventListener(
+  "click",
+  openMenu
+);
+
+
+$(
+  "menuClose"
+)
+.addEventListener(
+  "click",
+  closeMenu
+);
+
+
+$(
+  "menuOverlay"
+)
+.addEventListener(
+  "click",
+  closeMenu
+);
+
+
+document
+  .querySelectorAll(
+    ".menu-item"
+  )
+  .forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          setView(
+            button.dataset.view
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+/* =========================
+   DATE NAVIGATION
+========================= */
+
+$(
+  "datePrev"
+)
+.addEventListener(
+  "click",
+  () =>
+    shiftPeriod(
+      -1
+    )
+);
+
+
+$(
+  "dateNext"
+)
+.addEventListener(
+  "click",
+  () =>
+    shiftPeriod(
+      1
+    )
+);
+
+
+/* =========================
+   REFRESH
+========================= */
+
+$(
+  "refreshButton"
+)
+.addEventListener(
+  "click",
+  loadAll
+);
+
+
+/* =========================
+   START
+========================= */
+
+loadAll();
+
+
+/* =========================
+   LIVE UPDATE
+========================= */
+
+setInterval(
+  () => {
+
+    updateHero();
+
+
+    if(
+      currentView ===
+      "nearest"
+      ||
+      currentView ===
+      "today"
+    ){
+
+      renderStats();
+
+    }
+
+
+    if(
+      currentView !==
+      "archive"
+      &&
+      currentView !==
+      "exams"
+      &&
+      currentView !==
+      "changes"
+    ){
+
+      groupAndRender(
+
+        filtered(
+          getBaseLessons()
+        )
+
+      );
+
+    }
+
+  },
+  1000
+);
+
+
+/* =========================
+   DATA UPDATE
+========================= */
+
+setInterval(
+  loadAll,
+  5 * 60 * 1000
+);/* =========================
    LOAD SCHEDULE
 ========================= */
 
@@ -3826,16 +5847,16 @@ async function loadSchedule(){
     );
 
 
-  button.classList.add(
-    "loading"
-  );
-
-
-  button.textContent =
-    "↻ Обновление...";
-
-
   try{
+
+    button.classList.add(
+      "loading"
+    );
+
+
+    button.textContent =
+      "↻ Загрузка...";
+
 
     const response =
       await fetch(
@@ -3853,7 +5874,8 @@ async function loadSchedule(){
     ){
 
       throw new Error(
-        "Не удалось загрузить schedule.json"
+        "HTTP " +
+        response.status
       );
 
     }
@@ -3870,7 +5892,7 @@ async function loadSchedule(){
     ){
 
       throw new Error(
-        "Неверный формат schedule.json"
+        "schedule.json должен содержать массив"
       );
 
     }
@@ -3883,7 +5905,12 @@ async function loadSchedule(){
           lesson =>
 
             lesson.date
+            &&
 
+            lesson.beginLesson
+            &&
+
+            lesson.endLesson
             &&
 
             belongsToTargetGroup(
@@ -3905,27 +5932,40 @@ async function loadSchedule(){
         .toLocaleTimeString(
           "ru-RU",
           {
-            hour:"2-digit",
-            minute:"2-digit"
+            hour:
+              "2-digit",
+
+            minute:
+              "2-digit"
           }
         );
 
 
-    renderSchedule();
-
   }
-
 
   catch(
     error
   ){
 
+    console.error(
+      "Schedule loading error:",
+      error
+    );
+
+
     if(
       currentView !==
       "archive"
+
       &&
+
       currentView !==
       "exams"
+
+      &&
+
+      currentView !==
+      "changes"
     ){
 
       $(
@@ -3942,6 +5982,7 @@ async function loadSchedule(){
 
           </strong>
 
+
           ${esc(
             error.message
           )}
@@ -3953,7 +5994,6 @@ async function loadSchedule(){
     }
 
   }
-
 
   finally{
 
@@ -4019,7 +6059,6 @@ async function loadArchive(){
           lesson =>
 
             lesson.date
-
             &&
 
             belongsToTargetGroup(
@@ -4036,7 +6075,6 @@ async function loadArchive(){
 
   }
 
-
   catch(
     error
   ){
@@ -4045,6 +6083,7 @@ async function loadArchive(){
       "Archive loading error:",
       error
     );
+
 
     archive =
       [];
@@ -4059,28 +6098,139 @@ async function loadArchive(){
 ========================= */
 
 async function loadExams(){
-  try{
-    const response = await fetch(
-      "exams.json?t=" + Date.now(),
-      { cache: "no-store" }
-    );
 
-    if(!response.ok){
-      exams = [];
+  try{
+
+    const response =
+      await fetch(
+        "exams.json?t=" +
+        Date.now(),
+        {
+          cache:
+            "no-store"
+        }
+      );
+
+
+    if(
+      !response.ok
+    ){
+
+      exams =
+        [];
+
       return;
+
     }
 
-    const data = await response.json();
 
-    exams = Array.isArray(data)
-      ? data.filter(exam => exam.date)
-      : [];
+    const data =
+      await response.json();
+
+
+    exams =
+
+      Array.isArray(
+        data
+      )
+
+      ?
+
+      data.filter(
+        exam =>
+          exam.date
+      )
+
+      :
+
+      [];
+
   }
-  catch(error){
-    console.error("Exams loading error:", error);
-    exams = [];
+
+  catch(
+    error
+  ){
+
+    console.error(
+      "Exams loading error:",
+      error
+    );
+
+
+    exams =
+      [];
+
   }
+
 }
+
+
+/* =========================
+   LOAD CHANGES
+========================= */
+
+async function loadChanges(){
+
+  let externalChanges =
+    [];
+
+
+  try{
+
+    const response =
+      await fetch(
+        "changes.json?t=" +
+        Date.now(),
+        {
+          cache:
+            "no-store"
+        }
+      );
+
+
+    if(
+      response.ok
+    ){
+
+      const data =
+        await response.json();
+
+
+      externalChanges =
+        normaliseExternalChanges(
+          data
+        );
+
+    }
+
+  }
+
+  catch(
+    error
+  ){
+
+    console.warn(
+      "Changes loading error:",
+      error
+    );
+
+  }
+
+
+  const history =
+    readChangesHistory();
+
+
+  changes = [
+
+    ...externalChanges,
+
+    ...history
+
+  ];
+
+}
+
 
 /* =========================
    LOAD ALL
@@ -4088,15 +6238,133 @@ async function loadExams(){
 
 async function loadAll(){
 
+  const previousSchedule =
+    readScheduleSnapshot();
+
+
   await Promise.all([
 
     loadSchedule(),
 
     loadArchive(),
 
-    loadExams()
+    loadExams(),
+
+    loadChanges()
 
   ]);
+
+
+  /*
+    Сравниваем предыдущую
+    версию расписания
+    с новой.
+  */
+
+  const localChanges =
+    detectLocalChanges(
+      previousSchedule,
+      schedule
+    );
+
+
+  if(
+    localChanges.length
+  ){
+
+    const history =
+      readChangesHistory();
+
+
+    const mergedHistory = [
+
+      ...localChanges,
+
+      ...history
+
+    ];
+
+
+    const uniqueHistory =
+      [];
+
+
+    const seen =
+      new Set();
+
+
+    mergedHistory.forEach(
+      item => {
+
+        const key = [
+
+          item.date,
+
+          item.discipline,
+
+          ...(
+            item.changes ||
+            []
+          )
+          .map(
+            change =>
+              `${change.field}:${change.oldValue}:${change.newValue}`
+          )
+
+        ].join(
+          "|"
+        );
+
+
+        if(
+          !seen.has(
+            key
+          )
+        ){
+
+          seen.add(
+            key
+          );
+
+
+          uniqueHistory.push(
+            item
+          );
+
+        }
+
+      }
+    );
+
+
+    saveChangesHistory(
+
+      uniqueHistory.slice(
+        0,
+        100
+      )
+
+    );
+
+
+    changes = [
+
+      ...changes,
+
+      ...localChanges
+
+    ];
+
+  }
+
+
+  /*
+    Сохраняем текущую
+    версию как предыдущую
+    для следующего обновления.
+  */
+
+  saveScheduleSnapshot();
 
 
   renderSchedule();
@@ -4139,7 +6407,9 @@ function heroKey(){
       ? "current"
       : "next"
 
-  ].join("|");
+  ].join(
+    "|"
+  );
 
 }
 
@@ -4238,24 +6508,16 @@ function openMenu(){
 
   $(
     "sideMenu"
-  )
-  .classList
-  .add(
+  ).classList.add(
     "open"
   );
 
 
   $(
     "menuOverlay"
-  )
-  .classList
-  .add(
+  ).classList.add(
     "open"
   );
-
-
-  document.body.style.overflow =
-    "hidden";
 
 }
 
@@ -4264,27 +6526,94 @@ function closeMenu(){
 
   $(
     "sideMenu"
-  )
-  .classList
-  .remove(
+  ).classList.remove(
     "open"
   );
 
 
   $(
     "menuOverlay"
-  )
-  .classList
-  .remove(
+  ).classList.remove(
     "open"
   );
 
-
-  document.body.style.overflow =
-    "";
-
 }
 
+
+/* =========================
+   FILTER EVENTS
+========================= */
+
+$(
+  "searchInput"
+)
+.addEventListener(
+  "input",
+  event => {
+
+    searchText =
+      event.target.value
+        .trim();
+
+
+    renderSchedule();
+
+  }
+);
+
+
+$(
+  "typeFilter"
+)
+.addEventListener(
+  "change",
+  event => {
+
+    typeFilter =
+      event.target.value;
+
+
+    renderSchedule();
+
+  }
+);
+
+
+$(
+  "clearFilters"
+)
+.addEventListener(
+  "click",
+  () => {
+
+    searchText =
+      "";
+
+    typeFilter =
+      "all";
+
+
+    $(
+      "searchInput"
+    ).value =
+      "";
+
+
+    $(
+      "typeFilter"
+    ).value =
+      "all";
+
+
+    renderSchedule();
+
+  }
+);
+
+
+/* =========================
+   MENU EVENTS
+========================= */
 
 $(
   "menuOpen"
@@ -4313,10 +6642,6 @@ $(
 );
 
 
-/* =========================
-   MENU ITEMS
-========================= */
-
 document
   .querySelectorAll(
     ".menu-item"
@@ -4327,8 +6652,6 @@ document
       button.addEventListener(
         "click",
         () => {
-
-          closeMenu();
 
           setView(
             button.dataset.view
@@ -4342,119 +6665,8 @@ document
 
 
 /* =========================
-   SEARCH
-========================= */
-
-$(
-  "searchInput"
-)
-.addEventListener(
-  "input",
-  updateFilters
-);
-
-
-$(
-  "typeFilter"
-)
-.addEventListener(
-  "change",
-  updateFilters
-);
-
-
-$(
-  "clearFilters"
-)
-.addEventListener(
-  "click",
-  () => {
-
-    $(
-      "searchInput"
-    ).value =
-      "";
-
-
-    $(
-      "typeFilter"
-    ).value =
-      "all";
-
-
-    searchText =
-      "";
-
-
-    typeFilter =
-      "all";
-
-
-    renderSchedule();
-
-  }
-);
-
-
-/* =========================
    DATE NAVIGATION
 ========================= */
-
-function shiftPeriod(
-  direction
-){
-
-  if(
-    currentView ===
-    "today"
-    ||
-    currentView ===
-    "tomorrow"
-  ){
-
-    selectedDate =
-      addDays(
-        selectedDate,
-        direction
-      );
-
-  }
-
-
-  else if(
-    currentView ===
-    "week"
-  ){
-
-    selectedDate =
-      addDays(
-        selectedDate,
-        7 *
-        direction
-      );
-
-  }
-
-
-  else if(
-    currentView ===
-    "month"
-  ){
-
-    selectedDate =
-      addDays(
-        selectedDate,
-        30 *
-        direction
-      );
-
-  }
-
-
-  renderSchedule();
-
-}
-
 
 $(
   "datePrev"
@@ -4513,7 +6725,9 @@ setInterval(
     if(
       currentView ===
       "nearest"
+
       ||
+
       currentView ===
       "today"
     ){
@@ -4524,20 +6738,48 @@ setInterval(
 
 
     if(
+
       currentView !==
       "archive"
+
       &&
+
       currentView !==
       "exams"
+
+      &&
+
+      currentView !==
+      "changes"
+
     ){
 
-      groupAndRender(
+      /*
+        Не перерисовываем
+        страницу для раздела
+        "Изменения".
+      */
 
-        filtered(
-          getBaseLessons()
-        )
+      if(
+        currentView ===
+        "nearest"
+        ||
+        currentView ===
+        "today"
+        ||
+        currentView ===
+        "tomorrow"
+        ||
+        currentView ===
+        "week"
+        ||
+        currentView ===
+        "month"
+      ){
 
-      );
+        renderSchedule();
+
+      }
 
     }
 
