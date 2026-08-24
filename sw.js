@@ -1,9 +1,10 @@
-const CACHE_NAME = "mezhdot25-2-v1";
+const CACHE_NAME = "mezhdot25-2-v2";
 
 const APP_FILES = [
   "./",
   "./index.html",
   "./schedule.json",
+  "./changes.json",
   "./manifest.json"
 ];
 
@@ -47,38 +48,43 @@ self.addEventListener("activate", event => {
 self.addEventListener("fetch", event => {
 
   /*
-   schedule.json всегда пытаемся
-   получить свежим из сети.
+   schedule.json и changes.json всегда
+   пытаемся получить свежими из сети.
+   Для changes.json URL может содержать ?t=Date.now(),
+   поэтому кэшируем и читаем данные по URL без query-параметров.
   */
 
-  if(
-    event.request.url.includes("schedule.json")
-  ){
+  const requestUrl = new URL(event.request.url);
+  const isDataFile =
+    requestUrl.pathname.endsWith("/schedule.json") ||
+    requestUrl.pathname.endsWith("/changes.json");
+
+  if(isDataFile){
+
+    const cacheKey = new Request(
+      new URL(
+        requestUrl.pathname,
+        self.location.origin
+      ).href
+    );
 
     event.respondWith(
-
       fetch(event.request)
         .then(response => {
 
-          const copy =
-            response.clone();
+          const copy = response.clone();
 
           caches.open(CACHE_NAME)
             .then(cache =>
-              cache.put(
-                event.request,
-                copy
-              )
+              cache.put(cacheKey, copy)
             );
 
           return response;
 
         })
-
         .catch(() =>
-          caches.match(event.request)
+          caches.match(cacheKey)
         )
-
     );
 
     return;
