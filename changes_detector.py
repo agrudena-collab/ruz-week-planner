@@ -26,10 +26,7 @@ def load(path):
 
 
 def identity(lesson):
-    """
-    Stable lesson identity that does not depend on fields we want to detect
-    as changes. This lets us detect time/subject/teacher/room changes.
-    """
+    """Stable lesson identity independent of fields we detect as changes."""
     return (
         lesson.get("date", ""),
         lesson.get("lessonNumberStart", ""),
@@ -101,17 +98,29 @@ new_by_id = {
     if identity(x) != ("", "", "", "", "", "", "")
 }
 
+# The schedule is a rolling window. Its first/last dates naturally move
+# between runs, so lessons that disappear from the old window or appear at
+# the new far edge must not be reported as real removals/additions.
+old_dates = {x.get("date", "") for x in old if x.get("date", "")}
+new_dates = {x.get("date", "") for x in new if x.get("date", "")}
+shared_dates = old_dates & new_dates
+
 changes = []
 now = datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
 
-# Existing lessons: detect changed fields.
 for lesson_id in sorted(old_by_id.keys() | new_by_id.keys()):
     previous = old_by_id.get(lesson_id)
     current = new_by_id.get(lesson_id)
 
     if previous is None:
+        # Ignore additions that exist only because the rolling window moved.
+        if current.get("date", "") not in shared_dates:
+            continue
         change = make_change(None, current, now, "added")
     elif current is None:
+        # Ignore removals that exist only because the rolling window moved.
+        if previous.get("date", "") not in shared_dates:
+            continue
         change = make_change(previous, None, now, "removed")
     else:
         change = make_change(previous, current, now)
@@ -127,4 +136,5 @@ with CHANGES_FILE.open("w", encoding="utf-8") as f:
 
 print(f"Previous lessons: {len(old)}")
 print(f"Current lessons: {len(new)}")
+print(f"Shared dates: {len(shared_dates)}")
 print(f"Detected changes: {len(changes)}")
