@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
 
 <meta charset="UTF-8">
@@ -206,22 +205,18 @@ button{
 }
 
 
-/*
-  Теперь вместо буквы R —
-  кнопка меню.
-*/
-
 .menu-button{
 
   width:50px;
-
   height:50px;
 
-  border:1px solid var(--line);
+  border:
+    1px solid var(--line);
 
   border-radius:17px;
 
   background:
+
     linear-gradient(
       135deg,
       rgba(79,140,255,.25),
@@ -250,9 +245,7 @@ button{
 
 
 .menu-button:active{
-
   transform:scale(.94);
-
 }
 
 
@@ -322,16 +315,12 @@ button{
 
 
 .refresh:active{
-
   transform:scale(.95);
-
 }
 
 
 .refresh.loading{
-
   opacity:.55;
-
 }
 
 
@@ -376,9 +365,7 @@ button{
   position:fixed;
 
   left:0;
-
   top:0;
-
   bottom:0;
 
   z-index:101;
@@ -461,10 +448,10 @@ button{
 .menu-close{
 
   width:44px;
-
   height:44px;
 
-  border:1px solid var(--line);
+  border:
+    1px solid var(--line);
 
   border-radius:14px;
 
@@ -532,9 +519,7 @@ button{
 
 
 .menu-item:active{
-
   transform:scale(.98);
-
 }
 
 
@@ -569,7 +554,6 @@ button{
   position:absolute;
 
   left:20px;
-
   right:20px;
 
   bottom:
@@ -628,13 +612,11 @@ button{
   position:absolute;
 
   width:360px;
-
   height:360px;
 
   border-radius:50%;
 
   right:-130px;
-
   top:-170px;
 
   background:
@@ -704,7 +686,6 @@ button{
 .dot{
 
   width:7px;
-
   height:7px;
 
   border-radius:50%;
@@ -976,9 +957,7 @@ button{
   position:absolute;
 
   left:0;
-
   top:0;
-
   bottom:0;
 
   width:4px;
@@ -996,13 +975,11 @@ button{
   position:absolute;
 
   width:150px;
-
   height:150px;
 
   border-radius:50%;
 
   right:-90px;
-
   bottom:-100px;
 
   background:
@@ -1065,9 +1042,86 @@ button{
   margin:
     9px
     0
-    13px;
+    8px;
 
   max-width:90%;
+
+}
+
+
+/* =========================================
+   TYPE OF LESSON
+========================================= */
+
+.lesson-type{
+
+  display:inline-flex;
+
+  align-items:center;
+
+  width:max-content;
+
+  margin-bottom:13px;
+
+  padding:
+    6px
+    9px;
+
+  border-radius:9px;
+
+  font-size:10px;
+
+  font-weight:900;
+
+  letter-spacing:.1px;
+
+  color:#dce2ed;
+
+  background:
+    rgba(255,255,255,.065);
+
+  border:
+    1px solid
+    rgba(255,255,255,.08);
+
+}
+
+
+.lesson-type.lecture{
+
+  color:#8fc0ff;
+
+  background:
+    rgba(79,140,255,.11);
+
+  border-color:
+    rgba(79,140,255,.18);
+
+}
+
+
+.lesson-type.seminar{
+
+  color:#c4a5ff;
+
+  background:
+    rgba(155,108,255,.11);
+
+  border-color:
+    rgba(155,108,255,.18);
+
+}
+
+
+.lesson-type.military{
+
+  color:#7ff0bd;
+
+  background:
+    rgba(39,223,145,.10);
+
+  border-color:
+    rgba(39,223,145,.18);
 
 }
 
@@ -1164,7 +1218,7 @@ button{
 
 
 /* =========================================
-   ARCHIVE HEADER
+   ARCHIVE
 ========================================= */
 
 .archive-header{
@@ -1240,7 +1294,6 @@ button{
   .menu-button{
 
     width:44px;
-
     height:44px;
 
     border-radius:14px;
@@ -1371,37 +1424,25 @@ button{
 }
 
 
-/* =========================================
-   VERY SMALL PHONES
-========================================= */
-
 @media(max-width:380px){
 
   .title{
-
     font-size:21px;
-
   }
 
 
   .group{
-
     font-size:11px;
-
   }
 
 
   .refresh{
-
     font-size:11px;
-
   }
 
 
   .hero-time{
-
     font-size:36px;
-
   }
 
 }
@@ -1491,8 +1532,6 @@ button{
     <div class="menu-divider"></div>
 
 
-    <!-- НОВЫЙ РАЗДЕЛ -->
-
     <button
       class="menu-item"
       data-view="archive"
@@ -1504,9 +1543,7 @@ button{
 
 
   <div class="menu-footer">
-
     МеждОт25-2 · РУЗ
-
   </div>
 
 </aside>
@@ -1524,8 +1561,6 @@ button{
 
   <div class="brand">
 
-
-    <!-- КНОПКА МЕНЮ СЛЕВА -->
 
     <button
       class="menu-button"
@@ -1569,24 +1604,14 @@ button{
       ↻ Обновить
     </button>
 
-
   </div>
+
 
 </header>
 
 
-<!-- =======================================
-     NEXT LESSON
-     ПОКАЗЫВАЕТСЯ ТОЛЬКО В БЛИЖАЙШЕМ
-======================================= -->
-
 <div id="nextLesson"></div>
 
-
-<!-- =======================================
-     STATS
-     ПОКАЗЫВАЕТСЯ ТОЛЬКО В БЛИЖАЙШЕМ И СЕГОДНЯ
-======================================= -->
 
 <div
   class="stats"
@@ -1594,25 +1619,17 @@ button{
 ></div>
 
 
-<!-- =======================================
-     CONTENT
-======================================= -->
-
 <main id="schedule">
 
   <div class="empty">
-
     Загрузка расписания...
-
   </div>
 
 </main>
 
 
 <div class="source">
-
   Автоматически обновляется из РУЗ · МеждОт25-2
-
 </div>
 
 
@@ -1620,6 +1637,7 @@ button{
 
 
 <script>
+
 
 /* =========================================
    DATA
@@ -1649,36 +1667,23 @@ function localDateString(
 ){
 
   return (
-
     d.getFullYear()
-
     + "-"
-
-    + pad(
-      d.getMonth() + 1
-    )
-
+    + pad(d.getMonth()+1)
     + "-"
-
-    + pad(
-      d.getDate()
-    )
-
+    + pad(d.getDate())
   );
 
 }
 
 
-function addDays(
-  d,
-  n
-){
+function addDays(d,n){
 
   const x =
     new Date(d);
 
   x.setDate(
-    x.getDate() + n
+    x.getDate()+n
   );
 
   return x;
@@ -1728,30 +1733,11 @@ function esc(v){
     v ?? ""
   )
 
-  .replace(
-    /&/g,
-    "&amp;"
-  )
-
-  .replace(
-    /</g,
-    "&lt;"
-  )
-
-  .replace(
-    />/g,
-    "&gt;"
-  )
-
-  .replace(
-    /"/g,
-    "&quot;"
-  )
-
-  .replace(
-    /'/g,
-    "&#039;"
-  );
+  .replace(/&/g,"&amp;")
+  .replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;")
+  .replace(/'/g,"&#039;");
 
 }
 
@@ -1799,9 +1785,7 @@ function ended(lesson){
   return (
 
     new Date()
-
     >=
-
     dt(
       lesson,
       "endLesson"
@@ -1836,12 +1820,74 @@ function sort(lessons){
 
 
 /* =========================================
+   TYPE OF LESSON
+========================================= */
+
+function lessonType(lesson){
+
+  const value =
+    String(
+      lesson.kindOfWork || ""
+    ).trim();
+
+
+  if(!value){
+    return null;
+  }
+
+
+  if(
+    value === "Лекции"
+    ||
+    value.toLowerCase() === "лекции"
+  ){
+
+    return {
+      text:"Лекция",
+      className:"lecture"
+    };
+
+  }
+
+
+  if(
+    value ===
+    "Практические (семинарские) занятия"
+  ){
+
+    return {
+      text:"Семинар",
+      className:"seminar"
+    };
+
+  }
+
+
+  if(
+    value === "Военная подготовка"
+  ){
+
+    return {
+      text:"Военная подготовка",
+      className:"military"
+    };
+
+  }
+
+
+  return {
+    text:value,
+    className:""
+  };
+
+}
+
+
+/* =========================================
    ACCENT
 ========================================= */
 
-function accent(
-  subject = ""
-){
+function accent(subject=""){
 
   const s =
     subject.toLowerCase();
@@ -1916,11 +1962,8 @@ function next(){
   if(c){
 
     return {
-
       lesson:c,
-
       current:true
-
     };
 
   }
@@ -1937,17 +1980,14 @@ function next(){
 
     ?
 
-      {
-
-        lesson:n,
-
-        current:false
-
-      }
+    {
+      lesson:n,
+      current:false
+    }
 
     :
 
-      null;
+    null;
 
 }
 
@@ -1993,6 +2033,10 @@ function renderNext(){
     result.lesson;
 
 
+  const type =
+    lessonType(lesson);
+
+
   container.innerHTML = `
 
     <section class="hero">
@@ -2003,28 +2047,24 @@ function renderNext(){
         ${
           result.current
 
-            ?
+          ?
 
           `
+          <div class="live">
 
-            <div class="live">
+            <span class="dot"></span>
 
-              <span class="dot"></span>
+            СЕЙЧАС ИДЁТ
 
-              СЕЙЧАС ИДЁТ
-
-            </div>
-
+          </div>
           `
 
-            :
+          :
 
           `
-
-            <div class="eyebrow">
-              Следующая пара
-            </div>
-
+          <div class="eyebrow">
+            Следующая пара
+          </div>
           `
 
         }
@@ -2058,6 +2098,24 @@ function renderNext(){
         <div class="chips">
 
 
+          ${
+            type
+
+            ?
+
+            `
+            <span class="chip">
+              🎓 ${esc(type.text)}
+            </span>
+            `
+
+            :
+
+            ""
+
+          }
+
+
           <span class="chip">
 
             📅
@@ -2082,23 +2140,21 @@ function renderNext(){
           ${
             lesson.lecturer
 
-              ?
+            ?
 
             `
+            <span class="chip">
 
-              <span class="chip">
+              👨‍🏫
 
-                👨‍🏫
+              ${esc(
+                lesson.lecturer
+              )}
 
-                ${esc(
-                  lesson.lecturer
-                )}
-
-              </span>
-
+            </span>
             `
 
-              :
+            :
 
             ""
 
@@ -2108,23 +2164,21 @@ function renderNext(){
           ${
             lesson.auditorium
 
-              ?
+            ?
 
             `
+            <span class="chip">
 
-              <span class="chip">
+              🏫
 
-                🏫
+              ${esc(
+                lesson.auditorium
+              )}
 
-                ${esc(
-                  lesson.auditorium
-                )}
-
-              </span>
-
+            </span>
             `
 
-              :
+            :
 
             ""
 
@@ -2134,23 +2188,21 @@ function renderNext(){
           ${
             lesson.building
 
-              ?
+            ?
 
             `
+            <span class="chip">
 
-              <span class="chip">
+              📍
 
-                📍
+              ${esc(
+                lesson.building
+              )}
 
-                ${esc(
-                  lesson.building
-                )}
-
-              </span>
-
+            </span>
             `
 
-              :
+            :
 
             ""
 
@@ -2215,9 +2267,7 @@ function renderStats(){
 
           )
 
-          /
-
-          60000
+          /60000
 
         ),
 
@@ -2228,13 +2278,13 @@ function renderStats(){
 
   const hours =
     Math.floor(
-      minutes / 60
+      minutes/60
     );
 
 
   const mins =
     Math.round(
-      minutes % 60
+      minutes%60
     );
 
 
@@ -2242,12 +2292,10 @@ function renderStats(){
     new Set(
 
       lessons
-
         .map(
           x =>
             x.building
         )
-
         .filter(Boolean)
 
     ).size;
@@ -2258,15 +2306,11 @@ function renderStats(){
     <div class="stat">
 
       <div class="stat-value">
-
         ${lessons.length}
-
       </div>
 
       <div class="stat-label">
-
         пар сегодня
-
       </div>
 
     </div>
@@ -2278,23 +2322,16 @@ function renderStats(){
 
         ${
           hours
-
-            ?
-
+          ?
           `${hours}ч ${mins}м`
-
-            :
-
+          :
           `${mins}м`
-
         }
 
       </div>
 
       <div class="stat-label">
-
         учебного времени
-
       </div>
 
     </div>
@@ -2303,15 +2340,11 @@ function renderStats(){
     <div class="stat">
 
       <div class="stat-value">
-
         ${buildings}
-
       </div>
 
       <div class="stat-label">
-
         корпуса сегодня
-
       </div>
 
     </div>
@@ -2325,9 +2358,7 @@ function renderStats(){
    LESSON CARD
 ========================================= */
 
-function lessonCard(
-  lesson
-){
+function lessonCard(lesson){
 
   const isNow =
     current(lesson);
@@ -2337,6 +2368,10 @@ function lessonCard(
     accent(
       lesson.discipline
     );
+
+
+  const type =
+    lessonType(lesson);
 
 
   return `
@@ -2384,25 +2419,44 @@ function lessonCard(
           </div>
 
 
+          ${
+            type
+
+            ?
+
+            `
+            <div
+              class="
+                lesson-type
+                ${type.className}
+              "
+            >
+              🎓 ${esc(type.text)}
+            </div>
+            `
+
+            :
+
+            ""
+
+          }
+
+
         </div>
 
 
         ${
           isNow
 
-            ?
+          ?
 
           `
-
-            <div class="badge">
-
-              СЕЙЧАС
-
-            </div>
-
+          <div class="badge">
+            СЕЙЧАС
+          </div>
           `
 
-            :
+          :
 
           ""
 
@@ -2418,23 +2472,18 @@ function lessonCard(
         ${
           lesson.lecturer
 
-            ?
+          ?
 
           `
-
-            <span>
-
-              👨‍🏫
-
-              ${esc(
-                lesson.lecturer
-              )}
-
-            </span>
-
+          <span>
+            👨‍🏫
+            ${esc(
+              lesson.lecturer
+            )}
+          </span>
           `
 
-            :
+          :
 
           ""
 
@@ -2444,23 +2493,18 @@ function lessonCard(
         ${
           lesson.auditorium
 
-            ?
+          ?
 
           `
-
-            <span>
-
-              🏫
-
-              ${esc(
-                lesson.auditorium
-              )}
-
-            </span>
-
+          <span>
+            🏫
+            ${esc(
+              lesson.auditorium
+            )}
+          </span>
           `
 
-            :
+          :
 
           ""
 
@@ -2470,23 +2514,18 @@ function lessonCard(
         ${
           lesson.building
 
-            ?
+          ?
 
           `
-
-            <span>
-
-              📍
-
-              ${esc(
-                lesson.building
-              )}
-
-            </span>
-
+          <span>
+            📍
+            ${esc(
+              lesson.building
+            )}
+          </span>
           `
 
-            :
+          :
 
           ""
 
@@ -2504,7 +2543,7 @@ function lessonCard(
 
 
 /* =========================================
-   GROUP LESSONS BY DATE
+   GROUP LESSONS
 ========================================= */
 
 function renderGroupedLessons(
@@ -2515,9 +2554,7 @@ function renderGroupedLessons(
     $("schedule");
 
 
-  if(
-    !lessons.length
-  ){
+  if(!lessons.length){
 
     container.innerHTML = `
 
@@ -2546,23 +2583,16 @@ function renderGroupedLessons(
     lesson => {
 
       if(
-        !grouped[
-          lesson.date
-        ]
+        !grouped[lesson.date]
       ){
 
-        grouped[
-          lesson.date
-        ] = [];
+        grouped[lesson.date] = [];
 
       }
 
 
-      grouped[
-        lesson.date
-      ].push(
-        lesson
-      );
+      grouped[lesson.date]
+        .push(lesson);
 
     }
   );
@@ -2576,70 +2606,37 @@ function renderGroupedLessons(
 
   container.innerHTML =
 
-    dates
+    dates.map(
 
-      .map(
+      date => `
 
-        date => `
-
-          <section class="day">
+        <section class="day">
 
 
-            <div class="day-heading">
+          <div class="day-heading">
 
 
-              <div>
+            <div>
 
 
-                <div class="weekday">
+              <div class="weekday">
 
-                  ${esc(
-                    formatWeekday(
-                      date
-                    )
-                  )}
-
-                </div>
-
-
-                <div class="date">
-
-                  ${esc(
-                    formatDate(
-                      date
-                    )
-                  )}
-
-                </div>
-
+                ${esc(
+                  formatWeekday(
+                    date
+                  )
+                )}
 
               </div>
 
 
-              <div class="count">
+              <div class="date">
 
-                ${grouped[date].length}
-
-                ${
-                  grouped[date].length === 1
-
-                    ?
-
-                  "пара"
-
-                    :
-
-                  grouped[date].length < 5
-
-                    ?
-
-                  "пары"
-
-                    :
-
-                  "пар"
-
-                }
+                ${esc(
+                  formatDate(
+                    date
+                  )
+                )}
 
               </div>
 
@@ -2647,34 +2644,48 @@ function renderGroupedLessons(
             </div>
 
 
-            <div class="grid">
+            <div class="count">
 
-              ${sort(
-                grouped[date]
-              )
+              ${grouped[date].length}
 
-              .map(
-                lessonCard
-              )
-
-              .join("")}
+              ${
+                grouped[date].length === 1
+                ? "пара"
+                : grouped[date].length < 5
+                ? "пары"
+                : "пар"
+              }
 
             </div>
 
 
-          </section>
+          </div>
 
-        `
 
-      )
+          <div class="grid">
 
-      .join("");
+            ${sort(
+              grouped[date]
+            )
+            .map(
+              lessonCard
+            )
+            .join("")}
+
+          </div>
+
+
+        </section>
+
+      `
+
+    ).join("");
 
 }
 
 
 /* =========================================
-   NORMAL SCHEDULE FILTER
+   NORMAL FILTER
 ========================================= */
 
 function getLessons(){
@@ -2738,7 +2749,6 @@ function getLessons(){
 
 
     return schedule.filter(
-
       x =>
 
         x.date >=
@@ -2768,7 +2778,6 @@ function getLessons(){
 
 
     return schedule.filter(
-
       x =>
 
         x.date >=
@@ -2784,7 +2793,7 @@ function getLessons(){
   }
 
 
-  /* Ближайшее */
+  /* БЛИЖАЙШЕЕ */
 
   const futureDates = [
 
@@ -2793,12 +2802,9 @@ function getLessons(){
       sort(schedule)
 
         .filter(
-
           x =>
-
             x.date >=
             todayString
-
         )
 
         .map(
@@ -2821,97 +2827,9 @@ function getLessons(){
 
 
   return schedule.filter(
-
     x =>
-
       x.date ===
       futureDates[0]
-
-  );
-
-}
-
-
-/* =========================================
-   RENDER CURRENT VIEW
-========================================= */
-
-function renderSchedule(){
-
-  /* =======================================
-     АРХИВ
-  ======================================= */
-
-  if(
-    currentView === "archive"
-  ){
-
-    renderArchive();
-
-    return;
-
-  }
-
-
-  /* =======================================
-     БЛИЖАЙШЕЕ
-     HERO + STATS
-  ======================================= */
-
-  if(
-    currentView === "nearest"
-  ){
-
-    $("nextLesson").style.display =
-      "block";
-
-    $("stats").style.display =
-      "grid";
-
-    renderNext();
-
-    renderStats();
-
-  }
-
-
-  /* =======================================
-     СЕГОДНЯ
-     STATS, НО БЕЗ HERO
-  ======================================= */
-
-  else if(
-    currentView === "today"
-  ){
-
-    $("nextLesson").style.display =
-      "none";
-
-    $("stats").style.display =
-      "grid";
-
-    renderStats();
-
-  }
-
-
-  /* =======================================
-     ЗАВТРА / НЕДЕЛЯ / МЕСЯЦ
-  ======================================= */
-
-  else{
-
-    $("nextLesson").style.display =
-      "none";
-
-    $("stats").style.display =
-      "none";
-
-  }
-
-
-  renderGroupedLessons(
-    getLessons()
   );
 
 }
@@ -2979,32 +2897,6 @@ function renderArchive(){
     sort(archive);
 
 
-  container.innerHTML = `
-
-    <section class="archive-header">
-
-      <div class="archive-title">
-        Архив
-      </div>
-
-      <div class="archive-subtitle">
-
-        Прошедшие занятия ·
-        ${sorted.length} ${
-          sorted.length === 1
-            ? "пара"
-            : sorted.length < 5
-              ? "пары"
-              : "пар"
-        }
-
-      </div>
-
-    </section>
-
-  `;
-
-
   const grouped = {};
 
 
@@ -3012,23 +2904,16 @@ function renderArchive(){
     lesson => {
 
       if(
-        !grouped[
-          lesson.date
-        ]
+        !grouped[lesson.date]
       ){
 
-        grouped[
-          lesson.date
-        ] = [];
+        grouped[lesson.date] = [];
 
       }
 
 
-      grouped[
-        lesson.date
-      ].push(
-        lesson
-      );
+      grouped[lesson.date]
+        .push(lesson);
 
     }
   );
@@ -3040,59 +2925,72 @@ function renderArchive(){
     ).sort();
 
 
+  const total =
+    sorted.length;
+
+
+  container.innerHTML = `
+
+    <section class="archive-header">
+
+      <div class="archive-title">
+        Архив
+      </div>
+
+      <div class="archive-subtitle">
+
+        Прошедшие занятия ·
+
+        ${total}
+
+        ${
+          total === 1
+          ? "пара"
+          : total < 5
+          ? "пары"
+          : "пар"
+        }
+
+      </div>
+
+    </section>
+
+  `;
+
+
   const html =
 
-    dates
+    dates.map(
 
-      .map(
+      date => `
 
-        date => `
-
-          <section class="day">
+        <section class="day">
 
 
-            <div class="day-heading">
+          <div class="day-heading">
 
 
-              <div>
+            <div>
 
 
-                <div class="weekday">
+              <div class="weekday">
 
-                  ${esc(
-                    formatWeekday(
-                      date
-                    )
-                  )}
-
-                </div>
-
-
-                <div class="date">
-
-                  ${esc(
-                    formatDate(
-                      date
-                    )
-                  )}
-
-                </div>
-
+                ${esc(
+                  formatWeekday(
+                    date
+                  )
+                )}
 
               </div>
 
 
-              <div class="count">
+              <div class="date">
 
-                ${grouped[date].length}
-
-                ${
-                  grouped[date].length === 1
-                    ? "пара"
-                    : grouped[date].length < 5
-                      ? "пары"
-                      : "пар"
-                }
+                ${esc(
+                  formatDate(
+                    date
+                  )
+                )}
 
               </div>
 
@@ -3100,33 +2998,115 @@ function renderArchive(){
             </div>
 
 
-            <div class="grid">
+            <div class="count">
 
-              ${sort(
-                grouped[date]
-              )
+              ${grouped[date].length}
 
-              .map(
-                lessonCard
-              )
-
-              .join("")}
+              ${
+                grouped[date].length === 1
+                ? "пара"
+                : grouped[date].length < 5
+                ? "пары"
+                : "пар"
+              }
 
             </div>
 
 
-          </section>
+          </div>
 
-        `
 
-      )
+          <div class="grid">
 
-      .join("");
+            ${sort(
+              grouped[date]
+            )
+            .map(
+              lessonCard
+            )
+            .join("")}
+
+          </div>
+
+
+        </section>
+
+      `
+
+    ).join("");
 
 
   container.insertAdjacentHTML(
     "beforeend",
     html
+  );
+
+}
+
+
+/* =========================================
+   RENDER CURRENT VIEW
+========================================= */
+
+function renderSchedule(){
+
+
+  if(
+    currentView === "archive"
+  ){
+
+    renderArchive();
+
+    return;
+
+  }
+
+
+  if(
+    currentView === "nearest"
+  ){
+
+    $("nextLesson").style.display =
+      "block";
+
+    $("stats").style.display =
+      "grid";
+
+    renderNext();
+
+    renderStats();
+
+  }
+
+
+  else if(
+    currentView === "today"
+  ){
+
+    $("nextLesson").style.display =
+      "none";
+
+    $("stats").style.display =
+      "grid";
+
+    renderStats();
+
+  }
+
+
+  else{
+
+    $("nextLesson").style.display =
+      "none";
+
+    $("stats").style.display =
+      "none";
+
+  }
+
+
+  renderGroupedLessons(
+    getLessons()
   );
 
 }
@@ -3152,6 +3132,7 @@ async function loadSchedule(){
 
 
   try{
+
 
     const response =
       await fetch(
@@ -3251,7 +3232,6 @@ async function loadSchedule(){
       "loading"
     );
 
-
     button.textContent =
       "↻ Обновить";
 
@@ -3268,6 +3248,7 @@ async function loadArchive(){
 
   try{
 
+
     const response =
       await fetch(
         "archive.json?t=" +
@@ -3281,12 +3262,6 @@ async function loadArchive(){
     if(
       !response.ok
     ){
-
-      /*
-        Если archive.json ещё не создан
-        или временно недоступен —
-        считаем архив пустым.
-      */
 
       archive = [];
 
@@ -3431,9 +3406,7 @@ document
     button => {
 
       button.addEventListener(
-
         "click",
-
         () => {
 
 
@@ -3465,7 +3438,6 @@ document
           renderSchedule();
 
         }
-
       );
 
     }
@@ -3479,15 +3451,12 @@ document
 
 $("refreshButton")
   .addEventListener(
-
     "click",
-
     async () => {
 
       await loadAll();
 
     }
-
   );
 
 
@@ -3507,6 +3476,7 @@ setInterval(
 
   () => {
 
+
     if(
       currentView ===
       "nearest"
@@ -3522,6 +3492,7 @@ setInterval(
 
     }
 
+
     else if(
       currentView ===
       "today"
@@ -3534,6 +3505,7 @@ setInterval(
       );
 
     }
+
 
   },
 
@@ -3548,16 +3520,12 @@ setInterval(
 ========================================= */
 
 setInterval(
-
   loadAll,
-
   5 * 60 * 1000
-
 );
+
 
 </script>
 
-
 </body>
-
 </html>
