@@ -26,7 +26,7 @@ def load(path):
 
 
 def identity(lesson):
-    """Stable lesson identity independent of fields we detect as changes."""
+    """Identify the lesson by its stable timetable slot, not mutable data."""
     return (
         lesson.get("date", ""),
         lesson.get("lessonNumberStart", ""),
@@ -34,7 +34,6 @@ def identity(lesson):
         lesson.get("group", ""),
         lesson.get("subGroup", ""),
         lesson.get("stream", ""),
-        lesson.get("contentTableOfLessonsOid", ""),
     )
 
 
@@ -90,12 +89,12 @@ new = load(NEW_FILE)
 old_by_id = {
     identity(x): x
     for x in old
-    if identity(x) != ("", "", "", "", "", "", "")
+    if identity(x) != ("", "", "", "", "", "")
 }
 new_by_id = {
     identity(x): x
     for x in new
-    if identity(x) != ("", "", "", "", "", "", "")
+    if identity(x) != ("", "", "", "", "", "")
 }
 
 # The schedule is a rolling window. Its first/last dates naturally move
@@ -113,12 +112,10 @@ for lesson_id in sorted(old_by_id.keys() | new_by_id.keys()):
     current = new_by_id.get(lesson_id)
 
     if previous is None:
-        # Ignore additions that exist only because the rolling window moved.
         if current.get("date", "") not in shared_dates:
             continue
         change = make_change(None, current, now, "added")
     elif current is None:
-        # Ignore removals that exist only because the rolling window moved.
         if previous.get("date", "") not in shared_dates:
             continue
         change = make_change(previous, None, now, "removed")
