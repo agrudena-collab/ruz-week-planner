@@ -83,7 +83,7 @@ HTML = r"""
 JS = r"""
 /* GROUP_PICKER_VIEW */
 (function(){
-  const TARGET_GROUP_ID="164336";
+  const TARGET_GROUP_ID="164606";
   const TARGET_GROUP_NAME="МеждОт25-2";
   const storageKey="ruz.selectedGroupId";
   const button=document.getElementById("groupPickerButton");
@@ -189,7 +189,6 @@ JS = r"""
   $("refreshButton").addEventListener("click",()=>setTimeout(restoreSelected,250));
   setInterval(restoreSelected,5*60*1000+1000);
 
-  button.insertAdjacentHTML("beforebegin","");
   loadData();
 })();
 """
@@ -205,7 +204,6 @@ body_pos = text.rfind("</body>")
 if min(style_pos, script_pos, body_pos) < 0:
     raise SystemExit("index.html structure not recognized")
 
-# Put the selector directly below the existing group label.
 needle = '      <div class="group">\n        МеждОт25-2 · РУЗ\n      </div>'
 replacement = needle + '\n\n      <button class="group-picker" id="groupPickerButton" type="button">\n        <span>МеждОт25-2</span>\n        <span class="group-picker-arrow">⌄</span>\n      </button>'
 if needle not in text:
