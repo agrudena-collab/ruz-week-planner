@@ -20,7 +20,7 @@ def test_groups():
 def test_known_group_schedule():
     response = client.get("/api/v1/groups/164606/schedule")
     assert response.status_code == 200
-    assert response.json()["id"] == 164606
+    assert response.json()["id"] == "164606"
 
 
 def test_known_group_changes():
