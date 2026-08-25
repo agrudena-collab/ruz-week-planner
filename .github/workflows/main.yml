@@ -133,6 +133,7 @@ jobs:
       - name: Validate generated frontend
         run: |
           python - <<'PY'
+          import json
           import re
           import subprocess
           from pathlib import Path
@@ -157,9 +158,6 @@ jobs:
           if '<option value="164606" selected>' not in html:
               raise SystemExit("Default group 164606 is missing from the native selector")
 
-          # Do not count comment markers here: the repair script intentionally
-          # keeps the marker strings inside its own source templates, while the
-          # generated HTML only needs to have one real selector and valid JS.
           scripts = re.findall(r"<script[^>]*>(.*?)</script>", html, flags=re.S | re.I)
           if not scripts:
               raise SystemExit("No inline scripts found")
