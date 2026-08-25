@@ -107,6 +107,37 @@ jobs:
       - name: Install native group selector
         run: python repair_group_picker.py
 
+      - name: Validate generated frontend
+        run: |
+          python - <<'PY'
+          import re
+          import subprocess
+          from pathlib import Path
+
+          html = Path("index.html").read_text(encoding="utf-8")
+          if html.count('id="groupPickerButton"') != 1:
+              raise SystemExit("groupPickerButton must exist exactly once")
+          if '<select class="group-picker" id="groupPickerButton"' not in html:
+              raise SystemExit("native group selector is missing")
+          if html.count("GROUP_PICKER_NATIVE") != 2:
+              raise SystemExit("native group selector markers are missing or duplicated")
+
+          scripts = re.findall(r"<script(?:\\s[^>]*)?>(.*?)</script>", html, flags=re.S | re.I)
+          if not scripts:
+              raise SystemExit("No inline scripts found")
+
+          for index, script in enumerate(scripts):
+              path = Path(f"/tmp/index-script-{index}.js")
+              path.write_text(script, encoding="utf-8")
+              result = subprocess.run(["node", "--check", str(path)], text=True, capture_output=True)
+              if result.returncode != 0:
+                  print(result.stdout)
+                  print(result.stderr)
+                  raise SystemExit(f"JavaScript syntax error in inline script {index}")
+
+          print(f"Validated {len(scripts)} inline JavaScript blocks")
+          PY
+
       - name: Save schedule and changes
         run: |
           git config user.name "github-actions[bot]"
