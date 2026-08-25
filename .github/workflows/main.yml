@@ -38,6 +38,27 @@ jobs:
       - name: Run RUZ client
         run: python ruz_client.py
 
+      - name: Validate schedule output
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("schedule.json")
+          if not path.exists():
+              raise SystemExit("schedule.json was not created")
+
+          try:
+              data = json.loads(path.read_text(encoding="utf-8"))
+          except json.JSONDecodeError as exc:
+              raise SystemExit(f"schedule.json is invalid JSON: {exc}")
+
+          if not isinstance(data, list) or not data:
+              raise SystemExit("schedule.json must contain a non-empty array")
+
+          print(f"Validated schedule: {len(data)} lessons")
+          PY
+
       - name: Run planner
         run: python planner.py
 
