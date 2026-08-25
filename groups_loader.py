@@ -1,6 +1,5 @@
 import json
 import os
-import string
 from pathlib import Path
 
 import requests
@@ -10,14 +9,26 @@ BASE_URL = "https://ruz.fa.ru"
 SEARCH_URL = f"{BASE_URL}/api/search"
 OUTPUT_PATH = Path("groups.json")
 
-# RUZ rejects an empty search string. Therefore, when no explicit search term
-# is provided, we make a small alphabet sweep and merge the results. This is
-# much safer than relying on one specific group name and lets us discover the
-# catalogue without knowing all group names in advance.
+# RUZ does not accept an empty/one-character group search reliably.  Keep the
+# explicit term for diagnostics, but use a small set of meaningful prefixes
+# when discovering the catalogue automatically.
 EXPLICIT_TERM = os.getenv("RUZ_GROUP_SEARCH", "").strip()
-
-CYRILLIC_ALPHABET = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
-SEARCH_TERMS = list(dict.fromkeys(CYRILLIC_ALPHABET + string.digits))
+SEARCH_TERMS = [
+    "Межд",
+    "Фин",
+    "Эконом",
+    "Менедж",
+    "Бизнес",
+    "Маркет",
+    "Прав",
+    "Государ",
+    "Информац",
+    "Компьют",
+    "Матем",
+    "Логист",
+    "Торгов",
+    "Международ",
+]
 
 
 def extract_items(data):
@@ -31,7 +42,6 @@ def extract_items(data):
             if isinstance(value, list):
                 return value
 
-        # Some APIs wrap the result one level deeper.
         for value in data.values():
             if isinstance(value, dict):
                 nested = extract_items(value)
@@ -62,14 +72,9 @@ def normalize_group(item):
 
 
 def fetch_groups_for_term(session, term):
-    params = {
-        "term": term,
-        "type": "group",
-    }
-
     response = session.get(
         SEARCH_URL,
-        params=params,
+        params={"term": term, "type": "group"},
         timeout=30,
     )
     response.raise_for_status()
@@ -100,22 +105,28 @@ def fetch_groups_for_term(session, term):
 
 
 def fetch_groups():
-    # Explicit search remains available for diagnostics/testing.
-    if EXPLICIT_TERM:
-        terms = [EXPLICIT_TERM]
-    else:
-        terms = SEARCH_TERMS
+    terms = [EXPLICIT_TERM] if EXPLICIT_TERM else SEARCH_TERMS
 
     session = requests.Session()
     unique_groups = {}
     successful_terms = 0
+    failed_terms = []
 
     print(f"Поиск каталога групп РУЗ. Запросов: {len(terms)}")
 
     for term in terms:
-        groups = fetch_groups_for_term(session, term)
-        successful_terms += 1
+        try:
+            groups = fetch_groups_for_term(session, term)
+        except requests.RequestException as exc:
+            failed_terms.append((term, f"HTTP: {exc}"))
+            print(f"  '{term}': ошибка HTTP, пропускаем")
+            continue
+        except (ValueError, RuntimeError) as exc:
+            failed_terms.append((term, str(exc)))
+            print(f"  '{term}': ошибка формата, пропускаем")
+            continue
 
+        successful_terms += 1
         before = len(unique_groups)
         for group in groups:
             unique_groups[str(group["id"])] = group
@@ -127,9 +138,10 @@ def fetch_groups():
         )
 
     if not unique_groups:
+        details = "; ".join(f"{term}: {error}" for term, error in failed_terms)
         raise RuntimeError(
-            "РУЗ не вернул ни одной группы. "
-            "groups.json не будет записан пустым."
+            "РУЗ не вернул ни одной группы. groups.json не будет записан пустым. "
+            + (f"Ошибки: {details}" if details else "")
         )
 
     print(
