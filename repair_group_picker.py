@@ -19,40 +19,20 @@ CSS = r'''/* GROUP_PICKER_NATIVE */
 JS = r'''/* GROUP_PICKER_NATIVE */
 (function(){
   "use strict";
-
   const TARGET_GROUP_ID = "164606";
   const STORAGE_KEY = "ruz.selectedGroupId";
   const select = document.getElementById("groupPickerButton");
   if (!select || select.tagName !== "SELECT") return;
-
-  function validGroupId(id){
-    return Array.from(select.options).some(option => String(option.value) === String(id));
-  }
-
-  function selectedGroupId(){
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved && validGroupId(saved) ? String(saved) : TARGET_GROUP_ID;
-  }
-
-  function setHeader(name){
-    const label = document.querySelector(".group");
-    if (label && name) label.textContent = name + " · РУЗ";
-  }
-
+  function validGroupId(id){ return Array.from(select.options).some(option => String(option.value) === String(id)); }
+  function selectedGroupId(){ const saved = localStorage.getItem(STORAGE_KEY); return saved && validGroupId(saved) ? String(saved) : TARGET_GROUP_ID; }
+  function setHeader(name){ const label = document.querySelector(".group"); if (label && name) label.textContent = name + " · РУЗ"; }
   async function fetchGroupLessons(id){
-    const response = await fetch(
-      "./group_schedules/" + encodeURIComponent(String(id)) + ".json?t=" + Date.now(),
-      {cache:"no-store",headers:{Accept:"application/json"}}
-    );
+    const response = await fetch("./group_schedules/" + encodeURIComponent(String(id)) + ".json?t=" + Date.now(), {cache:"no-store",headers:{Accept:"application/json"}});
     if (!response.ok) throw new Error("Не удалось загрузить расписание выбранной группы");
     const payload = await response.json();
     if (!payload || !Array.isArray(payload.lessons)) throw new Error("Некорректный файл расписания группы");
     return payload.lessons;
   }
-
-  // Replace the application's schedule loader before its boot call. This makes
-  // initial load, manual refresh, and the existing 5-minute refresh all respect
-  // the persisted selected group.
   const originalLoadSchedule = loadSchedule;
   loadSchedule = async function(){
     const id = selectedGroupId();
@@ -66,20 +46,14 @@ JS = r'''/* GROUP_PICKER_NATIVE */
       $("updated").textContent = "Обновлено в " + new Date().toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
       renderSchedule();
     }catch(error){
-      if(id === TARGET_GROUP_ID){
-        await originalLoadSchedule();
-        return;
-      }
-      if(currentView !== "archive" && currentView !== "exams"){
-        $("schedule").innerHTML = `<div class="error"><strong>Не удалось загрузить расписание</strong> ${esc(error.message)}</div>`;
-      }
+      if(id === TARGET_GROUP_ID){ await originalLoadSchedule(); return; }
+      if(currentView !== "archive" && currentView !== "exams") $("schedule").innerHTML = `<div class="error"><strong>Не удалось загрузить расписание</strong> ${esc(error.message)}</div>`;
       throw error;
     }finally{
       button.classList.remove("loading");
       button.textContent = "↻ Обновить";
     }
   };
-
   window.__ruzApp = window.__ruzApp || {};
   window.__ruzApp.loadGroup = async function(id){
     const selectedId = String(id);
@@ -102,7 +76,6 @@ JS = r'''/* GROUP_PICKER_NATIVE */
       select.setAttribute("aria-busy","false");
     }
   };
-
   select.addEventListener("change",function(){
     window.__ruzApp.loadGroup(this.value).catch(()=>{
       select.value = TARGET_GROUP_ID;
@@ -112,7 +85,6 @@ JS = r'''/* GROUP_PICKER_NATIVE */
       window.__ruzApp.loadGroup(TARGET_GROUP_ID).catch(()=>{});
     });
   });
-
   function restoreSelected(){
     const id = selectedGroupId();
     select.value = id;
@@ -121,24 +93,18 @@ JS = r'''/* GROUP_PICKER_NATIVE */
     localStorage.setItem(STORAGE_KEY,id);
     return window.__ruzApp.loadGroup(id);
   }
-
-  if(document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded",()=>restoreSelected().catch(()=>{}),{once:true});
-  }else{
-    restoreSelected().catch(()=>{});
-  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded",()=>restoreSelected().catch(()=>{}),{once:true});
+  else restoreSelected().catch(()=>{});
 })();
 /* END_GROUP_PICKER_NATIVE */
 '''
 
 
 def remove_generated(text):
-    text = re.sub(
-        r"\n?/\* GROUP_PICKER_NATIVE \*/.*?/\* END_GROUP_PICKER_NATIVE \*/",
-        "",
-        text,
-        flags=re.S,
-    )
+    # Remove current marker-delimited injections and legacy injections that were
+    # created before END_GROUP_PICKER_NATIVE was present.
+    text = re.sub(r"\n?/\* GROUP_PICKER_NATIVE \*/.*?(?=\n\s*</style>)", "", text, flags=re.S)
+    text = re.sub(r"\n?/\* GROUP_PICKER_NATIVE \*/.*?(?=\n\s*loadAll\(\)\.then\(\(\) => \{)", "", text, flags=re.S)
     text = re.sub(r"\n?/\* GROUP_PICKER_VIEW \*/.*?(?=\n\s*</style>)", "", text, flags=re.S)
     text = re.sub(r"\n?/\* GROUP_PICKER_VIEW \*/.*?(?=\n\s*</script>)", "", text, flags=re.S)
     while "<!-- GROUP_PICKER_VIEW -->" in text:
@@ -161,34 +127,25 @@ def build_options(groups):
 text=remove_generated(INDEX.read_text(encoding="utf-8"))
 groups=json.loads(GROUPS.read_text(encoding="utf-8"))
 if not isinstance(groups,list) or not groups: raise SystemExit("groups.json must contain a non-empty array")
-
 options=build_options(groups)
-new_control=(
-    '<div class="group-picker-wrap">\n'
-    '      <select class="group-picker" id="groupPickerButton" aria-label="Выбор учебной группы">\n'
-    + options + '\n'
-    '      </select>\n'
-    '</div>'
-)
-
+new_control=('<div class="group-picker-wrap">\n'
+              '      <select class="group-picker" id="groupPickerButton" aria-label="Выбор учебной группы">\n'
+              + options + '\n'
+              '      </select>\n'
+              '</div>')
 old_button=re.compile(r'<button class="group-picker" id="groupPickerButton" type="button">.*?</button>',re.S)
 old_select=re.compile(r'<select class="group-picker" id="groupPickerButton".*?</select>',re.S)
-if old_button.search(text):
-    text=old_button.sub(new_control,text,count=1)
-elif old_select.search(text):
-    text=old_select.sub(new_control,text,count=1)
+if old_button.search(text): text=old_button.sub(new_control,text,count=1)
+elif old_select.search(text): text=old_select.sub(new_control,text,count=1)
 elif 'id="groupPickerButton"' not in text:
     needle='      <div class="group">\n        МеждОт25-2 · РУЗ\n      </div>'
     if needle not in text: raise SystemExit("group header markup not found")
     text=text.replace(needle,needle+"\n\n"+new_control,1)
-
 style_pos=text.find("</style>")
 if style_pos<0: raise SystemExit("</style> not found")
 text=text[:style_pos]+"\n"+CSS+text[style_pos:]
-
 boot=re.search(r'loadAll\(\)\.then\(\(\) => \{',text)
 if not boot: raise SystemExit("real loadAll().then(...) boot call not found")
 text=text[:boot.start()]+JS+"\n\n"+text[boot.start():]
-
 INDEX.write_text(text,encoding="utf-8")
 print(f"Installed exactly one native group picker for {len(groups)} groups")
