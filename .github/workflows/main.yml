@@ -145,7 +145,19 @@ jobs:
           if '<select class="group-picker" id="groupPickerButton"' not in html:
               raise SystemExit("native group selector is missing")
 
-          options = re.findall(r'<option value="([^"]+)"(?: selected)?>(.*?)</option>', html, flags=re.S | re.I)
+          picker = re.search(
+              r'<select class="group-picker" id="groupPickerButton"[^>]*>(.*?)</select>',
+              html,
+              flags=re.S | re.I,
+          )
+          if not picker:
+              raise SystemExit("Unable to isolate native group selector")
+
+          options = re.findall(
+              r'<option value="([^"]+)"(?: selected)?>(.*?)</option>',
+              picker.group(1),
+              flags=re.S | re.I,
+          )
           expected_ids = {str(group["id"]) for group in groups}
           option_ids = {value for value, _ in options}
           if option_ids != expected_ids:
@@ -155,7 +167,7 @@ jobs:
           if len(options) != len(groups):
               raise SystemExit(f"Frontend group option count mismatch: {len(options)} != {len(groups)}")
 
-          if '<option value="164606" selected>' not in html:
+          if '<option value="164606" selected>' not in picker.group(1):
               raise SystemExit("Default group 164606 is missing from the native selector")
 
           scripts = re.findall(r"<script[^>]*>(.*?)</script>", html, flags=re.S | re.I)
