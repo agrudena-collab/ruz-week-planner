@@ -5,117 +5,127 @@ from datetime import date, timedelta
 
 
 BASE_URL = "https://ruz.fa.ru"
-# Keep the current group as the safe default. Multi-group runs can provide
-# GROUP_NAME through the environment without changing the source code.
 GROUP_NAME = os.getenv("GROUP_NAME", "МеждОт25-2").strip()
+
+
+def extract_list(data):
+    """Find a list of schedule records in the different RUZ response shapes."""
+    if isinstance(data, list):
+        return data
+
+    if isinstance(data, dict):
+        preferred_keys = (
+            "data",
+            "schedule",
+            "lessons",
+            "items",
+            "results",
+            "result",
+            "list",
+        )
+
+        for key in preferred_keys:
+            value = data.get(key)
+            if isinstance(value, list):
+                return value
+
+        for value in data.values():
+            if isinstance(value, (dict, list)):
+                found = extract_list(value)
+                if found is not None:
+                    return found
+
+    return None
 
 
 def get_group():
     url = f"{BASE_URL}/api/search"
-
     params = {
         "term": GROUP_NAME,
         "type": "group",
     }
 
-    response = requests.get(
-        url,
-        params=params,
-        timeout=20,
-    )
-
+    response = requests.get(url, params=params, timeout=30)
     response.raise_for_status()
+    data = response.json()
 
-    return response.json()
+    groups = extract_list(data)
+    if groups is None:
+        raise RuntimeError(
+            "РУЗ вернул неожиданный формат поиска групп: "
+            + json.dumps(data, ensure_ascii=False)[:1000]
+        )
+
+    return groups
 
 
 def get_schedule(group_id):
-
     start = date.today()
     finish = start + timedelta(days=70)
 
     url = f"{BASE_URL}/api/schedule/group/{group_id}"
-
     params = {
         "start": start.strftime("%Y.%m.%d"),
         "finish": finish.strftime("%Y.%m.%d"),
         "lng": 1,
     }
 
-    print()
     print("=" * 70)
     print("ДИАГНОСТИКА ЗАПРОСА К РУЗ")
     print("=" * 70)
-
     print(f"Группа:         {GROUP_NAME}")
-    print(f"Сегодня:        {start}")
+    print(f"Group ID:       {group_id}")
     print(f"Запрашиваем с:  {start}")
     print(f"Запрашиваем до: {finish}")
+    print(f"URL:            {url}")
+    print(f"Параметры:      {params}")
 
-    print()
-    print("URL:")
-    print(url)
-
-    print()
-    print("Параметры:")
-    print(params)
-
-    response = requests.get(
-        url,
-        params=params,
-        timeout=20,
-    )
-
-    print()
-    print(f"HTTP статус: {response.status_code}")
-
+    response = requests.get(url, params=params, timeout=30)
+    print(f"HTTP статус:    {response.status_code}")
     response.raise_for_status()
 
-    data = response.json()
+    raw_data = response.json()
+    data = extract_list(raw_data)
 
-    print()
-    print(f"Всего записей от РУЗ: {len(data)}")
-
-    if data:
-
-        dates = sorted(
-            set(
-                lesson.get("date")
-                for lesson in data
-                if lesson.get("date")
-            )
+    if data is None:
+        raise RuntimeError(
+            "РУЗ вернул неожиданный формат расписания. "
+            f"Тип ответа: {type(raw_data).__name__}. "
+            f"Ответ: {json.dumps(raw_data, ensure_ascii=False)[:2000]}"
         )
 
-        print()
-        print("Даты, которые реально вернул РУЗ:")
+    print(f"Всего записей после разбора ответа: {len(data)}")
 
-        for item_date in dates:
-            print(f"  {item_date}")
+    if not data:
+        raise RuntimeError(
+            "РУЗ вернул пустое расписание. "
+            "schedule.json специально НЕ будет перезаписан пустым массивом."
+        )
 
-        print()
+    valid_lessons = [item for item in data if isinstance(item, dict)]
+    if not valid_lessons:
+        raise RuntimeError("РУЗ вернул список без объектов занятий.")
+
+    dates = sorted(
+        {
+            lesson.get("date")
+            for lesson in valid_lessons
+            if lesson.get("date")
+        }
+    )
+
+    if dates:
         print(f"Самая ранняя дата: {dates[0]}")
         print(f"Самая поздняя дата: {dates[-1]}")
 
-    else:
-        print()
-        print("РУЗ вернул пустой список.")
-
     print("=" * 70)
-    print()
-
-    return data
+    return valid_lessons
 
 
 def is_regular_lesson(lesson):
+    kind_of_work = lesson.get("kindOfWork", "") or ""
 
-    kind_of_work = lesson.get(
-        "kindOfWork",
-        ""
-    ) or ""
-
-    if kind_of_work.startswith(
-        "Повторная промежуточная аттестация"
-    ):
+    if kind_of_work.startswith("Повторная промежуточная аттестация"):
         return False
 
     if lesson.get("deletion_mark", 0) != 0:
@@ -125,139 +135,70 @@ def is_regular_lesson(lesson):
 
 
 if __name__ == "__main__":
-
     print("=" * 70)
     print("ПОИСК ГРУППЫ")
     print("=" * 70)
 
     groups = get_group()
 
-    print()
-    print("Найденные группы:")
+    print(f"Найдено результатов: {len(groups)}")
 
-    for group in groups:
-        print(
-            f'ID: {group.get("id")} | '
-            f'Название: {group.get("label") or group.get("name")}'
-        )
-
-    if not groups:
-        raise RuntimeError(
-            f"Группа '{GROUP_NAME}' не найдена в РУЗ."
-        )
-
-    # Ищем точное совпадение названия.
     exact_group = None
-
     for group in groups:
+        if not isinstance(group, dict):
+            continue
 
         name = (
             group.get("label")
             or group.get("name")
+            or group.get("title")
+            or group.get("groupName")
             or ""
         )
 
-        if name.strip() == GROUP_NAME:
+        if str(name).strip() == GROUP_NAME:
             exact_group = group
             break
 
     if exact_group is None:
-
         raise RuntimeError(
-            f"Точное совпадение группы "
-            f"'{GROUP_NAME}' не найдено."
+            f"Точное совпадение группы '{GROUP_NAME}' не найдено. "
+            f"Результаты: {json.dumps(groups, ensure_ascii=False)[:2000]}"
         )
 
-    group = exact_group
-    group_id = group["id"]
+    group_id = (
+        exact_group.get("id")
+        or exact_group.get("groupId")
+        or exact_group.get("group_id")
+    )
 
-    print()
-    print("Выбрана точная группа:")
+    if group_id is None:
+        raise RuntimeError(
+            f"У группы '{GROUP_NAME}' не найден ID: "
+            f"{json.dumps(exact_group, ensure_ascii=False)}"
+        )
 
-    print(group)
-
-    print()
-    print("Получаем расписание...")
+    print(f"Выбрана группа: {GROUP_NAME}")
+    print(f"ID группы:       {group_id}")
 
     raw_schedule = get_schedule(group_id)
 
-    print()
-    print("=" * 70)
-    print("АНАЛИЗ ФИЛЬТРА")
-    print("=" * 70)
-
-    if raw_schedule:
-
-        raw_dates = sorted(
-            set(
-                lesson.get("date")
-                for lesson in raw_schedule
-                if lesson.get("date")
-            )
-        )
-
-        print()
-        print(
-            f"До фильтра: "
-            f"{len(raw_schedule)} записей"
-        )
-
-        print(
-            f"Диапазон: "
-            f"{raw_dates[0]} → {raw_dates[-1]}"
-        )
-
     schedule = [
-        lesson
-        for lesson in raw_schedule
+        lesson for lesson in raw_schedule
         if is_regular_lesson(lesson)
     ]
 
-    print()
-    print(
-        f"После фильтра: "
-        f"{len(schedule)} записей"
-    )
+    print(f"До фильтра:      {len(raw_schedule)}")
+    print(f"После фильтра:   {len(schedule)}")
 
-    if schedule:
-
-        filtered_dates = sorted(
-            set(
-                lesson.get("date")
-                for lesson in schedule
-                if lesson.get("date")
-            )
+    if not schedule:
+        raise RuntimeError(
+            "После фильтра расписание стало пустым. "
+            "schedule.json не будет очищен."
         )
 
-        print(
-            f"Диапазон после фильтра: "
-            f"{filtered_dates[0]} → "
-            f"{filtered_dates[-1]}"
-        )
+    with open("schedule.json", "w", encoding="utf-8") as f:
+        json.dump(schedule, f, ensure_ascii=False, indent=2)
+        f.write("\n")
 
-    print()
-    print("Последние даты после фильтра:")
-
-    if schedule:
-
-        for lesson_date in filtered_dates[-10:]:
-            print(f"  {lesson_date}")
-
-    print()
-    print("=" * 70)
-
-    with open(
-        "schedule.json",
-        "w",
-        encoding="utf-8"
-    ) as f:
-
-        json.dump(
-            schedule,
-            f,
-            ensure_ascii=False,
-            indent=2
-        )
-
-    print()
-    print("schedule.json обновлён.")
+    print(f"schedule.json обновлён: {len(schedule)} занятий")
