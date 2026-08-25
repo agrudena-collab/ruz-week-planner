@@ -24,4 +24,4 @@ jobs:
         run: python -m pip install -r backend/requirements.txt
 
       - name: Run backend tests
-        run: pytest -q backend/test_app.py
+        run: pytest -q backend/test_app.py backend/test_ruz_client.py
