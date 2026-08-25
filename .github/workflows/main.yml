@@ -1,6 +1,8 @@
 name: RUZ Daily Schedule
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
   pull_request:
     types: [opened, synchronize]
