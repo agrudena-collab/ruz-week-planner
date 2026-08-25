@@ -1042,45 +1042,15 @@ button,input,select{font:inherit}
 
 
 
-/* GROUP_PICKER_NATIVE */
-.group-picker-wrap{
-  position:relative;
-  margin-top:7px;
-  width:min(360px,78vw);
-}
-.group-picker{
-  width:100%;
-  min-height:38px;
-  appearance:auto;
-  -webkit-appearance:auto;
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:12px;
-  padding:7px 34px 7px 10px;
-  background:rgba(255,255,255,.045);
-  color:#cbd1dd;
-  font-size:13px;
-  font-weight:750;
-  cursor:pointer;
-  touch-action:manipulation;
-}
-.group-picker:focus{
-  outline:2px solid rgba(66,217,255,.35);
-  outline-offset:2px;
-}
-.group-picker-wrap::after{
-  content:"⌄";
-  position:absolute;
-  right:11px;
-  top:50%;
-  transform:translateY(-52%);
-  color:#8e96a8;
-  pointer-events:none;
-}
-@media(max-width:640px){
-  .group-picker-wrap{width:min(330px,82vw)}
-  .group-picker{min-height:42px;font-size:14px}
-}
 
+
+/* GROUP_PICKER_NATIVE */
+.group-picker-wrap{position:relative;margin-top:7px;width:min(360px,78vw)}
+.group-picker{width:100%;min-height:38px;appearance:auto;-webkit-appearance:auto;border:1px solid rgba(255,255,255,.10);border-radius:12px;padding:7px 34px 7px 10px;background:rgba(255,255,255,.045);color:#cbd1dd;font-size:13px;font-weight:750;cursor:pointer;touch-action:manipulation}
+.group-picker:focus{outline:2px solid rgba(66,217,255,.35);outline-offset:2px}
+.group-picker-wrap::after{content:"⌄";position:absolute;right:11px;top:50%;transform:translateY(-52%);color:#8e96a8;pointer-events:none}
+@media(max-width:640px){.group-picker-wrap{width:min(330px,82vw)}.group-picker{min-height:42px;font-size:14px}}
+/* END_GROUP_PICKER_NATIVE */
 </style>
 </head>
 
@@ -1194,6 +1164,7 @@ button,input,select{font:inherit}
         МеждОт25-2 · РУЗ
       </div>
 
+      <div class="group-picker-wrap">
       <div class="group-picker-wrap">
       <select class="group-picker" id="groupPickerButton" aria-label="Выбор учебной группы">
         <option value="164336">002877_5 Информационные торговые системы в меж - 1</option>
@@ -1363,6 +1334,7 @@ button,input,select{font:inherit}
         <option value="165405">ФИН26-1в</option>
         <option value="165406">ФИН26-2в</option>
       </select>
+</div>
 </div>
 
     </div>
@@ -4778,6 +4750,89 @@ window.__ruzApp.setSchedule = function(lessons){
 window.__ruzApp.restoreDefault = function(){
   if (typeof loadAll === "function") loadAll();
 };
+
+/* GROUP_PICKER_NATIVE */
+(function(){
+  "use strict";
+  const TARGET_GROUP_ID = "164606";
+  const STORAGE_KEY = "ruz.selectedGroupId";
+  const select = document.getElementById("groupPickerButton");
+  if (!select || select.tagName !== "SELECT") return;
+  function validGroupId(id){ return Array.from(select.options).some(option => String(option.value) === String(id)); }
+  function selectedGroupId(){ const saved = localStorage.getItem(STORAGE_KEY); return saved && validGroupId(saved) ? String(saved) : TARGET_GROUP_ID; }
+  function setHeader(name){ const label = document.querySelector(".group"); if (label && name) label.textContent = name + " · РУЗ"; }
+  async function fetchGroupLessons(id){
+    const response = await fetch("./group_schedules/" + encodeURIComponent(String(id)) + ".json?t=" + Date.now(), {cache:"no-store",headers:{Accept:"application/json"}});
+    if (!response.ok) throw new Error("Не удалось загрузить расписание выбранной группы");
+    const payload = await response.json();
+    if (!payload || !Array.isArray(payload.lessons)) throw new Error("Некорректный файл расписания группы");
+    return payload.lessons;
+  }
+  const originalLoadSchedule = loadSchedule;
+  loadSchedule = async function(){
+    const id = selectedGroupId();
+    const button = $("refreshButton");
+    button.classList.add("loading");
+    button.textContent = "↻ Обновление...";
+    try{
+      const lessons = await fetchGroupLessons(id);
+      schedule = typeof sort === "function" ? sort(lessons) : lessons;
+      archive = [];
+      $("updated").textContent = "Обновлено в " + new Date().toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
+      renderSchedule();
+    }catch(error){
+      if(id === TARGET_GROUP_ID){ await originalLoadSchedule(); return; }
+      if(currentView !== "archive" && currentView !== "exams") $("schedule").innerHTML = `<div class="error"><strong>Не удалось загрузить расписание</strong> ${esc(error.message)}</div>`;
+      throw error;
+    }finally{
+      button.classList.remove("loading");
+      button.textContent = "↻ Обновить";
+    }
+  };
+  window.__ruzApp = window.__ruzApp || {};
+  window.__ruzApp.loadGroup = async function(id){
+    const selectedId = String(id);
+    if(!validGroupId(selectedId)) return;
+    localStorage.setItem(STORAGE_KEY,selectedId);
+    select.value = selectedId;
+    const option = select.options[select.selectedIndex];
+    if(option) setHeader(option.textContent);
+    select.disabled = true;
+    select.setAttribute("aria-busy","true");
+    try{
+      const lessons = await fetchGroupLessons(selectedId);
+      schedule = typeof sort === "function" ? sort(lessons) : lessons;
+      archive = [];
+      renderSchedule();
+      if(typeof renderStats === "function") renderStats();
+      if(typeof updateHero === "function") updateHero();
+    }finally{
+      select.disabled = false;
+      select.setAttribute("aria-busy","false");
+    }
+  };
+  select.addEventListener("change",function(){
+    window.__ruzApp.loadGroup(this.value).catch(()=>{
+      select.value = TARGET_GROUP_ID;
+      localStorage.setItem(STORAGE_KEY,TARGET_GROUP_ID);
+      const option = select.options[select.selectedIndex];
+      if(option) setHeader(option.textContent);
+      window.__ruzApp.loadGroup(TARGET_GROUP_ID).catch(()=>{});
+    });
+  });
+  function restoreSelected(){
+    const id = selectedGroupId();
+    select.value = id;
+    const option = select.options[select.selectedIndex];
+    if(option) setHeader(option.textContent);
+    localStorage.setItem(STORAGE_KEY,id);
+    return window.__ruzApp.loadGroup(id);
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded",()=>restoreSelected().catch(()=>{}),{once:true});
+  else restoreSelected().catch(()=>{});
+})();
+/* END_GROUP_PICKER_NATIVE */
+
 
 loadAll().then(() => {
   window.__ruzApp.ready = true;
