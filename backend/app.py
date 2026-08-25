@@ -11,7 +11,7 @@ SCHEDULE_DIR = ROOT / "group_schedules"
 CHANGES_DIR = ROOT / "changes_by_group"
 DB_PATH = Path(os.getenv("SCHEDULE_DB_PATH", "/tmp/ruz_schedule.db"))
 
-app = FastAPI(title="Schedule API", version="1.1.0")
+app = FastAPI(title="Schedule API", version="1.2.0")
 
 
 def read_json(path: Path, default):
@@ -21,6 +21,16 @@ def read_json(path: Path, default):
         return json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return default
+
+
+def seed_table_from_files(db, table: str, paths):
+    for path in paths:
+        data = read_json(path, None)
+        if data is not None:
+            db.execute(
+                f"INSERT OR REPLACE INTO {table} (group_id, payload) VALUES (?, ?)",
+                (path.stem, json.dumps(data, ensure_ascii=False)),
+            )
 
 
 def init_db():
@@ -43,36 +53,26 @@ def init_db():
             """
         )
 
-        # Rebuild the read-only snapshot so removed source files cannot leave
-        # stale records in SQLite.
-        db.execute("DELETE FROM groups")
-        db.execute("DELETE FROM schedules")
-        db.execute("DELETE FROM changes")
+        # JSON files are bootstrap data only. Once SQLite has been populated,
+        # runtime updates are kept in SQLite and are not overwritten on restart.
+        groups_count = db.execute("SELECT COUNT(*) FROM groups").fetchone()[0]
+        if groups_count == 0:
+            group_data = read_json(GROUPS_FILE, [])
+            if isinstance(group_data, list):
+                for item in group_data:
+                    if isinstance(item, dict) and item.get("id") is not None:
+                        db.execute(
+                            "INSERT OR REPLACE INTO groups (id, name) VALUES (?, ?)",
+                            (str(item["id"]), str(item.get("name", ""))),
+                        )
 
-        group_data = read_json(GROUPS_FILE, [])
-        if isinstance(group_data, list):
-            for item in group_data:
-                if isinstance(item, dict) and item.get("id") is not None:
-                    db.execute(
-                        "INSERT INTO groups (id, name) VALUES (?, ?)",
-                        (str(item["id"]), str(item.get("name", ""))),
-                    )
+        schedules_count = db.execute("SELECT COUNT(*) FROM schedules").fetchone()[0]
+        if schedules_count == 0:
+            seed_table_from_files(db, "schedules", SCHEDULE_DIR.glob("*.json"))
 
-        for path in SCHEDULE_DIR.glob("*.json"):
-            data = read_json(path, None)
-            if data is not None:
-                db.execute(
-                    "INSERT INTO schedules (group_id, payload) VALUES (?, ?)",
-                    (path.stem, json.dumps(data, ensure_ascii=False)),
-                )
-
-        for path in CHANGES_DIR.glob("*.json"):
-            data = read_json(path, None)
-            if data is not None:
-                db.execute(
-                    "INSERT INTO changes (group_id, payload) VALUES (?, ?)",
-                    (path.stem, json.dumps(data, ensure_ascii=False)),
-                )
+        changes_count = db.execute("SELECT COUNT(*) FROM changes").fetchone()[0]
+        if changes_count == 0:
+            seed_table_from_files(db, "changes", CHANGES_DIR.glob("*.json"))
 
 
 def db_query_one(query: str, params=()):
@@ -90,7 +90,7 @@ init_db()
 
 @app.get("/api/v1/health")
 def health():
-    return {"status": "ok", "version": "1.1.0", "storage": "sqlite"}
+    return {"status": "ok", "version": "1.2.0", "storage": "sqlite"}
 
 
 @app.get("/api/v1/groups")
