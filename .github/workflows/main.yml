@@ -30,6 +30,9 @@ jobs:
       - name: Install requests
         run: pip install requests
 
+      - name: Validate Python sources
+        run: python -m py_compile groups_loader.py build_group_schedules.py ruz_client.py planner.py changes_detector.py repair_group_picker.py inject_changes_view.py
+
       - name: Update groups catalog
         run: python groups_loader.py
 
@@ -49,28 +52,47 @@ jobs:
           import json
           from pathlib import Path
 
-          path = Path("schedule.json")
-          if not path.exists():
+          schedule = Path("schedule.json")
+          if not schedule.exists():
               raise SystemExit("schedule.json was not created")
-
-          try:
-              data = json.loads(path.read_text(encoding="utf-8"))
-          except json.JSONDecodeError as exc:
-              raise SystemExit(f"schedule.json is invalid JSON: {exc}")
-
+          data = json.loads(schedule.read_text(encoding="utf-8"))
           if not isinstance(data, list) or not data:
               raise SystemExit("schedule.json must contain a non-empty array")
 
-          group_schedules = Path("group_schedules.json")
-          if not group_schedules.exists():
+          combined = Path("group_schedules.json")
+          if not combined.exists():
               raise SystemExit("group_schedules.json was not created")
-
-          multi = json.loads(group_schedules.read_text(encoding="utf-8"))
+          multi = json.loads(combined.read_text(encoding="utf-8"))
           if not isinstance(multi, dict) or not isinstance(multi.get("groups"), dict) or not multi["groups"]:
               raise SystemExit("group_schedules.json must contain a non-empty groups object")
 
+          groups = json.loads(Path("groups.json").read_text(encoding="utf-8"))
+          lazy_dir = Path("group_schedules")
+          if not lazy_dir.is_dir():
+              raise SystemExit("group_schedules/ directory was not created")
+
+          missing = []
+          invalid = []
+          for group in groups:
+              path = lazy_dir / f"{group['id']}.json"
+              if not path.exists():
+                  missing.append(str(group['id']))
+                  continue
+              try:
+                  item = json.loads(path.read_text(encoding="utf-8"))
+                  if str(item.get("id")) != str(group["id"]) or not isinstance(item.get("lessons"), list):
+                      invalid.append(str(group['id']))
+              except json.JSONDecodeError:
+                  invalid.append(str(group['id']))
+
+          if missing:
+              raise SystemExit(f"Missing per-group schedule files: {missing[:10]}")
+          if invalid:
+              raise SystemExit(f"Invalid per-group schedule files: {invalid[:10]}")
+
           print(f"Validated current schedule: {len(data)} lessons")
           print(f"Validated group schedules: {len(multi['groups'])} groups")
+          print(f"Validated lazy-load files: {len(groups)} groups")
           PY
 
       - name: Run planner
@@ -82,16 +104,13 @@ jobs:
       - name: Install schedule changes view
         run: python inject_changes_view.py
 
-      - name: Install group picker
-        run: python inject_group_picker.py
-
-      - name: Repair group picker
+      - name: Install native group selector
         run: python repair_group_picker.py
 
       - name: Save schedule and changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add groups.json group_schedules.json schedule.json changes.json index.html
+          git add groups.json group_schedules.json group_schedules schedule.json changes.json index.html
           git diff --cached --quiet || git commit -m "Update groups, schedules and changes"
           git push origin "HEAD:${{ github.event.pull_request.head.ref || github.ref_name }}"
