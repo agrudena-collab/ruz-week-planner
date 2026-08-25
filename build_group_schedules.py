@@ -1,4 +1,5 @@
 import json
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, timedelta
 from pathlib import Path
@@ -13,6 +14,8 @@ GROUP_DIR = Path("group_schedules")
 START = date.today()
 FINISH = START + timedelta(days=70)
 MAX_WORKERS = 5
+FETCH_ATTEMPTS = 3
+RETRY_DELAY_SECONDS = 2
 
 
 def extract_list(data):
@@ -50,21 +53,33 @@ def fetch_group(group):
         "lng": 1,
     }
 
-    with requests.Session() as session:
-        response = session.get(url, params=params, timeout=30)
-        response.raise_for_status()
-        raw = response.json()
+    last_error = None
+    for attempt in range(1, FETCH_ATTEMPTS + 1):
+        try:
+            with requests.Session() as session:
+                response = session.get(url, params=params, timeout=30)
+                response.raise_for_status()
+                raw = response.json()
 
-    data = extract_list(raw)
-    if data is None:
-        raise RuntimeError("unexpected RUZ response shape")
+            data = extract_list(raw)
+            if data is None:
+                raise RuntimeError("unexpected RUZ response shape")
 
-    lessons = [item for item in data if isinstance(item, dict) and is_regular_lesson(item)]
-    return {
-        "id": group_id,
-        "name": group["name"],
-        "lessons": lessons,
-    }
+            lessons = [
+                item for item in data
+                if isinstance(item, dict) and is_regular_lesson(item)
+            ]
+            return {
+                "id": group_id,
+                "name": group["name"],
+                "lessons": lessons,
+            }
+        except (requests.RequestException, ValueError, RuntimeError) as exc:
+            last_error = exc
+            if attempt < FETCH_ATTEMPTS:
+                time.sleep(RETRY_DELAY_SECONDS * attempt)
+
+    raise RuntimeError(f"RUZ fetch failed after {FETCH_ATTEMPTS} attempts: {last_error}")
 
 
 def write_group_file(item):
@@ -76,45 +91,84 @@ def write_group_file(item):
     )
 
 
+def load_previous_group(group_id):
+    path = GROUP_DIR / f"{group_id}.json"
+    if not path.exists():
+        return None
+
+    try:
+        item = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+
+    if str(item.get("id")) != str(group_id) or not isinstance(item.get("lessons"), list):
+        return None
+    return item
+
+
 def main():
     groups = json.loads(GROUPS_PATH.read_text(encoding="utf-8"))
     if not isinstance(groups, list) or not groups:
         raise SystemExit("groups.json must contain a non-empty array")
 
     GROUP_DIR.mkdir(parents=True, exist_ok=True)
+
+    current_ids = {str(group["id"]) for group in groups}
     for old_file in GROUP_DIR.glob("*.json"):
-        old_file.unlink()
+        if old_file.stem not in current_ids:
+            old_file.unlink()
 
     result = {}
     failures = []
 
     print(f"Building schedules for {len(groups)} groups")
+    print(f"RUZ fetch attempts per group: {FETCH_ATTEMPTS}")
 
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         futures = {executor.submit(fetch_group, group): group for group in groups}
         for index, future in enumerate(as_completed(futures), 1):
             group = futures[future]
+            group_id = str(group["id"])
             try:
                 item = future.result()
-                result[str(item["id"])] = item
+                result[group_id] = item
                 write_group_file(item)
                 print(f"[{index}/{len(groups)}] {item['name']}: {len(item['lessons'])} lessons")
             except Exception as exc:
-                failures.append((group["id"], group["name"], str(exc)))
-                print(f"[{index}/{len(groups)}] {group['name']}: FAILED - {exc}")
+                previous = load_previous_group(group_id)
+                if previous is not None:
+                    result[group_id] = previous
+                    failures.append({
+                        "id": group["id"],
+                        "name": group["name"],
+                        "error": str(exc),
+                        "fallback": "previous per-group schedule",
+                    })
+                    print(
+                        f"[{index}/{len(groups)}] {group['name']}: "
+                        f"FAILED - {exc}; using previous schedule"
+                    )
+                else:
+                    failures.append({
+                        "id": group["id"],
+                        "name": group["name"],
+                        "error": str(exc),
+                    })
+                    print(f"[{index}/{len(groups)}] {group['name']}: FAILED - {exc}")
 
     if not result:
         raise SystemExit("No group schedules were fetched")
+
+    missing_current = sorted(current_ids - set(result))
+    if missing_current:
+        raise SystemExit(f"No schedule data available for groups: {missing_current[:10]}")
 
     payload = {
         "generatedAt": START.isoformat(),
         "start": START.isoformat(),
         "finish": FINISH.isoformat(),
         "groups": result,
-        "failed": [
-            {"id": group_id, "name": name, "error": error}
-            for group_id, name, error in failures
-        ],
+        "failed": failures,
     }
 
     OUTPUT_PATH.write_text(
@@ -125,6 +179,9 @@ def main():
     print(f"Saved {len(result)} group schedules to {OUTPUT_PATH}")
     print(f"Saved {len(result)} lazy-load files to {GROUP_DIR}/")
     print(f"Failed groups: {len(failures)}")
+    fallback_count = sum(1 for item in failures if item.get("fallback"))
+    if fallback_count:
+        print(f"Used previous schedules as fallback: {fallback_count}")
 
 
 if __name__ == "__main__":
