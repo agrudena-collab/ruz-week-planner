@@ -43,12 +43,18 @@ def init_db():
             """
         )
 
+        # Rebuild the read-only snapshot so removed source files cannot leave
+        # stale records in SQLite.
+        db.execute("DELETE FROM groups")
+        db.execute("DELETE FROM schedules")
+        db.execute("DELETE FROM changes")
+
         group_data = read_json(GROUPS_FILE, [])
         if isinstance(group_data, list):
             for item in group_data:
                 if isinstance(item, dict) and item.get("id") is not None:
                     db.execute(
-                        "INSERT OR REPLACE INTO groups (id, name) VALUES (?, ?)",
+                        "INSERT INTO groups (id, name) VALUES (?, ?)",
                         (str(item["id"]), str(item.get("name", ""))),
                     )
 
@@ -56,7 +62,7 @@ def init_db():
             data = read_json(path, None)
             if data is not None:
                 db.execute(
-                    "INSERT OR REPLACE INTO schedules (group_id, payload) VALUES (?, ?)",
+                    "INSERT INTO schedules (group_id, payload) VALUES (?, ?)",
                     (path.stem, json.dumps(data, ensure_ascii=False)),
                 )
 
@@ -64,7 +70,7 @@ def init_db():
             data = read_json(path, None)
             if data is not None:
                 db.execute(
-                    "INSERT OR REPLACE INTO changes (group_id, payload) VALUES (?, ?)",
+                    "INSERT INTO changes (group_id, payload) VALUES (?, ?)",
                     (path.stem, json.dumps(data, ensure_ascii=False)),
                 )
 
