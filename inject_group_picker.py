@@ -82,6 +82,7 @@ HTML = r"""
 
 JS = r"""
 /* GROUP_PICKER_VIEW */
+document.addEventListener("DOMContentLoaded", function(){
 (function(){
   const TARGET_GROUP_ID="164606";
   const TARGET_GROUP_NAME="МеждОт25-2";
@@ -191,11 +192,25 @@ JS = r"""
 
   loadData();
 })();
+});
 """
 
 text = INDEX.read_text(encoding="utf-8")
+
+# Repair an already-installed picker. The previous version injected the
+# picker JS before the picker HTML, so its event handlers were never bound.
 if MARKER in text:
-    print("Group picker already installed")
+    old_start = '/* GROUP_PICKER_VIEW */\n(function(){'
+    new_start = '/* GROUP_PICKER_VIEW */\ndocument.addEventListener("DOMContentLoaded", function(){\n(function(){'
+    old_end = '  loadData();\n})();\n\n</script>'
+    new_end = '  loadData();\n})();\n});\n\n</script>'
+    if old_start in text and old_end in text:
+        text = text.replace(old_start, new_start, 1)
+        text = text.replace(old_end, new_end, 1)
+        INDEX.write_text(text, encoding="utf-8")
+        print("Repaired existing group picker initialization")
+    else:
+        print("Group picker marker exists but no repairable old block was found")
     raise SystemExit(0)
 
 style_pos = text.rfind("</style>")
