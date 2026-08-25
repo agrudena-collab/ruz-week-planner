@@ -1,4 +1,4 @@
-const CACHE_NAME = "mezhdot25-2-v3";
+const CACHE_NAME = "mezhdot25-2-v4";
 
 const APP_FILES = [
   "./",
@@ -37,6 +37,10 @@ self.addEventListener("fetch", event => {
     requestUrl.pathname.endsWith("/schedule.json") ||
     requestUrl.pathname.endsWith("/changes.json");
 
+  const isAppShell =
+    event.request.mode === "navigate" ||
+    requestUrl.pathname.endsWith("/index.html");
+
   if (isDataFile) {
     const cacheKey = new Request(
       new URL(requestUrl.pathname, self.location.origin).href
@@ -45,7 +49,6 @@ self.addEventListener("fetch", event => {
     event.respondWith(
       fetch(event.request)
         .then(response => {
-          // Never replace a good cached response with an HTTP error page.
           if (response.ok) {
             const copy = response.clone();
             caches.open(CACHE_NAME)
@@ -56,6 +59,26 @@ self.addEventListener("fetch", event => {
           return response;
         })
         .catch(() => caches.match(cacheKey))
+    );
+
+    return;
+  }
+
+  // Always prefer the newest HTML so a deployed frontend fix is not hidden
+  // behind an old cached index.html. Fall back to cache only when offline.
+  if (isAppShell) {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME)
+              .then(cache => cache.put(event.request, copy))
+              .catch(() => {});
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request))
     );
 
     return;
