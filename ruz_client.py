@@ -1,10 +1,13 @@
+import os
 import requests
 import json
 from datetime import date, timedelta
 
 
 BASE_URL = "https://ruz.fa.ru"
-GROUP_NAME = "МеждОт25-2"
+# Keep the current group as the safe default. Multi-group runs can provide
+# GROUP_NAME through the environment without changing the source code.
+GROUP_NAME = os.getenv("GROUP_NAME", "МеждОт25-2").strip()
 
 
 def get_group():
@@ -44,6 +47,7 @@ def get_schedule(group_id):
     print("ДИАГНОСТИКА ЗАПРОСА К РУЗ")
     print("=" * 70)
 
+    print(f"Группа:         {GROUP_NAME}")
     print(f"Сегодня:        {start}")
     print(f"Запрашиваем с:  {start}")
     print(f"Запрашиваем до: {finish}")
