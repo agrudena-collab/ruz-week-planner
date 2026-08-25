@@ -9,6 +9,7 @@ import requests
 BASE_URL = "https://ruz.fa.ru"
 GROUPS_PATH = Path("groups.json")
 OUTPUT_PATH = Path("group_schedules.json")
+GROUP_DIR = Path("group_schedules")
 START = date.today()
 FINISH = START + timedelta(days=70)
 MAX_WORKERS = 5
@@ -66,10 +67,23 @@ def fetch_group(group):
     }
 
 
+def write_group_file(item):
+    GROUP_DIR.mkdir(parents=True, exist_ok=True)
+    path = GROUP_DIR / f"{item['id']}.json"
+    path.write_text(
+        json.dumps(item, ensure_ascii=False, separators=(",", ":")) + "\n",
+        encoding="utf-8",
+    )
+
+
 def main():
     groups = json.loads(GROUPS_PATH.read_text(encoding="utf-8"))
     if not isinstance(groups, list) or not groups:
         raise SystemExit("groups.json must contain a non-empty array")
+
+    GROUP_DIR.mkdir(parents=True, exist_ok=True)
+    for old_file in GROUP_DIR.glob("*.json"):
+        old_file.unlink()
 
     result = {}
     failures = []
@@ -83,6 +97,7 @@ def main():
             try:
                 item = future.result()
                 result[str(item["id"])] = item
+                write_group_file(item)
                 print(f"[{index}/{len(groups)}] {item['name']}: {len(item['lessons'])} lessons")
             except Exception as exc:
                 failures.append((group["id"], group["name"], str(exc)))
@@ -92,7 +107,7 @@ def main():
         raise SystemExit("No group schedules were fetched")
 
     payload = {
-        "generatedAt": f"{START.isoformat()}",
+        "generatedAt": START.isoformat(),
         "start": START.isoformat(),
         "finish": FINISH.isoformat(),
         "groups": result,
@@ -108,6 +123,7 @@ def main():
     )
 
     print(f"Saved {len(result)} group schedules to {OUTPUT_PATH}")
+    print(f"Saved {len(result)} lazy-load files to {GROUP_DIR}/")
     print(f"Failed groups: {len(failures)}")
 
 
