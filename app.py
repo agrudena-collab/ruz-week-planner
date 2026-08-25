@@ -4,16 +4,16 @@ import json
 import os
 import threading
 import time
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 
 from groups_loader import fetch_groups
-from ruz_client import get_group, get_schedule, is_regular_lesson
+from ruz_client import get_schedule, is_regular_lesson
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -41,6 +41,57 @@ _schedule_cache: dict[str, tuple[float, list[dict[str, Any]]]] = {}
 _groups_cache: tuple[float, list[dict[str, Any]]] | None = None
 
 
+# The GitHub Pages version still asks for JSON files directly.  On Railway we
+# transparently redirect those requests to the live API, so the same frontend
+# can keep working while its data source moves from static snapshots to RUZ.
+API_BRIDGE = r"""
+<script>
+(() => {
+  const nativeFetch = window.fetch.bind(window);
+
+  function jsonResponse(payload) {
+    return new Response(JSON.stringify(payload), {
+      status: 200,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+
+  window.fetch = async (input, init) => {
+    const url = typeof input === "string" ? input : (input && input.url) || "";
+
+    let match = url.match(/(?:\.\/)?group_schedules\/(\d+)\.json(?:\?.*)?$/);
+    if (match) {
+      const groupId = match[1];
+      const response = await nativeFetch(
+        "/api/schedule?group_id=" + encodeURIComponent(groupId),
+        init
+      );
+      if (!response.ok) return response;
+      const payload = await response.json();
+      return jsonResponse({
+        id: payload.group_id,
+        name: payload.group_name,
+        lessons: payload.lessons
+      });
+    }
+
+    if (/(?:^|\/)schedule\.json(?:\?.*)?$/.test(url)) {
+      const response = await nativeFetch(
+        "/api/schedule?group_id=" + encodeURIComponent("__DEFAULT__"),
+        init
+      );
+      if (!response.ok) return response;
+      const payload = await response.json();
+      return jsonResponse(payload.lessons || []);
+    }
+
+    return nativeFetch(input, init);
+  };
+})();
+</script>
+"""
+
+
 def _read_json(path: Path, fallback: Any) -> Any:
     try:
         return json.loads(path.read_text(encoding="utf-8"))
@@ -57,7 +108,10 @@ def _load_cached_groups() -> list[dict[str, Any]]:
 
     groups_file = _read_json(BASE_DIR / "groups.json", None)
     if isinstance(groups_file, list) and groups_file:
-        groups = [g for g in groups_file if isinstance(g, dict) and g.get("id") and g.get("name")]
+        groups = [
+            g for g in groups_file
+            if isinstance(g, dict) and g.get("id") and g.get("name")
+        ]
     else:
         groups = fetch_groups()
 
@@ -113,17 +167,29 @@ def health() -> dict[str, Any]:
 @app.get("/api/groups")
 def groups() -> dict[str, Any]:
     items = _load_cached_groups()
-    return {"groups": items, "count": len(items), "default_group_id": DEFAULT_GROUP_ID}
+    return {
+        "groups": items,
+        "count": len(items),
+        "default_group_id": DEFAULT_GROUP_ID,
+    }
 
 
 @app.get("/api/schedule")
 def schedule(
     group_id: str = Query(DEFAULT_GROUP_ID, min_length=1),
 ) -> dict[str, Any]:
+    # The bridge uses __DEFAULT__ for schedule.json so that the frontend does
+    # not need to know the backend's default group id.
+    if group_id == "__DEFAULT__":
+        group_id = DEFAULT_GROUP_ID
+
     try:
         items = _normalize_schedule(_fetch_live_schedule(group_id))
     except Exception as exc:
-        raise HTTPException(status_code=502, detail=f"Не удалось получить расписание из РУЗ: {exc}") from exc
+        raise HTTPException(
+            status_code=502,
+            detail=f"Не удалось получить расписание из РУЗ: {exc}",
+        ) from exc
 
     return {
         "group_id": str(group_id),
@@ -144,8 +210,16 @@ def changes(group_id: str = Query(DEFAULT_GROUP_ID, min_length=1)) -> dict[str, 
     current_lessons = current.get("lessons", []) if isinstance(current, dict) else []
     previous_lessons = previous.get("lessons", []) if isinstance(previous, dict) else []
 
-    previous_map = {json.dumps(x, ensure_ascii=False, sort_keys=True): x for x in previous_lessons if isinstance(x, dict)}
-    current_map = {json.dumps(x, ensure_ascii=False, sort_keys=True): x for x in current_lessons if isinstance(x, dict)}
+    previous_map = {
+        json.dumps(x, ensure_ascii=False, sort_keys=True): x
+        for x in previous_lessons
+        if isinstance(x, dict)
+    }
+    current_map = {
+        json.dumps(x, ensure_ascii=False, sort_keys=True): x
+        for x in current_lessons
+        if isinstance(x, dict)
+    }
 
     added = [current_map[key] for key in current_map.keys() - previous_map.keys()]
     removed = [previous_map[key] for key in previous_map.keys() - current_map.keys()]
@@ -171,8 +245,10 @@ def now() -> dict[str, Any]:
 
 
 @app.get("/", include_in_schema=False)
-def index() -> FileResponse:
-    return FileResponse(BASE_DIR / "index.html")
+def index() -> HTMLResponse:
+    html = (BASE_DIR / "index.html").read_text(encoding="utf-8")
+    html = html.replace("</head>", API_BRIDGE + "</head>", 1)
+    return HTMLResponse(html)
 
 
 @app.get("/{path:path}", include_in_schema=False)
