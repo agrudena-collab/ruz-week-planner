@@ -1,5 +1,6 @@
 import json
 import os
+import string
 from pathlib import Path
 
 import requests
@@ -9,9 +10,14 @@ BASE_URL = "https://ruz.fa.ru"
 SEARCH_URL = f"{BASE_URL}/api/search"
 OUTPUT_PATH = Path("groups.json")
 
-# RUZ rejects an empty search string, so use the current configured group
-# as the safe default. Set RUZ_GROUP_SEARCH to another term when testing.
-SEARCH_TERM = os.getenv("RUZ_GROUP_SEARCH", "МеждОт25-2")
+# RUZ rejects an empty search string. Therefore, when no explicit search term
+# is provided, we make a small alphabet sweep and merge the results. This is
+# much safer than relying on one specific group name and lets us discover the
+# catalogue without knowing all group names in advance.
+EXPLICIT_TERM = os.getenv("RUZ_GROUP_SEARCH", "").strip()
+
+CYRILLIC_ALPHABET = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
+SEARCH_TERMS = list(dict.fromkeys(CYRILLIC_ALPHABET + string.digits))
 
 
 def extract_items(data):
@@ -35,13 +41,33 @@ def extract_items(data):
     return None
 
 
-def fetch_groups():
+def normalize_group(item):
+    if not isinstance(item, dict):
+        return None
+
+    group_id = item.get("id") or item.get("groupId") or item.get("group_id")
+    name = (
+        item.get("label")
+        or item.get("name")
+        or item.get("title")
+        or item.get("groupName")
+        or ""
+    )
+    name = str(name).strip()
+
+    if group_id is None or not name:
+        return None
+
+    return {"id": group_id, "name": name}
+
+
+def fetch_groups_for_term(session, term):
     params = {
-        "term": SEARCH_TERM,
+        "term": term,
         "type": "group",
     }
 
-    response = requests.get(
+    response = session.get(
         SEARCH_URL,
         params=params,
         timeout=30,
@@ -56,40 +82,65 @@ def fetch_groups():
             keys = ", ".join(map(str, data.keys()))
             preview = json.dumps(data, ensure_ascii=False)[:500]
             raise RuntimeError(
-                f"РУЗ вернул неожиданный формат. Ключи: {keys}. Ответ: {preview}"
+                f"РУЗ вернул неожиданный формат для запроса '{term}'. "
+                f"Ключи: {keys}. Ответ: {preview}"
             )
         raise RuntimeError(
-            f"РУЗ вернул неожиданный формат: {type(data).__name__}"
+            f"РУЗ вернул неожиданный формат для запроса '{term}': "
+            f"{type(data).__name__}"
         )
 
     groups = []
-    seen_ids = set()
-
     for item in items:
-        if not isinstance(item, dict):
-            continue
+        group = normalize_group(item)
+        if group is not None:
+            groups.append(group)
 
-        group_id = item.get("id") or item.get("groupId") or item.get("group_id")
-        name = (
-            item.get("label")
-            or item.get("name")
-            or item.get("title")
-            or item.get("groupName")
-            or ""
-        )
-        name = str(name).strip()
-
-        if group_id is None or not name or group_id in seen_ids:
-            continue
-
-        seen_ids.add(group_id)
-        groups.append({
-            "id": group_id,
-            "name": name,
-        })
-
-    groups.sort(key=lambda group: group["name"].casefold())
     return groups
+
+
+def fetch_groups():
+    # Explicit search remains available for diagnostics/testing.
+    if EXPLICIT_TERM:
+        terms = [EXPLICIT_TERM]
+    else:
+        terms = SEARCH_TERMS
+
+    session = requests.Session()
+    unique_groups = {}
+    successful_terms = 0
+
+    print(f"Поиск каталога групп РУЗ. Запросов: {len(terms)}")
+
+    for term in terms:
+        groups = fetch_groups_for_term(session, term)
+        successful_terms += 1
+
+        before = len(unique_groups)
+        for group in groups:
+            unique_groups[str(group["id"])] = group
+        added = len(unique_groups) - before
+
+        print(
+            f"  '{term}': найдено {len(groups)}, новых {added}, "
+            f"всего уникальных {len(unique_groups)}"
+        )
+
+    if not unique_groups:
+        raise RuntimeError(
+            "РУЗ не вернул ни одной группы. "
+            "groups.json не будет записан пустым."
+        )
+
+    print(
+        f"Успешно обработано запросов: {successful_terms}/{len(terms)}; "
+        f"уникальных групп: {len(unique_groups)}"
+    )
+
+    return sorted(
+        unique_groups.values(),
+        key=lambda group: group["name"].casefold(),
+    )
 
 
 def save_groups(groups):
@@ -99,15 +150,14 @@ def save_groups(groups):
 
 
 if __name__ == "__main__":
-    print(f"Получаем список групп из РУЗ по запросу: {SEARCH_TERM}")
     groups = fetch_groups()
     save_groups(groups)
 
     print(f"Получено групп: {len(groups)}")
     print(f"Сохранено: {OUTPUT_PATH}")
 
-    for group in groups[:20]:
+    for group in groups[:30]:
         print(f"  {group['id']} | {group['name']}")
 
-    if len(groups) > 20:
-        print(f"  ... ещё {len(groups) - 20}")
+    if len(groups) > 30:
+        print(f"  ... ещё {len(groups) - 30}")
