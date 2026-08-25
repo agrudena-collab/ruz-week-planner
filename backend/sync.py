@@ -41,9 +41,8 @@ def fetch_with_retry(client, group, start, finish):
     raise RuntimeError(str(last_error))
 
 
-def apply_results(results):
+def apply_results(results, prune=False):
     with sqlite3.connect(DB_PATH) as db:
-        current_ids = {item["id"] for item in results}
         for item in results:
             db.execute(
                 "INSERT OR REPLACE INTO groups (id, name) VALUES (?, ?)",
@@ -54,21 +53,24 @@ def apply_results(results):
                 (item["id"], json.dumps(item, ensure_ascii=False)),
             )
 
-        if current_ids:
-            placeholders = ",".join("?" for _ in current_ids)
-            db.execute(
-                f"DELETE FROM schedules WHERE group_id NOT IN ({placeholders})",
-                tuple(current_ids),
-            )
-            db.execute(
-                f"DELETE FROM groups WHERE id NOT IN ({placeholders})",
-                tuple(current_ids),
-            )
+        if prune:
+            current_ids = {item["id"] for item in results}
+            if current_ids:
+                placeholders = ",".join("?" for _ in current_ids)
+                db.execute(
+                    f"DELETE FROM schedules WHERE group_id NOT IN ({placeholders})",
+                    tuple(current_ids),
+                )
+                db.execute(
+                    f"DELETE FROM groups WHERE id NOT IN ({placeholders})",
+                    tuple(current_ids),
+                )
 
 
 def sync_groups(days=DEFAULT_DAYS, group_id=None):
     init_db()
     groups = load_groups()
+    full_sync = group_id is None
     if group_id is not None:
         groups = [group for group in groups if str(group["id"]) == str(group_id)]
         if not groups:
@@ -97,7 +99,7 @@ def sync_groups(days=DEFAULT_DAYS, group_id=None):
                 })
 
     if results:
-        apply_results(results)
+        apply_results(results, prune=full_sync and not failures)
 
     return {
         "requested": len(groups),
