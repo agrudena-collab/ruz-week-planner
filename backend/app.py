@@ -9,7 +9,9 @@ ROOT = Path(__file__).resolve().parent.parent
 GROUPS_FILE = ROOT / "groups.json"
 SCHEDULE_DIR = ROOT / "group_schedules"
 CHANGES_DIR = ROOT / "changes_by_group"
-DB_PATH = Path(os.getenv("SCHEDULE_DB_PATH", "/tmp/ruz_schedule.db"))
+# Production deployments should mount a persistent volume at /data.
+# Local development can override this with SCHEDULE_DB_PATH.
+DB_PATH = Path(os.getenv("SCHEDULE_DB_PATH", "/data/ruz_schedule.db"))
 
 app = FastAPI(title="Schedule API", version="1.2.0")
 
