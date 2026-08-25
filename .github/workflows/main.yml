@@ -31,7 +31,7 @@ jobs:
         run: pip install requests
 
       - name: Validate Python sources
-        run: python -m py_compile groups_loader.py build_group_schedules.py ruz_client.py planner.py changes_detector.py repair_group_picker.py inject_changes_view.py
+        run: python -m py_compile groups_loader.py build_group_schedules.py ruz_client.py planner.py changes_detector.py repair_group_picker.py inject_changes_view.py inject_selected_group_changes.py
 
       - name: Update groups catalog
         run: python groups_loader.py
@@ -163,6 +163,9 @@ jobs:
       - name: Install native group selector
         run: python repair_group_picker.py
 
+      - name: Wire selected-group changes
+        run: python inject_selected_group_changes.py
+
       - name: Validate generated frontend
         run: |
           python - <<'PY'
@@ -177,6 +180,10 @@ jobs:
               raise SystemExit("groupPickerButton must exist exactly once")
           if '<select class="group-picker" id="groupPickerButton"' not in html:
               raise SystemExit("native group selector is missing")
+          if 'SELECTED_GROUP_CHANGES' not in html:
+              raise SystemExit("selected-group changes bridge is missing")
+          if 'changes_by_group/' not in html:
+              raise SystemExit("changes_by_group integration is missing")
 
           picker = re.search(r'<select class="group-picker" id="groupPickerButton"[^>]*>(.*?)</select>', html, flags=re.S | re.I)
           if not picker:
@@ -204,12 +211,12 @@ jobs:
                   print(result.stdout)
                   print(result.stderr)
                   raise SystemExit(f"JavaScript syntax error in inline script {index}")
-          print(f"Validated one native group selector, {len(options)} group options and {len(scripts)} inline JavaScript blocks")
+          print(f"Validated native group selector, {len(options)} group options, selected-group changes bridge and {len(scripts)} inline JavaScript blocks")
 
       - name: Save schedule and changes
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "41898282+users.noreply.github.com"
           git add groups.json group_schedules.json group_schedules group_schedules_previous changes_by_group changes.json schedule.json index.html
           git diff --cached --quiet || git commit -m "Update groups, schedules and changes"
           git push origin "HEAD:${{ github.event.pull_request.head.ref || github.ref_name }}"
