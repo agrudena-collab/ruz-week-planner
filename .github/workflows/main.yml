@@ -119,8 +119,14 @@ jobs:
               raise SystemExit("groupPickerButton must exist exactly once")
           if '<select class="group-picker" id="groupPickerButton"' not in html:
               raise SystemExit("native group selector is missing")
-          if html.count("GROUP_PICKER_NATIVE") != 2:
-              raise SystemExit("native group selector markers are missing or duplicated")
+
+          # The selector injector deliberately places one opening marker in CSS
+          # and one in JS. END_GROUP_PICKER_NATIVE contains the marker text too,
+          # so counting the short substring is incorrect and caused a false CI failure.
+          if html.count("/* GROUP_PICKER_NATIVE */") != 2:
+              raise SystemExit("native group selector opening markers are missing or duplicated")
+          if html.count("/* END_GROUP_PICKER_NATIVE */") != 2:
+              raise SystemExit("native group selector end markers are missing or duplicated")
 
           scripts = re.findall(r"<script[^>]*>(.*?)</script>", html, flags=re.S | re.I)
           if not scripts:
