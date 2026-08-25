@@ -117,7 +117,8 @@ JS = r'''/* GROUP_PICKER_NATIVE */
     } catch (error) {
       const status = document.getElementById("updated");
       if (status) status.textContent = error.message || "Ошибка загрузки группы";
-      select.value = localStorage.getItem(STORAGE_KEY) || TARGET_GROUP_ID;
+      select.value = TARGET_GROUP_ID;
+      localStorage.setItem(STORAGE_KEY, TARGET_GROUP_ID);
     } finally {
       loading = false;
       select.disabled = false;
@@ -147,8 +148,6 @@ JS = r'''/* GROUP_PICKER_NATIVE */
     restoreSaved();
   }, { once: true });
 
-  // Defensive fallback for a very slow network/device where the ready event
-  // has not arrived yet.
   setTimeout(() => {
     if (!window.__ruzApp.ready) {
       window.__ruzApp.ready = true;
@@ -200,12 +199,10 @@ if not isinstance(groups, list) or not groups:
 
 selected_id = str(next((g["id"] for g in groups if str(g["id"]) == "164606"), groups[0]["id"]))
 
-# Remove every old picker implementation first. This makes the migration idempotent.
 text = remove_marked_css(text)
 text = remove_marked_js(text)
 text = remove_marked_html(text)
 
-# Replace the old custom button with a real native <select>.
 old_button = re.compile(r'<button class="group-picker" id="groupPickerButton" type="button">.*?</button>', flags=re.S)
 new_control = (
     '<div class="group-picker-wrap">\n'
@@ -233,7 +230,7 @@ else:
         flags=re.S,
     )
 
-# Expose the main app bridge before its first loadAll() call and emit a readiness event.
+# Install a bridge in the main script before its initial loadAll() call.
 bridge_anchor = 'window.__ruzApp = window.__ruzApp || {};'
 if bridge_anchor not in text:
     last_load = text.rfind("loadAll();")
@@ -242,10 +239,12 @@ if bridge_anchor not in text:
     readiness = '''window.__ruzApp = window.__ruzApp || {};\nwindow.__ruzApp.ready = false;\nwindow.__ruzApp.setSchedule = function(lessons){\n  schedule = typeof sort === "function" ? sort(lessons || []) : (lessons || []);\n  archive = [];\n  if (typeof renderSchedule === "function") renderSchedule();\n  if (typeof renderStats === "function") renderStats();\n  if (typeof updateHero === "function") updateHero();\n};\nwindow.__ruzApp.restoreDefault = function(){\n  if (typeof loadAll === "function") loadAll();\n};\n\n'''
     text = text[:last_load] + readiness + text[last_load:]
 
-# Replace the initial call with a readiness-aware call. This only changes the first boot call.
-first_load = text.find("loadAll();")
-if first_load >= 0:
-    text = text[:first_load] + 'loadAll().then(() => {\n  window.__ruzApp.ready = true;\n  document.dispatchEvent(new Event("ruz:schedule-ready"));\n}).catch(() => {\n  window.__ruzApp.ready = true;\n  document.dispatchEvent(new Event("ruz:schedule-ready"));\n});' + text[first_load + len("loadAll();"):]
+# The final loadAll(); in the file is the real boot call; the bridge above also contains
+# a loadAll(); reference, so use rfind rather than find here.
+boot_load = text.rfind("loadAll();")
+if boot_load >= 0:
+    replacement = '''loadAll().then(() => {\n  window.__ruzApp.ready = true;\n  document.dispatchEvent(new Event("ruz:schedule-ready"));\n}).catch(() => {\n  window.__ruzApp.ready = true;\n  document.dispatchEvent(new Event("ruz:schedule-ready"));\n});'''
+    text = text[:boot_load] + replacement + text[boot_load + len("loadAll();"):]
 
 style_pos = text.rfind("</style>")
 if style_pos < 0:
