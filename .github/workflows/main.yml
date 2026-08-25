@@ -36,6 +36,13 @@ jobs:
       - name: Update groups catalog
         run: python groups_loader.py
 
+      - name: Snapshot previous group schedules
+        run: |
+          mkdir -p group_schedules_previous
+          if [ -d group_schedules ]; then
+            find group_schedules -maxdepth 1 -type f -name '*.json' -exec cp {} group_schedules_previous/ \;
+          fi
+
       - name: Build schedules for all groups
         run: python build_group_schedules.py
 
@@ -71,8 +78,11 @@ jobs:
               raise SystemExit("groups.json must contain a non-empty array")
 
           lazy_dir = Path("group_schedules")
+          previous_dir = Path("group_schedules_previous")
           if not lazy_dir.is_dir():
               raise SystemExit("group_schedules/ directory was not created")
+          if not previous_dir.is_dir():
+              raise SystemExit("group_schedules_previous/ directory was not created")
 
           expected_ids = {str(group["id"]) for group in groups}
           actual_ids = {str(group_id) for group_id in multi["groups"].keys()}
@@ -108,7 +118,6 @@ jobs:
           failures = multi.get("failed", [])
           if not isinstance(failures, list):
               raise SystemExit("group_schedules.json failed field must be an array")
-          fallback_count = sum(1 for item in failures if isinstance(item, dict) and item.get("fallback"))
           hard_failures = [item for item in failures if not isinstance(item, dict) or not item.get("fallback")]
           if hard_failures:
               raise SystemExit(f"Groups without current or fallback schedule: {hard_failures[:5]}")
@@ -116,13 +125,37 @@ jobs:
           print(f"Validated current schedule: {len(data)} lessons")
           print(f"Validated group schedules: {len(multi['groups'])} groups")
           print(f"Validated lazy-load files: {len(groups)} groups")
-          print(f"RUZ fallback schedules in use: {fallback_count}")
+          print(f"Validated previous snapshots: {len(list(previous_dir.glob('*.json')))} files")
 
       - name: Run planner
         run: python planner.py
 
       - name: Detect schedule changes
         run: python changes_detector.py
+
+      - name: Validate per-group changes
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          groups = json.loads(Path("groups.json").read_text(encoding="utf-8"))
+          expected = {str(group["id"]) for group in groups}
+          directory = Path("changes_by_group")
+          actual = {path.stem for path in directory.glob("*.json")}
+          if actual != expected:
+              missing = sorted(expected - actual)
+              extra = sorted(actual - expected)
+              raise SystemExit(f"Change files mismatch; missing={missing[:10]} extra={extra[:10]}")
+          for path in directory.glob("*.json"):
+              data = json.loads(path.read_text(encoding="utf-8"))
+              if not isinstance(data, list):
+                  raise SystemExit(f"{path} must contain an array")
+          legacy = json.loads(Path("changes.json").read_text(encoding="utf-8"))
+          default = json.loads((directory / "164606.json").read_text(encoding="utf-8"))
+          if legacy != default:
+              raise SystemExit("Legacy changes.json must mirror default group 164606")
+          print(f"Validated per-group change files: {len(actual)}")
 
       - name: Install schedule changes view
         run: python inject_changes_view.py
@@ -145,19 +178,10 @@ jobs:
           if '<select class="group-picker" id="groupPickerButton"' not in html:
               raise SystemExit("native group selector is missing")
 
-          picker = re.search(
-              r'<select class="group-picker" id="groupPickerButton"[^>]*>(.*?)</select>',
-              html,
-              flags=re.S | re.I,
-          )
+          picker = re.search(r'<select class="group-picker" id="groupPickerButton"[^>]*>(.*?)</select>', html, flags=re.S | re.I)
           if not picker:
               raise SystemExit("Unable to isolate native group selector")
-
-          options = re.findall(
-              r'<option value="([^"]+)"(?: selected)?>(.*?)</option>',
-              picker.group(1),
-              flags=re.S | re.I,
-          )
+          options = re.findall(r'<option value="([^"]+)"(?: selected)?>(.*?)</option>', picker.group(1), flags=re.S | re.I)
           expected_ids = {str(group["id"]) for group in groups}
           option_ids = {value for value, _ in options}
           if option_ids != expected_ids:
@@ -166,14 +190,12 @@ jobs:
               raise SystemExit(f"Frontend group options mismatch; missing={missing[:10]} extra={extra[:10]}")
           if len(options) != len(groups):
               raise SystemExit(f"Frontend group option count mismatch: {len(options)} != {len(groups)}")
-
           if '<option value="164606" selected>' not in picker.group(1):
               raise SystemExit("Default group 164606 is missing from the native selector")
 
           scripts = re.findall(r"<script[^>]*>(.*?)</script>", html, flags=re.S | re.I)
           if not scripts:
               raise SystemExit("No inline scripts found")
-
           for index, script in enumerate(scripts):
               path = Path(f"/tmp/index-script-{index}.js")
               path.write_text(script, encoding="utf-8")
@@ -182,14 +204,12 @@ jobs:
                   print(result.stdout)
                   print(result.stderr)
                   raise SystemExit(f"JavaScript syntax error in inline script {index}")
-
           print(f"Validated one native group selector, {len(options)} group options and {len(scripts)} inline JavaScript blocks")
-          PY
 
       - name: Save schedule and changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add groups.json group_schedules.json group_schedules schedule.json changes.json index.html
+          git add groups.json group_schedules.json group_schedules group_schedules_previous changes_by_group changes.json schedule.json index.html
           git diff --cached --quiet || git commit -m "Update groups, schedules and changes"
           git push origin "HEAD:${{ github.event.pull_request.head.ref || github.ref_name }}"
