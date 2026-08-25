@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "date": "2026-09-01",
+    "beginLesson": "08:30",
+    "endLesson": "10:00",
+    "discipline": "Математика",
+    "lecturer": "Тестовый преподаватель",
+    "auditorium": "101",
+    "building": "1",
+    "detectedAt": "2026-08-25T00:00:00Z",
+    "fields": [
+      {
+        "field": "beginLesson",
+        "label": "Время начала",
+        "old": "08:30",
+        "new": "10:00"
+      },
+      {
+        "field": "auditorium",
+        "label": "Аудитория",
+        "old": "101",
+        "new": "205"
+      }
+    ]
+  }
+]
