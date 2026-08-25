@@ -9,9 +9,9 @@ BASE_URL = "https://ruz.fa.ru"
 SEARCH_URL = f"{BASE_URL}/api/search"
 OUTPUT_PATH = Path("groups.json")
 
-# RUZ search is intentionally used instead of hard-coding group IDs.
-# Set RUZ_GROUP_SEARCH to a narrower term when testing a subset of groups.
-SEARCH_TERM = os.getenv("RUZ_GROUP_SEARCH", "")
+# RUZ rejects an empty search string, so use the current configured group
+# as the safe default. Set RUZ_GROUP_SEARCH to another term when testing.
+SEARCH_TERM = os.getenv("RUZ_GROUP_SEARCH", "МеждОт25-2")
 
 
 def extract_items(data):
@@ -99,7 +99,7 @@ def save_groups(groups):
 
 
 if __name__ == "__main__":
-    print("Получаем список групп из РУЗ...")
+    print(f"Получаем список групп из РУЗ по запросу: {SEARCH_TERM}")
     groups = fetch_groups()
     save_groups(groups)
 
