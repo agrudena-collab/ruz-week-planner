@@ -14,6 +14,27 @@ OUTPUT_PATH = Path("groups.json")
 SEARCH_TERM = os.getenv("RUZ_GROUP_SEARCH", "")
 
 
+def extract_items(data):
+    """Normalize the different container shapes returned by RUZ search."""
+    if isinstance(data, list):
+        return data
+
+    if isinstance(data, dict):
+        for key in ("data", "results", "items", "groups", "list"):
+            value = data.get(key)
+            if isinstance(value, list):
+                return value
+
+        # Some APIs wrap the result one level deeper.
+        for value in data.values():
+            if isinstance(value, dict):
+                nested = extract_items(value)
+                if nested is not None:
+                    return nested
+
+    return None
+
+
 def fetch_groups():
     params = {
         "term": SEARCH_TERM,
@@ -28,18 +49,35 @@ def fetch_groups():
     response.raise_for_status()
 
     data = response.json()
-    if not isinstance(data, list):
-        raise RuntimeError("РУЗ вернул неожиданный формат списка групп.")
+    items = extract_items(data)
+
+    if items is None:
+        if isinstance(data, dict):
+            keys = ", ".join(map(str, data.keys()))
+            preview = json.dumps(data, ensure_ascii=False)[:500]
+            raise RuntimeError(
+                f"РУЗ вернул неожиданный формат. Ключи: {keys}. Ответ: {preview}"
+            )
+        raise RuntimeError(
+            f"РУЗ вернул неожиданный формат: {type(data).__name__}"
+        )
 
     groups = []
     seen_ids = set()
 
-    for item in data:
+    for item in items:
         if not isinstance(item, dict):
             continue
 
-        group_id = item.get("id")
-        name = (item.get("label") or item.get("name") or "").strip()
+        group_id = item.get("id") or item.get("groupId") or item.get("group_id")
+        name = (
+            item.get("label")
+            or item.get("name")
+            or item.get("title")
+            or item.get("groupName")
+            or ""
+        )
+        name = str(name).strip()
 
         if group_id is None or not name or group_id in seen_ids:
             continue
