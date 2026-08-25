@@ -4,6 +4,7 @@ from pathlib import Path
 
 INDEX = Path("index.html")
 GROUPS = Path("groups.json")
+MARKER = "/* GROUP_PICKER_NATIVE */"
 
 CSS = r'''/* GROUP_PICKER_NATIVE */
 .group-picker-wrap{
@@ -52,121 +53,132 @@ JS = r'''/* GROUP_PICKER_NATIVE */
   const TARGET_GROUP_ID = "164606";
   const STORAGE_KEY = "ruz.selectedGroupId";
   const select = document.getElementById("groupPickerButton");
-
-  // Bridge into the main non-module script. The closure can access its lexical
-  // schedule variable; assigning window.schedule would create a different value.
-  window.__ruzApp = window.__ruzApp || {};
-  window.__ruzApp.ready = false;
-  window.__ruzApp.setSchedule = function(lessons){
-    schedule = typeof sort === "function" ? sort(lessons || []) : (lessons || []);
-    archive = [];
-    if (typeof renderSchedule === "function") renderSchedule();
-    if (typeof renderStats === "function") renderStats();
-    if (typeof updateHero === "function") updateHero();
-  };
-  window.__ruzApp.restoreDefault = function(){
-    if (typeof loadAll === "function") loadAll();
-  };
-
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js", {
-      scope: "./",
-      updateViaCache: "none"
-    }).catch(() => {});
-  }
-
   if (!select || select.tagName !== "SELECT") return;
 
-  let loading = false;
+  function validGroupId(id){
+    return Array.from(select.options).some(
+      option => String(option.value) === String(id)
+    );
+  }
+
+  function selectedGroupId(){
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved && validGroupId(saved) ? String(saved) : TARGET_GROUP_ID;
+  }
 
   function setHeader(name){
     const label = document.querySelector(".group");
     if (label && name) label.textContent = name + " · РУЗ";
   }
 
-  async function loadGroup(id){
-    if (loading) return;
-    const option = Array.from(select.options).find(item => String(item.value) === String(id));
-    if (!option) return;
+  function groupUrl(id){
+    return "./group_schedules/" + encodeURIComponent(String(id)) + ".json?t=" + Date.now();
+  }
 
-    const selectedId = String(id);
-    localStorage.setItem(STORAGE_KEY, selectedId);
-    select.value = selectedId;
-    setHeader(option.textContent);
-
-    if (selectedId === TARGET_GROUP_ID) {
-      window.__ruzApp.restoreDefault();
-      return;
+  async function fetchGroupLessons(id){
+    const response = await fetch(groupUrl(id), {
+      cache: "no-store",
+      headers: { Accept: "application/json" }
+    });
+    if (!response.ok) throw new Error("Не удалось загрузить расписание выбранной группы");
+    const payload = await response.json();
+    if (!payload || !Array.isArray(payload.lessons)) {
+      throw new Error("Некорректный файл расписания группы");
     }
+    return payload.lessons;
+  }
 
-    loading = true;
-    select.disabled = true;
-    select.setAttribute("aria-busy", "true");
+  // Make the existing application loader group-aware BEFORE its boot call.
+  // This keeps every later refresh (including the 5-minute refresh) on the
+  // currently selected group instead of reverting to schedule.json/default.
+  const originalLoadSchedule = loadSchedule;
+  loadSchedule = async function(){
+    const id = selectedGroupId();
+    const button = $("refreshButton");
+    button.classList.add("loading");
+    button.textContent = "↻ Обновление...";
 
     try {
-      const response = await fetch(
-        "./group_schedules/" + encodeURIComponent(selectedId) + ".json?t=" + Date.now(),
-        { cache: "no-store", headers: { Accept: "application/json" } }
-      );
-      if (!response.ok) throw new Error("Не удалось загрузить расписание выбранной группы");
-      const payload = await response.json();
-      if (!payload || !Array.isArray(payload.lessons)) {
-        throw new Error("Некорректный файл расписания группы");
-      }
-      window.__ruzApp.setSchedule(payload.lessons);
+      const lessons = await fetchGroupLessons(id);
+      schedule = typeof sort === "function" ? sort(lessons) : lessons;
+      archive = [];
+      $("updated").textContent = "Обновлено в " + new Date().toLocaleTimeString("ru-RU", {hour:"2-digit", minute:"2-digit"});
+      renderSchedule();
     } catch (error) {
-      const status = document.getElementById("updated");
-      if (status) status.textContent = error.message || "Ошибка загрузки группы";
-      select.value = TARGET_GROUP_ID;
-      localStorage.setItem(STORAGE_KEY, TARGET_GROUP_ID);
+      // Preserve the existing default loader as a safe fallback for the
+      // default group if a per-group file is temporarily unavailable.
+      if (id === TARGET_GROUP_ID) {
+        await originalLoadSchedule();
+        return;
+      }
+      if (currentView !== "archive" && currentView !== "exams") {
+        $("schedule").innerHTML = `<div class="error"><strong>Не удалось загрузить расписание</strong> ${esc(error.message)}</div>`;
+      }
+      throw error;
     } finally {
-      loading = false;
+      button.classList.remove("loading");
+      button.textContent = "↻ Обновить";
+    }
+  };
+
+  window.__ruzApp = window.__ruzApp || {};
+  window.__ruzApp.loadGroup = async function(id){
+    const selectedId = String(id);
+    if (!validGroupId(selectedId)) return;
+    localStorage.setItem(STORAGE_KEY, selectedId);
+    select.value = selectedId;
+    const option = select.options[select.selectedIndex];
+    if (option) setHeader(option.textContent);
+
+    select.disabled = true;
+    select.setAttribute("aria-busy", "true");
+    try {
+      const lessons = await fetchGroupLessons(selectedId);
+      schedule = typeof sort === "function" ? sort(lessons) : lessons;
+      archive = [];
+      renderSchedule();
+      if (typeof renderStats === "function") renderStats();
+      if (typeof updateHero === "function") updateHero();
+    } finally {
       select.disabled = false;
       select.setAttribute("aria-busy", "false");
     }
-  }
+  };
 
   select.addEventListener("change", function(){
-    loadGroup(this.value);
+    window.__ruzApp.loadGroup(this.value).catch(() => {
+      select.value = TARGET_GROUP_ID;
+      localStorage.setItem(STORAGE_KEY, TARGET_GROUP_ID);
+      const option = select.options[select.selectedIndex];
+      if (option) setHeader(option.textContent);
+      window.__ruzApp.loadGroup(TARGET_GROUP_ID).catch(() => {});
+    });
   });
 
-  function restoreSaved(){
-    const saved = localStorage.getItem(STORAGE_KEY) || TARGET_GROUP_ID;
-    if (!Array.from(select.options).some(option => String(option.value) === String(saved))) {
-      localStorage.removeItem(STORAGE_KEY);
-      select.value = TARGET_GROUP_ID;
-      return;
-    }
-    select.value = String(saved);
+  function restoreSelected(){
+    const id = selectedGroupId();
+    select.value = id;
     const option = select.options[select.selectedIndex];
     if (option) setHeader(option.textContent);
-    if (String(saved) !== TARGET_GROUP_ID) loadGroup(saved);
+    localStorage.setItem(STORAGE_KEY, id);
+    return window.__ruzApp.loadGroup(id);
   }
 
-  document.addEventListener("ruz:schedule-ready", function(){
-    window.__ruzApp.ready = true;
-    restoreSaved();
-  }, { once: true });
-
-  setTimeout(() => {
-    if (!window.__ruzApp.ready) {
-      window.__ruzApp.ready = true;
-      restoreSaved();
-    }
-  }, 3000);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => restoreSelected().catch(() => {}), { once:true });
+  } else {
+    restoreSelected().catch(() => {});
+  }
 })();
 '''
 
 
-def remove_marked_css(text):
-    return re.sub(r"\n?/\* GROUP_PICKER_VIEW \*/.*?(?=\n\s*</style>)", "", text, flags=re.S)
-
-
-def remove_marked_js(text):
-    return re.sub(r"\n?/\* GROUP_PICKER_VIEW \*/.*?(?=\n\s*</script>)", "", text, flags=re.S)
-
-
-def remove_marked_html(text):
+def remove_generated(text):
+    # Remove all prior native picker CSS/JS blocks and the old generated view.
+    text = re.sub(r"\n?/\* GROUP_PICKER_NATIVE \*/.*?(?=\n\s*</style>)", "", text, flags=re.S)
+    text = re.sub(r"\n?/\* GROUP_PICKER_NATIVE \*/.*?(?=\n\s*</script>)", "", text, flags=re.S)
+    text = re.sub(r"\n?/\* GROUP_PICKER_VIEW \*/.*?(?=\n\s*</style>)", "", text, flags=re.S)
+    text = re.sub(r"\n?/\* GROUP_PICKER_VIEW \*/.*?(?=\n\s*</script>)", "", text, flags=re.S)
     while "<!-- GROUP_PICKER_VIEW -->" in text:
         start = text.rfind("<!-- GROUP_PICKER_VIEW -->")
         end = text.find("</body>", start)
@@ -176,85 +188,62 @@ def remove_marked_html(text):
     return text
 
 
-def build_options(groups, selected_id):
+def build_options(groups):
     options = []
     for group in groups:
         gid = str(group["id"])
         name = str(group["name"])
-        selected = " selected" if gid == selected_id else ""
         safe_name = (
             name.replace("&", "&amp;")
             .replace("<", "&lt;")
             .replace(">", "&gt;")
             .replace('"', "&quot;")
         )
+        selected = " selected" if gid == "164606" else ""
         options.append(f'        <option value="{gid}"{selected}>{safe_name}</option>')
     return "\n".join(options)
 
 
-text = INDEX.read_text(encoding="utf-8")
+text = remove_generated(INDEX.read_text(encoding="utf-8"))
 groups = json.loads(GROUPS.read_text(encoding="utf-8"))
 if not isinstance(groups, list) or not groups:
     raise SystemExit("groups.json must contain a non-empty array")
 
-selected_id = str(next((g["id"] for g in groups if str(g["id"]) == "164606"), groups[0]["id"]))
+options = build_options(groups)
 
-text = remove_marked_css(text)
-text = remove_marked_js(text)
-text = remove_marked_html(text)
-
-old_button = re.compile(r'<button class="group-picker" id="groupPickerButton" type="button">.*?</button>', flags=re.S)
+# Replace either the old button or an existing native select with one canonical select.
+old_button = re.compile(r'<button class="group-picker" id="groupPickerButton" type="button">.*?</button>', re.S)
+old_select = re.compile(r'<select class="group-picker" id="groupPickerButton".*?</select>', re.S)
 new_control = (
     '<div class="group-picker-wrap">\n'
     '      <select class="group-picker" id="groupPickerButton" aria-label="Выбор учебной группы">\n'
-    + build_options(groups, selected_id)
+    + options
     + '\n      </select>\n'
     '</div>'
 )
 
 if old_button.search(text):
     text = old_button.sub(new_control, text, count=1)
+elif old_select.search(text):
+    text = old_select.sub(new_control, text, count=1)
 elif 'id="groupPickerButton"' not in text:
     needle = '      <div class="group">\n        МеждОт25-2 · РУЗ\n      </div>'
     if needle not in text:
         raise SystemExit("group header markup not found")
     text = text.replace(needle, needle + "\n\n" + new_control, 1)
-else:
-    text = re.sub(
-        r'<select class="group-picker" id="groupPickerButton".*?</select>',
-        '<select class="group-picker" id="groupPickerButton" aria-label="Выбор учебной группы">\n'
-        + build_options(groups, selected_id)
-        + '\n      </select>',
-        text,
-        count=1,
-        flags=re.S,
-    )
 
-# Install a bridge in the main script before its initial loadAll() call.
-bridge_anchor = 'window.__ruzApp = window.__ruzApp || {};'
-if bridge_anchor not in text:
-    last_load = text.rfind("loadAll();")
-    if last_load < 0:
-        raise SystemExit("initial loadAll(); call not found")
-    readiness = '''window.__ruzApp = window.__ruzApp || {};\nwindow.__ruzApp.ready = false;\nwindow.__ruzApp.setSchedule = function(lessons){\n  schedule = typeof sort === "function" ? sort(lessons || []) : (lessons || []);\n  archive = [];\n  if (typeof renderSchedule === "function") renderSchedule();\n  if (typeof renderStats === "function") renderStats();\n  if (typeof updateHero === "function") updateHero();\n};\nwindow.__ruzApp.restoreDefault = function(){\n  if (typeof loadAll === "function") loadAll();\n};\n\n'''
-    text = text[:last_load] + readiness + text[last_load:]
-
-# The final loadAll(); in the file is the real boot call; the bridge above also contains
-# a loadAll(); reference, so use rfind rather than find here.
-boot_load = text.rfind("loadAll();")
-if boot_load >= 0:
-    replacement = '''loadAll().then(() => {\n  window.__ruzApp.ready = true;\n  document.dispatchEvent(new Event("ruz:schedule-ready"));\n}).catch(() => {\n  window.__ruzApp.ready = true;\n  document.dispatchEvent(new Event("ruz:schedule-ready"));\n});'''
-    text = text[:boot_load] + replacement + text[boot_load + len("loadAll();"):]
-
-style_pos = text.rfind("</style>")
+# Insert exactly one canonical CSS block.
+style_pos = text.find("</style>")
 if style_pos < 0:
     raise SystemExit("</style> not found")
 text = text[:style_pos] + "\n" + CSS + "\n" + text[style_pos:]
 
-script_pos = text.rfind("</script>")
-if script_pos < 0:
-    raise SystemExit("</script> not found")
-text = text[:script_pos] + "\n" + JS + "\n" + text[script_pos:]
+# Insert the picker block immediately before the real boot call.  Do not use a
+# generic find('loadAll();'): the source contains other references to loadAll.
+boot_match = re.search(r'loadAll\(\)\.then\(\(\) => \{', text)
+if not boot_match:
+    raise SystemExit("real loadAll().then(...) boot call not found")
+text = text[:boot_match.start()] + JS + "\n\n" + text[boot_match.start():]
 
 INDEX.write_text(text, encoding="utf-8")
-print(f"Installed native group selector for {len(groups)} groups")
+print(f"Installed exactly one native group picker for {len(groups)} groups")
