@@ -1047,6 +1047,11 @@ button,input,select{font:inherit}
   pointer-events:auto;
   touch-action:manipulation;
   -webkit-tap-highlight-color:transparent;
+  position:relative;
+  z-index:130;
+  pointer-events:auto;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
   margin-top:7px;
   display:inline-flex;
   align-items:center;
@@ -1065,6 +1070,7 @@ button,input,select{font:inherit}
 .group-picker span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .group-picker-arrow{color:#8e96a8}
 .group-picker-backdrop{
+  z-index:1000;
   z-index:1000;
   position:fixed;
   inset:0;
