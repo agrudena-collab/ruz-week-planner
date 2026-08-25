@@ -1040,74 +1040,45 @@ button,input,select{font:inherit}
 
 
 
-/* GROUP_PICKER_VIEW */
-.group-picker{
+
+
+/* GROUP_PICKER_NATIVE */
+.group-picker-wrap{
   position:relative;
-  z-index:130;
-  pointer-events:auto;
-  touch-action:manipulation;
-  -webkit-tap-highlight-color:transparent;
-  position:relative;
-  z-index:130;
-  pointer-events:auto;
-  touch-action:manipulation;
-  -webkit-tap-highlight-color:transparent;
   margin-top:7px;
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  max-width:min(360px,78vw);
+  width:min(360px,78vw);
+}
+.group-picker{
+  width:100%;
+  min-height:38px;
+  appearance:auto;
+  -webkit-appearance:auto;
   border:1px solid rgba(255,255,255,.10);
   border-radius:12px;
-  padding:7px 10px;
+  padding:7px 34px 7px 10px;
   background:rgba(255,255,255,.045);
   color:#cbd1dd;
   font-size:13px;
   font-weight:750;
   cursor:pointer;
+  touch-action:manipulation;
 }
-.group-picker:hover{background:rgba(255,255,255,.07);color:#fff}
-.group-picker span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.group-picker-arrow{color:#8e96a8}
-.group-picker-backdrop{
-  z-index:1000;
-  z-index:1000;
-  position:fixed;
-  inset:0;
-  z-index:125;
-  display:none;
-  align-items:flex-end;
-  justify-content:center;
-  padding:14px;
-  background:rgba(0,0,0,.62);
-  backdrop-filter:blur(9px);
+.group-picker:focus{
+  outline:2px solid rgba(66,217,255,.35);
+  outline-offset:2px;
 }
-.group-picker-backdrop.open{display:flex}
-.group-picker-panel{
-  width:min(620px,100%);
-  max-height:min(82vh,720px);
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:26px;
-  background:linear-gradient(160deg,#111624,#090b12);
-  box-shadow:0 30px 90px rgba(0,0,0,.55);
+.group-picker-wrap::after{
+  content:"⌄";
+  position:absolute;
+  right:11px;
+  top:50%;
+  transform:translateY(-52%);
+  color:#8e96a8;
+  pointer-events:none;
 }
-.group-picker-head{padding:18px 18px 12px;border-bottom:1px solid rgba(255,255,255,.07)}
-.group-picker-head-row{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.group-picker-title{font-size:22px;font-weight:900}
-.group-picker-close{border:1px solid rgba(255,255,255,.10);border-radius:12px;background:rgba(255,255,255,.06);color:#fff;padding:8px 11px;cursor:pointer}
-.group-picker-search{width:100%;margin-top:12px;border:1px solid rgba(255,255,255,.09);border-radius:13px;background:rgba(255,255,255,.045);color:#fff;padding:11px 12px;outline:none}
-.group-picker-search::placeholder{color:#697184}
-.group-picker-status{padding:10px 18px;color:#8e96a8;font-size:12px}
-.group-picker-list{max-height:calc(min(82vh,720px) - 145px);overflow:auto;padding:0 10px 12px}
-.group-picker-item{width:100%;display:block;text-align:left;border:1px solid transparent;border-radius:13px;background:transparent;color:#cbd1dd;padding:11px 12px;margin:3px 0;cursor:pointer}
-.group-picker-item:hover{background:rgba(255,255,255,.055);color:#fff}
-.group-picker-item.active{background:rgba(79,140,255,.12);border-color:rgba(79,140,255,.22);color:#fff}
-.group-picker-id{display:block;color:#697184;font-size:10px;margin-top:3px}
-@media (max-width:640px){
-  .group-picker-backdrop{padding:0}
-  .group-picker-panel{border-radius:24px 24px 0 0;max-height:88vh}
-  .group-picker-list{max-height:calc(88vh - 145px)}
+@media(max-width:640px){
+  .group-picker-wrap{width:min(330px,82vw)}
+  .group-picker{min-height:42px;font-size:14px}
 }
 
 </style>
@@ -1223,10 +1194,176 @@ button,input,select{font:inherit}
         МеждОт25-2 · РУЗ
       </div>
 
-      <button class="group-picker" id="groupPickerButton" type="button">
-        <span>МеждОт25-2</span>
-        <span class="group-picker-arrow">⌄</span>
-      </button>
+      <div class="group-picker-wrap">
+      <select class="group-picker" id="groupPickerButton" aria-label="Выбор учебной группы">
+        <option value="164336">002877_5 Информационные торговые системы в меж - 1</option>
+        <option value="162026">003757_4 Модуль &quot;Международные финансы для уст - 1</option>
+        <option value="162037">003758_4 Модуль &quot;Международный бизнес и устойч - 1</option>
+        <option value="162038">003758_4 Модуль &quot;Международный бизнес и устойч - 2</option>
+        <option value="162039">003758_4 Модуль &quot;Международный бизнес и устойч - 3</option>
+        <option value="162040">003758_4 Модуль &quot;Международный бизнес и устойч - 4</option>
+        <option value="162035">003758_4 Модуль &quot;Мировая экономика&quot; - 1</option>
+        <option value="162036">003758_4 Модуль &quot;Мировая экономика&quot; - 2</option>
+        <option value="162061">003760_4 Модуль &quot;Экономическая дипломатия&quot; (на - 1</option>
+        <option value="162062">003760_4 Модуль &quot;Экономическая дипломатия&quot; (на - 2</option>
+        <option value="162064">003761_4 Модуль &quot;Международная торговля и поли - 1</option>
+        <option value="162477">003790_4 Модуль &quot;Графический дизайн и компьюте - 1</option>
+        <option value="162478">003790_4 Модуль &quot;Графический дизайн и компьюте - 2</option>
+        <option value="162487">003793_4 Модуль &quot;Экономическая политика&quot; - 1</option>
+        <option value="162500">003795_4 Модуль &quot;Психология бизнеса&quot; - 1</option>
+        <option value="162498">003795_4 Модуль &quot;Этика управления&quot; - 1</option>
+        <option value="162453">003798_4 Модуль &quot;Акционерное право&quot; - 1</option>
+        <option value="162458">003798_4 Модуль &quot;Банкротное право&quot; - 1</option>
+        <option value="162459">003798_4 Модуль &quot;Банкротное право&quot; - 2</option>
+        <option value="162447">003798_4 Модуль &quot;Право цифровой экономики&quot; - 1</option>
+        <option value="162448">003798_4 Модуль &quot;Право цифровой экономики&quot; - 2</option>
+        <option value="162469">003800_4 Модуль &quot;Банкротное право&quot; - 1</option>
+        <option value="162505">003805_4 Модуль &quot;Маркетинговые коммуникации&quot; - 1</option>
+        <option value="162506">003805_4 Модуль &quot;Маркетинговые коммуникации&quot; - 2</option>
+        <option value="162507">003805_4 Модуль &quot;Маркетинговые коммуникации&quot; - 3</option>
+        <option value="162317">003810_4 Модуль &quot;Государственные закупки&quot; - 1</option>
+        <option value="162318">003810_4 Модуль &quot;Государственные закупки&quot; - 2</option>
+        <option value="162319">003810_4 Модуль &quot;Государственные закупки&quot; - 3</option>
+        <option value="162321">003810_4 Модуль &quot;Информационные технологии&quot; - 1</option>
+        <option value="162323">003810_4 Модуль &quot;Математика&quot; - 1</option>
+        <option value="162333">003810_4 Модуль &quot;Эффективное государство&quot; - 1</option>
+        <option value="162335">003810_4 Модуль &quot;Эффективное государство&quot; - 2</option>
+        <option value="162337">003811_4 Модуль &quot;Корпоративный риск-менеджмент - 1</option>
+        <option value="162341">003812_4 Модуль &quot;Государственный аудит&quot; - 1</option>
+        <option value="162354">003825_4 Модуль &quot;Эффективное государство&quot; - 1</option>
+        <option value="162207">003831_4 Модуль &quot;ИТ-менеджмент&quot; - 1</option>
+        <option value="162208">003831_4 Модуль &quot;ИТ-менеджмент&quot; - 2</option>
+        <option value="162356">003836_4 Модуль &quot;Биржевая торговля&quot; - 1</option>
+        <option value="162358">003836_4 Модуль &quot;Биржевая торговля&quot; - 2</option>
+        <option value="162143">003840_4 Модуль &quot;Бизнес коммуникации&quot; - 1</option>
+        <option value="162145">003841_4 Модуль &quot;Инновационный маркетинг&quot; - 1</option>
+        <option value="162144">003841_4 Модуль &quot;Маркетинговые коммуникации&quot; - 1</option>
+        <option value="162148">003842_4 Модуль &quot;Международная квалификация CI - 1</option>
+        <option value="162149">003842_4 Модуль &quot;Международная квалификация CI - 2</option>
+        <option value="162150">003842_4 Модуль &quot;Международная квалификация CI - 3</option>
+        <option value="162067">003843_4 Модуль &quot;Информационные технологии в п - 1</option>
+        <option value="162068">003843_4 Модуль &quot;Экономика и финансы&quot; - 1</option>
+        <option value="162664">003851_4 Модуль &quot;Информационные технологии в п - 1</option>
+        <option value="162665">003851_4 Модуль &quot;Информационные технологии в п - 2</option>
+        <option value="162670">003852_4 Модуль &quot;Информационные технологии в п - 1</option>
+        <option value="162224">003884_4 Модуль &quot;Стохастическая математика&quot; - 1</option>
+        <option value="161994">003891_4 Модуль &quot;Методы и инструменты в логист - 1</option>
+        <option value="161995">003905_4 Модуль &quot;Ресторанный бизнес&quot; - 1</option>
+        <option value="162000">003940_4 Модуль &quot;Эффективность бизнеса&quot; - 1</option>
+        <option value="162004">003943_4 Модуль &quot;Эффективность бизнеса&quot; - 1</option>
+        <option value="162005">003943_4 Модуль &quot;Эффективность бизнеса&quot; - 2</option>
+        <option value="162683">003966_4 Модуль &quot;Информационные технологии в п - 1</option>
+        <option value="161953">004010_4 Модуль &quot;Инвестиционный менеджмент&quot; - 1</option>
+        <option value="161955">004011_4 Модуль &quot;Маркетинговая аналитика&quot; - 1</option>
+        <option value="161963">004019_4 Модуль &quot;Информационные технологии в п - 1</option>
+        <option value="162370">004049_4 Модуль &quot;Эффективное государство&quot; - 1</option>
+        <option value="162074">005205_3 Модуль &quot;Экономическая дипломатия&quot; - 1</option>
+        <option value="162075">005205_3 Модуль &quot;Экономическая дипломатия&quot; - 2</option>
+        <option value="162076">005205_3 Модуль &quot;Экономическая дипломатия&quot; - 3</option>
+        <option value="162160">005225_3 Модуль &quot;Маркетинг менеджмент (на англ - 1</option>
+        <option value="162684">005236_3 Модуль &quot;Информационные технологии в п - 1</option>
+        <option value="162685">005236_3 Модуль &quot;Информационные технологии в п - 2</option>
+        <option value="162691">005238_3 Модуль &quot;Информационные технологии в п - 1</option>
+        <option value="162169">005247_3 Модуль &quot;Государственное управление со - 1</option>
+        <option value="162374">005303_3 Модуль &quot;Государственные закупки&quot; - 1</option>
+        <option value="162376">005303_3 Модуль &quot;Государственные закупки&quot; - 2</option>
+        <option value="162378">005303_3 Модуль &quot;Информационные технологии&quot; - 1</option>
+        <option value="162380">005303_3 Модуль &quot;Математика&quot; - 1</option>
+        <option value="162386">005303_3 Модуль &quot;Эффективное государство&quot; - 1</option>
+        <option value="162387">005303_3 Модуль &quot;Эффективное государство&quot; - 2</option>
+        <option value="162389">005304_3 Модуль &quot;Корпоративный риск-менеджмент - 1</option>
+        <option value="162174">005317_3 Модуль &quot;Маркетинговая аналитика&quot; - 1</option>
+        <option value="162391">005329_3 Модуль &quot;Биржевая торговля&quot; - 1</option>
+        <option value="162281">005338_3 Модуль &quot;Data Science для бизнеса&quot; - 1</option>
+        <option value="162289">005342_3 Модуль &quot;Data Science для бизнеса&quot; - 1</option>
+        <option value="162305">005345_3 Модуль &quot;Data Science для бизнеса&quot; - 1</option>
+        <option value="162023">005358_3 Модуль &quot;Ресторанный бизнес&quot; - 1</option>
+        <option value="162540">005362_3 Модуль &quot;Графический дизайн и компьюте - 1</option>
+        <option value="162542">005362_3 Модуль &quot;Графический дизайн и компьюте - 2</option>
+        <option value="162549">005365_3 Модуль &quot;Экономическая политика&quot; - 1</option>
+        <option value="162556">005368_3 Модуль &quot;Психология бизнеса&quot; - 1</option>
+        <option value="162555">005368_3 Модуль &quot;Этика управления&quot; - 1</option>
+        <option value="162569">005373_3 Модуль &quot;Маркетинговые коммуникации&quot; - 1</option>
+        <option value="162570">005373_3 Модуль &quot;Маркетинговые коммуникации&quot; - 2</option>
+        <option value="162572">005373_3 Модуль &quot;Маркетинговые коммуникации&quot; - 3</option>
+        <option value="162025">005381_3 Модуль &quot;Цифровые технологии в логисти - 1</option>
+        <option value="161968">005473_3 Модуль &quot;Государственные закупки&quot; - 1</option>
+        <option value="161975">005486_3 Модуль &quot;Инвестиционный менеджмент&quot; - 1</option>
+        <option value="162397">005555_3 Модуль &quot;Эффективное государство&quot; - 1</option>
+        <option value="161762">006038_2 Геополитика и геоэкономика - 1</option>
+        <option value="161764">006038_2 Международная торговля и таможенные к - 1</option>
+        <option value="161768">006038_2 Практикум &quot;Деятельность торговых пред - 1</option>
+        <option value="161789">006041_2 Практикум &quot;Международные торговые пер - 1</option>
+        <option value="161790">006041_2 Риск-менеджмент в международной эконо - 1</option>
+        <option value="161605">006051_2 Банковский маркетинг - 1</option>
+        <option value="161612">006053_2 Портфельное управление - 1</option>
+        <option value="161682">006058_2 Корпоративное право - 1</option>
+        <option value="161688">006058_2 Международные инвестиции - 1</option>
+        <option value="161683">006058_2 Налоговый менеджмент компаний - 1</option>
+        <option value="162582">006067_2 Event-маркетинг (организация мероприя - 1</option>
+        <option value="162583">006067_2 Коммьюнити-менеджмент - 1</option>
+        <option value="162418">006083_2 Реорганизация бизнеса - 1</option>
+        <option value="162414">006083_2 Современные бизнес-модели - 1</option>
+        <option value="162424">006084_2 Экономическая экспертиза - 1</option>
+        <option value="161664">006096_2 Прикладные модели и методы компьютерн - 1</option>
+        <option value="161665">006097_2 Информационное противоборство - 1</option>
+        <option value="161666">006097_2 Информационное противоборство - 2</option>
+        <option value="161812">006098_2 Финансово-экономическая экспертиза - 1</option>
+        <option value="161708">006109_2 Event-менеджмент в спортивной индустр - 1</option>
+        <option value="161711">006109_2 Управление в киберспорте - 1</option>
+        <option value="161721">006110_2 Международное предпринимательство - 1</option>
+        <option value="161722">006110_2 Международное предпринимательство - 2</option>
+        <option value="162622">006119_2 Оценка стоимости бизнеса - 1</option>
+        <option value="162643">006121_2 Стратегический анализ и риск-менеджме - 1</option>
+        <option value="161737">006128_2 Управление продажами - 1</option>
+        <option value="161745">006129_2 Цифровой маркетинг - 1</option>
+        <option value="161827">006139_2 Маркетинг курортных дестинаций - 1</option>
+        <option value="161828">006139_2 Менеджмент качества в туризме и госте - 1</option>
+        <option value="161676">006145_2 Аудит информационных систем - 1</option>
+        <option value="161672">006145_2 Маркетинг информационных технологий - 1</option>
+        <option value="162608">006148_2 Управление талантами - 1</option>
+        <option value="161625">006157_2 Управление данными и Big Data - 1</option>
+        <option value="161865">006177_2 Международные стандарты аудита - 1</option>
+        <option value="161880">006179_2 Цифровая логистика - 1</option>
+        <option value="161879">006179_2 Цифровой маркетинг - 1</option>
+        <option value="161888">006180_2 Управление командами - 1</option>
+        <option value="161892">006180_2 Управление спросом - 1</option>
+        <option value="161898">006181_2 Корпоративное право - 1</option>
+        <option value="161906">006181_2 Международные инвестиции - 1</option>
+        <option value="161900">006181_2 Налоговый менеджмент компаний - 1</option>
+        <option value="162178">006245_3 Модуль &quot;Психология менеджмента&quot; - 1</option>
+        <option value="161938">006337_2 Современные бизнес-модели - 1</option>
+        <option value="161799">006829_1 Практикум &quot;Международные торговые пер - 1</option>
+        <option value="161800">006829_1 Практикум &quot;Международные торговые пер - 2</option>
+        <option value="161806">006831_1 Международное страховое дело - 1</option>
+        <option value="164399">МеждОт24-1</option>
+        <option value="164400">МеждОт24-2</option>
+        <option value="164605">МеждОт25-1</option>
+        <option value="164606" selected>МеждОт25-2</option>
+        <option value="164958">МеждОт25-3</option>
+        <option value="164987">МеждОт25-4</option>
+        <option value="164769">МеждЭБ25-1м</option>
+        <option value="164768">МеждЭБ25-2м</option>
+        <option value="165479">МеждЭБ25-2м; МеждЭБ25-1м</option>
+        <option value="165223">МеждЭБ26-1м</option>
+        <option value="165224">МеждЭБ26-2м</option>
+        <option value="161875">ФИН22-1в</option>
+        <option value="161877">ФИН22-2в</option>
+        <option value="162708">ФИН23-1в</option>
+        <option value="162710">ФИН23-2в</option>
+        <option value="164448">ФИН24-1в</option>
+        <option value="164449">ФИН24-2в</option>
+        <option value="164441">Фин24-3а</option>
+        <option value="164451">Фин24-4а</option>
+        <option value="164691">ФИН25-1в</option>
+        <option value="164993">ФИН25-2в</option>
+        <option value="164946">Фин25-3а</option>
+        <option value="164943">Фин25-4а</option>
+        <option value="164937">Фин25-6а</option>
+        <option value="165405">ФИН26-1в</option>
+        <option value="165406">ФИН26-2в</option>
+      </select>
+</div>
 
     </div>
 
@@ -4629,7 +4766,26 @@ $(
    START
 ========================= */
 
-loadAll();
+window.__ruzApp = window.__ruzApp || {};
+window.__ruzApp.ready = false;
+window.__ruzApp.setSchedule = function(lessons){
+  schedule = typeof sort === "function" ? sort(lessons || []) : (lessons || []);
+  archive = [];
+  if (typeof renderSchedule === "function") renderSchedule();
+  if (typeof renderStats === "function") renderStats();
+  if (typeof updateHero === "function") updateHero();
+};
+window.__ruzApp.restoreDefault = function(){
+  if (typeof loadAll === "function") loadAll();
+};
+
+loadAll().then(() => {
+  window.__ruzApp.ready = true;
+  document.dispatchEvent(new Event("ruz:schedule-ready"));
+}).catch(() => {
+  window.__ruzApp.ready = true;
+  document.dispatchEvent(new Event("ruz:schedule-ready"));
+});
 
 
 /* =========================
@@ -4740,184 +4896,117 @@ document.addEventListener("DOMContentLoaded", function(){
 
 
 
-/* GROUP_PICKER_VIEW */
+
+
+/* GROUP_PICKER_NATIVE */
 (function(){
   "use strict";
 
   const TARGET_GROUP_ID = "164606";
-  const TARGET_GROUP_NAME = "МеждОт25-2";
-  const storageKey = "ruz.selectedGroupId";
-  let catalog = [];
-  let schedules = {};
-  let selectedId = TARGET_GROUP_ID;
+  const STORAGE_KEY = "ruz.selectedGroupId";
+  const select = document.getElementById("groupPickerButton");
 
-  const get = id => document.getElementById(id);
+  // Bridge into the main non-module script. The closure can access its lexical
+  // schedule variable; assigning window.schedule would create a different value.
+  window.__ruzApp = window.__ruzApp || {};
+  window.__ruzApp.ready = false;
+  window.__ruzApp.setSchedule = function(lessons){
+    schedule = typeof sort === "function" ? sort(lessons || []) : (lessons || []);
+    archive = [];
+    if (typeof renderSchedule === "function") renderSchedule();
+    if (typeof renderStats === "function") renderStats();
+    if (typeof updateHero === "function") updateHero();
+  };
+  window.__ruzApp.restoreDefault = function(){
+    if (typeof loadAll === "function") loadAll();
+  };
 
-  function esc(value){
-    return String(value ?? "").replace(/[&<>\"']/g, ch => ({
-      "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;", "'":"&#39;"
-    }[ch]));
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js", {
+      scope: "./",
+      updateViaCache: "none"
+    }).catch(() => {});
   }
 
-  function readStored(){
-    try { return localStorage.getItem(storageKey) || TARGET_GROUP_ID; }
-    catch (_) { return TARGET_GROUP_ID; }
-  }
+  if (!select || select.tagName !== "SELECT") return;
 
-  function writeStored(id){
-    try { localStorage.setItem(storageKey, id); } catch (_) {}
-  }
+  let loading = false;
 
   function setHeader(name){
     const label = document.querySelector(".group");
-    const button = get("groupPickerButton");
-    const changes = get("scheduleChangesButton");
-    const value = name || TARGET_GROUP_NAME;
-    if(label) label.textContent = value + " · РУЗ";
-    if(button){
-      const span = button.querySelector("span:first-child");
-      if(span) span.textContent = value;
-    }
-    if(changes) changes.style.display = String(selectedId) === TARGET_GROUP_ID ? "" : "none";
+    if (label && name) label.textContent = name + " · РУЗ";
   }
 
-  function openPicker(){
-    const backdrop = get("groupPickerBackdrop");
-    if(!backdrop) return;
-    backdrop.classList.add("open");
-    backdrop.setAttribute("aria-hidden", "false");
-    backdrop.style.display = "flex";
-    document.body.style.overflow = "hidden";
-    renderList();
-    const search = get("groupPickerSearch");
-    if(search) setTimeout(() => search.focus(), 0);
-  }
+  async function loadGroup(id){
+    if (loading) return;
+    const option = Array.from(select.options).find(item => String(item.value) === String(id));
+    if (!option) return;
 
-  function closePicker(){
-    const backdrop = get("groupPickerBackdrop");
-    if(!backdrop) return;
-    backdrop.classList.remove("open");
-    backdrop.setAttribute("aria-hidden", "true");
-    backdrop.style.display = "none";
-    document.body.style.overflow = "";
-  }
+    const selectedId = String(id);
+    localStorage.setItem(STORAGE_KEY, selectedId);
+    select.value = selectedId;
+    setHeader(option.textContent);
 
-  // Capture-phase delegation makes the control independent of script order and
-  // survives any later DOM replacement by the schedule renderer.
-  document.addEventListener("click", event => {
-    const target = event.target && event.target.closest ? event.target.closest("#groupPickerButton") : null;
-    if(target){
-      event.preventDefault();
-      event.stopPropagation();
-      openPicker();
+    if (selectedId === TARGET_GROUP_ID) {
+      window.__ruzApp.restoreDefault();
       return;
     }
 
-    const close = event.target && event.target.closest ? event.target.closest("#groupPickerClose") : null;
-    if(close){
-      event.preventDefault();
-      closePicker();
-      return;
-    }
+    loading = true;
+    select.disabled = true;
+    select.setAttribute("aria-busy", "true");
 
-    const item = event.target && event.target.closest ? event.target.closest("[data-group-id]") : null;
-    if(item){
-      event.preventDefault();
-      selectGroup(item.getAttribute("data-group-id"));
-      return;
-    }
-
-    if(event.target === get("groupPickerBackdrop")) closePicker();
-  }, true);
-
-  document.addEventListener("keydown", event => {
-    if(event.key === "Escape") closePicker();
-  });
-
-  document.addEventListener("input", event => {
-    if(event.target && event.target.id === "groupPickerSearch") renderList();
-  });
-
-  function renderList(){
-    const list = get("groupPickerList");
-    const status = get("groupPickerStatus");
-    const search = get("groupPickerSearch");
-    if(!list || !status) return;
-
-    const query = search ? search.value.trim().toLowerCase() : "";
-    const items = catalog.filter(group => !query || String(group.name || "").toLowerCase().includes(query));
-    status.textContent = catalog.length ? `${items.length} из ${catalog.length} групп` : "Загрузка групп…";
-    list.innerHTML = items.slice(0,250).map(group =>
-      `<button class="group-picker-item ${String(group.id) === String(selectedId) ? "active" : ""}" data-group-id="${esc(group.id)}" type="button">${esc(group.name)}<span class="group-picker-id">ID ${esc(group.id)}</span></button>`
-    ).join("");
-    if(items.length > 250) status.textContent += " · показаны первые 250";
-  }
-
-  async function loadData(){
-    try{
-      const [groupsResponse, schedulesResponse] = await Promise.all([
-        fetch("./groups.json?t=" + Date.now(), {cache:"no-store"}),
-        fetch("./group_schedules.json?t=" + Date.now(), {cache:"no-store"})
-      ]);
-      if(!groupsResponse.ok) throw new Error("Не удалось загрузить groups.json");
-      if(!schedulesResponse.ok) throw new Error("Не удалось загрузить group_schedules.json");
-
-      const groups = await groupsResponse.json();
-      const payload = await schedulesResponse.json();
-      catalog = Array.isArray(groups) ? groups : [];
-      schedules = payload && payload.groups && typeof payload.groups === "object" ? payload.groups : {};
-
-      if(!catalog.some(group => String(group.id) === String(selectedId))){
-        selectedId = TARGET_GROUP_ID;
-        writeStored(selectedId);
+    try {
+      const response = await fetch(
+        "./group_schedules/" + encodeURIComponent(selectedId) + ".json?t=" + Date.now(),
+        { cache: "no-store", headers: { Accept: "application/json" } }
+      );
+      if (!response.ok) throw new Error("Не удалось загрузить расписание выбранной группы");
+      const payload = await response.json();
+      if (!payload || !Array.isArray(payload.lessons)) {
+        throw new Error("Некорректный файл расписания группы");
       }
-
-      const selected = catalog.find(group => String(group.id) === String(selectedId));
-      setHeader(selected ? selected.name : TARGET_GROUP_NAME);
-      renderList();
-      if(String(selectedId) !== TARGET_GROUP_ID) applySelectedSchedule(false);
-      const status = get("groupPickerStatus");
-      if(status) status.textContent = `${catalog.length} групп доступно`;
-    }catch(error){
-      const status = get("groupPickerStatus");
-      const list = get("groupPickerList");
-      if(status) status.textContent = error.message || "Ошибка загрузки групп";
-      if(list) list.innerHTML = "";
+      window.__ruzApp.setSchedule(payload.lessons);
+    } catch (error) {
+      const status = document.getElementById("updated");
+      if (status) status.textContent = error.message || "Ошибка загрузки группы";
+      select.value = TARGET_GROUP_ID;
+      localStorage.setItem(STORAGE_KEY, TARGET_GROUP_ID);
+    } finally {
+      loading = false;
+      select.disabled = false;
+      select.setAttribute("aria-busy", "false");
     }
   }
 
-  function applySelectedSchedule(hideAfter){
-    const item = schedules[String(selectedId)];
-    if(!item || !Array.isArray(item.lessons) || !item.lessons.length){
-      const status = get("groupPickerStatus");
-      if(status) status.textContent = "Для этой группы расписание пока не загружено";
+  select.addEventListener("change", function(){
+    loadGroup(this.value);
+  });
+
+  function restoreSaved(){
+    const saved = localStorage.getItem(STORAGE_KEY) || TARGET_GROUP_ID;
+    if (!Array.from(select.options).some(option => String(option.value) === String(saved))) {
+      localStorage.removeItem(STORAGE_KEY);
+      select.value = TARGET_GROUP_ID;
       return;
     }
-
-    if(typeof window.sort === "function") window.schedule = window.sort(item.lessons);
-    else window.schedule = item.lessons;
-    window.archive = [];
-    if(typeof window.renderSchedule === "function") window.renderSchedule();
-    if(hideAfter) closePicker();
+    select.value = String(saved);
+    const option = select.options[select.selectedIndex];
+    if (option) setHeader(option.textContent);
+    if (String(saved) !== TARGET_GROUP_ID) loadGroup(saved);
   }
 
-  function selectGroup(id){
-    const group = catalog.find(item => String(item.id) === String(id));
-    if(!group) return;
-    selectedId = String(id);
-    writeStored(selectedId);
-    setHeader(group.name);
-    renderList();
-    applySelectedSchedule(true);
-  }
+  document.addEventListener("ruz:schedule-ready", function(){
+    window.__ruzApp.ready = true;
+    restoreSaved();
+  }, { once: true });
 
-  selectedId = readStored();
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", loadData, {once:true});
-  else loadData();
-
-  setInterval(() => {
-    if(String(selectedId) !== TARGET_GROUP_ID) applySelectedSchedule(false);
-  }, 5 * 60 * 1000 + 1000);
+  setTimeout(() => {
+    if (!window.__ruzApp.ready) {
+      window.__ruzApp.ready = true;
+      restoreSaved();
+    }
+  }, 3000);
 })();
 
 </script>
@@ -4940,21 +5029,6 @@ document.addEventListener("DOMContentLoaded", function(){
 </div>
 
 
-
-<!-- GROUP_PICKER_VIEW -->
-<div class="group-picker-backdrop" id="groupPickerBackdrop" aria-hidden="true">
-  <section class="group-picker-panel" role="dialog" aria-modal="true" aria-labelledby="groupPickerTitle">
-    <div class="group-picker-head">
-      <div class="group-picker-head-row">
-        <div class="group-picker-title" id="groupPickerTitle">Выбор группы</div>
-        <button class="group-picker-close" id="groupPickerClose" type="button">Закрыть</button>
-      </div>
-      <input class="group-picker-search" id="groupPickerSearch" type="search" placeholder="Найти группу…" autocomplete="off">
-    </div>
-    <div class="group-picker-status" id="groupPickerStatus">Загрузка групп…</div>
-    <div class="group-picker-list" id="groupPickerList"></div>
-  </section>
-</div>
 
 </body>
 </html>
