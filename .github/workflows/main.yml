@@ -67,33 +67,56 @@ jobs:
               raise SystemExit("group_schedules.json must contain a non-empty groups object")
 
           groups = json.loads(Path("groups.json").read_text(encoding="utf-8"))
+          if not isinstance(groups, list) or not groups:
+              raise SystemExit("groups.json must contain a non-empty array")
+
           lazy_dir = Path("group_schedules")
           if not lazy_dir.is_dir():
               raise SystemExit("group_schedules/ directory was not created")
 
+          expected_ids = {str(group["id"]) for group in groups}
+          actual_ids = {str(group_id) for group_id in multi["groups"].keys()}
+          if actual_ids != expected_ids:
+              missing = sorted(expected_ids - actual_ids)
+              extra = sorted(actual_ids - expected_ids)
+              raise SystemExit(f"Combined group IDs mismatch; missing={missing[:10]} extra={extra[:10]}")
+
           missing = []
           invalid = []
           for group in groups:
-              path = lazy_dir / f"{group['id']}.json"
+              group_id = str(group["id"])
+              path = lazy_dir / f"{group_id}.json"
               if not path.exists():
-                  missing.append(str(group['id']))
+                  missing.append(group_id)
                   continue
               try:
                   item = json.loads(path.read_text(encoding="utf-8"))
-                  if str(item.get("id")) != str(group["id"]) or not isinstance(item.get("lessons"), list):
-                      invalid.append(str(group['id']))
+                  if str(item.get("id")) != group_id:
+                      invalid.append(f"{group_id}: id")
+                  if str(item.get("name")) != str(group["name"]):
+                      invalid.append(f"{group_id}: name")
+                  if not isinstance(item.get("lessons"), list):
+                      invalid.append(f"{group_id}: lessons")
               except json.JSONDecodeError:
-                  invalid.append(str(group['id']))
+                  invalid.append(f"{group_id}: invalid JSON")
 
           if missing:
               raise SystemExit(f"Missing per-group schedule files: {missing[:10]}")
           if invalid:
               raise SystemExit(f"Invalid per-group schedule files: {invalid[:10]}")
 
+          failures = multi.get("failed", [])
+          if not isinstance(failures, list):
+              raise SystemExit("group_schedules.json failed field must be an array")
+          fallback_count = sum(1 for item in failures if isinstance(item, dict) and item.get("fallback"))
+          hard_failures = [item for item in failures if not isinstance(item, dict) or not item.get("fallback")]
+          if hard_failures:
+              raise SystemExit(f"Groups without current or fallback schedule: {hard_failures[:5]}")
+
           print(f"Validated current schedule: {len(data)} lessons")
           print(f"Validated group schedules: {len(multi['groups'])} groups")
           print(f"Validated lazy-load files: {len(groups)} groups")
-          PY
+          print(f"RUZ fallback schedules in use: {fallback_count}")
 
       - name: Run planner
         run: python planner.py
@@ -115,10 +138,24 @@ jobs:
           from pathlib import Path
 
           html = Path("index.html").read_text(encoding="utf-8")
+          groups = json.loads(Path("groups.json").read_text(encoding="utf-8"))
           if html.count('id="groupPickerButton"') != 1:
               raise SystemExit("groupPickerButton must exist exactly once")
           if '<select class="group-picker" id="groupPickerButton"' not in html:
               raise SystemExit("native group selector is missing")
+
+          options = re.findall(r'<option value="([^"]+)"(?: selected)?>(.*?)</option>', html, flags=re.S | re.I)
+          expected_ids = {str(group["id"]) for group in groups}
+          option_ids = {value for value, _ in options}
+          if option_ids != expected_ids:
+              missing = sorted(expected_ids - option_ids)
+              extra = sorted(option_ids - expected_ids)
+              raise SystemExit(f"Frontend group options mismatch; missing={missing[:10]} extra={extra[:10]}")
+          if len(options) != len(groups):
+              raise SystemExit(f"Frontend group option count mismatch: {len(options)} != {len(groups)}")
+
+          if '<option value="164606" selected>' not in html:
+              raise SystemExit("Default group 164606 is missing from the native selector")
 
           # Do not count comment markers here: the repair script intentionally
           # keeps the marker strings inside its own source templates, while the
@@ -136,7 +173,7 @@ jobs:
                   print(result.stderr)
                   raise SystemExit(f"JavaScript syntax error in inline script {index}")
 
-          print(f"Validated one native group selector and {len(scripts)} inline JavaScript blocks")
+          print(f"Validated one native group selector, {len(options)} group options and {len(scripts)} inline JavaScript blocks")
           PY
 
       - name: Save schedule and changes
