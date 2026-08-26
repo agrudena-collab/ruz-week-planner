@@ -136,7 +136,6 @@ JS = r'''/* GROUP_PICKER_NATIVE */
   // this overridden loadSchedule(). We deliberately do not call loadGroup()
   // on DOMContentLoaded, which used to race loadAll() and leave iOS PWAs in
   // a permanent loading state.
-  const originalLoadSchedule = loadSchedule;
   loadSchedule = async function(){
     const id = selectedGroupId();
     const button = $("refreshButton");
@@ -147,13 +146,6 @@ JS = r'''/* GROUP_PICKER_NATIVE */
       applyLessons(lessons);
       $("updated").textContent = "Обновлено в " + new Date().toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
     }catch(error){
-      // Keep the original loader as a final online fallback for the default group.
-      if (id === TARGET_GROUP_ID) {
-        try {
-          await originalLoadSchedule();
-          return;
-        } catch (_) {}
-      }
       if(currentView !== "archive" && currentView !== "exams") {
         $("schedule").innerHTML = `<div class="error"><strong>Не удалось загрузить расписание</strong> ${esc(error.message || "Ошибка загрузки")}</div>`;
       }
