@@ -8,7 +8,7 @@ GROUPS = Path("groups.json")
 MARKER = "/* GROUP_PICKER_NATIVE */"
 END = "/* END_GROUP_PICKER_NATIVE */"
 TARGET = "164606"
-SW_VERSION = "15"
+SW_VERSION = "16"
 
 
 def blocks(text):
@@ -30,7 +30,7 @@ def options(groups):
 
 
 def remove_element(text, tag, class_name):
-    """Remove one matching element while respecting nested same-tag elements."""
+    """Remove and return one matching element, respecting nested same-tag elements."""
     start_re = re.compile(
         rf'<{tag}\b(?=[^>]*\bclass=["\'][^"\']*\b{re.escape(class_name)}\b[^"\']*["\'])[^>]*>',
         re.I,
@@ -53,12 +53,11 @@ def remove_element(text, tag, class_name):
 
     if end is None:
         raise SystemExit(f"Unclosed {tag}.{class_name} element")
-
     return text[:start.start()] + text[end:], text[start.start():end]
 
 
 def div_depth(fragment):
-    """Approximate div nesting depth for a small, known HTML fragment."""
+    """Count div nesting in a small HTML fragment."""
     opens = len(re.findall(r'<div\b[^>]*>', fragment, re.I))
     closes = len(re.findall(r'</div\s*>', fragment, re.I))
     return opens - closes
@@ -82,7 +81,6 @@ runtime = runtime.replace(
     f'navigator.serviceWorker.register("./sw.js?v={SW_VERSION}", {{',
 )
 
-# Remove every previous generated block before rebuilding one deterministic version.
 text = strip_blocks(text)
 
 picker = (
@@ -93,18 +91,48 @@ picker = (
     '</div>'
 )
 
-# Remove any stale picker from the header (including a nested copy), then insert
-# exactly one picker as a direct child of the semantic header element.
-text, _ = remove_element(text, "div", "group-picker-wrap")
+# The old page had malformed nesting: title/group lived inside an inner div that
+# was never closed before the picker/header-right. Rebuild the header DOM itself
+# instead of trying to patch that malformed tree with regex insertion.
 header = re.search(r'<header\s+class="header">(.*?)</header>', text, re.S | re.I)
 if not header:
     raise SystemExit("header element not found")
 header_html = header.group(1)
-right = re.search(r'<div\b[^>]*\bclass=["\'][^"\']*\bheader-right\b[^"\']*["\'][^>]*>', header_html, re.I)
-if not right:
-    raise SystemExit("header-right not found inside header")
-insert_at = header.start(1) + right.start()
-text = text[:insert_at] + "  " + picker + "\n\n  " + text[insert_at:]
+
+title_match = re.search(r'<div\b[^>]*\bclass=["\'][^"\']*\btitle\b[^"\']*["\'][^>]*>(.*?)</div>', header_html, re.S | re.I)
+group_match = re.search(r'<div\b[^>]*\bclass=["\'][^"\']*\bgroup\b[^"\']*["\'][^>]*>(.*?)</div>', header_html, re.S | re.I)
+if not title_match or not group_match:
+    raise SystemExit("header title/group markup not found")
+
+_, right_markup = remove_element(header_html, "div", "header-right")
+if not right_markup:
+    raise SystemExit("header-right markup not found")
+
+# Keep the existing menu/label content while normalizing only the hierarchy.
+brand_markup = (
+    '  <div class="brand">\n'
+    '    <button\n'
+    '      class="menu-button"\n'
+    '      id="menuOpen"\n'
+    '      aria-label="Открыть меню"\n'
+    '    >\n'
+    '      ☰\n'
+    '    </button>\n\n'
+    '    <div>\n'
+    f'      <div class="title">{title_match.group(1).strip()}</div>\n\n'
+    f'      <div class="group">{group_match.group(1).strip()}</div>\n'
+    '    </div>\n'
+    '  </div>'
+)
+
+normalized_header = (
+    '<header class="header">\n\n'
+    + brand_markup + '\n\n'
+    + '  ' + picker + '\n\n'
+    + '  ' + right_markup.strip() + '\n\n'
+    + '</header>'
+)
+text = text[:header.start()] + normalized_header + text[header.end():]
 
 header_css = '''.header{
   display:grid;
@@ -140,8 +168,7 @@ if not boot:
     raise SystemExit("loadAll boot call not found")
 text = text[:boot.start()] + runtime + "\n\n" + text[boot.start():]
 
-# Structural validation focuses on the invariant that matters to CSS Grid:
-# the picker and header-right must both be direct children of the header.
+# Structural validation: CSS Grid only works if these are real direct children.
 header = re.search(r'<header\s+class="header">(.*?)</header>', text, re.S | re.I)
 if not header:
     raise SystemExit("header block not found for structural validation")
