@@ -1,4 +1,4 @@
-const CACHE_NAME = "mezhdot25-2-v6";
+const CACHE_NAME = "mezhdot25-2-v7";
 
 const APP_FILES = [
   "./",
@@ -22,23 +22,15 @@ function cacheKey(request) {
 }
 
 self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(APP_FILES))
-  );
-
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_FILES)));
   self.skipWaiting();
 });
 
 self.addEventListener("activate", event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys
-          .filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
-      )
-    ).then(() => self.clients.claim())
+    caches.keys().then(keys => Promise.all(
+      keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+    )).then(() => self.clients.claim())
   );
 });
 
@@ -49,10 +41,7 @@ self.addEventListener("fetch", event => {
     requestUrl.pathname.endsWith("/changes.json") ||
     requestUrl.pathname.endsWith("/groups.json") ||
     requestUrl.pathname.includes("/group_schedules/");
-
-  const isAppShell =
-    event.request.mode === "navigate" ||
-    requestUrl.pathname.endsWith("/index.html");
+  const isAppShell = event.request.mode === "navigate" || requestUrl.pathname.endsWith("/index.html");
 
   if (isDataFile || isAppShell) {
     event.respondWith(
@@ -60,24 +49,14 @@ self.addEventListener("fetch", event => {
         .then(response => {
           if (response.ok) {
             const copy = response.clone();
-            const normalizedRequest = cacheKey(event.request);
-            caches.open(CACHE_NAME)
-              .then(cache => cache.put(normalizedRequest, copy))
-              .catch(() => {});
+            caches.open(CACHE_NAME).then(cache => cache.put(cacheKey(event.request), copy)).catch(() => {});
           }
           return response;
         })
-        .catch(() => {
-          const normalizedRequest = cacheKey(event.request);
-          return caches.match(event.request)
-            .then(cached => cached || caches.match(normalizedRequest));
-        })
+        .catch(() => caches.match(event.request).then(cached => cached || caches.match(cacheKey(event.request))))
     );
     return;
   }
 
-  event.respondWith(
-    caches.match(event.request)
-      .then(cached => cached || fetch(event.request))
-  );
+  event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request)));
 });
