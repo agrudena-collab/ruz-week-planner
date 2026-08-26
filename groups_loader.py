@@ -1,5 +1,6 @@
 import json
 import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 import requests
@@ -9,11 +10,8 @@ BASE_URL = "https://ruz.fa.ru"
 SEARCH_URL = f"{BASE_URL}/api/search"
 OUTPUT_PATH = Path("groups.json")
 
-# RUZ does not accept an empty/one-character group search reliably.  Keep the
-# explicit term for diagnostics, but use a small set of meaningful prefixes
-# when discovering the catalogue automatically.
 EXPLICIT_TERM = os.getenv("RUZ_GROUP_SEARCH", "").strip()
-SEARCH_TERMS = [
+SEMANTIC_TERMS = [
     "Межд",
     "Фин",
     "Эконом",
@@ -28,11 +26,43 @@ SEARCH_TERMS = [
     "Логист",
     "Торгов",
     "Международ",
+    "Дизайн",
+    "Психолог",
+    "Аудит",
+    "Инвест",
+    "Ресторан",
+    "Управ",
+    "Полит",
+    "Юрид",
+    "Бух",
+    "Налог",
+    "Тамож",
+    "Статист",
+    "Социолог",
+    "Лингв",
+    "Иностран",
+    "Технолог",
+    "Програм",
+    "Кибер",
+    "Данные",
+    "Гуманит",
 ]
+
+# Most FA groups are represented by numeric programme codes. The previous
+# loader queried only a small hand-written set of words, which necessarily
+# omitted entire programmes whose names did not contain those words. Two-digit
+# numeric prefixes give us a deterministic catalogue sweep without relying on
+# a single-character query (which RUZ handles unreliably).
+NUMERIC_PREFIX_TERMS = [f"{number:02d}" for number in range(100)]
+SEARCH_TERMS = (
+    [EXPLICIT_TERM]
+    if EXPLICIT_TERM
+    else list(dict.fromkeys(NUMERIC_PREFIX_TERMS + SEMANTIC_TERMS))
+)
+MAX_WORKERS = 10
 
 
 def extract_items(data):
-    """Normalize the different container shapes returned by RUZ search."""
     if isinstance(data, list):
         return data
 
@@ -81,78 +111,76 @@ def fetch_groups_for_term(session, term):
 
     data = response.json()
     items = extract_items(data)
-
     if items is None:
-        if isinstance(data, dict):
-            keys = ", ".join(map(str, data.keys()))
-            preview = json.dumps(data, ensure_ascii=False)[:500]
-            raise RuntimeError(
-                f"РУЗ вернул неожиданный формат для запроса '{term}'. "
-                f"Ключи: {keys}. Ответ: {preview}"
-            )
-        raise RuntimeError(
-            f"РУЗ вернул неожиданный формат для запроса '{term}': "
-            f"{type(data).__name__}"
-        )
+        raise RuntimeError(f"unexpected RUZ response shape for '{term}'")
 
     groups = []
     for item in items:
         group = normalize_group(item)
         if group is not None:
             groups.append(group)
-
     return groups
 
 
 def fetch_groups():
-    terms = [EXPLICIT_TERM] if EXPLICIT_TERM else SEARCH_TERMS
-
-    session = requests.Session()
     unique_groups = {}
-    successful_terms = 0
     failed_terms = []
 
-    print(f"Поиск каталога групп РУЗ. Запросов: {len(terms)}")
+    print(f"Поиск полного каталога групп РУЗ. Запросов: {len(SEARCH_TERMS)}")
 
-    for term in terms:
-        try:
-            groups = fetch_groups_for_term(session, term)
-        except requests.RequestException as exc:
-            failed_terms.append((term, f"HTTP: {exc}"))
-            print(f"  '{term}': ошибка HTTP, пропускаем")
-            continue
-        except (ValueError, RuntimeError) as exc:
-            failed_terms.append((term, str(exc)))
-            print(f"  '{term}': ошибка формата, пропускаем")
-            continue
+    def worker(term):
+        with requests.Session() as session:
+            return term, fetch_groups_for_term(session, term)
 
-        successful_terms += 1
-        before = len(unique_groups)
-        for group in groups:
-            unique_groups[str(group["id"])] = group
-        added = len(unique_groups) - before
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        futures = {executor.submit(worker, term): term for term in SEARCH_TERMS}
+        completed = 0
+        for future in as_completed(futures):
+            term = futures[future]
+            completed += 1
+            try:
+                _, groups = future.result()
+                before = len(unique_groups)
+                for group in groups:
+                    unique_groups[str(group["id"])] = group
+                added = len(unique_groups) - before
+                print(
+                    f"[{completed}/{len(SEARCH_TERMS)}] '{term}': "
+                    f"найдено {len(groups)}, новых {added}, всего {len(unique_groups)}"
+                )
+            except (requests.RequestException, ValueError, RuntimeError) as exc:
+                failed_terms.append((term, str(exc)))
+                print(f"[{completed}/{len(SEARCH_TERMS)}] '{term}': ошибка, пропускаем")
 
-        print(
-            f"  '{term}': найдено {len(groups)}, новых {added}, "
-            f"всего уникальных {len(unique_groups)}"
-        )
+    # Never destroy a known-good catalogue because RUZ temporarily rejects
+    # some search prefixes. Merge the previous catalogue as a safety net; the
+    # next successful run can only add/update groups, not silently erase them.
+    previous = []
+    try:
+        raw_previous = json.loads(OUTPUT_PATH.read_text(encoding="utf-8"))
+        if isinstance(raw_previous, list):
+            previous = [g for g in raw_previous if normalize_group(g)]
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        pass
+
+    for group in previous:
+        normalized = normalize_group(group)
+        if normalized is not None:
+            unique_groups.setdefault(str(normalized["id"]), normalized)
 
     if not unique_groups:
-        details = "; ".join(f"{term}: {error}" for term, error in failed_terms)
+        details = "; ".join(f"{term}: {error}" for term, error in failed_terms[:10])
         raise RuntimeError(
-            "РУЗ не вернул ни одной группы. groups.json не будет записан пустым. "
-            + (f"Ошибки: {details}" if details else "")
+            "РУЗ не вернул ни одной группы. groups.json не будет записан пустым."
+            + (f" Ошибки: {details}" if details else "")
         )
 
+    groups = sorted(unique_groups.values(), key=lambda group: group["name"].casefold())
     print(
-        f"Успешно обработано запросов: {successful_terms}/{len(terms)}; "
-        f"уникальных групп: {len(unique_groups)}"
+        f"Каталог готов: {len(groups)} уникальных групп; "
+        f"ошибок запросов: {len(failed_terms)}"
     )
-
-    return sorted(
-        unique_groups.values(),
-        key=lambda group: group["name"].casefold(),
-    )
+    return groups
 
 
 def save_groups(groups):
@@ -164,12 +192,5 @@ def save_groups(groups):
 if __name__ == "__main__":
     groups = fetch_groups()
     save_groups(groups)
-
     print(f"Получено групп: {len(groups)}")
     print(f"Сохранено: {OUTPUT_PATH}")
-
-    for group in groups[:30]:
-        print(f"  {group['id']} | {group['name']}")
-
-    if len(groups) > 30:
-        print(f"  ... ещё {len(groups) - 30}")
