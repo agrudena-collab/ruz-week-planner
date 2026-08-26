@@ -1,4 +1,4 @@
-const CACHE_NAME = "mezhdot25-2-v12";
+const CACHE_NAME = "mezhdot25-2-v16";
 const FETCH_TIMEOUT_MS = 4000;
 
 const APP_SHELL = [
@@ -39,8 +39,6 @@ async function warmShell() {
     })
   );
 
-  // The shell is the only hard installation requirement. Data is warmed when
-  // available, but a transient failure must never prevent the SW from activating.
   const shell = await cache.match("./index.html") || await cache.match("./");
   if (!shell) throw new Error("offline app shell could not be cached");
 }
