@@ -1,4 +1,4 @@
-const CACHE_NAME = "mezhdot25-2-v5";
+const CACHE_NAME = "mezhdot25-2-v6";
 
 const APP_FILES = [
   "./",
@@ -8,6 +8,18 @@ const APP_FILES = [
   "./groups.json",
   "./manifest.json"
 ];
+
+function cacheKey(request) {
+  const url = new URL(request.url);
+  url.search = "";
+  return new Request(url.href, {
+    method: "GET",
+    headers: request.headers,
+    mode: request.mode,
+    credentials: request.credentials,
+    redirect: request.redirect
+  });
+}
 
 self.addEventListener("install", event => {
   event.waitUntil(
@@ -48,13 +60,18 @@ self.addEventListener("fetch", event => {
         .then(response => {
           if (response.ok) {
             const copy = response.clone();
+            const normalizedRequest = cacheKey(event.request);
             caches.open(CACHE_NAME)
-              .then(cache => cache.put(event.request, copy))
+              .then(cache => cache.put(normalizedRequest, copy))
               .catch(() => {});
           }
           return response;
         })
-        .catch(() => caches.match(event.request))
+        .catch(() => {
+          const normalizedRequest = cacheKey(event.request);
+          return caches.match(event.request)
+            .then(cached => cached || caches.match(normalizedRequest));
+        })
     );
     return;
   }
