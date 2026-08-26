@@ -1,5 +1,6 @@
 import json
 import os
+import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
@@ -48,12 +49,20 @@ SEMANTIC_TERMS = [
     "Гуманит",
 ]
 
-# Most FA groups are represented by numeric programme codes. The previous
-# loader queried only a small hand-written set of words, which necessarily
-# omitted entire programmes whose names did not contain those words. Two-digit
-# numeric prefixes give us a deterministic catalogue sweep without relying on
-# a single-character query (which RUZ handles unreliably).
-NUMERIC_PREFIX_TERMS = [f"{number:02d}" for number in range(100)]
+# The current RUZ group names contain six-digit programme codes such as
+# 002877 and 003757. A search for just "00" is not a catalogue endpoint: it
+# returns only the first slice of matching groups. Querying the four-digit
+# prefixes partitions that catalogue much more safely (0000..0099).
+NUMERIC_PREFIX_TERMS = [f"00{number:02d}" for number in range(100)]
+
+# RUZ's search endpoint does not expose pagination in this API contract. Some
+# prefixes can therefore be saturated at a fixed result count. When a numeric
+# prefix returns one of these common cap sizes, recursively split it by one
+# more digit. This turns a broad search into a deterministic prefix crawl.
+SATURATION_COUNTS = {10, 20, 50, 100}
+MAX_NUMERIC_PREFIX_DEPTH = 6
+MAX_NUMERIC_QUERIES = 5000
+
 SEARCH_TERMS = (
     [EXPLICIT_TERM]
     if EXPLICIT_TERM
@@ -122,35 +131,79 @@ def fetch_groups_for_term(session, term):
     return groups
 
 
+def numeric_children(term):
+    if not term.isdigit() or len(term) >= MAX_NUMERIC_PREFIX_DEPTH:
+        return []
+    return [term + str(digit) for digit in range(10)]
+
+
+def should_expand_numeric_term(term, groups):
+    return (
+        term.isdigit()
+        and len(term) < MAX_NUMERIC_PREFIX_DEPTH
+        and len(groups) in SATURATION_COUNTS
+    )
+
+
 def fetch_groups():
     unique_groups = {}
     failed_terms = []
+    pending_terms = list(SEARCH_TERMS)
+    seen_terms = set()
+    numeric_queries = 0
 
-    print(f"Поиск полного каталога групп РУЗ. Запросов: {len(SEARCH_TERMS)}")
+    print(f"Поиск расширенного каталога групп РУЗ. Начальных запросов: {len(SEARCH_TERMS)}")
 
-    def worker(term):
-        with requests.Session() as session:
-            return term, fetch_groups_for_term(session, term)
+    while pending_terms:
+        batch = []
+        for term in pending_terms:
+            if term in seen_terms:
+                continue
+            seen_terms.add(term)
+            batch.append(term)
+        pending_terms = []
 
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-        futures = {executor.submit(worker, term): term for term in SEARCH_TERMS}
-        completed = 0
-        for future in as_completed(futures):
-            term = futures[future]
-            completed += 1
-            try:
-                _, groups = future.result()
-                before = len(unique_groups)
-                for group in groups:
-                    unique_groups[str(group["id"])] = group
-                added = len(unique_groups) - before
-                print(
-                    f"[{completed}/{len(SEARCH_TERMS)}] '{term}': "
-                    f"найдено {len(groups)}, новых {added}, всего {len(unique_groups)}"
-                )
-            except (requests.RequestException, ValueError, RuntimeError) as exc:
-                failed_terms.append((term, str(exc)))
-                print(f"[{completed}/{len(SEARCH_TERMS)}] '{term}': ошибка, пропускаем")
+        if not batch:
+            break
+
+        numeric_queries += sum(term.isdigit() for term in batch)
+        if numeric_queries > MAX_NUMERIC_QUERIES:
+            raise RuntimeError(
+                "Слишком много числовых запросов к РУЗ; каталог не записан, "
+                "чтобы не публиковать потенциально неполный результат."
+            )
+
+        def worker(term):
+            with requests.Session() as session:
+                return term, fetch_groups_for_term(session, term)
+
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            futures = {executor.submit(worker, term): term for term in batch}
+            completed = 0
+            for future in as_completed(futures):
+                term = futures[future]
+                completed += 1
+                try:
+                    _, groups = future.result()
+                    before = len(unique_groups)
+                    for group in groups:
+                        unique_groups[str(group["id"])] = group
+                    added = len(unique_groups) - before
+                    print(
+                        f"[{completed}/{len(batch)}] '{term}': "
+                        f"найдено {len(groups)}, новых {added}, всего {len(unique_groups)}"
+                    )
+
+                    if should_expand_numeric_term(term, groups):
+                        children = numeric_children(term)
+                        pending_terms.extend(children)
+                        print(
+                            f"  -> префикс '{term}' выглядит насыщенным; "
+                            f"добавляем {len(children)} дочерних префиксов"
+                        )
+                except (requests.RequestException, ValueError, RuntimeError) as exc:
+                    failed_terms.append((term, str(exc)))
+                    print(f"[{completed}/{len(batch)}] '{term}': ошибка, пропускаем")
 
     # Never destroy a known-good catalogue because RUZ temporarily rejects
     # some search prefixes. Merge the previous catalogue as a safety net; the
@@ -178,7 +231,8 @@ def fetch_groups():
     groups = sorted(unique_groups.values(), key=lambda group: group["name"].casefold())
     print(
         f"Каталог готов: {len(groups)} уникальных групп; "
-        f"ошибок запросов: {len(failed_terms)}"
+        f"ошибок запросов: {len(failed_terms)}; "
+        f"числовых запросов: {numeric_queries}"
     )
     return groups
 
