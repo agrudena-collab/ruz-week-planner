@@ -1,4 +1,4 @@
-const CACHE_NAME = "mezhdot25-2-v8";
+const CACHE_NAME = "mezhdot25-2-v9";
 
 const APP_FILES = [
   "./",
@@ -6,7 +6,8 @@ const APP_FILES = [
   "./schedule.json",
   "./changes.json",
   "./groups.json",
-  "./manifest.json"
+  "./manifest.json",
+  "./group_schedules/164606.json"
 ];
 
 const FETCH_TIMEOUT_MS = 8000;
@@ -33,7 +34,9 @@ function fetchWithTimeout(request) {
 }
 
 self.addEventListener("install", event => {
-  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_FILES)));
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(APP_FILES))
+  );
   self.skipWaiting();
 });
 
@@ -52,7 +55,9 @@ self.addEventListener("fetch", event => {
     requestUrl.pathname.endsWith("/changes.json") ||
     requestUrl.pathname.endsWith("/groups.json") ||
     requestUrl.pathname.includes("/group_schedules/");
-  const isAppShell = event.request.mode === "navigate" || requestUrl.pathname.endsWith("/index.html");
+  const isAppShell =
+    event.request.mode === "navigate" ||
+    requestUrl.pathname.endsWith("/index.html");
 
   if (isDataFile || isAppShell) {
     event.respondWith(
@@ -60,7 +65,9 @@ self.addEventListener("fetch", event => {
         .then(response => {
           if (response.ok) {
             const copy = response.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(cacheKey(event.request), copy)).catch(() => {});
+            caches.open(CACHE_NAME)
+              .then(cache => cache.put(cacheKey(event.request), copy))
+              .catch(() => {});
           }
           return response;
         })
@@ -69,7 +76,10 @@ self.addEventListener("fetch", event => {
             cached || caches.match(cacheKey(event.request)).then(normalized =>
               normalized || new Response(
                 JSON.stringify({error:"offline-or-timeout"}),
-                {status:504, headers:{"Content-Type":"application/json; charset=utf-8"}}
+                {
+                  status:504,
+                  headers:{"Content-Type":"application/json; charset=utf-8"}
+                }
               )
             )
           )
@@ -78,5 +88,9 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-  event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request)));
+  event.respondWith(
+    caches.match(event.request).then(cached =>
+      cached || fetch(event.request)
+    )
+  );
 });
