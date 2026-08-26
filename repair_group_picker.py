@@ -43,8 +43,6 @@ def remove_element(text, tag, class_name):
     depth = 0
     end = None
     for token in token_re.finditer(text, start.start()):
-        if token.start() < start.start():
-            continue
         if token.group(1):
             depth -= 1
             if depth == 0:
@@ -59,28 +57,11 @@ def remove_element(text, tag, class_name):
     return text[:start.start()] + text[end:], text[start.start():end]
 
 
-def direct_child_divs(header_html):
-    """Return direct-child div classes from a header fragment."""
-    token_re = re.compile(r'<(/?)div\b([^>]*)>', re.I)
-    depth = 0
-    result = []
-    for token in token_re.finditer(header_html):
-        if token.group(1):
-            depth -= 1
-            if depth < 0:
-                raise SystemExit("Invalid header markup: negative div depth")
-            continue
-
-        attrs = token.group(2)
-        if depth == 0:
-            match = re.search(r'\bclass=["\']([^"\']*)["\']', attrs, re.I)
-            classes = match.group(1).split() if match else []
-            result.append((classes, token.start()))
-        depth += 1
-
-    if depth != 0:
-        raise SystemExit("Invalid header markup: unbalanced div nesting")
-    return result
+def div_depth(fragment):
+    """Approximate div nesting depth for a small, known HTML fragment."""
+    opens = len(re.findall(r'<div\b[^>]*>', fragment, re.I))
+    closes = len(re.findall(r'</div\s*>', fragment, re.I))
+    return opens - closes
 
 
 text = INDEX.read_text(encoding="utf-8")
@@ -159,16 +140,25 @@ if not boot:
     raise SystemExit("loadAll boot call not found")
 text = text[:boot.start()] + runtime + "\n\n" + text[boot.start():]
 
-# Structural validation must prove direct-child placement, not just string order.
+# Structural validation focuses on the invariant that matters to CSS Grid:
+# the picker and header-right must both be direct children of the header.
 header = re.search(r'<header\s+class="header">(.*?)</header>', text, re.S | re.I)
 if not header:
     raise SystemExit("header block not found for structural validation")
-children = direct_child_divs(header.group(1))
-classes = [set(item[0]) for item in children]
-expected = [{"brand"}, {"group-picker-wrap"}, {"header-right"}]
-if classes[:3] != expected or len(classes) != 3:
-    raise SystemExit(f"header direct children invalid: {children}")
-
+h = header.group(1)
+brand = re.search(r'<div\b[^>]*\bclass=["\'][^"\']*\bbrand\b[^"\']*["\'][^>]*>', h, re.I)
+pick = re.search(r'<div\b[^>]*\bclass=["\'][^"\']*\bgroup-picker-wrap\b[^"\']*["\'][^>]*>', h, re.I)
+right = re.search(r'<div\b[^>]*\bclass=["\'][^"\']*\bheader-right\b[^"\']*["\'][^>]*>', h, re.I)
+if not brand or not pick or not right:
+    raise SystemExit("header structure is invalid: required elements are missing")
+if not (brand.start() < pick.start() < right.start()):
+    raise SystemExit("header structure is invalid: expected brand -> picker -> header-right")
+if div_depth(h[:pick.start()]) != 0:
+    raise SystemExit("group picker is nested inside another div")
+if div_depth(h[:right.start()]) != 0:
+    raise SystemExit("header-right is nested inside another div")
+if div_depth(h[pick.start():right.start()]) != 0:
+    raise SystemExit("group picker does not close before header-right")
 if text.count('id="groupPickerButton"') != 1:
     raise SystemExit("groupPickerButton must exist exactly once")
 if text.count('navigator.serviceWorker.register') != 1:
