@@ -1057,6 +1057,8 @@ button,input,select{font:inherit}
 
 
 
+
+
 /* GROUP_PICKER_NATIVE */
 .group-picker-wrap{position:relative;margin-top:7px;width:min(360px,78vw)}
 .group-picker{width:100%;min-height:38px;appearance:auto;-webkit-appearance:auto;border:1px solid rgba(255,255,255,.10);border-radius:12px;padding:7px 34px 7px 10px;background:rgba(255,255,255,.045);color:#cbd1dd;font-size:13px;font-weight:750;cursor:pointer;touch-action:manipulation}
@@ -1064,6 +1066,30 @@ button,input,select{font:inherit}
 .group-picker-wrap::after{content:"⌄";position:absolute;right:11px;top:50%;transform:translateY(-52%);color:#8e96a8;pointer-events:none}
 @media(max-width:640px){.group-picker-wrap{width:min(330px,82vw)}.group-picker{min-height:42px;font-size:14px}}
 /* END_GROUP_PICKER_NATIVE */
+.header{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  grid-template-areas:
+    "brand actions"
+    "picker actions";
+  column-gap:20px;
+  row-gap:7px;
+  align-items:start;
+  margin-bottom:20px
+}
+.brand{grid-area:brand}
+.group-picker-wrap{grid-area:picker;position:relative;margin-top:0;width:min(360px,78vw)}
+.header-right{grid-area:actions;align-self:start}
+.group-picker{width:100%;min-height:38px;appearance:auto;-webkit-appearance:auto;border:1px solid rgba(255,255,255,.10);border-radius:12px;padding:7px 34px 7px 10px;background:rgba(255,255,255,.045);color:#cbd1dd;font-size:13px;font-weight:750;cursor:pointer;touch-action:manipulation}
+.group-picker:focus{outline:2px solid rgba(66,217,255,.35);outline-offset:2px}
+.group-picker-wrap::after{content:"⌄";position:absolute;right:11px;top:50%;transform:translateY(-52%);color:#8e96a8;pointer-events:none}
+@media(max-width:640px){
+  .header{grid-template-columns:1fr;grid-template-areas:"brand" "picker" "actions";row-gap:9px}
+  .header-right{justify-self:start;align-self:auto}
+  .group-picker-wrap{width:min(330px,82vw)}
+  .group-picker{min-height:42px;font-size:14px}
+}
+
 </style>
 </head>
 
@@ -1176,8 +1202,9 @@ button,input,select{font:inherit}
       <div class="group">
         МеждОт25-2 · РУЗ
       </div>
-<div class="group-picker-wrap">
-      <select class="group-picker" id="groupPickerButton" aria-label="Выбор учебной группы">
+
+  <div class="group-picker-wrap">
+  <select class="group-picker" id="groupPickerButton" aria-label="Выбор учебной группы">
         <option value="164336">002877_5 Информационные торговые системы в меж - 1</option>
         <option value="162026">003757_4 Модуль &quot;Международные финансы для уст - 1</option>
         <option value="162037">003758_4 Модуль &quot;Международный бизнес и устойч - 1</option>
@@ -1344,7 +1371,7 @@ button,input,select{font:inherit}
         <option value="164937">Фин25-6а</option>
         <option value="165405">ФИН26-1в</option>
         <option value="165406">ФИН26-2в</option>
-      </select>
+  </select>
 </div>
 
   <div class="header-right">
@@ -4756,6 +4783,8 @@ window.__ruzApp.setSchedule = function(lessons){
 window.__ruzApp.restoreDefault = function(){
   if (typeof loadAll === "function") loadAll();
 };
+
+
 
 
 
