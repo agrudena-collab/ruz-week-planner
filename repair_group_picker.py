@@ -59,11 +59,14 @@ new_select = (
     '</div>'
 )
 
-# Collapse the historical chain of nested wrappers around the selector.
+# Collapse only the selector wrapper itself. Do NOT consume following structural
+# </div> tags: those close the title/brand containers and keep .header-right as a
+# sibling of .brand. The previous broad regex swallowed those tags and moved the
+# refresh button inside the title block on iPad.
 selector = re.compile(
     r'(?:\s*<div class="group-picker-wrap">\s*)+'
     r'<select class="group-picker" id="groupPickerButton"[^>]*>.*?</select>'
-    r'(?:\s*</div>)+',
+    r'\s*</div>',
     flags=re.S,
 )
 if selector.search(text):
@@ -96,6 +99,16 @@ if text.count('navigator.serviceWorker.register') != 1:
     raise SystemExit("service worker registration must exist exactly once")
 if len(re.findall(r'<div class="group-picker-wrap">', text)) != 1:
     raise SystemExit("group-picker-wrap must exist exactly once")
+
+# Structural guard: the refresh area must remain a direct child of .header,
+# after .brand. This catches the exact regression before it reaches GitHub Pages.
+header_match = re.search(r'<div class="header">(.*?)</div>\s*<div class="hero', text, flags=re.S)
+if header_match:
+    header_html = header_match.group(1)
+    brand_pos = header_html.find('<div class="brand">')
+    right_pos = header_html.find('<div class="header-right">')
+    if brand_pos < 0 or right_pos < 0 or right_pos < brand_pos:
+        raise SystemExit("header structure is invalid: .brand/.header-right order is broken")
 
 INDEX.write_text(text, encoding="utf-8")
 print(f"Normalized native group selector: {len(groups)} groups, one runtime block, SW v{SW_VERSION}")
