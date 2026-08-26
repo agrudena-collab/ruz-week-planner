@@ -8,7 +8,7 @@ GROUPS = Path("groups.json")
 MARKER = "/* GROUP_PICKER_NATIVE */"
 END = "/* END_GROUP_PICKER_NATIVE */"
 TARGET = "164606"
-SW_VERSION = "12"
+SW_VERSION = "13"
 
 
 def marker_blocks(text):
@@ -59,10 +59,8 @@ new_select = (
     '</div>'
 )
 
-# Collapse only the selector wrapper itself. Do NOT consume following structural
-# </div> tags: those close the title/brand containers and keep .header-right as a
-# sibling of .brand. The previous broad regex swallowed those tags and moved the
-# refresh button inside the title block on iPad.
+# Normalize only the selector itself. Never consume surrounding structural
+# closing tags: the picker must not become part of .brand or .header-right.
 selector = re.compile(
     r'(?:\s*<div class="group-picker-wrap">\s*)+'
     r'<select class="group-picker" id="groupPickerButton"[^>]*>.*?</select>'
@@ -79,12 +77,83 @@ else:
         needle = '      <div class="group">\n        МеждОт25-2 · РУЗ\n      </div>'
         if needle not in text:
             raise SystemExit("group header markup not found")
-        text = text.replace(needle, needle + "\n\n" + new_select, 1)
+        text = text.replace(needle, needle + "\n" + new_select, 1)
+
+# The selector is generated inside the title/brand block by the legacy
+# template. Move the complete wrapper out of .brand so the header can place
+# it in its own second row while keeping the refresh area at the top-right.
+picker_match = re.search(r'\n<div class="group-picker-wrap">.*?</div>', text, flags=re.S)
+header_right = '\n  <div class="header-right">'
+if not picker_match:
+    raise SystemExit("group-picker-wrap not found after normalization")
+if header_right not in text:
+    raise SystemExit("header-right not found")
+picker_html = picker_match.group(0).strip()
+text = text[:picker_match.start()] + text[picker_match.end():]
+text = text.replace(header_right, "\n" + picker_html + header_right, 1)
+
+# Header layout: title on row 1, selector on row 2, refresh area spanning both
+# rows. This matches the original visual hierarchy and remains stable on iPad.
+header_css = '''.header{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  grid-template-areas:
+    "brand actions"
+    "picker actions";
+  column-gap:20px;
+  row-gap:7px;
+  align-items:center;
+  margin-bottom:20px
+}
+
+.brand{grid-area:brand}
+.header-right{grid-area:actions;align-self:start}
+
+.group-picker-wrap{
+  grid-area:picker;
+  position:relative;
+  margin-top:0;
+  width:min(360px,78vw)
+}
+
+.group-picker{
+  width:100%;
+  min-height:38px;
+  appearance:auto;
+  -webkit-appearance:auto;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:12px;
+  padding:7px 34px 7px 10px;
+  background:rgba(255,255,255,.045);
+  color:#cbd1dd;
+  font-size:13px;
+  font-weight:750;
+  cursor:pointer;
+  touch-action:manipulation
+}
+
+.group-picker:focus{outline:2px solid rgba(66,217,255,.35);outline-offset:2px}
+.group-picker-wrap::after{content:"⌄";position:absolute;right:11px;top:50%;transform:translateY(-52%);color:#8e96a8;pointer-events:none}
+
+@media(max-width:640px){
+  .header{
+    grid-template-columns:1fr;
+    grid-template-areas:
+      "brand"
+      "picker"
+      "actions";
+    row-gap:9px
+  }
+  .header-right{justify-self:start;align-self:auto}
+  .group-picker-wrap{width:min(330px,82vw)}
+  .group-picker{min-height:42px;font-size:14px}
+}
+'''
 
 style_pos = text.find("</style>")
 if style_pos < 0:
     raise SystemExit("</style> not found")
-text = text[:style_pos] + "\n" + css_block + "\n" + text[style_pos:]
+text = text[:style_pos] + "\n" + css_block + "\n" + header_css + "\n" + text[style_pos:]
 
 boot = re.search(r'loadAll\(\)\.then\(\(\) => \{', text)
 if not boot:
@@ -100,15 +169,25 @@ if text.count('navigator.serviceWorker.register') != 1:
 if len(re.findall(r'<div class="group-picker-wrap">', text)) != 1:
     raise SystemExit("group-picker-wrap must exist exactly once")
 
-# Structural guard: the refresh area must remain a direct child of .header,
-# after .brand. This catches the exact regression before it reaches GitHub Pages.
+# Structural guard: .brand and .header-right must remain direct children of
+# .header, and the picker must be a separate direct child between them.
 header_match = re.search(r'<div class="header">(.*?)</div>\s*<div class="hero', text, flags=re.S)
-if header_match:
-    header_html = header_match.group(1)
-    brand_pos = header_html.find('<div class="brand">')
-    right_pos = header_html.find('<div class="header-right">')
-    if brand_pos < 0 or right_pos < 0 or right_pos < brand_pos:
-        raise SystemExit("header structure is invalid: .brand/.header-right order is broken")
+if not header_match:
+    raise SystemExit("header block not found for structural validation")
+header_html = header_match.group(1)
+brand_pos = header_html.find('<div class="brand">')
+picker_pos = header_html.find('<div class="group-picker-wrap">')
+right_pos = header_html.find('<div class="header-right">')
+if brand_pos < 0 or picker_pos < 0 or right_pos < 0:
+    raise SystemExit("header structure is invalid: required children are missing")
+if not (brand_pos < picker_pos < right_pos):
+    raise SystemExit("header structure is invalid: expected brand -> picker -> header-right")
+
+# The picker must not be nested inside .brand or .header-right.
+brand_chunk = header_html[brand_pos:picker_pos]
+right_chunk = header_html[right_pos:]
+if 'group-picker-wrap' in brand_chunk or 'group-picker-wrap' in right_chunk:
+    raise SystemExit("group picker is still nested in a header child")
 
 INDEX.write_text(text, encoding="utf-8")
 print(f"Normalized native group selector: {len(groups)} groups, one runtime block, SW v{SW_VERSION}")
