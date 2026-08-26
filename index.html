@@ -1163,6 +1163,32 @@ button,input,select{font:inherit}
 }
 
 
+
+.header{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  grid-template-areas:
+    "brand actions"
+    "picker actions";
+  column-gap:20px;
+  row-gap:7px;
+  align-items:start;
+  margin-bottom:20px
+}
+.header > .brand{grid-area:brand}
+.header > .group-picker-wrap{grid-area:picker;position:relative;margin-top:0;width:min(360px,78vw)}
+.header > .header-right{grid-area:actions;align-self:start}
+.header > .group-picker-wrap .group-picker{width:100%;min-height:38px;appearance:auto;-webkit-appearance:auto;border:1px solid rgba(255,255,255,.10);border-radius:12px;padding:7px 34px 7px 10px;background:rgba(255,255,255,.045);color:#cbd1dd;font-size:13px;font-weight:750;cursor:pointer;touch-action:manipulation}
+.header > .group-picker-wrap .group-picker:focus{outline:2px solid rgba(66,217,255,.35);outline-offset:2px}
+.header > .group-picker-wrap::after{content:"⌄";position:absolute;right:11px;top:50%;transform:translateY(-52%);color:#8e96a8;pointer-events:none}
+@media(max-width:640px){
+  .header{grid-template-columns:1fr;grid-template-areas:"brand" "picker" "actions";row-gap:9px}
+  .header > .header-right{justify-self:start;align-self:auto}
+  .header > .group-picker-wrap{width:min(330px,82vw)}
+  .header > .group-picker-wrap .group-picker{min-height:42px;font-size:14px}
+}
+
+
 /* GROUP_PICKER_NATIVE */
 .group-picker-wrap{position:relative;margin-top:7px;width:min(360px,78vw)}
 .group-picker{width:100%;min-height:38px;appearance:auto;-webkit-appearance:auto;border:1px solid rgba(255,255,255,.10);border-radius:12px;padding:7px 34px 7px 10px;background:rgba(255,255,255,.045);color:#cbd1dd;font-size:13px;font-weight:750;cursor:pointer;touch-action:manipulation}
@@ -1306,6 +1332,11 @@ button,input,select{font:inherit}
   <div class="group-picker-wrap">
   <select class="group-picker" id="groupPickerButton" aria-label="Выбор учебной группы">
         <option value="164336">002877_5 Информационные торговые системы в меж - 1</option>
+        <option value="164341">002877_5 Модуль &quot;Второй иностранный язык (проф - 1</option>
+        <option value="164340">002877_5 Модуль &quot;Технологии бизнес-перевода&quot; - 1</option>
+        <option value="164337">002877_5 Практика применения информационных и  - 1</option>
+        <option value="164338">002877_5 Ценообразование на мировых товарных р - 1</option>
+        <option value="164339">002877_5 Ценообразование на мировых товарных р - 2</option>
         <option value="162026">003757_4 Модуль &quot;Международные финансы для уст - 1</option>
         <option value="162037">003758_4 Модуль &quot;Международный бизнес и устойч - 1</option>
         <option value="162038">003758_4 Модуль &quot;Международный бизнес и устойч - 2</option>
@@ -1313,11 +1344,26 @@ button,input,select{font:inherit}
         <option value="162040">003758_4 Модуль &quot;Международный бизнес и устойч - 4</option>
         <option value="162035">003758_4 Модуль &quot;Мировая экономика&quot; - 1</option>
         <option value="162036">003758_4 Модуль &quot;Мировая экономика&quot; - 2</option>
+        <option value="162057">003760_4 Модуль &quot;Китайский язык - 1&quot; - 1</option>
         <option value="162061">003760_4 Модуль &quot;Экономическая дипломатия&quot; (на - 1</option>
         <option value="162062">003760_4 Модуль &quot;Экономическая дипломатия&quot; (на - 2</option>
+        <option value="162066">003761_4 Модуль &quot;Восточный язык 1&quot; - 1</option>
         <option value="162064">003761_4 Модуль &quot;Международная торговля и поли - 1</option>
+        <option value="162115">003767_4 Модуль &quot;IT Skills&quot; - 1</option>
+        <option value="162112">003767_4 Модуль &quot;Soft Skills&quot; - 1</option>
+        <option value="162113">003767_4 Модуль &quot;Soft Skills&quot; - 2</option>
+        <option value="162114">003767_4 Модуль &quot;Soft Skills&quot; - 3</option>
         <option value="162116">003767_4 Модуль &quot;Управление продуктом&quot; - 1</option>
         <option value="162117">003767_4 Модуль &quot;Управление продуктом&quot; - 2</option>
+        <option value="162123">003768_4 Модуль &quot;Soft Skills&quot; - 1</option>
+        <option value="162127">003770_4 Модуль &quot;Soft Skills&quot; - 1</option>
+        <option value="162128">003770_4 Модуль &quot;Soft Skills&quot; - 2</option>
+        <option value="162129">003771_4 Модуль &quot;Soft Skills&quot; - 1</option>
+        <option value="162131">003772_4 Модуль &quot;IT Skills&quot; - 1</option>
+        <option value="162130">003772_4 Модуль &quot;Soft Skills&quot; - 1</option>
+        <option value="162132">003773_4 Модуль &quot;IT Skills&quot; - 1</option>
+        <option value="162471">003789_4 Модуль &quot;Регионы мира&quot; - 1</option>
+        <option value="162472">003789_4 Модуль &quot;Регионы мира&quot; - 2</option>
         <option value="162477">003790_4 Модуль &quot;Графический дизайн и компьюте - 1</option>
         <option value="162478">003790_4 Модуль &quot;Графический дизайн и компьюте - 2</option>
         <option value="162479">003792_4 Модуль &quot;Социология бизнеса и предприн - 1</option>
@@ -1348,10 +1394,12 @@ button,input,select{font:inherit}
         <option value="162507">003805_4 Модуль &quot;Маркетинговые коммуникации&quot; - 3</option>
         <option value="162508">003806_4 Модуль &quot;Психологические инструменты р - 1</option>
         <option value="162509">003806_4 Модуль &quot;Психологические инструменты р - 2</option>
+        <option value="162314">003810_4 Модуль &quot;Бюджетирование&quot; - 1</option>
         <option value="162317">003810_4 Модуль &quot;Государственные закупки&quot; - 1</option>
         <option value="162318">003810_4 Модуль &quot;Государственные закупки&quot; - 2</option>
         <option value="162319">003810_4 Модуль &quot;Государственные закупки&quot; - 3</option>
         <option value="162321">003810_4 Модуль &quot;Информационные технологии&quot; - 1</option>
+        <option value="162322">003810_4 Модуль &quot;Лидерство&quot; - 1</option>
         <option value="162323">003810_4 Модуль &quot;Математика&quot; - 1</option>
         <option value="162333">003810_4 Модуль &quot;Эффективное государство&quot; - 1</option>
         <option value="162335">003810_4 Модуль &quot;Эффективное государство&quot; - 2</option>
@@ -1378,6 +1426,7 @@ button,input,select{font:inherit}
         <option value="162145">003841_4 Модуль &quot;Инновационный маркетинг&quot; - 1</option>
         <option value="162144">003841_4 Модуль &quot;Маркетинговые коммуникации&quot; - 1</option>
         <option value="162146">003841_4 Модуль &quot;Товарно-брендинговая политика - 1</option>
+        <option value="162147">003842_4 Модуль &quot;IT Skills&quot; - 1</option>
         <option value="162148">003842_4 Модуль &quot;Международная квалификация CI - 1</option>
         <option value="162149">003842_4 Модуль &quot;Международная квалификация CI - 2</option>
         <option value="162150">003842_4 Модуль &quot;Международная квалификация CI - 3</option>
@@ -1396,37 +1445,80 @@ button,input,select{font:inherit}
         <option value="162675">003853_4 Модуль &quot;Учет и налогообложение в банк - 1</option>
         <option value="162673">003853_4 Модуль &quot;Учет и налогообложение по вид - 1</option>
         <option value="162672">003853_4 Модуль &quot;Учет, отчетность и налогообло - 1</option>
+        <option value="162211">003860_4 Модуль &quot;ERP-системы&quot; - 1</option>
+        <option value="162212">003860_4 Модуль &quot;ERP-системы&quot; - 2</option>
+        <option value="162219">003860_4 Модуль &quot;Анализ данных&quot; - 1</option>
+        <option value="162220">003860_4 Модуль &quot;Анализ данных&quot; - 2</option>
         <option value="162217">003860_4 Модуль &quot;Прикладное программирование&quot; - 1</option>
         <option value="162218">003860_4 Модуль &quot;Прикладное программирование&quot; - 2</option>
         <option value="162213">003860_4 Модуль &quot;Системное программирование&quot; - 1</option>
         <option value="162214">003860_4 Модуль &quot;Системное программирование&quot; - 2</option>
         <option value="162224">003884_4 Модуль &quot;Стохастическая математика&quot; - 1</option>
         <option value="162223">003884_4 Модуль &quot;Управление рисками&quot; - 1</option>
+        <option value="162228">003885_4 Модуль &quot;Анализ данных&quot; - 1</option>
         <option value="162227">003885_4 Модуль &quot;Прикладное программирование&quot; - 1</option>
         <option value="162230">003886_4 Модуль &quot;Прикладное программирование&quot; - 1</option>
+        <option value="162231">003887_4 Модуль &quot;ERP-системы&quot; - 1</option>
+        <option value="162232">003887_4 Модуль &quot;ERP-системы&quot; - 2</option>
+        <option value="162237">003889_4 Модуль &quot;ERP-системы&quot; - 1</option>
+        <option value="162243">003889_4 Модуль &quot;Анализ данных&quot; - 1</option>
         <option value="162238">003889_4 Модуль &quot;Системное программирование&quot; - 1</option>
         <option value="162239">003889_4 Модуль &quot;Системное программирование&quot; - 2</option>
         <option value="161994">003891_4 Модуль &quot;Методы и инструменты в логист - 1</option>
         <option value="162680">003899_4 Модуль &quot;Инвестиционный анализ: продви - 1</option>
+        <option value="162919">003905_4 Иностранный язык в индустрии т (КИЯиМК)-1</option>
+        <option value="162920">003905_4 Иностранный язык в индустрии т (КИЯиМК)-2</option>
+        <option value="162921">003905_4 Иностранный язык в индустрии т (КИЯиМК)-3</option>
         <option value="161995">003905_4 Модуль &quot;Ресторанный бизнес&quot; - 1</option>
+        <option value="161996">003905_4 Модуль &quot;Финансы в туризме&quot; - 1</option>
+        <option value="161997">003907_4 Модуль &quot;Управление продажами в сфере  - 1</option>
+        <option value="161998">003907_4 Модуль &quot;Экономика впечатлений в сфере - 1</option>
         <option value="162000">003940_4 Модуль &quot;Эффективность бизнеса&quot; - 1</option>
         <option value="162004">003943_4 Модуль &quot;Эффективность бизнеса&quot; - 1</option>
         <option value="162005">003943_4 Модуль &quot;Эффективность бизнеса&quot; - 2</option>
+        <option value="162008">003948_4 Модуль &quot;Маркетинг в креативных индуст - 1</option>
         <option value="162682">003966_4 Модуль &quot;Аудит компаний финансового се - 1</option>
         <option value="162683">003966_4 Модуль &quot;Информационные технологии в п - 1</option>
+        <option value="161940">003983_4 Модуль &quot;Учет, оценка и аналитика в со - 1</option>
+        <option value="161939">003983_4 Модуль &quot;Цифровая трансформация и прое - 1</option>
         <option value="161941">004003_4 Модуль &quot;Цифровизация политических про - 1</option>
         <option value="161945">004005_4 Модуль &quot;Прикладное программирование&quot; - 1</option>
+        <option value="161946">004005_4 Модуль &quot;Прикладное программирование&quot; - 2</option>
+        <option value="161947">004007_4 Модуль &quot;Мировые финансы&quot; - 1</option>
+        <option value="161951">004009_4 Модуль &quot;Мировые финансы&quot; - 1</option>
         <option value="161952">004009_4 Модуль &quot;Финансовые технологии&quot; - 1</option>
         <option value="161953">004010_4 Модуль &quot;Инвестиционный менеджмент&quot; - 1</option>
+        <option value="161954">004010_4 Модуль &quot;Финансовая аналитика&quot; - 1</option>
         <option value="161955">004011_4 Модуль &quot;Маркетинговая аналитика&quot; - 1</option>
         <option value="161956">004011_4 Модуль &quot;Товарно-брендинговая политика - 1</option>
+        <option value="161957">004012_4 Модуль &quot;Современные технологии в HR-м - 1</option>
+        <option value="161962">004017_4 Модуль &quot;Анализ данных&quot; - 1</option>
         <option value="161963">004019_4 Модуль &quot;Информационные технологии в п - 1</option>
         <option value="161964">004019_4 Модуль &quot;Особенности учета, налогообло - 1</option>
+        <option value="161965">004024_4 Модуль &quot;Практическая журналистика&quot; - 1</option>
+        <option value="161967">004024_4 Модуль &quot;Этика и речевая культура&quot; - 1</option>
+        <option value="162366">004049_4 Модуль &quot;Банковское дело&quot; - 1</option>
+        <option value="162367">004049_4 Модуль &quot;Общественные финансы&quot; - 1</option>
         <option value="162370">004049_4 Модуль &quot;Эффективное государство&quot; - 1</option>
         <option value="162074">005205_3 Модуль &quot;Экономическая дипломатия&quot; - 1</option>
         <option value="162075">005205_3 Модуль &quot;Экономическая дипломатия&quot; - 2</option>
         <option value="162076">005205_3 Модуль &quot;Экономическая дипломатия&quot; - 3</option>
+        <option value="162096">005208_3 Модуль &quot;Английский язык&quot; - 1</option>
+        <option value="162097">005208_3 Модуль &quot;Английский язык&quot; - 2</option>
+        <option value="162100">005208_3 Модуль &quot;Китайский язык - 1&quot; - 1</option>
+        <option value="162101">005208_3 Модуль &quot;Китайский язык - 1&quot; - 2</option>
+        <option value="162102">005208_3 Модуль &quot;Китайский язык - 2&quot; - 1</option>
+        <option value="162103">005208_3 Модуль &quot;Китайский язык - 2&quot; - 2</option>
+        <option value="162110">005209_3 Модуль &quot;Английский язык 1&quot; - 1</option>
+        <option value="162109">005209_3 Модуль &quot;Восточный язык 1&quot; - 1</option>
         <option value="162160">005225_3 Модуль &quot;Маркетинг менеджмент (на англ - 1</option>
+        <option value="162154">005225_3 Модуль &quot;Предпринимательство&quot; - 1</option>
+        <option value="162155">005225_3 Модуль &quot;Предпринимательство&quot; - 2</option>
+        <option value="162156">005225_3 Модуль &quot;Предпринимательство&quot; - 3</option>
+        <option value="162157">005225_3 Модуль &quot;Предпринимательство&quot; - 4</option>
+        <option value="162158">005225_3 Модуль &quot;Предпринимательство&quot; - 5</option>
+        <option value="162159">005225_3 Модуль &quot;Предпринимательство&quot; - 6</option>
+        <option value="162164">005230_3 Модуль &quot;Инновации&quot; - 1</option>
         <option value="162684">005236_3 Модуль &quot;Информационные технологии в п - 1</option>
         <option value="162685">005236_3 Модуль &quot;Информационные технологии в п - 2</option>
         <option value="162686">005236_3 Модуль &quot;Особенности учета, налогообло - 1</option>
@@ -1438,10 +1530,14 @@ button,input,select{font:inherit}
         <option value="162247">005256_3 Модуль &quot;Прикладные задачи кибер-безоп - 1</option>
         <option value="162248">005256_3 Модуль &quot;Прикладные задачи кибер-безоп - 2</option>
         <option value="162249">005256_3 Модуль &quot;Прикладные задачи кибер-безоп - 3</option>
+        <option value="162371">005303_3 Модуль &quot;Бюджетирование&quot; - 1</option>
+        <option value="162373">005303_3 Модуль &quot;Бюджетирование&quot; - 2</option>
         <option value="162374">005303_3 Модуль &quot;Государственные закупки&quot; - 1</option>
         <option value="162376">005303_3 Модуль &quot;Государственные закупки&quot; - 2</option>
         <option value="162378">005303_3 Модуль &quot;Информационные технологии&quot; - 1</option>
+        <option value="162379">005303_3 Модуль &quot;Лидерство&quot; - 1</option>
         <option value="162380">005303_3 Модуль &quot;Математика&quot; - 1</option>
+        <option value="162381">005303_3 Модуль &quot;Мировые финансы&quot; - 1</option>
         <option value="162386">005303_3 Модуль &quot;Эффективное государство&quot; - 1</option>
         <option value="162387">005303_3 Модуль &quot;Эффективное государство&quot; - 2</option>
         <option value="162389">005304_3 Модуль &quot;Корпоративный риск-менеджмент - 1</option>
@@ -1454,12 +1550,19 @@ button,input,select{font:inherit}
         <option value="162391">005329_3 Модуль &quot;Биржевая торговля&quot; - 1</option>
         <option value="162392">005329_3 Модуль &quot;Финансовые технологии&quot; - 1</option>
         <option value="162281">005338_3 Модуль &quot;Data Science для бизнеса&quot; - 1</option>
+        <option value="162273">005338_3 Модуль &quot;ERP-системы&quot; - 1</option>
+        <option value="162274">005338_3 Модуль &quot;ERP-системы&quot; - 2</option>
+        <option value="162279">005338_3 Модуль &quot;Анализ данных&quot; - 1</option>
         <option value="162275">005338_3 Модуль &quot;Системное программирование&quot; - 1</option>
         <option value="162276">005338_3 Модуль &quot;Системное программирование&quot; - 2</option>
         <option value="162289">005342_3 Модуль &quot;Data Science для бизнеса&quot; - 1</option>
+        <option value="162284">005342_3 Модуль &quot;ERP-системы&quot; - 1</option>
         <option value="162285">005342_3 Модуль &quot;Системное программирование&quot; - 1</option>
+        <option value="162295">005343_3 Модуль &quot;Анализ данных&quot; - 1</option>
         <option value="162290">005343_3 Модуль &quot;Системное программирование&quot; - 1</option>
         <option value="162305">005345_3 Модуль &quot;Data Science для бизнеса&quot; - 1</option>
+        <option value="162296">005345_3 Модуль &quot;ERP-системы&quot; - 1</option>
+        <option value="162304">005345_3 Модуль &quot;Анализ данных&quot; - 1</option>
         <option value="162297">005345_3 Модуль &quot;Системное программирование&quot; - 1</option>
         <option value="162298">005345_3 Модуль &quot;Системное программирование&quot; - 2</option>
         <option value="162702">005350_3 Модуль &quot;Инвестиционный анализ: продви - 1</option>
@@ -1486,13 +1589,35 @@ button,input,select{font:inherit}
         <option value="162025">005381_3 Модуль &quot;Цифровые технологии в логисти - 1</option>
         <option value="162579">005390_3 Модуль &quot;Психологический консалтинг в  - 1</option>
         <option value="162580">005390_3 Модуль &quot;Психологический консалтинг в  - 2</option>
+        <option value="162839">005406_3 Основы деловой и публичной ком (КИЯиМК)-1</option>
+        <option value="162841">005406_3 Основы деловой и публичной ком (КИЯиМК)-2</option>
+        <option value="162842">005406_3 Основы деловой и публичной ком (КИЯиМК)-3</option>
+        <option value="162843">005406_3 Основы деловой и публичной ком (КИЯиМК)-4</option>
+        <option value="162844">005406_3 Основы деловой и публичной ком (КИЯиМК)-5</option>
+        <option value="162764">005407_3 Иностранный язык в профессиона (КАЯиПК)-1</option>
+        <option value="162765">005407_3 Иностранный язык в профессиона (КАЯиПК)-2</option>
         <option value="161968">005473_3 Модуль &quot;Государственные закупки&quot; - 1</option>
         <option value="161970">005473_3 Модуль &quot;Финансовые технологии&quot; - 1</option>
+        <option value="161972">005482_3 Модуль &quot;Оценка в современной экономик - 1</option>
+        <option value="161973">005484_3 Модуль &quot;Информационные технологии в п - 1</option>
+        <option value="161974">005484_3 Модуль &quot;Особенности учета, налогообло - 1</option>
         <option value="161975">005486_3 Модуль &quot;Инвестиционный менеджмент&quot; - 1</option>
+        <option value="161976">005486_3 Модуль &quot;Финансовая аналитика&quot; - 1</option>
         <option value="161980">005492_3 Модуль &quot;Цивилизованный фактор в полит - 1</option>
         <option value="161979">005492_3 Модуль &quot;Цифровизация политических про - 1</option>
+        <option value="161982">005502_3 Модуль &quot;Правозащитная деятельность&quot; - 1</option>
         <option value="161981">005502_3 Модуль &quot;Юридическое сопровождение сде - 1</option>
+        <option value="162396">005555_3 Модуль &quot;Информационно-аналитические т - 1</option>
         <option value="162397">005555_3 Модуль &quot;Эффективное государство&quot; - 1</option>
+        <option value="161985">005568_3 Модуль &quot;Анализ данных&quot; - 1</option>
+        <option value="161984">005568_3 Модуль &quot;Методы искусственного интелле - 1</option>
+        <option value="163607">005585_3 Иностранный язык в профессиона (КАЯиПК)-1</option>
+        <option value="163608">005585_3 Иностранный язык в профессиона (КАЯиПК)-2</option>
+        <option value="163999">005705_3 Иностранный язык в профессиона (КАЯиПК)-1</option>
+        <option value="162401">005705_3 Ипотечные программы для военнослужащи - 1</option>
+        <option value="162400">005705_3 Практикум &quot;Управление ЗАТО Минобороны - 1</option>
+        <option value="162399">005705_3 Управление военным имуществом и МТО В - 1</option>
+        <option value="162398">005705_3 Электронный бюджет (практикум) - 1</option>
         <option value="163145">006032_2 Иностранный язык (КИЯиМК)-1</option>
         <option value="163146">006032_2 Иностранный язык (КИЯиМК)-2</option>
         <option value="163147">006032_2 Иностранный язык (КИЯиМК)-3</option>
@@ -1502,9 +1627,14 @@ button,input,select{font:inherit}
         <option value="163151">006032_2 Иностранный язык (КИЯиМК)-7</option>
         <option value="163152">006032_2 Иностранный язык (КИЯиМК)-8</option>
         <option value="163153">006032_2 Иностранный язык (КИЯиМК)-9</option>
+        <option value="163185">006035_2 Английский язык (КИЯиМК)-1</option>
+        <option value="163186">006035_2 Английский язык (КИЯиМК)-2</option>
+        <option value="163187">006035_2 Английский язык (КИЯиМК)-3</option>
+        <option value="163188">006035_2 Английский язык (КИЯиМК)-4</option>
         <option value="161762">006038_2 Геополитика и геоэкономика - 1</option>
         <option value="161764">006038_2 Международная торговля и таможенные к - 1</option>
         <option value="161768">006038_2 Практикум &quot;Деятельность торговых пред - 1</option>
+        <option value="161779">006039_2 Геофинансы - 1</option>
         <option value="161770">006039_2 Международная финансовая статистика и - 1</option>
         <option value="161785">006040_2 Международная статистика и платежный  - 1</option>
         <option value="161789">006041_2 Практикум &quot;Международные торговые пер - 1</option>
@@ -1534,6 +1664,10 @@ button,input,select{font:inherit}
         <option value="162414">006083_2 Современные бизнес-модели - 1</option>
         <option value="162424">006084_2 Экономическая экспертиза - 1</option>
         <option value="162439">006084_2 Юридическая ответственность должностн - 1</option>
+        <option value="161658">006095_2 MLOps - 1</option>
+        <option value="161659">006095_2 MLOps - 2</option>
+        <option value="161654">006095_2 Интернет вещей - 1</option>
+        <option value="161655">006095_2 Интернет вещей - 2</option>
         <option value="161656">006095_2 Облачные технологии - 1</option>
         <option value="161657">006095_2 Облачные технологии - 2</option>
         <option value="161664">006096_2 Прикладные модели и методы компьютерн - 1</option>
@@ -1551,6 +1685,7 @@ button,input,select{font:inherit}
         <option value="161722">006110_2 Международное предпринимательство - 2</option>
         <option value="161719">006110_2 Управление коммуникациями - 1</option>
         <option value="161720">006110_2 Управление коммуникациями - 2</option>
+        <option value="161731">006111_2 HR-консалтинг - 1</option>
         <option value="162624">006119_2 Аудит консолидированной отчетности - 1</option>
         <option value="162623">006119_2 Налоговый аудит - 1</option>
         <option value="162622">006119_2 Оценка стоимости бизнеса - 1</option>
@@ -1562,23 +1697,31 @@ button,input,select{font:inherit}
         <option value="161827">006139_2 Маркетинг курортных дестинаций - 1</option>
         <option value="161828">006139_2 Менеджмент качества в туризме и госте - 1</option>
         <option value="161825">006139_2 Организация и управление ресторанным  - 1</option>
+        <option value="161832">006141_2 Практикум &quot;Due Diligence&quot; - 1</option>
+        <option value="161833">006141_2 Элитный туризм - 1</option>
         <option value="161676">006145_2 Аудит информационных систем - 1</option>
         <option value="161672">006145_2 Маркетинг информационных технологий - 1</option>
+        <option value="162609">006148_2 Кадровый консалтинг - 1</option>
         <option value="162610">006148_2 Управление коммуникациями - 1</option>
         <option value="162608">006148_2 Управление талантами - 1</option>
         <option value="161626">006157_2 Венчурные инвесторы и private equity  - 1</option>
         <option value="161625">006157_2 Управление данными и Big Data - 1</option>
         <option value="161632">006158_2 Финансовая политика и устойчивое разв - 1</option>
+        <option value="161633">006158_2 Финансы стартапов - 1</option>
         <option value="161638">006161_2 Доказательный подход в аудите - 1</option>
         <option value="161637">006161_2 Корпоративный аудит - 1</option>
         <option value="161645">006162_2 Аудит оценочных значений - 1</option>
         <option value="162616">006163_2 Большие данные и журналистика расслед - 1</option>
         <option value="162617">006163_2 Большие данные и журналистика расслед - 2</option>
         <option value="161865">006177_2 Международные стандарты аудита - 1</option>
+        <option value="161866">006177_2 Финансовый анализ - 1</option>
         <option value="161878">006178_2 Инвестиционный портфель корпораций: о - 1</option>
         <option value="161871">006178_2 Финансовые инвестиции - 1</option>
         <option value="161880">006179_2 Цифровая логистика - 1</option>
         <option value="161879">006179_2 Цифровой маркетинг - 1</option>
+        <option value="161890">006180_2 Data driven подход - 1</option>
+        <option value="161897">006180_2 GTM стратегия - 1</option>
+        <option value="161885">006180_2 Визуализация данных - 1</option>
         <option value="161888">006180_2 Управление командами - 1</option>
         <option value="161892">006180_2 Управление спросом - 1</option>
         <option value="161898">006181_2 Корпоративное право - 1</option>
@@ -1587,15 +1730,96 @@ button,input,select{font:inherit}
         <option value="161922">006184_2 Система управления рисками инвестицио - 1</option>
         <option value="161928">006186_2 Юридическое сопровождение инвестицион - 1</option>
         <option value="161849">006197_2 Инвестиционный портфель корпораций: о - 1</option>
+        <option value="163513">006245_3 Иностранный язык в профессиона (КАЯиПК)-1</option>
+        <option value="163514">006245_3 Иностранный язык в профессиона (КАЯиПК)-2</option>
         <option value="162178">006245_3 Модуль &quot;Психология менеджмента&quot; - 1</option>
+        <option value="163772">006251_2 Иностранный язык (КАЯиПК)-1</option>
+        <option value="163773">006251_2 Иностранный язык (КАЯиПК)-2</option>
+        <option value="163774">006251_2 Иностранный язык (КАЯиПК)-3</option>
+        <option value="161750">006263_2 Антикризисный менеджмент в кредитных  - 1</option>
+        <option value="161752">006263_2 Инжиниринг и управление крупными прое - 1</option>
+        <option value="161753">006263_2 Риск-менеджмент в антикризисном управ - 1</option>
+        <option value="161751">006263_2 Тренинг &quot;Эффективные переговоры&quot; - 1</option>
+        <option value="161760">006264_2 Маркетинг и подготовка общественного  - 1</option>
+        <option value="161756">006264_2 Стратегия и управление развитием - 1</option>
+        <option value="161758">006264_2 Финтех: инструментарий и модели бизне - 1</option>
+        <option value="162864">006267_2 Иностранный язык в сфере юрисп (КАЯиПК)-1</option>
+        <option value="161986">006268_2 Модуль &quot;Правозащитная деятельность&quot; - 1</option>
+        <option value="162867">006315_2 Иностранный язык в профессиона (КАЯиПК)-1</option>
+        <option value="162868">006317_2 Иностранный язык в профессиона (КАЯиПК)-1</option>
+        <option value="161987">006317_2 Модуль &quot;Стимулирование экономического - 1</option>
+        <option value="161988">006317_2 Модуль &quot;Управление развитием субъекто - 1</option>
+        <option value="162869">006320_2 Иностранный язык в профессиона (КАЯиПК)-1</option>
+        <option value="162870">006320_2 Иностранный язык в профессиона (КАЯиПК)-2</option>
         <option value="161937">006337_2 Защита прав граждан и юридических лиц - 1</option>
+        <option value="161933">006337_2 Международно-правовое регулирование и - 1</option>
+        <option value="161936">006337_2 Международное корпоративное и предпри - 1</option>
+        <option value="161934">006337_2 Налоговое консультирование в условиях - 1</option>
         <option value="161938">006337_2 Современные бизнес-модели - 1</option>
+        <option value="164079">006352_2 Иностранный язык в профессиона (КАЯиПК)-1</option>
+        <option value="164080">006352_2 Иностранный язык в профессиона (КАЯиПК)-2</option>
+        <option value="164082">006355_2 Иностранный язык в профессиона (КАЯиПК)-1</option>
+        <option value="164084">006355_2 Иностранный язык в профессиона (КАЯиПК)-2</option>
+        <option value="163775">006427_2 Иностранный язык в профессиона (КАЯиПК)-1</option>
+        <option value="162311">006427_2 Модуль &quot;Методы искусственного интелле - 1</option>
+        <option value="162310">006427_2 Модуль &quot;Технологии машинного обучения - 1</option>
+        <option value="163776">006467_2 Иностранный язык (КАЯиПК)-1</option>
+        <option value="162312">006467_2 Модуль &quot;Прикладные задачи комплексной - 1</option>
+        <option value="162313">006467_2 Модуль &quot;Эксперт информационной безопа - 1</option>
+        <option value="162871">006555_2 Иностранный язык (КАЯиПК)-1</option>
+        <option value="162872">006622_2 Иностранный язык (КАЯиПК)-1</option>
+        <option value="162873">006622_2 Иностранный язык (КАЯиПК)-2</option>
+        <option value="162874">006771_2 Иностранный язык в профессиона (КАЯиПК)-1</option>
+        <option value="163262">006823_1 Иностранный язык (КИЯиМК)-1</option>
+        <option value="163263">006823_1 Иностранный язык (КИЯиМК)-2</option>
+        <option value="163264">006823_1 Иностранный язык (КИЯиМК)-3</option>
+        <option value="163265">006823_1 Иностранный язык (КИЯиМК)-4</option>
+        <option value="163266">006823_1 Иностранный язык (КИЯиМК)-5</option>
+        <option value="163267">006823_1 Иностранный язык (КИЯиМК)-6</option>
+        <option value="163268">006823_1 Иностранный язык (КИЯиМК)-7</option>
+        <option value="163269">006823_1 Иностранный язык (КИЯиМК)-8</option>
+        <option value="163270">006823_1 Иностранный язык (КИЯиМК)-9</option>
+        <option value="163334">006825_1 Иностранный язык (КИЯиМК)-1</option>
+        <option value="163335">006825_1 Иностранный язык (КИЯиМК)-2</option>
         <option value="161799">006829_1 Практикум &quot;Международные торговые пер - 1</option>
         <option value="161800">006829_1 Практикум &quot;Международные торговые пер - 2</option>
         <option value="161803">006831_1 Международное инвестиционное кредитов - 1</option>
         <option value="161806">006831_1 Международное страховое дело - 1</option>
+        <option value="163412">006877_1 Латинский язык (КИЯиМК)-1</option>
+        <option value="163413">006877_1 Латинский язык (КИЯиМК)-2</option>
+        <option value="163414">006877_1 Латинский язык (КИЯиМК)-3</option>
+        <option value="163415">006877_1 Латинский язык (КИЯиМК)-4</option>
         <option value="162618">006890_1 Методы обработки данных в психологиче - 1</option>
+        <option value="163006">006904_1 Иностранный язык (КАЯиПК)-1</option>
+        <option value="163007">006904_1 Иностранный язык (КАЯиПК)-2</option>
+        <option value="163008">006904_1 Иностранный язык (КАЯиПК)-3</option>
+        <option value="163009">006904_1 Иностранный язык (КАЯиПК)-4</option>
+        <option value="163010">006904_1 Иностранный язык (КАЯиПК)-5</option>
+        <option value="163011">006904_1 Иностранный язык (КАЯиПК)-6</option>
+        <option value="164323">006912_1 Иностранный язык (КАЯиПК)-1</option>
+        <option value="164324">006912_1 Иностранный язык (КАЯиПК)-2</option>
+        <option value="164325">006912_1 Иностранный язык (КАЯиПК)-3</option>
+        <option value="164326">006912_1 Иностранный язык (КАЯиПК)-4</option>
+        <option value="164327">006912_1 Иностранный язык (КАЯиПК)-5</option>
+        <option value="164328">006912_1 Иностранный язык (КАЯиПК)-6</option>
+        <option value="163660">006914_1 Иностранный язык (КАЯиПК)-1</option>
+        <option value="163661">006914_1 Иностранный язык (КАЯиПК)-2</option>
         <option value="161647">006926_1 Фискальная социология - 1</option>
+        <option value="162908">007018_1 Иностранный язык (КАЯиПК)-1</option>
+        <option value="162909">007019_1 Иностранный язык (КАЯиПК)-1</option>
+        <option value="162910">007019_1 Иностранный язык (КАЯиПК)-2</option>
+        <option value="162911">007021_1 Иностранный язык (КАЯиПК)-1</option>
+        <option value="162912">007021_1 Иностранный язык (КАЯиПК)-2</option>
+        <option value="162913">007024_1 Иностранный язык (КАЯиПК)-1</option>
+        <option value="162914">007024_1 Иностранный язык (КАЯиПК)-2</option>
+        <option value="162915">007025_1 Иностранный язык в профессиона (КАЯиПК)-1</option>
+        <option value="162916">007026_1 Иностранный язык в профессиона (КАЯиПК)-1</option>
+        <option value="162917">007027_1 Иностранный язык в профессиона (КАЯиПК)-1</option>
+        <option value="164335">007036_1 Иностранный язык (КАЯиПК)-1</option>
+        <option value="164189">007037_1 Иностранный язык (КАЯиПК)-1</option>
+        <option value="164190">007037_1 Иностранный язык (КАЯиПК)-2</option>
+        <option value="164191">007038_1 Иностранный язык (КАЯиПК)-1</option>
+        <option value="164192">007038_1 Иностранный язык (КАЯиПК)-2</option>
         <option value="164399">МеждОт24-1</option>
         <option value="164400">МеждОт24-2</option>
         <option value="164605">МеждОт25-1</option>
@@ -5034,6 +5258,8 @@ window.__ruzApp.setSchedule = function(lessons){
 window.__ruzApp.restoreDefault = function(){
   if (typeof loadAll === "function") loadAll();
 };
+
+
 
 
 
