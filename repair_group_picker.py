@@ -144,7 +144,6 @@ JS = f'''{MARKER}
     if (typeof updateHero === "function") updateHero();
   }}
 
-  // Exactly one initial data path. loadAll() calls this loader once.
   loadSchedule = async function(forceNetwork=false){{
     const id = selectedGroupId();
     const button = $("refreshButton");
@@ -220,7 +219,21 @@ JS = f'''{MARKER}
 
 
 def remove_generated(text: str) -> str:
-    text = re.sub(re.escape(MARKER) + r".*?" + re.escape(END_MARKER), "", text, flags=re.S)
+    # Older builds accidentally produced nested marker blocks. A line-based
+    # depth parser removes them safely without swallowing unrelated generated
+    # blocks that may sit between the nested copies.
+    out = []
+    depth = 0
+    for line in text.splitlines(keepends=True):
+        if END_MARKER in line:
+            if depth > 0:
+                depth -= 1
+            continue
+        if MARKER in line:
+            depth += 1
+            continue
+        out.append(line)
+    text = "".join(out)
     text = re.sub(r"\n?/\* GROUP_PICKER_VIEW \*/.*?(?=\n\s*</style>)", "", text, flags=re.S)
     text = re.sub(r"\n?/\* GROUP_PICKER_VIEW \*/.*?(?=\n\s*</script>)", "", text, flags=re.S)
     return text
@@ -250,9 +263,6 @@ new_control = (
     '</div>'
 )
 
-# Collapse any number of wrappers left by older generators and replace the
-# whole selector block, not just the SELECT node. This prevents nested wrappers
-# from accumulating on repeated GitHub Actions runs.
 selector_block = re.compile(
     r'(?:\s*<div class="group-picker-wrap">\s*)+'
     r'<select class="group-picker" id="groupPickerButton"[^>]*>.*?</select>'
@@ -284,9 +294,6 @@ if not boot:
     raise SystemExit("real loadAll().then(...) boot call not found")
 text = text[:boot.start()] + JS + "\n\n" + text[boot.start():]
 
-# Hard invariants: the generated frontend must contain one selector and one
-# native-picker runtime block. These checks make future CI regressions fail
-# instead of silently shipping another race.
 if text.count('id="groupPickerButton"') != 1:
     raise SystemExit("groupPickerButton must exist exactly once")
 if text.count(MARKER) != 2 or text.count(END_MARKER) != 2:
