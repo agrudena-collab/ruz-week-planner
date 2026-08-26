@@ -1,11 +1,19 @@
-const CACHE_NAME = "mezhdot25-2-v16";
+const CACHE_NAME = "mezhdot25-2-v17";
 const FETCH_TIMEOUT_MS = 4000;
 
+// Everything required to render the default schedule is precached during
+// service-worker installation. This is deliberately explicit: on iPad/PWA
+// the first data request can happen before the page is controlled by the new
+// worker, so relying only on a later fetch event is not enough for offline use.
 const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.json",
   "./icon.png",
+  "./schedule.json",
+  "./archive.json",
+  "./exams.json",
+  "./changes.json",
   "./group_schedules/164606.json"
 ];
 
@@ -27,6 +35,7 @@ async function fetchWithTimeout(request, timeout = FETCH_TIMEOUT_MS) {
 
 async function warmShell() {
   const cache = await caches.open(CACHE_NAME);
+
   await Promise.allSettled(
     APP_SHELL.map(async file => {
       try {
@@ -34,12 +43,15 @@ async function warmShell() {
           cache: "reload",
           credentials: "same-origin"
         }));
-        if (response.ok) await cache.put(file, response.clone());
+        if (response.ok) {
+          await cache.put(cacheKey(new Request(file)), response.clone());
+        }
       } catch (_) {}
     })
   );
 
-  const shell = await cache.match("./index.html") || await cache.match("./");
+  const shell = await cache.match(cacheKey(new Request("./index.html")))
+    || await cache.match(cacheKey(new Request("./")));
   if (!shell) throw new Error("offline app shell could not be cached");
 }
 
@@ -79,6 +91,7 @@ async function cacheFirst(request) {
 async function networkFirstNavigation(request) {
   const cache = await caches.open(CACHE_NAME);
   const key = cacheKey(request);
+
   try {
     const response = await fetchWithTimeout(request, 2500);
     if (response.ok) await cache.put(key, response.clone());
@@ -86,6 +99,7 @@ async function networkFirstNavigation(request) {
   } catch (_) {
     const cached = await cache.match(key, { ignoreSearch: true });
     if (cached) return cached;
+
     return new Response(
       "<!doctype html><meta charset=\"utf-8\"><title>Расписание</title><body style=\"font-family:-apple-system,sans-serif;padding:24px;background:#07090f;color:#fff\"><h1>Расписание</h1><p>Офлайн-версия ещё не сохранена на этом устройстве.</p></body>",
       { status: 503, headers: { "Content-Type": "text/html; charset=utf-8" } }
@@ -104,6 +118,7 @@ async function staleWhileRevalidate(request) {
   }).catch(() => null);
 
   if (cached) return cached;
+
   return (await refresh) || new Response(
     JSON.stringify({ error: "offline-or-timeout" }),
     { status: 504, headers: { "Content-Type": "application/json; charset=utf-8" } }
