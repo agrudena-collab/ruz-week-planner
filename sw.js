@@ -1,4 +1,4 @@
-const CACHE_NAME = "mezhdot25-2-v9";
+const CACHE_NAME = "mezhdot25-2-v10";
 
 const APP_FILES = [
   "./",
@@ -33,11 +33,23 @@ function fetchWithTimeout(request) {
   ]);
 }
 
+async function cacheAppFiles(cache) {
+  await Promise.all(
+    APP_FILES.map(async file => {
+      try {
+        const response = await fetch(file, { cache: "no-store" });
+        if (response.ok) await cache.put(file, response.clone());
+      } catch (_) {}
+    })
+  );
+}
+
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(APP_FILES))
+    caches.open(CACHE_NAME)
+      .then(cacheAppFiles)
+      .then(() => self.skipWaiting())
   );
-  self.skipWaiting();
 });
 
 self.addEventListener("activate", event => {
