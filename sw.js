@@ -1,4 +1,4 @@
-const CACHE_NAME = "mezhdot25-2-v7";
+const CACHE_NAME = "mezhdot25-2-v8";
 
 const APP_FILES = [
   "./",
@@ -8,6 +8,8 @@ const APP_FILES = [
   "./groups.json",
   "./manifest.json"
 ];
+
+const FETCH_TIMEOUT_MS = 8000;
 
 function cacheKey(request) {
   const url = new URL(request.url);
@@ -19,6 +21,15 @@ function cacheKey(request) {
     credentials: request.credentials,
     redirect: request.redirect
   });
+}
+
+function fetchWithTimeout(request) {
+  return Promise.race([
+    fetch(request),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("network-timeout")), FETCH_TIMEOUT_MS)
+    )
+  ]);
 }
 
 self.addEventListener("install", event => {
@@ -45,7 +56,7 @@ self.addEventListener("fetch", event => {
 
   if (isDataFile || isAppShell) {
     event.respondWith(
-      fetch(event.request)
+      fetchWithTimeout(event.request)
         .then(response => {
           if (response.ok) {
             const copy = response.clone();
@@ -53,7 +64,16 @@ self.addEventListener("fetch", event => {
           }
           return response;
         })
-        .catch(() => caches.match(event.request).then(cached => cached || caches.match(cacheKey(event.request))))
+        .catch(() =>
+          caches.match(event.request).then(cached =>
+            cached || caches.match(cacheKey(event.request)).then(normalized =>
+              normalized || new Response(
+                JSON.stringify({error:"offline-or-timeout"}),
+                {status:504, headers:{"Content-Type":"application/json; charset=utf-8"}}
+              )
+            )
+          )
+        )
     );
     return;
   }
