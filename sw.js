@@ -1,4 +1,4 @@
-const CACHE_NAME = "mezhdot25-2-v18";
+const CACHE_NAME = "mezhdot25-2-v19";
 const FETCH_TIMEOUT_MS = 4000;
 
 const APP_SHELL = [
@@ -10,7 +10,7 @@ const APP_SHELL = [
   "./archive.json",
   "./exams.json",
   "./changes.json",
-  "./group-search.js",
+  "./group-search-v2.js",
   "./group_schedules/164606.json"
 ];
 
@@ -92,7 +92,7 @@ async function injectGroupSearch(response) {
 
   try {
     const html = await response.text();
-    if (html.includes('src="./group-search.js"')) {
+    if (html.includes('src="./group-search-v2.js"')) {
       return new Response(html, {
         status: response.status,
         statusText: response.statusText,
@@ -102,7 +102,7 @@ async function injectGroupSearch(response) {
 
     const injected = html.replace(
       /<\/body>/i,
-      '<script src="./group-search.js"></script></body>'
+      '<script src="./group-search-v2.js"></script></body>'
     );
 
     const headers = new Headers(response.headers);
