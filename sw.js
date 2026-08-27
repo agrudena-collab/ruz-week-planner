@@ -1,10 +1,6 @@
-const CACHE_NAME = "mezhdot25-2-v17";
+const CACHE_NAME = "mezhdot25-2-v18";
 const FETCH_TIMEOUT_MS = 4000;
 
-// Everything required to render the default schedule is precached during
-// service-worker installation. This is deliberately explicit: on iPad/PWA
-// the first data request can happen before the page is controlled by the new
-// worker, so relying only on a later fetch event is not enough for offline use.
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -14,6 +10,7 @@ const APP_SHELL = [
   "./archive.json",
   "./exams.json",
   "./changes.json",
+  "./group-search.js",
   "./group_schedules/164606.json"
 ];
 
@@ -88,6 +85,38 @@ async function cacheFirst(request) {
   }
 }
 
+async function injectGroupSearch(response) {
+  if (!response || !response.ok) return response;
+  const contentType = response.headers.get("content-type") || "";
+  if (!contentType.includes("text/html")) return response;
+
+  try {
+    const html = await response.text();
+    if (html.includes('src="./group-search.js"')) {
+      return new Response(html, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: response.headers
+      });
+    }
+
+    const injected = html.replace(
+      /<\/body>/i,
+      '<script src="./group-search.js"></script></body>'
+    );
+
+    const headers = new Headers(response.headers);
+    headers.delete("content-length");
+    return new Response(injected, {
+      status: response.status,
+      statusText: response.statusText,
+      headers
+    });
+  } catch (_) {
+    return response;
+  }
+}
+
 async function networkFirstNavigation(request) {
   const cache = await caches.open(CACHE_NAME);
   const key = cacheKey(request);
@@ -95,10 +124,10 @@ async function networkFirstNavigation(request) {
   try {
     const response = await fetchWithTimeout(request, 2500);
     if (response.ok) await cache.put(key, response.clone());
-    return response;
+    return injectGroupSearch(response);
   } catch (_) {
     const cached = await cache.match(key, { ignoreSearch: true });
-    if (cached) return cached;
+    if (cached) return injectGroupSearch(cached);
 
     return new Response(
       "<!doctype html><meta charset=\"utf-8\"><title>Расписание</title><body style=\"font-family:-apple-system,sans-serif;padding:24px;background:#07090f;color:#fff\"><h1>Расписание</h1><p>Офлайн-версия ещё не сохранена на этом устройстве.</p></body>",
