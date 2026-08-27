@@ -96,7 +96,7 @@ async function injectGroupSearch(response) {
       return new Response(html, {
         status: response.status,
         statusText: response.statusText,
-        headers: response.headers
+        headers: new Headers(response.headers)
       });
     }
 
@@ -107,6 +107,9 @@ async function injectGroupSearch(response) {
 
     const headers = new Headers(response.headers);
     headers.delete("content-length");
+    headers.delete("content-encoding");
+    headers.delete("etag");
+    headers.delete("content-md5");
     return new Response(injected, {
       status: response.status,
       statusText: response.statusText,
