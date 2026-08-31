@@ -1,0 +1,31 @@
+name: Restore Dark Theme
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  dark-theme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dark theme
+        run: python apply_dark_theme.py
+
+      - name: Commit frontend change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet; then
+            echo "Dark theme already installed"
+          else
+            git add index.html dark-theme.css apply_dark_theme.py
+            git commit -m "Restore dark schedule theme"
+            git push
+          fi
