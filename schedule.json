@@ -464,11 +464,11 @@
     "DPO": false
   },
   {
-    "auditorium": "ЛП51_1/0625",
+    "auditorium": "ЛП51_1/0529",
     "auditoriumAmount": 120,
     "auditoriumGUID": "00000000-0000-0000-0000-000000000000",
-    "auditoriumOid": 3186,
-    "author": "FADOMAIN\\Tmnikishova",
+    "auditoriumOid": 3185,
+    "author": "FADOMAIN\\VVarfolomeev",
     "beginLesson": "08:30",
     "building": "Ленинградский проспект, 51, корп. 1",
     "buildingGid": 525,
@@ -550,7 +550,7 @@
         "personMDM_Person_UID": null
       }
     ],
-    "modifieddate": "2026-06-17T12:32:18Z00:00",
+    "modifieddate": "2026-08-31T16:30:41Z00:00",
     "note": null,
     "note_description": "",
     "parentschedule": "МеждОт-25 (1-4)",
@@ -1232,11 +1232,11 @@
     "DPO": false
   },
   {
-    "auditorium": "ЛП51_1/0625",
+    "auditorium": "ЛП51_1/0236",
     "auditoriumAmount": 120,
     "auditoriumGUID": "00000000-0000-0000-0000-000000000000",
-    "auditoriumOid": 3186,
-    "author": "FADOMAIN\\Tmnikishova",
+    "auditoriumOid": 3183,
+    "author": "FADOMAIN\\VVarfolomeev",
     "beginLesson": "11:50",
     "building": "Ленинградский проспект, 51, корп. 1",
     "buildingGid": 525,
@@ -1318,7 +1318,7 @@
         "personMDM_Person_UID": null
       }
     ],
-    "modifieddate": "2026-06-17T13:19:29Z00:00",
+    "modifieddate": "2026-08-31T17:09:01Z00:00",
     "note": null,
     "note_description": "",
     "parentschedule": "МеждОт-25 (1-4)",
