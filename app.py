@@ -87,6 +87,35 @@ API_BRIDGE = r"""
 
     return nativeFetch(input, init);
   };
+
+  // The native group picker clears the archive while replacing schedule data.
+  // Restore the archive after the picker finishes so the Archive view never
+  // loses already archived lessons.
+  const repairArchive = () => {
+    if (window.__archiveRepairInstalled) return true;
+    if (!window.__ruzApp || typeof window.__ruzApp.loadGroup !== "function") return false;
+
+    const original = window.__ruzApp.loadGroup;
+    window.__ruzApp.loadGroup = async function(...args) {
+      const result = await original.apply(this, args);
+      if (typeof window.loadArchive === "function") {
+        try { await window.loadArchive(); } catch (_) {}
+      }
+      return result;
+    };
+    window.__archiveRepairInstalled = true;
+    return true;
+  };
+
+  const timer = setInterval(() => {
+    if (repairArchive()) clearInterval(timer);
+  }, 100);
+
+  setTimeout(async () => {
+    if (typeof window.loadArchive === "function") {
+      try { await window.loadArchive(); } catch (_) {}
+    }
+  }, 1500);
 })();
 </script>
 """
