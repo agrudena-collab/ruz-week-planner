@@ -1,6 +1,8 @@
 name: Deploy GitHub Pages
 
 on:
+  push:
+    branches: [main]
   workflow_run:
     workflows: ["RUZ Daily Schedule"]
     types: [completed]
@@ -11,6 +13,7 @@ jobs:
   build:
     if: >-
       github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'push' ||
       (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
     permissions:
@@ -35,6 +38,45 @@ jobs:
               p.write_text(s, encoding="utf-8")
           PY
 
+      - name: Repair archive after group loader
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path("index.html")
+          s = p.read_text(encoding="utf-8")
+          marker = "/* ARCHIVE_RUNTIME_REPAIR */"
+          if marker not in s:
+              patch = r'''<script>
+          /* ARCHIVE_RUNTIME_REPAIR */
+          (() => {
+            const repair = () => {
+              if (window.__archiveRepairInstalled) return true;
+              if (!window.__ruzApp || typeof window.__ruzApp.loadGroup !== "function") return false;
+              const original = window.__ruzApp.loadGroup;
+              window.__ruzApp.loadGroup = async function(...args) {
+                const result = await original.apply(this, args);
+                if (typeof window.loadArchive === "function") {
+                  try { await window.loadArchive(); } catch (_) {}
+                }
+                return result;
+              };
+              window.__archiveRepairInstalled = true;
+              return true;
+            };
+            const timer = setInterval(() => {
+              if (repair()) clearInterval(timer);
+            }, 100);
+            setTimeout(async () => {
+              if (typeof window.loadArchive === "function") {
+                try { await window.loadArchive(); } catch (_) {}
+              }
+            }, 1500);
+          })();
+          </script>'''
+              s = s.replace('</body>', patch + '\n</body>', 1)
+              p.write_text(s, encoding="utf-8")
+          PY
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
@@ -47,6 +89,7 @@ jobs:
     needs: build
     if: >-
       github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'push' ||
       (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
     permissions:
