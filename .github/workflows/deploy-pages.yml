@@ -44,33 +44,45 @@ jobs:
           from pathlib import Path
           p = Path("index.html")
           s = p.read_text(encoding="utf-8")
-          marker = "/* ARCHIVE_RUNTIME_REPAIR */"
+          marker = "/* ARCHIVE_RUNTIME_REPAIR_V2 */"
           if marker not in s:
               patch = r'''<script>
-          /* ARCHIVE_RUNTIME_REPAIR */
+          /* ARCHIVE_RUNTIME_REPAIR_V2 */
           (() => {
+            const loadArchiveSafe = async () => {
+              if (typeof window.loadArchive !== "function") return;
+              try { await window.loadArchive(); } catch (_) {}
+            };
+
             const repair = () => {
-              if (window.__archiveRepairInstalled) return true;
-              if (!window.__ruzApp || typeof window.__ruzApp.loadGroup !== "function") return false;
-              const original = window.__ruzApp.loadGroup;
-              window.__ruzApp.loadGroup = async function(...args) {
-                const result = await original.apply(this, args);
-                if (typeof window.loadArchive === "function") {
-                  try { await window.loadArchive(); } catch (_) {}
-                }
+              if (window.__archiveRepairInstalledV2) return true;
+              if (typeof window.loadSchedule !== "function") return false;
+
+              const originalLoadSchedule = window.loadSchedule;
+              window.loadSchedule = async function(...args) {
+                const result = await originalLoadSchedule.apply(this, args);
+                await loadArchiveSafe();
                 return result;
               };
-              window.__archiveRepairInstalled = true;
+
+              if (window.__ruzApp && typeof window.__ruzApp.loadGroup === "function") {
+                const originalLoadGroup = window.__ruzApp.loadGroup;
+                window.__ruzApp.loadGroup = async function(...args) {
+                  const result = await originalLoadGroup.apply(this, args);
+                  await loadArchiveSafe();
+                  return result;
+                };
+              }
+
+              window.__archiveRepairInstalledV2 = true;
               return true;
             };
+
             const timer = setInterval(() => {
               if (repair()) clearInterval(timer);
             }, 100);
-            setTimeout(async () => {
-              if (typeof window.loadArchive === "function") {
-                try { await window.loadArchive(); } catch (_) {}
-              }
-            }, 1500);
+
+            setTimeout(loadArchiveSafe, 1500);
           })();
           </script>'''
               s = s.replace('</body>', patch + '\n</body>', 1)
