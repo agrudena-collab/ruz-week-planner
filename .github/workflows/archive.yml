@@ -25,28 +25,36 @@ jobs:
           from datetime import datetime
           from zoneinfo import ZoneInfo
 
-          schedule_file = Path("schedule.json")
+          schedule_file = Path("group_schedules/164606.json")
           archive_file = Path("archive.json")
 
           if not schedule_file.exists():
-              raise SystemExit("schedule.json not found")
+              raise SystemExit("group_schedules/164606.json not found")
 
           if not archive_file.exists():
               archive_file.write_text("[]", encoding="utf-8")
 
           with schedule_file.open("r", encoding="utf-8") as f:
-              schedule = json.load(f)
+              source = json.load(f)
 
           with archive_file.open("r", encoding="utf-8") as f:
               archive = json.load(f)
 
+          # group_schedules/164606.json хранится как объект
+          # {"id": "164606", "name": "МеждОт25-2", "lessons": [...]}
+          if isinstance(source, dict):
+              schedule = source.get("lessons", [])
+          elif isinstance(source, list):
+              schedule = source
+          else:
+              raise SystemExit("group_schedules/164606.json has invalid format")
+
           if not isinstance(schedule, list):
-              raise SystemExit("schedule.json must contain an array")
+              raise SystemExit("group_schedules/164606.json lessons must be an array")
 
           if not isinstance(archive, list):
               raise SystemExit("archive.json must contain an array")
 
-          # Текущая дата по Москве
           today = datetime.now(
               ZoneInfo("Europe/Moscow")
           ).date().isoformat()
@@ -60,24 +68,25 @@ jobs:
                   lesson.get("lecturer", ""),
                   lesson.get("auditorium", ""),
                   lesson.get("building", ""),
-                  lesson.get("typeLesson", "")
+                  lesson.get("typeLesson", ""),
+                  lesson.get("lessonOid", "")
               )
 
           existing = {
               lesson_key(lesson)
               for lesson in archive
+              if isinstance(lesson, dict)
           }
 
           added = 0
 
-          # Добавляем в архив все даты, которые уже прошли
           for lesson in schedule:
-              lesson_date = lesson.get("date")
-
-              if not lesson_date:
+              if not isinstance(lesson, dict):
                   continue
 
-              if lesson_date >= today:
+              lesson_date = lesson.get("date")
+
+              if not lesson_date or lesson_date >= today:
                   continue
 
               key = lesson_key(lesson)
@@ -89,7 +98,6 @@ jobs:
               existing.add(key)
               added += 1
 
-          # Сортировка архива по дате и времени
           archive.sort(
               key=lambda lesson: (
                   lesson.get("date", ""),
@@ -97,7 +105,6 @@ jobs:
               )
           )
 
-          # Сохраняем архив
           with archive_file.open("w", encoding="utf-8") as f:
               json.dump(
                   archive,
