@@ -1683,6 +1683,32 @@ button,input,select{font:inherit}
 }
 
 
+
+.header{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  grid-template-areas:
+    "brand actions"
+    "picker actions";
+  column-gap:20px;
+  row-gap:7px;
+  align-items:start;
+  margin-bottom:20px
+}
+.header > .brand{grid-area:brand}
+.header > .group-picker-wrap{grid-area:picker;position:relative;margin-top:0;width:min(360px,78vw)}
+.header > .header-right{grid-area:actions;align-self:start}
+.header > .group-picker-wrap .group-picker{width:100%;min-height:38px;appearance:auto;-webkit-appearance:auto;border:1px solid rgba(255,255,255,.10);border-radius:12px;padding:7px 34px 7px 10px;background:rgba(255,255,255,.045);color:#cbd1dd;font-size:13px;font-weight:750;cursor:pointer;touch-action:manipulation}
+.header > .group-picker-wrap .group-picker:focus{outline:2px solid rgba(66,217,255,.35);outline-offset:2px}
+.header > .group-picker-wrap::after{content:"⌄";position:absolute;right:11px;top:50%;transform:translateY(-52%);color:#8e96a8;pointer-events:none}
+@media(max-width:640px){
+  .header{grid-template-columns:1fr;grid-template-areas:"brand" "picker" "actions";row-gap:9px}
+  .header > .header-right{justify-self:start;align-self:auto}
+  .header > .group-picker-wrap{width:min(330px,82vw)}
+  .header > .group-picker-wrap .group-picker{min-height:42px;font-size:14px}
+}
+
+
 /* GROUP_PICKER_NATIVE */
 .group-picker-wrap{position:relative;margin-top:7px;width:min(360px,78vw)}
 .group-picker{width:100%;min-height:38px;appearance:auto;-webkit-appearance:auto;border:1px solid rgba(255,255,255,.10);border-radius:12px;padding:7px 34px 7px 10px;background:rgba(255,255,255,.045);color:#cbd1dd;font-size:13px;font-weight:750;cursor:pointer;touch-action:manipulation}
@@ -5756,6 +5782,8 @@ window.__ruzApp.setSchedule = function(lessons){
 window.__ruzApp.restoreDefault = function(){
   if (typeof loadAll === "function") loadAll();
 };
+
+
 
 
 
